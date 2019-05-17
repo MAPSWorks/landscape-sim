@@ -6,9 +6,9 @@
 namespace renderer::vlk {
 Swapchain::Swapchain(const Device& device, const VkSurfaceKHR& surface, GLFWwindow* window) :
     device_(device.Get()),
-    swapchain_(Create(device, surface, window)),
-    images_(GetImages(device_)),
-    image_views_(CreateImageViews(device_, images_)) {
+    swapchain_(Create(device.GetGPU(),device.GetQueue().GetFamilyIndices(), surface, window)),
+    images_(GetImages()),
+    image_views_(CreateImageViews(images_)) {
     util::Log::Info("Renderer: swapchain created");
 } 
 
@@ -20,6 +20,10 @@ Swapchain::~Swapchain() {
     vkDestroySwapchainKHR(device_, swapchain_, nullptr);
 }
 
+const VkSwapchainKHR& Swapchain::Get() const {
+    return swapchain_;
+}
+
 const VkExtent2D& Swapchain::GetExtent() const {
     return extent_;
 }
@@ -28,11 +32,27 @@ const VkSurfaceFormatKHR& Swapchain::GetSurfaceFormat() const {
     return surface_format_;
 }
 
-VkSwapchainKHR Swapchain::Create(const Device& device, const VkSurfaceKHR& surface, GLFWwindow* window) {
-    surface_format_ = SelectSurfaceFormat(device.GetGPU(), surface);
-    const VkPresentModeKHR present_mode = SelectPresentMode(device.GetGPU(), surface);
-    extent_ = RetrieveExtent(device.GetGPU(), surface, window);
-    uint32_t image_count = SelectImageCount(device.GetGPU(), surface);
+const std::vector<VkImageView>& Swapchain::GetImageViews() const {
+    return image_views_;
+}
+
+// Next image index from swapchain that is available
+// image_available_semaphore - a semaphore that will become signaled when the presentation
+// engine has released ownership of the image
+uint32_t Swapchain::AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const {
+    uint32_t image_index;
+    constexpr uint64_t unlimited_timeout = std::numeric_limits<uint64_t>::max();
+    ErrorCheck(vkAcquireNextImageKHR(device_, swapchain_, unlimited_timeout, image_available_semaphore, 
+        VK_NULL_HANDLE, &image_index));
+    return image_index;
+}
+
+VkSwapchainKHR Swapchain::Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 
+    const VkSurfaceKHR& surface, GLFWwindow* window) {
+    surface_format_ = SelectSurfaceFormat(gpu, surface);
+    const VkPresentModeKHR present_mode = SelectPresentMode(gpu, surface);
+    extent_ = RetrieveExtent(gpu, surface, window);
+    uint32_t image_count = SelectImageCount(gpu, surface);
     VkSwapchainCreateInfoKHR create_info {};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface = surface;
@@ -44,7 +64,6 @@ VkSwapchainKHR Swapchain::Create(const Device& device, const VkSurfaceKHR& surfa
     // Other usages than 'color attachment' should be checked first because they are not guaranteed
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     // Handle swapchain iamges in case graphics and presentation queues differ
-    const auto qf_indices = device.GetDeviceQueue().GetFamilyIndices();
     if (!qf_indices.IsGraphicsPresentMatch()) {
         // Used by multiple queues that is why need to specify which
         create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
@@ -59,7 +78,7 @@ VkSwapchainKHR Swapchain::Create(const Device& device, const VkSurfaceKHR& surfa
         create_info.pQueueFamilyIndices = nullptr; // Optional
     }
     // No need to use different transforms on images
-    create_info.preTransform = SelectTransform(device.GetGPU(), surface);
+    create_info.preTransform = SelectTransform(gpu, surface);
     // Ignore blending with other windows
     create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     create_info.presentMode = present_mode;
@@ -68,7 +87,7 @@ VkSwapchainKHR Swapchain::Create(const Device& device, const VkSurfaceKHR& surfa
     // When swapchain needs to be recreated (resizig window) this field should be set to old swachain
     create_info.oldSwapchain = VK_NULL_HANDLE;
     VkSwapchainKHR swapchain;
-    ErrorCheck(vkCreateSwapchainKHR(device.Get(), &create_info, nullptr, &swapchain));
+    ErrorCheck(vkCreateSwapchainKHR(device_, &create_info, nullptr, &swapchain));
     return swapchain;
 }
 
@@ -164,18 +183,18 @@ VkSurfaceTransformFlagBitsKHR Swapchain::SelectTransform(const VkPhysicalDevice&
 }
 
 // Images are created together with swapchain so we only retrieve them 
-std::vector<VkImage> Swapchain::GetImages(const VkDevice& device) const {
+std::vector<VkImage> Swapchain::GetImages() const {
     // Get handles to swapchain images
     // NOTE: swapchain is allowed to create more images than we specify
     uint32_t image_count;
-    vkGetSwapchainImagesKHR(device, swapchain_, &image_count, nullptr);
+    vkGetSwapchainImagesKHR(device_, swapchain_, &image_count, nullptr);
     std::vector<VkImage> swapchain_images(image_count);
-    ErrorCheck(vkGetSwapchainImagesKHR(device, swapchain_, &image_count, swapchain_images.data()));
+    ErrorCheck(vkGetSwapchainImagesKHR(device_, swapchain_, &image_count, swapchain_images.data()));
     return swapchain_images;
 }
 
 // Images can be accessed through image view
-std::vector<VkImageView> Swapchain::CreateImageViews(const VkDevice& device, const std::vector<VkImage>& images) const {
+std::vector<VkImageView> Swapchain::CreateImageViews(const std::vector<VkImage>& images) const {
     std::vector<VkImageView> image_views(images_.size());
     uint32_t i = 0;
     for (const auto& image : images_) {
@@ -194,7 +213,7 @@ std::vector<VkImageView> Swapchain::CreateImageViews(const VkDevice& device, con
         create_info.subresourceRange.levelCount = 1;
         create_info.subresourceRange.baseArrayLayer = 0;
         create_info.subresourceRange.layerCount = 1;
-        ErrorCheck(vkCreateImageView(device, &create_info, nullptr, &image_views[i++]));
+        ErrorCheck(vkCreateImageView(device_, &create_info, nullptr, &image_views[i++]));
     }
     return image_views;
 }

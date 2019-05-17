@@ -75,21 +75,19 @@ public:
     };
 
     // TODO: give pipeline some name through parameter?
-    GraphicsPipeline(const VkDevice& device, const VkFormat& swapchain_format, const CreateParams& create_params);
+    GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const CreateParams& create_params);
     ~GraphicsPipeline();
     GraphicsPipeline(GraphicsPipeline const&) = delete;
     GraphicsPipeline operator=(GraphicsPipeline const&) = delete;
     const VkPipeline& Get() const;
 private:
-    VkRenderPass CreateRenderPass(const VkDevice& device, const VkFormat& swapchain_format) const;
-    VkPipelineLayout CreatePipelineLayout(const VkDevice& device, const LayoutParams& params) const;
-    VkPipeline Create(const VkDevice& device, const CreateParams& create_params) const;
-    // We grab reference and store it here because we need it in destructor
+    VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
+    VkPipeline Create(const VkRenderPass& render_pass, const CreateParams& create_params) const;
+    // Reference to resource this object is created with
     const VkDevice& device_;
     // Informative name for pipeline
-    std::string name_;
+    const std::string info_name_;
     const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;
-    const VkRenderPass render_pass_ = VK_NULL_HANDLE;
     const VkPipeline pipeline_ = VK_NULL_HANDLE;
 };
 };  // renderer vlk

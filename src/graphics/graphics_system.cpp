@@ -13,6 +13,10 @@ GraphicsSystem::~GraphicsSystem() {
 }
 
 void GraphicsSystem::RenderFrame() const {
-    triangle_.Draw();
+    triangle_.RenderFrame();
+}
+
+void GraphicsSystem::WaitForIdle() const {
+    vkDeviceWaitIdle(context_.device.Get());
 }
 }; // graphics

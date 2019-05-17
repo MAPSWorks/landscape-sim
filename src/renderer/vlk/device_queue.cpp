@@ -4,14 +4,14 @@
 #include <util/log.h>
 
 namespace renderer::vlk {
-DeviceQueue::DeviceQueue(const VkPhysicalDevice& physical_device, const VkSurfaceKHR& surface) :
-                                                family_indices_(SelectFamilies(physical_device, surface)) {
+DeviceQueue::DeviceQueue(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) :
+                                                family_indices_(SelectFamilies(gpu, surface)) {
     util::Log::Info("Renderer: device queue family indices picked. Graphics - ", 
                                                family_indices_.graphics.value(), 
                                 " present - ", family_indices_.present.value());
 }
 
-std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos(const VkPhysicalDevice& physical_device) const{
+std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos() const{
     // We dont know in advance whether queue family capabilities belong to one family or multiple
     const std::set<uint32_t> unique_queue_families = { family_indices_.graphics.value(), 
                                                        family_indices_.present.value() };
@@ -35,14 +35,70 @@ const DeviceQueue::FamilyIndices& DeviceQueue::GetFamilyIndices() const {
     return family_indices_;
 }
 
-DeviceQueue::FamilyIndices DeviceQueue::SelectFamilies(const VkPhysicalDevice& physical_device,
+void DeviceQueue::SetGraphics(VkQueue queue) {
+    graphics_queue_ = queue;
+}
+
+void DeviceQueue::SetPresent(VkQueue queue) {
+    present_queue_ = queue;
+}
+
+const VkQueue& DeviceQueue::GetGraphics() const {
+    return graphics_queue_;
+}
+
+const VkQueue& DeviceQueue::GetPresent() const {
+    return present_queue_;
+}
+
+// Single submit of command buffer to graphics queue
+// Performance is important since this is probably real-time function
+// wait_semaphore - to wait for executing on pipeline stage
+// signal_semaphore - to signal when done
+void DeviceQueue::GraphicsSubmit(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore, 
+    const VkSemaphore& signal_semaphore) const {
+    VkSubmitInfo submit_info{};
+    submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    const VkSemaphore wait_semaphores[] = { wait_semaphore };
+    // This means that waiting will happen on color output stage, so vertex and fragments 
+    // can be executed meanwhile
+    const VkPipelineStageFlags wait_stages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+    submit_info.waitSemaphoreCount = 1;
+    submit_info.pWaitSemaphores = wait_semaphores;
+    submit_info.pWaitDstStageMask = wait_stages;
+    submit_info.commandBufferCount = 1;
+    submit_info.pCommandBuffers = &command_buffer;
+    const VkSemaphore signal_semaphores[] = { signal_semaphore };
+    submit_info.signalSemaphoreCount = 1;
+    submit_info.pSignalSemaphores = signal_semaphores;
+    ErrorCheck(vkQueueSubmit(graphics_queue_, 1, &submit_info, VK_NULL_HANDLE));
+}
+
+// Presents iamege to swapchain
+// Performance is important since this is probably real-time function
+// wait_semaphore - emaphore to wait before presenting
+void DeviceQueue::Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const {
+    VkPresentInfoKHR present_info{};
+    present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    const VkSemaphore wait_semaphores[] = { wait_semaphore };
+    present_info.waitSemaphoreCount = 1;
+    present_info.pWaitSemaphores = wait_semaphores;
+    VkSwapchainKHR swap_chains[] = { swapchain };
+    present_info.swapchainCount = 1;
+    present_info.pSwapchains = swap_chains;
+    present_info.pImageIndices = &image_index;
+    present_info.pResults = nullptr; // Optional 
+    // Error in this doesnt necesserely means that we need to throw exception
+    vkQueuePresentKHR(present_queue_, &present_info);
+}
+
+DeviceQueue::FamilyIndices DeviceQueue::SelectFamilies(const VkPhysicalDevice& gpu,
                                                        const VkSurfaceKHR& surface) const {
     // Get all available queue families from given physical device
     uint32_t queue_family_count = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_family_count, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, nullptr);
     std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
-    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_family_count, queue_families.data());
-
+    vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, queue_families.data());
     FamilyIndices indices;
     uint32_t i = 0;
     for (const auto& family : queue_families) {
@@ -50,7 +106,7 @@ DeviceQueue::FamilyIndices DeviceQueue::SelectFamilies(const VkPhysicalDevice& p
             indices.graphics = i;
         }
         VkBool32 present_support = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(physical_device, i, surface, &present_support);
+        vkGetPhysicalDeviceSurfaceSupportKHR(gpu, i, surface, &present_support);
         if (family.queueCount > 0 && present_support) {
             indices.present = i;
         }
@@ -60,11 +116,9 @@ DeviceQueue::FamilyIndices DeviceQueue::SelectFamilies(const VkPhysicalDevice& p
 
         i++;
     }
-    
     if (!indices.IsComplete()) {
         throw std::runtime_error("Renderer: failed to find required device queue families");
     }
-
     return indices;
 }
 

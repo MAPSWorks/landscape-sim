@@ -6,7 +6,7 @@ namespace renderer::vlk {
 ShaderModule::ShaderModule(const VkDevice& device, const std::string& file_name) :
     device_(device),
     file_name_(file_name),
-    shader_module_(Create(device_, file_name)) {
+    shader_module_(Create(file_name)) {
     util::Log::Info("Renderer: shader module '",file_name_,"' created");
 }
 
@@ -40,7 +40,7 @@ std::vector<char> ShaderModule::ReadBinaryFile(const std::string& file_name) {
 
 // The compilation of the spir-v code to GPU machine code doesn't happen until the graphics pipeline
 // is created. That's why we can delete these shader modules after pipeline is created
-VkShaderModule ShaderModule::Create(const VkDevice& device, const std::string& file_name) const {
+VkShaderModule ShaderModule::Create(const std::string& file_name) const {
     // It is ok that this buffer is destroyed at exiting function
     const auto spirv_data = ReadBinaryFile(file_name);
     VkShaderModuleCreateInfo create_info {};
@@ -48,7 +48,7 @@ VkShaderModule ShaderModule::Create(const VkDevice& device, const std::string& f
     create_info.codeSize = spirv_data.size();
     create_info.pCode = reinterpret_cast<const uint32_t*>(spirv_data.data());
     VkShaderModule shader_module;
-    ErrorCheck(vkCreateShaderModule(device, &create_info, nullptr, &shader_module));
+    ErrorCheck(vkCreateShaderModule(device_, &create_info, nullptr, &shader_module));
     return shader_module;
 }
 }; // renderer vlk

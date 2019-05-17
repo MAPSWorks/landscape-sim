@@ -14,8 +14,8 @@ public:
     Surface operator=(Surface const&) = delete;
     const VkSurfaceKHR& Get() const;
 private:
-    VkSurfaceKHR Create(const VkInstance& instance, GLFWwindow* window) const;
-    // We grab reference and store it here because we need it in destructor
+    VkSurfaceKHR Create(GLFWwindow* window) const;
+    // Reference to resource this object was created with
     const VkInstance& instance_;
     // Images are presented to surface
     const VkSurfaceKHR surface_ = VK_NULL_HANDLE;

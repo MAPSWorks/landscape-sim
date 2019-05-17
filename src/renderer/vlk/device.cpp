@@ -9,11 +9,15 @@ Device::Device(const VkInstance& instance, const VkSurfaceKHR& surface) :
                 gpu_(AcquirePhysicalDevice(instance)),
                 queue_(gpu_, surface),
                 device_(CreateLogicalDevice(gpu_)) {
+    // Retrieve queues from device and set their handles in DeviceQueue class
+    queue_.SetGraphics(GetGraphicsQueue());
+    queue_.SetPresent(GetPresentQueue());
     util::Log::Info("Renderer: device created");
 }
 
 Device::~Device() {
     util::Log::Info("Renderer: device destroying...");
+    // Also destroys logical device and queues created from logical device
     vkDestroyDevice(device_, nullptr);
 }
 
@@ -26,24 +30,8 @@ const VkDevice& Device::Get() const {
 }
 
 // Get queue abstraction instead of actual queue
-const DeviceQueue& Device::GetDeviceQueue() const {
+const DeviceQueue& Device::GetQueue() const {
     return queue_;
-}
-
-// Queues are taken directly from device and not stored anywhere else
-// OPTI: store queue handles in Queue object and set them like this in device c-tor
-// and these functions below would not be needed any more, queues would be directly accessed from 
-// Queue class through references
-VkQueue Device::GetGraphicsQueue() const {
-    VkQueue queue;
-    vkGetDeviceQueue(device_, queue_.GetFamilyIndices().graphics.value(), 0, &queue);
-    return queue;
-}
-
-VkQueue Device::GetPresentQueue() const {
-    VkQueue queue;
-    vkGetDeviceQueue(device_, queue_.GetFamilyIndices().present.value(), 0, &queue);
-    return queue;
 }
 
 // Physical device is not created but acquired and need not be deleted
@@ -63,18 +51,19 @@ VkPhysicalDevice Device::AcquirePhysicalDevice(const VkInstance& instance) const
     return physical_device;
 }
 
-void Device::PrintPhysicalDeviceProperties(const VkPhysicalDevice& physical_device) const {
+void Device::PrintPhysicalDeviceProperties(const VkPhysicalDevice& gpu) const {
     // Log some properties
     VkPhysicalDeviceProperties p_device_properties;
-    vkGetPhysicalDeviceProperties(physical_device, &p_device_properties);
+    vkGetPhysicalDeviceProperties(gpu, &p_device_properties);
     util::Log::Info("Renderer: GPU picked - ", p_device_properties.deviceName,
                     ", Vulkan vers. - ", VK_VERSION_MAJOR(p_device_properties.apiVersion), ".",
                     VK_VERSION_MINOR(p_device_properties.apiVersion), ".",
                     VK_VERSION_PATCH(p_device_properties.apiVersion));
 }
 
-VkDevice Device::CreateLogicalDevice(const VkPhysicalDevice& physical_device) const {
-    const auto queue_create_infos = queue_.GetCreateInfos(physical_device);
+// Create logical device from given physical device
+VkDevice Device::CreateLogicalDevice(const VkPhysicalDevice& gpu) const {
+    const auto queue_create_infos = queue_.GetCreateInfos();
     // Device features to enable
     VkPhysicalDeviceFeatures device_features {};
     VkDeviceCreateInfo device_create_info {};
@@ -86,7 +75,19 @@ VkDevice Device::CreateLogicalDevice(const VkPhysicalDevice& physical_device) co
     device_create_info.ppEnabledExtensionNames = required_extentions_.data();
 
     VkDevice device;
-    ErrorCheck(vkCreateDevice(physical_device, &device_create_info, nullptr, &device));
+    ErrorCheck(vkCreateDevice(gpu, &device_create_info, nullptr, &device));
     return device;
+}
+
+VkQueue Device::GetGraphicsQueue() const {
+    VkQueue queue;
+    vkGetDeviceQueue(device_, queue_.GetFamilyIndices().graphics.value(), 0, &queue);
+    return queue;
+}
+
+VkQueue Device::GetPresentQueue() const {
+    VkQueue queue;
+    vkGetDeviceQueue(device_, queue_.GetFamilyIndices().present.value(), 0, &queue);
+    return queue;
 }
 }; //renderer vlk

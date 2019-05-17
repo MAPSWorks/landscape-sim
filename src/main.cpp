@@ -8,11 +8,6 @@ int main(int argc, char* argv[]) {
         App app;
         app.Run();
     }
-    // TODO: remove after no vulkan.hpp is used
-    catch (const vk::SystemError &e) {
-        util::Log::Error("vk::SystemError: ", e.what());
-        return 1;
-    }
     catch (const std::exception &e) {
         util::Log::Error("Exception: ", e.what());
         return 1;

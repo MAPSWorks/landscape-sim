@@ -11,6 +11,8 @@ public:
     GraphicsSystem(const Settings &settings, GLFWwindow* window);
     ~GraphicsSystem();
     void RenderFrame() const;
+    // Used to ensure nothing is currently in use on GPU
+    void WaitForIdle() const;
 private:
     const renderer::Context context_;
     const objects::Triangle triangle_;

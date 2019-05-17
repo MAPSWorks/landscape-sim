@@ -12,11 +12,11 @@ App::~App() {
     util::Log::Info("App shutting down...");
 }
 
-
 void App::Run() {
     while (platform_.IsRunning()) {
         platform_.PollEvents();
         graphics_system_.RenderFrame();
     }
+    graphics_system_.WaitForIdle();
 }
 

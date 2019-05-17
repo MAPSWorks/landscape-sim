@@ -11,10 +11,15 @@ public:
     ~Swapchain();
     Swapchain(Swapchain const&) = delete;
     Swapchain operator=(Swapchain const&) = delete;
+    const VkSwapchainKHR& Get() const;
     const VkExtent2D& GetExtent() const;
     const VkSurfaceFormatKHR& GetSurfaceFormat() const;
+    const std::vector<VkImageView>& GetImageViews() const;
+    // Next image index from swapchain that is available
+    uint32_t AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const;
 private:
-    VkSwapchainKHR Create(const Device& device, const VkSurfaceKHR& surface,  GLFWwindow* window);
+    VkSwapchainKHR Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 
+        const VkSurfaceKHR& surface,  GLFWwindow* window);
     VkSurfaceFormatKHR SelectSurfaceFormat(const VkPhysicalDevice & gpu, const VkSurfaceKHR& surface) const;
     VkPresentModeKHR SelectPresentMode(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
     VkExtent2D RetrieveExtent(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface, GLFWwindow* window) const;
@@ -23,9 +28,9 @@ private:
     // Select transformation of images in swapchain
     VkSurfaceTransformFlagBitsKHR SelectTransform(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
     // Retrieve list of images from swapchain
-    std::vector<VkImage> GetImages(const VkDevice& device) const;
-    std::vector<VkImageView> CreateImageViews(const VkDevice& device, const std::vector<VkImage> &images) const;
-    // We grab reference and store it here because we need it in destructor
+    std::vector<VkImage> GetImages() const;
+    std::vector<VkImageView> CreateImageViews(const std::vector<VkImage> &images) const;
+    // To store reference to resource this object was created with
     const VkDevice& device_;
     // Parameters below is not constant because they can probably change
     // NOTE: These params should be above swapchain_, because they get initialized 

@@ -5,7 +5,10 @@
 namespace graphics::objects {
     Triangle::Triangle(const renderer::Context& context) :
         context_(context),
-        graphics_pipeline_(context_.device.Get(), context.swapchain.GetSurfaceFormat().format,
+        render_pass_(context_.device.Get(), context.swapchain.GetSurfaceFormat().format),
+        framebuffers_(context_.device.Get(), render_pass_.Get(),
+            context_.swapchain.GetImageViews(), context_.swapchain.GetExtent()),
+        graphics_pipeline_(context_.device.Get(), render_pass_.Get(),
             renderer::vlk::GraphicsPipeline::CreateParams{
             // Pipeline name
             "Triangle pipeline",
@@ -43,21 +46,36 @@ namespace graphics::objects {
             {
                 0
             }
-            }) {
+            }),
+        command_buffers_(context_.device.Get(), context_.device.GetQueue().GetFamilyIndices().graphics.value(),
+            (uint32_t)framebuffers_.Get().size()),
+        image_available_semaphore_(context_.device.Get()),
+        render_finished_semaphore_(context_.device.Get()) {
+    // Record command buffers
+    command_buffers_.Begin();
+    command_buffers_.BeginRenderPass(render_pass_.Get(), framebuffers_.Get(), context_.swapchain.GetExtent());
+    command_buffers_.BindGraphicsPipeline(graphics_pipeline_.Get());
+    command_buffers_.Draw(3, 1, 0, 0);
+    command_buffers_.EndRenderPass();
+    command_buffers_.End();
+    util::Log::Info("Graphics objects: command buffers recorded");
     util::Log::Info("Graphics objects: triangle created");
+
 }
 
 Triangle::~Triangle() {
     util::Log::Info("Graphics objects: triangle destroying...");
 }
 
-void Triangle::Draw() const {
-    // Record command buffer
-
-    // Submit command buffer
-    // vkQueueSubmit(queue, 1, &submitInfo, NULL);
-
-    // Present to screen ?
-    // vkQueuePresentKHR(queue, &presentInfo);
+void Triangle::RenderFrame() const {
+    // -Record command buffer
+    // -Acquire an image from the swap chain
+    const auto image_index = context_.swapchain.AcquireNextImageIndex(image_available_semaphore_.Get());
+    // -Execute the command buffer with that image as attachment in the framebuffer
+    // There is command buffer for eatch image in swapchain
+    context_.device.GetQueue().GraphicsSubmit(command_buffers_.Get().at(image_index), 
+        image_available_semaphore_.Get(), render_finished_semaphore_.Get());
+    // -Return the image to the swap chain for presentation
+    context_.device.GetQueue().Present(context_.swapchain.Get(), image_index, render_finished_semaphore_.Get());
 }
-}; //graphics
+}; //graphics objects

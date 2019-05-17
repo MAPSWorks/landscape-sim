@@ -4,72 +4,25 @@
 #include "shader_module.h"
 
 namespace renderer::vlk {
-GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkFormat& swapchain_format, const CreateParams& create_params) :
+GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const CreateParams& create_params) :
     device_(device),
-    name_(create_params.name),
-    pipeline_layout_(CreatePipelineLayout(device_, create_params.layout)),
-    render_pass_(CreateRenderPass(device_, swapchain_format)),
-    pipeline_(Create(device_, create_params)) {
-    util::Log::Info("Renderer: graphics pipeline '", name_, "' created");
+    info_name_(create_params.name),
+    pipeline_layout_(CreatePipelineLayout(create_params.layout)),
+    pipeline_(Create(render_pass, create_params)) {
+    util::Log::Info("Renderer: graphics pipeline '", info_name_, "' created");
 }
 
 GraphicsPipeline::~GraphicsPipeline() {
-    util::Log::Info("Renderer: graphics pipeline '", name_, "' destroying...");
+    util::Log::Info("Renderer: graphics pipeline '", info_name_, "' destroying...");
     vkDestroyPipeline(device_, pipeline_, nullptr);
-    vkDestroyRenderPass(device_, render_pass_, nullptr);
     vkDestroyPipelineLayout(device_, pipeline_layout_, nullptr);
 }
 
 const VkPipeline& GraphicsPipeline::Get() const {
     return pipeline_;
 }
-// How many colorand depth buffers there will be, how many samples to use for each of
-// themand how their contents should be handled throughout the rendering operations
-VkRenderPass GraphicsPipeline::CreateRenderPass(const VkDevice& device, const VkFormat& swapchain_format) const {
-    // Single color buffer attachmnt
-    VkAttachmentDescription color_attachment {};
-    // The format of the color attachment should match the format of the swap chain images
-    color_attachment.format = swapchain_format;
-    // No multisampling
-    color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    // What to do with data in attachment before rendering (color and depth data)
-    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    // After rendering
-    color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    // Stencil data
-    color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    // Images to be presented in the swap chain
-    color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-    // Attachment reference
-    VkAttachmentReference color_attachment_ref {};
-    // Specifies which attachment to reference by its index in the attachment descriptions array
-    color_attachment_ref.attachment = 0;
-    color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    // Subpasses
-    VkSubpassDescription subpass {};
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.colorAttachmentCount = 1;
-    // The index of the attachment in this array is directly referenced from the 
-    // fragment shader with the layout(location = 0) out vec4 outColor directive!
-    subpass.pColorAttachments = &color_attachment_ref;
-    // Pass
-    VkRenderPassCreateInfo render_pass_create_info {};
-    render_pass_create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    render_pass_create_info.attachmentCount = 1;
-    render_pass_create_info.pAttachments = &color_attachment;
-    render_pass_create_info.subpassCount = 1;
-    render_pass_create_info.pSubpasses = &subpass;
-    //render_pass_info.dependencyCount = 1;
-    //render_pass_info.pDependencies = &dependency;
-    VkRenderPass render_pass;
-    ErrorCheck(vkCreateRenderPass(device, &render_pass_create_info, nullptr, &render_pass));
-    util::Log::Info("Renderer: pipeline '", name_, "' render pass created");
-    return render_pass;
-}
 
-VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const VkDevice& device, const LayoutParams& params) const {
+VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
     VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
     pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipeline_layout_create_info.setLayoutCount = params.layout_count; // Optional
@@ -77,14 +30,14 @@ VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const VkDevice& device, 
     pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional
     pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
     VkPipelineLayout pipeline_layout;
-    ErrorCheck(vkCreatePipelineLayout(device, &pipeline_layout_create_info, nullptr, &pipeline_layout));
-    util::Log::Info("Renderer: pipeline '", name_, "' pipeline layout created, count - ",
+    ErrorCheck(vkCreatePipelineLayout(device_, &pipeline_layout_create_info, nullptr, &pipeline_layout));
+    util::Log::Info("Renderer: pipeline '", info_name_, "' pipeline layout created, count - ",
         pipeline_layout_create_info.setLayoutCount);
     return pipeline_layout;
 }
 
 // Create pipeline from given outside configurable parameters
-VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& create_params) const {
+VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const CreateParams& create_params) const {
     // Programmamble part
     std::vector<VkPipelineShaderStageCreateInfo> stage_create_infos;
     // Shader modules are OK to be destroyed only after pipeline is created
@@ -93,14 +46,14 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     // but this class does not have it
     std::deque<ShaderModule> shader_modules;
     for (const auto& stage_params : create_params.shader_stages) {
-        shader_modules.emplace_back(device, stage_params.file_name);
+        shader_modules.emplace_back(device_, stage_params.file_name);
         VkPipelineShaderStageCreateInfo stage_create_info {};
         stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         stage_create_info.stage = static_cast<VkShaderStageFlagBits>(stage_params.stage);
         stage_create_info.module = shader_modules.back().Get();
         stage_create_info.pName = stage_params.entry_point.c_str();
         stage_create_infos.push_back(stage_create_info);
-        util::Log::Info("Renderer: pipeline '", name_, "' ", ToString(stage_create_info.stage),
+        util::Log::Info("Renderer: pipeline '", info_name_, "' ", ToString(stage_create_info.stage),
                     " shader stage created. Entry point - ", stage_create_info.pName);
     }
     // Fixed-function part
@@ -116,7 +69,7 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     input_assembly_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     input_assembly_create_info.topology = static_cast<VkPrimitiveTopology>(create_params.input_assembly.primitive_topology);
     input_assembly_create_info.primitiveRestartEnable = VK_FALSE;
-    util::Log::Info("Renderer: pipeline '", name_, "' primitive topology set - ", 
+    util::Log::Info("Renderer: pipeline '", info_name_, "' primitive topology set - ",
         ToString(input_assembly_create_info.topology));
     // Viewport and scissors
     // Potentially configurble, but usually the same for all
@@ -136,7 +89,7 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     viewport_states_create_info.pViewports = &viewport;
     viewport_states_create_info.scissorCount = 1;
     viewport_states_create_info.pScissors = &scissor;
-    util::Log::Info("Renderer: pipeline '", name_, "' viewport set - (", 
+    util::Log::Info("Renderer: pipeline '", info_name_, "' viewport set - (",
         viewport.width, "," , viewport.height,")");
     // Rasterizer
     VkPipelineRasterizationStateCreateInfo raster_state_create_info {};
@@ -152,7 +105,7 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     raster_state_create_info.depthBiasClamp = 0.0f; // Optional
     raster_state_create_info.depthBiasSlopeFactor = 0.0f; // Optional
     // In structure cull mode type is flags(uint32_t) but our parameter is bit value
-    util::Log::Info("Renderer: pipeline '", name_, "' rasterization set - ",
+    util::Log::Info("Renderer: pipeline '", info_name_, "' rasterization set - ",
         ToString(raster_state_create_info.polygonMode), " ", 
         ToString(static_cast<VkCullModeFlagBits>(raster_state_create_info.cullMode)));
     // Multisample
@@ -164,7 +117,7 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     multisample_create_info.pSampleMask = nullptr; // Optional
     multisample_create_info.alphaToCoverageEnable = VK_FALSE; // Optional
     multisample_create_info.alphaToOneEnable = VK_FALSE; // Optional
-    util::Log::Info("Renderer: pipeline '", name_, "' multisample enabled - ",
+    util::Log::Info("Renderer: pipeline '", info_name_, "' multisample enabled - ",
         ToString(create_params.multisample.sample_shading_enable));
     // Depth stencil
     // ....
@@ -189,7 +142,7 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     color_blend_create_info.blendConstants[1] = 0.0f; // Optional
     color_blend_create_info.blendConstants[2] = 0.0f; // Optional
     color_blend_create_info.blendConstants[3] = 0.0f; // Optional
-    util::Log::Info("Renderer: pipeline '", name_, "' color blend enabled - ",
+    util::Log::Info("Renderer: pipeline '", info_name_, "' color blend enabled - ",
         ToString(create_params.color_blend.blend_enable)); 
 
     // The pipeline itself
@@ -208,14 +161,14 @@ VkPipeline GraphicsPipeline::Create(const VkDevice& device, const CreateParams& 
     // TODO: some state can be modified without recreating pipeline check : VkPipelineDynamicStateCreateInfo
     create_info.pDynamicState = nullptr; // Optional
     create_info.layout = pipeline_layout_;
-    create_info.renderPass = render_pass_;
+    create_info.renderPass = render_pass;
     // Subpass index
     create_info.subpass = 0;
     // Pipelines can be derived to gain speed, VK_PIPELINE_CREATE_DERIVATIVE_BIT. must be set in flags
     create_info.basePipelineHandle = nullptr; // Optional
     create_info.basePipelineIndex = -1; // Optional
     VkPipeline pipeline;
-    ErrorCheck(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &create_info, nullptr, &pipeline));
+    ErrorCheck(vkCreateGraphicsPipelines(device_, VK_NULL_HANDLE, 1, &create_info, nullptr, &pipeline));
     return pipeline;
 }
 

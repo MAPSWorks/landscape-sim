@@ -19,8 +19,8 @@ private:
     // Loads and returns binary data from given file
     // Used to load SPIR-V data
     static std::vector<char> ReadBinaryFile(const std::string& file_name);
-    VkShaderModule Create(const VkDevice& device, const std::string& file_name) const;
-    // We grab reference and store it here because we need it in destructor
+    VkShaderModule Create(const std::string& file_name) const;
+    // Reference to resource this object is created with
     const VkDevice& device_;
     // For logging
     const std::string file_name_;
