@@ -1,6 +1,7 @@
 #pragma once
 #include <platform/platform.h>
-#include <graphics/graphics_system.h>
+#include <renderer/renderer.h>
+#include <scene/scene_manager.h>
 
 class App {
 public:
@@ -9,5 +10,6 @@ public:
     void Run();
 private:
     platform::Platform platform_;
-    graphics::GraphicsSystem graphics_system_;
+    renderer::Renderer renderer_;
+    scene::SceneManager scene_manager_;
 };

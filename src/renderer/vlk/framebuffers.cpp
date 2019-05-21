@@ -1,16 +1,16 @@
 #include "framebuffers.h"
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Framebuffers::Framebuffers(const VkDevice& device, const VkRenderPass& render_pass, 
     const std::vector<VkImageView>& swapchain_iamge_views,const VkExtent2D& swapchain_extent) :
     device_(device),
     framebuffers_(Create(render_pass, swapchain_iamge_views, swapchain_extent)) {
-    util::Log::Info("Renderer: all framebuffers created");
+    base::Log::Info("Renderer: all framebuffers created");
 }
 
 Framebuffers::~Framebuffers() {
-    util::Log::Info("Renderer: framebuffers destroying...");
+    base::Log::Info("Renderer: framebuffers destroying...");
     for (auto framebuffer : framebuffers_) {
         vkDestroyFramebuffer(device_, framebuffer, nullptr);
     }
@@ -36,7 +36,7 @@ std::vector<VkFramebuffer> Framebuffers::Create(const VkRenderPass& render_pass,
         framebuffer_create_info.height = swapchain_extent.height;
         framebuffer_create_info.layers = 1;
         ErrorCheck(vkCreateFramebuffer(device_, &framebuffer_create_info, nullptr, &framebuffers.at(fb_index++)));
-        util::Log::Info("Renderer: framebuffer ", (fb_index-1), " created");
+        base::Log::Info("Renderer: framebuffer ", (fb_index-1), " created");
     }
 
     return framebuffers;

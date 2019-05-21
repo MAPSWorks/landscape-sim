@@ -1,15 +1,15 @@
 #include "render_pass.h"
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 RenderPass::RenderPass(const VkDevice& device, const VkFormat& swapchain_format) : 
     device_(device),
     render_pass_(Create(swapchain_format)) {
-    util::Log::Info("Renderer: render pass created");
+    base::Log::Info("Renderer: render pass created");
 }
 
 RenderPass::~RenderPass() {
-    util::Log::Info("Renderer: render pass destroying...");
+    base::Log::Info("Renderer: render pass destroying...");
     vkDestroyRenderPass(device_, render_pass_, nullptr);
 }
 

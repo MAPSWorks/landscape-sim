@@ -1,22 +1,37 @@
 #include "app.h"
-#include <util/log.h>
-#include <util/types.h>
+#include <vector>
+#include <base/log.h>
+#include <base/types.h>
+#include <renderer/vlk/types.h>
+#include <objects/types.h>
+#include <scene/types.h>
 
-App::App() : platform_(t::Size(800, 600)),
-             graphics_system_({ "Test app", 1, "W2GPU", 1 }, 
-                                platform_.GetWindowHandle()) {
-    util::Log::Info("App initialized");
+// TODO: Global data, probably should be in json 
+const t::Size window_size(800, 600);
+const renderer::vlk::Settings renderer_settings{ "Test app", 1, "W2GPU", 1 };
+const scene::Settings scene_settings{ };
+// Objects and positions and camera position are all initial and can change
+// while scene is running
+const scene::ObjectDescription triangle_description{ object::Type::kTriangle, t::Vec3(0.0) };
+const std::vector<scene::ObjectDescription> scene_objects{ triangle_description };
+const scene::Description scene_description{ t::Vec3(0.0) , scene_objects };
+
+App::App() :
+    platform_(window_size),
+    renderer_(renderer_settings, platform_.GetWindowHandle()),
+    scene_manager_(scene_settings, scene_description, renderer_) {
+    base::Log::Info("App initialized");
 }
 
 App::~App() {
-    util::Log::Info("App shutting down...");
+    base::Log::Info("App shutting down...");
 }
 
 void App::Run() {
     while (platform_.IsRunning()) {
         platform_.PollEvents();
-        graphics_system_.RenderFrame();
+        scene_manager_.RenderFrame();
     }
-    graphics_system_.WaitForIdle();
+    renderer_.WaitForGPUIdle();
 }
 

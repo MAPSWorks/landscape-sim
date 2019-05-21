@@ -1,7 +1,7 @@
 #include "swapchain.h"
 #include <stdexcept>
 #include <algorithm>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Swapchain::Swapchain(const Device& device, const VkSurfaceKHR& surface, GLFWwindow* window) :
@@ -9,11 +9,11 @@ Swapchain::Swapchain(const Device& device, const VkSurfaceKHR& surface, GLFWwind
     swapchain_(Create(device.GetGPU(),device.GetQueue().GetFamilyIndices(), surface, window)),
     images_(GetImages()),
     image_views_(CreateImageViews(images_)) {
-    util::Log::Info("Renderer: swapchain created");
+    base::Log::Info("Renderer: swapchain created");
 } 
 
 Swapchain::~Swapchain() {
-    util::Log::Info("Renderer: swapchain destroying...");
+    base::Log::Info("Renderer: swapchain destroying...");
     for (auto image_view : image_views_) {
         vkDestroyImageView(device_, image_view, nullptr);
     }

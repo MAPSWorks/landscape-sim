@@ -1,17 +1,17 @@
 #include "instance.h"
 #include <GLFW/glfw3.h>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Instance::Instance(const Settings& settings) : required_extentions_(GetRequiredExtensions(validation_)),
                                                instance_(Create(settings)) {
     // NOTE: for messanger RAII make separate object
     validation_.CreateMessanger(instance_);
-    util::Log::Info("Renderer: instance created");
+    base::Log::Info("Renderer: instance created");
 }
 
 Instance::~Instance() {
-    util::Log::Info("Renderer: instance destroyting...");
+    base::Log::Info("Renderer: instance destroyting...");
     validation_.DestroyMessanger(instance_);
     vkDestroyInstance(instance_, nullptr);
 }

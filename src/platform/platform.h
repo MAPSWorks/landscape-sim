@@ -1,6 +1,6 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#include <util/types.h>
+#include <base/types.h>
 
 // Windowing and event handling class
 namespace platform {

@@ -1,6 +1,6 @@
 #include "graphics_pipeline.h"
 #include <deque>
-#include <util/log.h>
+#include <base/log.h>
 #include "shader_module.h"
 
 namespace renderer::vlk {
@@ -9,11 +9,11 @@ GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& r
     info_name_(create_params.name),
     pipeline_layout_(CreatePipelineLayout(create_params.layout)),
     pipeline_(Create(render_pass, create_params)) {
-    util::Log::Info("Renderer: graphics pipeline '", info_name_, "' created");
+    base::Log::Info("Renderer: graphics pipeline '", info_name_, "' created");
 }
 
 GraphicsPipeline::~GraphicsPipeline() {
-    util::Log::Info("Renderer: graphics pipeline '", info_name_, "' destroying...");
+    base::Log::Info("Renderer: graphics pipeline '", info_name_, "' destroying...");
     vkDestroyPipeline(device_, pipeline_, nullptr);
     vkDestroyPipelineLayout(device_, pipeline_layout_, nullptr);
 }
@@ -31,7 +31,7 @@ VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& para
     pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
     VkPipelineLayout pipeline_layout;
     ErrorCheck(vkCreatePipelineLayout(device_, &pipeline_layout_create_info, nullptr, &pipeline_layout));
-    util::Log::Info("Renderer: pipeline '", info_name_, "' pipeline layout created, count - ",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' pipeline layout created, count - ",
         pipeline_layout_create_info.setLayoutCount);
     return pipeline_layout;
 }
@@ -53,7 +53,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
         stage_create_info.module = shader_modules.back().Get();
         stage_create_info.pName = stage_params.entry_point.c_str();
         stage_create_infos.push_back(stage_create_info);
-        util::Log::Info("Renderer: pipeline '", info_name_, "' ", ToString(stage_create_info.stage),
+        base::Log::Info("Renderer: pipeline '", info_name_, "' ", ToString(stage_create_info.stage),
                     " shader stage created. Entry point - ", stage_create_info.pName);
     }
     // Fixed-function part
@@ -69,7 +69,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     input_assembly_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     input_assembly_create_info.topology = static_cast<VkPrimitiveTopology>(create_params.input_assembly.primitive_topology);
     input_assembly_create_info.primitiveRestartEnable = VK_FALSE;
-    util::Log::Info("Renderer: pipeline '", info_name_, "' primitive topology set - ",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' primitive topology set - ",
         ToString(input_assembly_create_info.topology));
     // Viewport and scissors
     // Potentially configurble, but usually the same for all
@@ -89,7 +89,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     viewport_states_create_info.pViewports = &viewport;
     viewport_states_create_info.scissorCount = 1;
     viewport_states_create_info.pScissors = &scissor;
-    util::Log::Info("Renderer: pipeline '", info_name_, "' viewport set - (",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' viewport set - (",
         viewport.width, "," , viewport.height,")");
     // Rasterizer
     VkPipelineRasterizationStateCreateInfo raster_state_create_info {};
@@ -105,7 +105,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     raster_state_create_info.depthBiasClamp = 0.0f; // Optional
     raster_state_create_info.depthBiasSlopeFactor = 0.0f; // Optional
     // In structure cull mode type is flags(uint32_t) but our parameter is bit value
-    util::Log::Info("Renderer: pipeline '", info_name_, "' rasterization set - ",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' rasterization set - ",
         ToString(raster_state_create_info.polygonMode), " ", 
         ToString(static_cast<VkCullModeFlagBits>(raster_state_create_info.cullMode)));
     // Multisample
@@ -117,7 +117,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     multisample_create_info.pSampleMask = nullptr; // Optional
     multisample_create_info.alphaToCoverageEnable = VK_FALSE; // Optional
     multisample_create_info.alphaToOneEnable = VK_FALSE; // Optional
-    util::Log::Info("Renderer: pipeline '", info_name_, "' multisample enabled - ",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' multisample enabled - ",
         ToString(create_params.multisample.sample_shading_enable));
     // Depth stencil
     // ....
@@ -142,7 +142,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     color_blend_create_info.blendConstants[1] = 0.0f; // Optional
     color_blend_create_info.blendConstants[2] = 0.0f; // Optional
     color_blend_create_info.blendConstants[3] = 0.0f; // Optional
-    util::Log::Info("Renderer: pipeline '", info_name_, "' color blend enabled - ",
+    base::Log::Info("Renderer: pipeline '", info_name_, "' color blend enabled - ",
         ToString(create_params.color_blend.blend_enable)); 
 
     // The pipeline itself

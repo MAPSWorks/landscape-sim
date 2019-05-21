@@ -1,15 +1,15 @@
 #include "semaphore.h"
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Semaphore::Semaphore(const VkDevice& device) : 
     device_(device),
     semaphore_(Create()) {
-    util::Log::Info("Renderer: render pass created");
+    base::Log::Info("Renderer: render pass created");
 }
 
 Semaphore::~Semaphore() {
-    util::Log::Info("Renderer: render pass destroying...");
+    base::Log::Info("Renderer: render pass destroying...");
     vkDestroySemaphore(device_, semaphore_, nullptr);
 }
 

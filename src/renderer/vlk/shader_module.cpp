@@ -1,17 +1,17 @@
 #include "shader_module.h"
 #include <fstream>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 ShaderModule::ShaderModule(const VkDevice& device, const std::string& file_name) :
     device_(device),
     file_name_(file_name),
     shader_module_(Create(file_name)) {
-    util::Log::Info("Renderer: shader module '",file_name_,"' created");
+    base::Log::Info("Renderer: shader module '",file_name_,"' created");
 }
 
 ShaderModule::~ShaderModule() {
-    util::Log::Info("Renderer: shader module '", file_name_, "' destroying...");
+    base::Log::Info("Renderer: shader module '", file_name_, "' destroying...");
     vkDestroyShaderModule(device_, shader_module_, nullptr);
 }
 
@@ -34,7 +34,7 @@ std::vector<char> ShaderModule::ReadBinaryFile(const std::string& file_name) {
     file.seekg(0);
     file.read(buffer.data(), file_size);
     file.close();
-    util::Log::Info("Renderer: ",buffer.size()," bytes read from '", file_name);
+    base::Log::Info("Renderer: ",buffer.size()," bytes read from '", file_name);
     return buffer;
 }
 

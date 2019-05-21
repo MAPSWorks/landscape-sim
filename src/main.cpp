@@ -1,6 +1,5 @@
 #include <exception>
-#include <vulkan/vulkan.hpp>
-#include <util/log.h>
+#include <base/log.h>
 #include "app.h"
 
 int main(int argc, char* argv[]) {
@@ -9,11 +8,11 @@ int main(int argc, char* argv[]) {
         app.Run();
     }
     catch (const std::exception &e) {
-        util::Log::Error("Exception: ", e.what());
+        base::Log::Error("Exception: ", e.what());
         return 1;
     }
     catch (...) {
-        util::Log::Error("Unknown error");
+        base::Log::Error("Unknown error");
         return 1;
     }
 

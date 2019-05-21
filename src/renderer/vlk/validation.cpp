@@ -1,6 +1,6 @@
 #include "validation.h"
 #include <stdexcept>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 // Prior to Vulkan SDK for 1.1.106.0 layers: VK_LAYER_LUNARG_standard_validation
@@ -8,13 +8,13 @@ namespace renderer::vlk {
 Validation::Validation() : layers_({ "VK_LAYER_KHRONOS_validation" }) {
     if (enabled_) {
         CheckSupport();
-        util::Log::Info("Renderer: validation initialized");
+        base::Log::Info("Renderer: validation initialized");
     }
 }
 
 Validation::~Validation() {
     if (enabled_) {
-        util::Log::Info("Renderer: validation shutting down...");
+        base::Log::Info("Renderer: validation shutting down...");
     }
 }
 
@@ -95,7 +95,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Validation::DebugCallback(VkDebugUtilsMessageSeve
                                                             VkDebugUtilsMessageTypeFlagsEXT message_type, 
                                                             const VkDebugUtilsMessengerCallbackDataEXT* callback_data, 
                                                             void* user_data) {
-    util::Log::Error("* Validation layer: ", callback_data->pMessage);
+    base::Log::Error("* Validation layer: ", callback_data->pMessage);
     return VK_FALSE;
 }
 }; // renderer vlk

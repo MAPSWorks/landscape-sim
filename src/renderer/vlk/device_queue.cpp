@@ -1,12 +1,12 @@
 #include "device_queue.h"
 #include <set>
 #include <stdexcept>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 DeviceQueue::DeviceQueue(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) :
                                                 family_indices_(SelectFamilies(gpu, surface)) {
-    util::Log::Info("Renderer: device queue family indices picked. Graphics - ", 
+    base::Log::Info("Renderer: device queue family indices picked. Graphics - ", 
                                                family_indices_.graphics.value(), 
                                 " present - ", family_indices_.present.value());
 }

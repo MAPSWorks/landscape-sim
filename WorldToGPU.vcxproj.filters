@@ -45,12 +45,6 @@
     <ClCompile Include="src\renderer\vlk\validation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\graphics_system.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\objects\triangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\vlk\shader_module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,18 +66,21 @@
     <ClCompile Include="src\renderer\vlk\semaphore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\scene_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects\triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects\i_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\platform.h">
@@ -113,15 +110,6 @@
     <ClInclude Include="src\renderer\vlk\validation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\graphics_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\objects\triangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\vlk\shader_module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -141,6 +129,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\vlk\semaphore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\scene_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\i_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "device.h"
 #include <vector>
 #include <stdexcept>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Device::Device(const VkInstance& instance, const VkSurfaceKHR& surface) : 
@@ -12,11 +12,11 @@ Device::Device(const VkInstance& instance, const VkSurfaceKHR& surface) :
     // Retrieve queues from device and set their handles in DeviceQueue class
     queue_.SetGraphics(GetGraphicsQueue());
     queue_.SetPresent(GetPresentQueue());
-    util::Log::Info("Renderer: device created");
+    base::Log::Info("Renderer: device created");
 }
 
 Device::~Device() {
-    util::Log::Info("Renderer: device destroying...");
+    base::Log::Info("Renderer: device destroying...");
     // Also destroys logical device and queues created from logical device
     vkDestroyDevice(device_, nullptr);
 }
@@ -55,7 +55,7 @@ void Device::PrintPhysicalDeviceProperties(const VkPhysicalDevice& gpu) const {
     // Log some properties
     VkPhysicalDeviceProperties p_device_properties;
     vkGetPhysicalDeviceProperties(gpu, &p_device_properties);
-    util::Log::Info("Renderer: GPU picked - ", p_device_properties.deviceName,
+    base::Log::Info("Renderer: GPU picked - ", p_device_properties.deviceName,
                     ", Vulkan vers. - ", VK_VERSION_MAJOR(p_device_properties.apiVersion), ".",
                     VK_VERSION_MINOR(p_device_properties.apiVersion), ".",
                     VK_VERSION_PATCH(p_device_properties.apiVersion));

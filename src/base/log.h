@@ -4,7 +4,7 @@
 //#include <windows.h>
 // PIENTRY warning is probably when windows is included before glfw (or other way around)
 
-namespace util {
+namespace base {
 // Logging class
 class Log {
 public:

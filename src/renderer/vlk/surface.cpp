@@ -1,16 +1,16 @@
 #include "surface.h"
 #include <stdexcept>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 Surface::Surface(const VkInstance& instance, GLFWwindow* window) : 
     instance_(instance),
     surface_(Create(window)) {
-    util::Log::Info("Renderer: surface created");
+    base::Log::Info("Renderer: surface created");
 }
 
 Surface::~Surface() {
-    util::Log::Info("Renderer: surface destroying...");
+    base::Log::Info("Renderer: surface destroying...");
     vkDestroySurfaceKHR(instance_, surface_, nullptr);
 }
 

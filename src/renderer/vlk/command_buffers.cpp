@@ -1,16 +1,16 @@
 #include "command_buffers.h"
-#include <util/log.h>
+#include <base/log.h>
 
 namespace renderer::vlk {
 CommandBuffers::CommandBuffers(const VkDevice& device, uint32_t queue_family_index, uint32_t count) :
     device_(device),
     command_pool_(CreateCommandPool(queue_family_index)),
     command_buffers_(AllocateCommandBuffers(count)) {
-    util::Log::Info("Renderer: command pool created and command buffers allocated");
+    base::Log::Info("Renderer: command pool created and command buffers allocated");
 }
 
 CommandBuffers::~CommandBuffers() {
-    util::Log::Info("Renderer: command pool (and implicitly command buffers) destroying...");
+    base::Log::Info("Renderer: command pool (and implicitly command buffers) destroying...");
     vkDestroyCommandPool(device_, command_pool_, nullptr);
     // Command buffers are destroyed together with pool
 }
@@ -80,7 +80,7 @@ VkCommandPool CommandBuffers::CreateCommandPool(uint32_t family_index) const {
     VkCommandPoolCreateInfo pool_create_info {};
     pool_create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     pool_create_info.queueFamilyIndex = family_index;
-    util::Log::Info("Renderer: command pool queue family index set to '", family_index ,"'");
+    base::Log::Info("Renderer: command pool queue family index set to '", family_index ,"'");
     VkCommandPool command_pool;
     ErrorCheck(vkCreateCommandPool(device_, &pool_create_info, nullptr, &command_pool));
     return command_pool;

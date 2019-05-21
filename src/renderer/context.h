@@ -12,6 +12,7 @@ namespace renderer {
 //
 // System-wide global state of rendering
 // Must be initialized first for any rendering system
+// TODO: use struct if context remains POD
 class Context {
 public:
     Context(const vlk::Settings& settings, GLFWwindow* window);
@@ -23,4 +24,4 @@ public:
     const vlk::Swapchain swapchain;
 //private:
 };
-}; // graphics vlk
+}; // renderer

@@ -1,15 +1,15 @@
 #include "platform.h"
 #include <string>
-#include <util/log.h>
+#include <base/log.h>
 
 namespace platform {
 Platform::Platform(const t::Size& win_size) : window_size_(win_size) {
     Init();
-    util::Log::Info("Platform initialized");
+    base::Log::Info("Platform initialized");
 }
 
 Platform::~Platform() {
-    util::Log::Info("Platform shutting down...");
+    base::Log::Info("Platform shutting down...");
     Shutdown();
 }
 
