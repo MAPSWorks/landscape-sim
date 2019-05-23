@@ -22,7 +22,9 @@ Triangle::Triangle(renderer::Renderer& renderer) :
     // Viewport and scisors
     {
         // Viewport size
-        renderer_.GetContext().swapchain.GetExtent().width, renderer_.GetContext().swapchain.GetExtent().height,
+        // TODO:
+        800, 600
+       /* renderer_.GetContext().swapchain.GetExtent().width, renderer_.GetContext().swapchain.GetExtent().height,*/
     },
     // Rasterization
     {

@@ -35,7 +35,7 @@ public:
     const VkQueue& GetPresent() const;
     // Submit command buffer to graphics queue
     void GraphicsSubmit(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore,
-        const VkSemaphore& signal_semaphore) const;
+        const VkSemaphore& signal_semaphore, const VkFence& fence) const;
     // Present image to swapchain
     void Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const;
 private:

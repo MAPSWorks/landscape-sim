@@ -1,18 +1,14 @@
 #include "renderer.h"
-#include <vulkan/vulkan.h>
 #include <base/log.h>
 
 namespace renderer {
 Renderer::Renderer(vlk::Settings settings, GLFWwindow* window) :
     context_(settings, window),
-    render_pass_(context_.device.Get(), context_.swapchain.GetSurfaceFormat().format),
-    pipeline_manager_(context_.device.Get(), render_pass_.Get()),
-    framebuffers_(context_.device.Get(), render_pass_.Get(),
-        context_.swapchain.GetImageViews(), context_.swapchain.GetExtent()),
+    window_(context_, window),
+    pipeline_manager_(context_.device.Get(), window_.render_pass.Get()),
     command_buffers_(context_.device.Get(), context_.device.GetQueue().GetFamilyIndices().graphics.value(),
-        (uint32_t)framebuffers_.Get().size()),
-    image_available_semaphore_(context_.device.Get()),
-    render_finished_semaphore_(context_.device.Get()) {
+        (uint32_t)window_.framebuffers.Get().size()),
+    sync_manager_(context_.device.Get()) {
     base::Log::Info("Renderer: renderer initialized");
 }
 
@@ -32,24 +28,25 @@ PipelineManager& Renderer::GetPipelineManager() {
     return pipeline_manager_;
 }
 
-void Renderer::RenderFrame() const {
+void Renderer::RenderFrame() {
+    // Frames on GPU are processed in paralel, there fore we need to synchronize with cpu
+    sync_manager_.WaitForInFlightFence();
     // -Acquire an image from the swap chain
-    const auto image_index = context_.swapchain.AcquireNextImageIndex(image_available_semaphore_.Get());
+    const auto image_index = window_.swapchain.AcquireNextImageIndex(sync_manager_.GetImageAvailableSemaphore());
     // -Execute the command buffer with that image as attachment in the framebuffer
     // There is command buffer for eatch image in swapchain
     context_.device.GetQueue().GraphicsSubmit(command_buffers_.Get().at(image_index),
-        image_available_semaphore_.Get(), render_finished_semaphore_.Get());
+        sync_manager_.GetImageAvailableSemaphore(), sync_manager_.GetRenderFinishedSemaphore(), sync_manager_.GetInFlightFence());
     // -Return the image to the swap chain for presentation
-    context_.device.GetQueue().Present(context_.swapchain.Get(), image_index, render_finished_semaphore_.Get());
-    // TODO: recreate to frames in flight variant
-    vkQueueWaitIdle(context_.device.GetQueue().GetPresent());
+    context_.device.GetQueue().Present(window_.swapchain.Get(), image_index, sync_manager_.GetRenderFinishedSemaphore());
+    sync_manager_.UpdateFrameInFlight();
 }
 
 // Calling thhis function will reset whole command buffers
 // Allcommand buffers are reecorded at once (for each framebuffer)
 void Renderer::BeginRecordCommandBuffers() const {
     command_buffers_.Begin();
-    command_buffers_.BeginRenderPass(render_pass_.Get(), framebuffers_.Get(), context_.swapchain.GetExtent());
+    command_buffers_.BeginRenderPass(window_.render_pass.Get(), window_.framebuffers.Get(), window_.swapchain.GetExtent());
 }
 
 void Renderer::EndRecordCommandBuffers() const {
@@ -58,6 +55,6 @@ void Renderer::EndRecordCommandBuffers() const {
 }
 
 void Renderer::WaitForGPUIdle() const {
-    vkDeviceWaitIdle(context_.device.Get());
+    sync_manager_.DeviceWaitIdle();
 }
 }; // renderer

@@ -27,9 +27,11 @@
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\pipeline_manager.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\sync_manager.cpp" />
     <ClCompile Include="src\renderer\vlk\command_buffers.cpp" />
     <ClCompile Include="src\renderer\vlk\device.cpp" />
     <ClCompile Include="src\renderer\vlk\device_queue.cpp" />
+    <ClCompile Include="src\renderer\vlk\fence.cpp" />
     <ClCompile Include="src\renderer\vlk\framebuffers.cpp" />
     <ClCompile Include="src\renderer\vlk\graphics_pipeline.cpp" />
     <ClCompile Include="src\renderer\vlk\instance.cpp" />
@@ -40,6 +42,7 @@
     <ClCompile Include="src\renderer\vlk\swapchain.cpp" />
     <ClCompile Include="src\renderer\vlk\validation.cpp" />
     <ClCompile Include="src\renderer\vlk\vulkan_shared.cpp" />
+    <ClCompile Include="src\renderer\window.cpp" />
     <ClCompile Include="src\scene\scene_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -51,10 +54,12 @@
     <ClInclude Include="src\renderer\context.h" />
     <ClInclude Include="src\renderer\pipeline_manager.h" />
     <ClInclude Include="src\renderer\renderer.h" />
+    <ClInclude Include="src\renderer\sync_manager.h" />
     <ClInclude Include="src\renderer\types.h" />
     <ClInclude Include="src\renderer\vlk\command_buffers.h" />
     <ClInclude Include="src\renderer\vlk\device.h" />
     <ClInclude Include="src\renderer\vlk\device_queue.h" />
+    <ClInclude Include="src\renderer\vlk\fence.h" />
     <ClInclude Include="src\renderer\vlk\framebuffers.h" />
     <ClInclude Include="src\renderer\vlk\graphics_pipeline.h" />
     <ClInclude Include="src\renderer\vlk\instance.h" />
@@ -68,6 +73,7 @@
     <ClInclude Include="src\renderer\vlk\vulkan_shared.h" />
     <ClInclude Include="src\base\log.h" />
     <ClInclude Include="src\base\types.h" />
+    <ClInclude Include="src\renderer\window.h" />
     <ClInclude Include="src\scene\scene_manager.h" />
     <ClInclude Include="src\scene\types.h" />
   </ItemGroup>

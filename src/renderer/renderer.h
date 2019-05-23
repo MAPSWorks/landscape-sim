@@ -1,12 +1,11 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include "vlk/types.h"
-#include "vlk/render_pass.h"
-#include "vlk/framebuffers.h"
 #include "vlk/command_buffers.h"
-#include "vlk/semaphore.h"
 #include "context.h"
+#include "window.h"
 #include "pipeline_manager.h"
+#include "sync_manager.h"
 
 namespace renderer {
 // General rendering class used to set-up means to render and render data in
@@ -18,19 +17,18 @@ public:
     const Context& GetContext() const;
     const vlk::CommandBuffers& GetCommandBuffers() const;
     PipelineManager& GetPipelineManager();
-    void RenderFrame() const;
+    void RenderFrame();
     void BeginRecordCommandBuffers() const;
     void EndRecordCommandBuffers() const;
     // Used to ensure nothing is currently in use on GPU
     void WaitForGPUIdle() const;
 private:
+    // Constant throughout the life of the renderer
     const Context context_;
-    const vlk::RenderPass render_pass_;
+    // Changed upon window resize (dependant on window siize)
+    Window window_;
     PipelineManager pipeline_manager_;
-    const vlk::Framebuffers framebuffers_;
     const vlk::CommandBuffers command_buffers_;;
-    const vlk::Semaphore image_available_semaphore_;
-    const vlk::Semaphore render_finished_semaphore_;
-
+    SyncManager sync_manager_;
 };
 }; // renderer

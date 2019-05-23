@@ -10,12 +10,11 @@ namespace renderer {
 Context::Context(const vlk::Settings& settings, GLFWwindow* window) :
     instance(settings),
     surface(instance.Get(), window),
-    device(instance.Get(), surface.Get()),
-    swapchain(device, surface.Get(), window) {
-    base::Log::Info("Renderer: context initialized");
+    device(instance.Get(), surface.Get()) {
+    base::Log::Info("Renderer: context created");
 }
 
 Context::~Context() {
-    base::Log::Info("Renderer: context shutting down...");
+    base::Log::Info("Renderer: context destroying...");
 }
 }; // graphics vlk

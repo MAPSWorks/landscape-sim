@@ -55,8 +55,9 @@ const VkQueue& DeviceQueue::GetPresent() const {
 // Performance is important since this is probably real-time function
 // wait_semaphore - to wait for executing on pipeline stage
 // signal_semaphore - to signal when done
+// fence - will be signaled when command buffer is complete
 void DeviceQueue::GraphicsSubmit(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore, 
-    const VkSemaphore& signal_semaphore) const {
+    const VkSemaphore& signal_semaphore, const VkFence& fence) const {
     VkSubmitInfo submit_info{};
     submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     const VkSemaphore wait_semaphores[] = { wait_semaphore };
@@ -71,7 +72,7 @@ void DeviceQueue::GraphicsSubmit(const VkCommandBuffer& command_buffer, const Vk
     const VkSemaphore signal_semaphores[] = { signal_semaphore };
     submit_info.signalSemaphoreCount = 1;
     submit_info.pSignalSemaphores = signal_semaphores;
-    ErrorCheck(vkQueueSubmit(graphics_queue_, 1, &submit_info, VK_NULL_HANDLE));
+    ErrorCheck(vkQueueSubmit(graphics_queue_, 1, &submit_info, fence));
 }
 
 // Presents iamege to swapchain

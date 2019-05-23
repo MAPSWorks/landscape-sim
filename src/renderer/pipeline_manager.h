@@ -17,6 +17,7 @@ public:
 private:
     // Pipeline manager is created for certain device and certain render pass
     // there for we grab references on init
+    // TODO: render passes are recreated with swapchain resize
     const VkDevice& device_;
     const VkRenderPass& render_pass_;
     std::vector<std::unique_ptr<vlk::GraphicsPipeline>> graphics_pipelines_;

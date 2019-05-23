@@ -3,7 +3,6 @@
 #include "vlk/instance.h"
 #include "vlk/surface.h"
 #include "vlk/device.h"
-#include "vlk/swapchain.h"
 
 // Context - the circumstances that form the setting for an event, statement, 
 //           or idea, and in terms of which it can be fully understood.
@@ -22,6 +21,5 @@ public:
     const vlk::Instance instance;
     const vlk::Surface surface;
     const vlk::Device device;
-    const vlk::Swapchain swapchain;
 };
 }; // renderer
