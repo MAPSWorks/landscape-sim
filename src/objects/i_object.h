@@ -1,5 +1,6 @@
 #pragma once
 #include <base/types.h>
+#include <renderer/vlk/command_buffers.h>
 
 namespace object {
 // Renderable object base class
@@ -9,7 +10,8 @@ public:
     // Deleting a derived class object using a pointer to a base class
     // that has a non-virtual destructor results in undefined behavior
     virtual ~IObject() {};
-    virtual void RenderFrame() const = 0;
+    // Add command to  command buffer, buffer is already started
+    virtual void RecordToCommandBuffer() const = 0;
 private:
     t::Vec3 world_position_;
 };

@@ -1,26 +1,19 @@
 #pragma once
 #include "i_object.h"
-#include <renderer/context.h>
-#include <renderer/vlk/render_pass.h>
-#include <renderer/vlk/framebuffers.h>
-#include <renderer/vlk/graphics_pipeline.h>
-#include <renderer/vlk/command_buffers.h>
-#include <renderer/vlk/semaphore.h>
+#include <renderer/renderer.h>
 
 namespace object {
 class Triangle : public IObject {
 public:
-    Triangle(const renderer::Context& context);
+    Triangle(renderer::Renderer& renderer);
     ~Triangle();
-    void RenderFrame() const override;
+    void RecordToCommandBuffer() const override;
 private:
-    // Reference to resources this object was created with
-    const renderer::Context& context_;
-    const renderer::vlk::RenderPass render_pass_;
-    const renderer::vlk::Framebuffers framebuffers_;
-    const renderer::vlk::GraphicsPipeline graphics_pipeline_;
-    const renderer::vlk::CommandBuffers command_buffers_;;
-    const renderer::vlk::Semaphore image_available_semaphore_;
-    const renderer::vlk::Semaphore render_finished_semaphore_;
+    // Reference to renderer this triangle is tied with
+    renderer::Renderer& renderer_;
+    // Only this object knows what pipeline it needs
+    const renderer::vlk::GraphicsPipeline::CreateParams pipeline_description_;
+    // Id of pipeline that is going to be used for rendering
+    const renderer::PipelineId pipeline_id_;
 };
 }; // object

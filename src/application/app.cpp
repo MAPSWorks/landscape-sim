@@ -16,6 +16,7 @@ const scene::ObjectDescription triangle_description{ object::Type::kTriangle, t:
 const std::vector<scene::ObjectDescription> scene_objects{ triangle_description };
 const scene::Description scene_description{ t::Vec3(0.0) , scene_objects };
 
+namespace application {
 App::App() :
     platform_(window_size),
     renderer_(renderer_settings, platform_.GetWindowHandle()),
@@ -34,4 +35,4 @@ void App::Run() {
     }
     renderer_.WaitForGPUIdle();
 }
-
+}; // application

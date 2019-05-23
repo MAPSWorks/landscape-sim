@@ -3,8 +3,8 @@
 #include <base/log.h>
 
 namespace platform {
-Platform::Platform(const t::Size& win_size) : window_size_(win_size) {
-    Init();
+Platform::Platform(const t::Size& win_size) {
+    Init(win_size);
     base::Log::Info("Platform initialized");
 }
 
@@ -13,12 +13,12 @@ Platform::~Platform() {
     Shutdown();
 }
 
-void Platform::Init() {
+void Platform::Init(const t::Size& win_size) {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     std::string window_title = "<App name>";
-    window_ = glfwCreateWindow(window_size_.width, window_size_.height, window_title.c_str(), nullptr, nullptr);
+    window_ = glfwCreateWindow(win_size.width, win_size.height, window_title.c_str(), nullptr, nullptr);
 }
 
 void Platform::Shutdown() {

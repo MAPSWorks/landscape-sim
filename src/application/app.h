@@ -3,6 +3,7 @@
 #include <renderer/renderer.h>
 #include <scene/scene_manager.h>
 
+namespace application {
 class App {
 public:
     App();
@@ -13,3 +14,4 @@ private:
     renderer::Renderer renderer_;
     scene::SceneManager scene_manager_;
 };
+}; //application

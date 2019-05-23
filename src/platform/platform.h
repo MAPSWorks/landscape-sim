@@ -14,9 +14,8 @@ public:
     void PollEvents() const;
     GLFWwindow* GetWindowHandle() const;
 private:
-    void Init();
+    void Init(const t::Size& win_size);
     void Shutdown();
-    const t::Size window_size_;
     GLFWwindow* window_ = nullptr;
 };
 }; // platform

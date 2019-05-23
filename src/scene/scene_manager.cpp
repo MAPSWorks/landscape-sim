@@ -6,10 +6,18 @@
 
 namespace scene {
 SceneManager::SceneManager(const Settings& settings, const Description& scene_description,
-    const renderer::Renderer& renderer) :
+    renderer::Renderer& renderer) :
     renderer_(renderer),
     camera_world_position_(scene_description.camera_position),
     objects_(InitObjects(scene_description.objects)) {
+
+    // Command buffer recording
+    renderer_.BeginRecordCommandBuffers();
+    for (const auto& object : objects_) {
+        object->RecordToCommandBuffer();
+    }
+    renderer_.EndRecordCommandBuffers();
+
     base::Log::Info("Scene: scene manager initialized");
 }
 
@@ -18,9 +26,7 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::RenderFrame() const {
-    for (const auto& object : objects_) {
-        object->RenderFrame();
-    }
+    renderer_.RenderFrame();
 }
 
 // Make objects in heap and store their pointers in base class pointers in vector
@@ -31,7 +37,7 @@ UniqueObjectVector SceneManager::InitObjects(const std::vector<ObjectDescription
     for (const auto& description : object_descriptions) {
         switch (description.type) {
         case object::Type::kTriangle :
-            objects.push_back(std::make_unique<object::Triangle>(renderer_.GetContext()));
+            objects.push_back(std::make_unique<object::Triangle>(renderer_));
             base::Log::Info("Scene: Triangle object added to scene");
             break;
         default:

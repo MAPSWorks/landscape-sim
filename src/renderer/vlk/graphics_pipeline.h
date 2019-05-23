@@ -58,7 +58,7 @@ public:
     };
     // Actual parameter structure
     struct CreateParams {
-        // Informative name for pipeline
+        // Name of a pipeline (text in free form)
         std::string name;
         // programmable stage
         const std::vector<ShaderStageParams> shader_stages;
@@ -80,13 +80,14 @@ public:
     GraphicsPipeline(GraphicsPipeline const&) = delete;
     GraphicsPipeline operator=(GraphicsPipeline const&) = delete;
     const VkPipeline& Get() const;
+    const std::string& GetName() const;
 private:
     VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
     VkPipeline Create(const VkRenderPass& render_pass, const CreateParams& create_params) const;
     // Reference to resource this object is created with
     const VkDevice& device_;
-    // Informative name for pipeline
-    const std::string info_name_;
+    // Name of pipeline in free form
+    const std::string name_;
     const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;
     const VkPipeline pipeline_ = VK_NULL_HANDLE;
 };

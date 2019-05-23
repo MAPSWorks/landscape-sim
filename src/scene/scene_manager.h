@@ -5,19 +5,19 @@
 #include "types.h"
 
 namespace scene {
-// Top-level object of the engine - brings otherwise unrelated objets together
+// Top-level object of the engine - brings otherwise unrelated parts together
 // to initialize, update and render the scene
 class SceneManager {
 public:
     SceneManager(const Settings& settings,  const Description &scene_description, 
-        const renderer::Renderer &renderer);
+         renderer::Renderer &renderer);
     ~SceneManager();
     void RenderFrame() const;
 private:
     // Initialize objects given at scene creation time
     UniqueObjectVector InitObjects(const std::vector<ObjectDescription>& object_descriptions);
     // Renderer will not be changed in runtime therefore grab the reference
-    const renderer::Renderer& renderer_;
+    renderer::Renderer& renderer_;
     t::Vec3 camera_world_position_;
     // Stores all renderable objects in the scene, is not constant
     // because can potentially change during rendering (add new objects or remove)
