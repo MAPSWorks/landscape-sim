@@ -1,5 +1,6 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <base/types.h>
 #include "vlk/types.h"
 #include "vlk/command_buffers.h"
 #include "context.h"
@@ -15,13 +16,19 @@ public:
     Renderer(vlk::Settings settings, GLFWwindow* window);
     ~Renderer();
     const Context& GetContext() const;
+    const Window& GetWindow() const;
     const vlk::CommandBuffers& GetCommandBuffers() const;
     PipelineManager& GetPipelineManager();
-    void RenderFrame();
-    void BeginRecordCommandBuffers() const;
-    void EndRecordCommandBuffers() const;
+    // Begine rendering and return current index of swapchain image
+    uint32_t BeginFrame();
+    // Submit graphics and presentation queues with command buffer at index
+    void EndFrame(uint32_t image_index);
+    void BeginRecordCommandBuffer(uint32_t buffer_index) const;
+    void EndRecordCommandBuffer(uint32_t buffer_index) const;
     // Used to ensure nothing is currently in use on GPU
     void WaitForGPUIdle() const;
+    // Window is resized, new size is passed through parameter
+    void Resize();
 private:
     // Constant throughout the life of the renderer
     const Context context_;

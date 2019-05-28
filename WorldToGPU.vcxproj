@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\application\app.cpp" />
+    <ClCompile Include="src\application\alpha_app.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\objects\i_object.cpp" />
     <ClCompile Include="src\objects\triangle.cpp" />
-    <ClCompile Include="src\platform\platform.cpp" />
+    <ClCompile Include="src\platform\i_application.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\pipeline_manager.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
@@ -46,11 +46,11 @@
     <ClCompile Include="src\scene\scene_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\application\app.h" />
+    <ClInclude Include="src\application\alpha_app.h" />
     <ClInclude Include="src\objects\i_object.h" />
     <ClInclude Include="src\objects\triangle.h" />
     <ClInclude Include="src\objects\types.h" />
-    <ClInclude Include="src\platform\platform.h" />
+    <ClInclude Include="src\platform\i_application.h" />
     <ClInclude Include="src\renderer\context.h" />
     <ClInclude Include="src\renderer\pipeline_manager.h" />
     <ClInclude Include="src\renderer\renderer.h" />

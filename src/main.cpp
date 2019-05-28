@@ -1,10 +1,10 @@
 #include <exception>
 #include <base/log.h>
-#include "application/app.h"
+#include "application/alpha_app.h"
 
 int main(int argc, char* argv[]) {
     try {
-        application::App app;
+        application::AlphaApp app;
         app.Run();
     }
     catch (const std::exception &e) {

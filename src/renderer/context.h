@@ -17,6 +17,8 @@ class Context {
 public:
     Context(const vlk::Settings& settings, GLFWwindow* window);
     ~Context();
+    // Store the pointer to window handle
+    GLFWwindow* window_glfw;
     // System-wide objects
     const vlk::Instance instance;
     const vlk::Surface surface;

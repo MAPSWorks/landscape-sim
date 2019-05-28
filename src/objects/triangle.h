@@ -7,12 +7,11 @@ class Triangle : public IObject {
 public:
     Triangle(renderer::Renderer& renderer);
     ~Triangle();
-    void RecordToCommandBuffer() const override;
+    void RecordToCommandBuffer(uint32_t buffer_index) const override;
 private:
+    renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
-    // Only this object knows what pipeline it needs
-    const renderer::vlk::GraphicsPipeline::CreateParams pipeline_description_;
     // Id of pipeline that is going to be used for rendering
     const renderer::PipelineId pipeline_id_;
 };

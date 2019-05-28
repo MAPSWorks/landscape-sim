@@ -12,15 +12,17 @@ public:
     CommandBuffers(CommandBuffers const&) = delete;
     CommandBuffers operator=(CommandBuffers const&) = delete;
     const std::vector<VkCommandBuffer>& Get() const;
+    const VkCommandBuffer& Get(uint32_t index) const;
     // Recording command buffers
-    // Bgin and end recording
-    void Begin() const;
-    void End() const;
-    void BeginRenderPass(const VkRenderPass& render_pass, const std::vector<VkFramebuffer>& frame_buffers,
+    // Inddividual recording
+    void Begin(uint32_t index) const;
+    void End(uint32_t index) const;
+    void BeginRenderPass(uint32_t index, const VkRenderPass& render_pass, const std::vector<VkFramebuffer>& frame_buffers,
         const VkExtent2D& render_area_extent) const;
-    void EndRenderPass() const;
-    void BindGraphicsPipeline(const VkPipeline& pipeline) const;
-    void Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, uint32_t first_instance) const;
+    void EndRenderPass(uint32_t index) const;
+    void BindGraphicsPipeline(uint32_t index, const VkPipeline& pipeline) const;
+    void Draw(uint32_t index, uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, uint32_t first_instance) const;
+
 private:
     VkCommandPool CreateCommandPool(uint32_t family_index) const;
     std::vector<VkCommandBuffer> AllocateCommandBuffers(uint32_t count) const;

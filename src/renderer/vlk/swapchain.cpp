@@ -39,12 +39,14 @@ const std::vector<VkImageView>& Swapchain::GetImageViews() const {
 // Next image index from swapchain that is available
 // image_available_semaphore - a semaphore that will become signaled when the presentation
 // engine has released ownership of the image
-uint32_t Swapchain::AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const {
+std::pair<uint32_t, VkResult> Swapchain::AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const {
     uint32_t image_index;
     constexpr uint64_t unlimited_timeout = std::numeric_limits<uint64_t>::max();
-    ErrorCheck(vkAcquireNextImageKHR(device_, swapchain_, unlimited_timeout, image_available_semaphore, 
-        VK_NULL_HANDLE, &image_index));
-    return image_index;
+    VkResult result = vkAcquireNextImageKHR(device_, swapchain_, unlimited_timeout, image_available_semaphore,
+        VK_NULL_HANDLE, &image_index);
+    if (result != VK_SUCCESS)
+        base::Log::Info("NIBBA");
+    return std::make_pair(image_index, result);
 }
 
 VkSwapchainKHR Swapchain::Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 

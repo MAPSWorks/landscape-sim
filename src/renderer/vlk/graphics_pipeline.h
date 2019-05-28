@@ -28,10 +28,6 @@ public:
     struct InputAssemblyParams {
         const PrimitiveTopology primitive_topology = PrimitiveTopology::kTriangleList;
     };
-    struct ViewportParams {
-        const uint32_t width;
-        const uint32_t height;
-    };
     enum class PolygonMode {
         kFill = VK_POLYGON_MODE_FILL
     };
@@ -65,7 +61,6 @@ public:
         // Fixed stage
         // TODO: vertex input stage here ... VertexInputParamts
         const InputAssemblyParams input_assembly;
-        const ViewportParams viewport;
         const RasterizationParams rasterization;
         const MultisampleParams multisample;
         // TODO: depth stencil params
@@ -75,17 +70,22 @@ public:
     };
 
     // TODO: give pipeline some name through parameter?
-    GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const CreateParams& create_params);
+    GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent,  
+        const CreateParams& create_params);
     ~GraphicsPipeline();
     GraphicsPipeline(GraphicsPipeline const&) = delete;
     GraphicsPipeline operator=(GraphicsPipeline const&) = delete;
     const VkPipeline& Get() const;
     const std::string& GetName() const;
+    const CreateParams& GetCreateParams() const;
 private:
     VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
-    VkPipeline Create(const VkRenderPass& render_pass, const CreateParams& create_params) const;
+    VkPipeline Create(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent, 
+        const CreateParams& create_params) const;
     // Reference to resource this object is created with
     const VkDevice& device_;
+    // Parameters with whitch this pipeline was created
+    const CreateParams create_params_;
     // Name of pipeline in free form
     const std::string name_;
     const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;

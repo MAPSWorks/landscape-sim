@@ -4,7 +4,8 @@
 namespace renderer::vlk {
 class Fence {
 public:
-    Fence(const VkDevice& device);
+    // Defaults to already signlaed fence on creation
+    Fence(const VkDevice& device, bool signaled = true);
     ~Fence();
     Fence(Fence const&) = delete;
     Fence operator=(Fence const&) = delete;
@@ -12,7 +13,7 @@ public:
     void WaitFor() const;
     void Reset() const;
 private:
-    VkFence Create() const;
+    VkFence Create(bool signaled) const;
     // Reference to resource this object is created with
     const VkDevice& device_;
     const VkFence fence_ = VK_NULL_HANDLE;

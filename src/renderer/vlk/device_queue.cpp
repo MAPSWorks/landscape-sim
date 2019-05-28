@@ -78,7 +78,7 @@ void DeviceQueue::GraphicsSubmit(const VkCommandBuffer& command_buffer, const Vk
 // Presents iamege to swapchain
 // Performance is important since this is probably real-time function
 // wait_semaphore - emaphore to wait before presenting
-void DeviceQueue::Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const {
+VkResult DeviceQueue::Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const {
     VkPresentInfoKHR present_info{};
     present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     const VkSemaphore wait_semaphores[] = { wait_semaphore };
@@ -90,7 +90,7 @@ void DeviceQueue::Present(const VkSwapchainKHR& swapchain, uint32_t image_index,
     present_info.pImageIndices = &image_index;
     present_info.pResults = nullptr; // Optional 
     // Error in this doesnt necesserely means that we need to throw exception
-    vkQueuePresentKHR(present_queue_, &present_info);
+    return vkQueuePresentKHR(present_queue_, &present_info);
 }
 
 DeviceQueue::FamilyIndices DeviceQueue::SelectFamilies(const VkPhysicalDevice& gpu,

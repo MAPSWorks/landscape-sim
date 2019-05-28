@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <utility>
 #include <GLFW/glfw3.h>
 #include "vulkan_shared.h"
 #include "device.h"
@@ -15,8 +16,9 @@ public:
     const VkExtent2D& GetExtent() const;
     const VkSurfaceFormatKHR& GetSurfaceFormat() const;
     const std::vector<VkImageView>& GetImageViews() const;
-    // Next image index from swapchain that is available
-    uint32_t AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const;
+    // Return Next image index from swapchain that is available
+    // also return result of an operation
+    std::pair<uint32_t, VkResult> AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const;
 private:
     VkSwapchainKHR Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 
         const VkSurfaceKHR& surface,  GLFWwindow* window);

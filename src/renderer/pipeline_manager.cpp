@@ -3,9 +3,8 @@
 #include <base/log.h>
 
 namespace renderer {
-PipelineManager::PipelineManager(const VkDevice& device, const VkRenderPass& render_pass) :
-    device_(device),
-    render_pass_(render_pass) {
+PipelineManager::PipelineManager(const VkDevice& device) :
+    device_(device) {
     base::Log::Info("Renderer: pipeline manager initialized");
 }
 
@@ -15,7 +14,8 @@ PipelineManager::~PipelineManager() {
 
 // Adds pipeline and returns id by which it is uniquelly identifieable
 // If pipeline already exists return the same existing id and don't add anything new
-PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::CreateParams& create_params) {
+PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::CreateParams& create_params,
+    const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent) {
     // Compare if pipeline exists by pipeline name
     // TODO: this might not be safe because pipeline names can match even when pipelines differ
     // if not entered correctly or forgoten
@@ -26,7 +26,7 @@ PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::Cre
     if (pipeline_iter == graphics_pipelines_.end()) {
         // Create pipelines on heap and store only unique ptr/.
         // Object ownership is delegated tounique ptr it was last assigned to
-        graphics_pipelines_.push_back(std::make_unique<vlk::GraphicsPipeline>(device_, render_pass_, create_params));
+        graphics_pipelines_.push_back(std::make_unique<vlk::GraphicsPipeline>(device_, render_pass, swapchain_extent, create_params));
         // Pipeline id is element index just inserted 
         // TODO: this is wrong for many reasons, cannot reorder etc, should use unordered map instead
         const auto inserted_id = graphics_pipelines_.size() - 1;
@@ -41,8 +41,19 @@ PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::Cre
     }
 }
 
-
 const VkPipeline& PipelineManager::GetGraphicsPipeline(PipelineId id) const {
     return graphics_pipelines_.at(id).get()->Get();
+}
+
+void PipelineManager::RecreatePipelines(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent) {
+    for (size_t i = 0; i < graphics_pipelines_.size(); i++) {
+        auto& pipeline = graphics_pipelines_.at(i);
+        // Get parameters this pipeline was created with
+        const auto create_params = pipeline.get()->GetCreateParams();
+        // Destroy eisting pipeline
+        pipeline.reset();
+        // Create the new one instead keeping the index the same
+        pipeline = std::make_unique<vlk::GraphicsPipeline>(device_, render_pass, swapchain_extent, create_params);
+    }
 }
 }; // renderer

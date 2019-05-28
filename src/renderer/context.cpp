@@ -8,8 +8,9 @@ Ideas:
 
 namespace renderer {
 Context::Context(const vlk::Settings& settings, GLFWwindow* window) :
+    window_glfw(window),
     instance(settings),
-    surface(instance.Get(), window),
+    surface(instance.Get(), window_glfw),
     device(instance.Get(), surface.Get()) {
     base::Log::Info("Renderer: context created");
 }

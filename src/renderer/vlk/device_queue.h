@@ -37,7 +37,7 @@ public:
     void GraphicsSubmit(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore,
         const VkSemaphore& signal_semaphore, const VkFence& fence) const;
     // Present image to swapchain
-    void Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const;
+    VkResult Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const;
 private:
     // Find suitable queue families and store their indices
     FamilyIndices SelectFamilies(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;

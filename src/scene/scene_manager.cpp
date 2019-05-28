@@ -10,15 +10,17 @@ SceneManager::SceneManager(const Settings& settings, const Description& scene_de
     renderer_(renderer),
     camera_world_position_(scene_description.camera_position),
     objects_(InitObjects(scene_description.objects)) {
-
-    // Command buffer recording
-    renderer_.BeginRecordCommandBuffers();
-    for (const auto& object : objects_) {
-        object->RecordToCommandBuffer();
-    }
-    renderer_.EndRecordCommandBuffers();
-
     base::Log::Info("Scene: scene manager initialized");
+    /*
+    for (size_t i = 0; i < 2; i++)
+    {
+        renderer_.BeginRecordCommandBuffer(i);
+        for (const auto& object : objects_) {
+            object->RecordToCommandBuffer(i);
+        }
+        renderer_.EndRecordCommandBuffer(i);
+    }
+    */
 }
 
 SceneManager::~SceneManager() {
@@ -26,7 +28,13 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::RenderFrame() const {
-    renderer_.RenderFrame();
+    const auto cmd_buffer_index = renderer_.BeginFrame();
+    renderer_.BeginRecordCommandBuffer(cmd_buffer_index);
+    for (const auto& object : objects_) {
+        object->RecordToCommandBuffer(cmd_buffer_index);
+    }
+    renderer_.EndRecordCommandBuffer(cmd_buffer_index);
+    renderer_.EndFrame(cmd_buffer_index);
 }
 
 // Make objects in heap and store their pointers in base class pointers in vector

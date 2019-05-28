@@ -4,11 +4,13 @@
 #include "shader_module.h"
 
 namespace renderer::vlk {
-GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const CreateParams& create_params) :
+GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent,
+    const CreateParams& create_params) :
     device_(device),
+    create_params_(create_params),
     name_(create_params.name),
     pipeline_layout_(CreatePipelineLayout(create_params.layout)),
-    pipeline_(Create(render_pass, create_params)) {
+    pipeline_(Create(render_pass, swapchain_extent, create_params)) {
     base::Log::Info("Renderer: graphics pipeline '", name_, "' created");
 }
 
@@ -26,6 +28,10 @@ const std::string& GraphicsPipeline::GetName() const {
     return name_;
 }
 
+const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const {
+    return create_params_;
+}
+
 VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
     VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
     pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -41,7 +47,8 @@ VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& para
 }
 
 // Create pipeline from given outside configurable parameters
-VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const CreateParams& create_params) const {
+VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent, 
+    const CreateParams& create_params) const {
     // Programmamble part
     std::vector<VkPipelineShaderStageCreateInfo> stage_create_infos;
     // Shader modules are OK to be destroyed only after pipeline is created
@@ -80,13 +87,13 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const Creat
     VkViewport viewport {};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
-    viewport.width = static_cast<float>(create_params.viewport.width);
-    viewport.height = static_cast<float>(create_params.viewport.height);
+    viewport.width = static_cast<float>(swapchain_extent.width);
+    viewport.height = static_cast<float>(swapchain_extent.height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     VkRect2D scissor  {};
     scissor.offset = { 0, 0 };
-    scissor.extent = { create_params.viewport.width, create_params.viewport.height };
+    scissor.extent = { swapchain_extent.width, swapchain_extent.height };
     VkPipelineViewportStateCreateInfo viewport_states_create_info {};
     viewport_states_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     viewport_states_create_info.viewportCount = 1;
