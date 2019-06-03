@@ -51,12 +51,6 @@
     <ClCompile Include="src\renderer\vlk\render_pass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\vlk\framebuffers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\vlk\command_buffers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\vlk\semaphore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,9 +72,6 @@
     <ClCompile Include="src\renderer\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\sync_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\vlk\fence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,6 +79,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\application\alpha_app.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\frame_resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\vlk\command_buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\vlk\command_pool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\vlk\frame_buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\frame_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,12 +134,6 @@
     <ClInclude Include="src\renderer\vlk\render_pass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\vlk\framebuffers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\vlk\command_buffers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\vlk\semaphore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -170,9 +170,6 @@
     <ClInclude Include="src\renderer\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\sync_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\vlk\fence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,6 +177,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\application\alpha_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\frame_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\vlk\command_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\vlk\command_pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\vlk\frame_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\frame_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

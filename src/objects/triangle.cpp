@@ -13,12 +13,10 @@ Triangle::~Triangle() {
     base::Log::Info("Objects: triangle destroying...");
 }
 
-// Command buffer and render pass is already started
-void Triangle::RecordToCommandBuffer(uint32_t buffer_index) const {
-    // For rendering triangle
-    // Assuming we have nnly one set of command buffers
-    renderer_.GetCommandBuffers().BindGraphicsPipeline(buffer_index, renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));
-    renderer_.GetCommandBuffers().Draw(buffer_index, 3, 1, 0, 0);
+// Add command to given command buffer that is already in recording state
+void Triangle::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
+    command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));
+    command_buffer.Draw(3, 1, 0, 0);
 }
 
 renderer::vlk::GraphicsPipeline::CreateParams Triangle::GetPipelineDescription()

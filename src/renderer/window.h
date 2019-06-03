@@ -4,7 +4,6 @@
 #include "context.h"
 #include "vlk/swapchain.h"
 #include "vlk/render_pass.h"
-#include "vlk/framebuffers.h"
 
 // Holds and manages objects that are dependant on swapchain.
 // Sensitive to window resize.
@@ -18,7 +17,6 @@ public:
     // Get wrapper object
     const vlk::Swapchain& GetSwapchainObject() const;
     const VkRenderPass& GetRenderPass() const;
-    const std::vector<VkFramebuffer>& GetFramebuffers() const;
     // Delete and recreate swapchain and all objects depending on swapchine format
     void RecreateSwapchain();
 private:
@@ -28,6 +26,5 @@ private:
     const Context& context_;
     std::unique_ptr<vlk::Swapchain> swapchain_;
     std::unique_ptr<vlk::RenderPass> render_pass_;
-    std::unique_ptr<vlk::Framebuffers> framebuffers_;
 };
 }; // renderer
