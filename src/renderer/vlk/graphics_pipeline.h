@@ -20,7 +20,8 @@ public:
         const std::string entry_point = "main";
     };
     struct VertexInputParamts {
-        // TODO: ...
+        const std::vector<VkVertexInputBindingDescription> binding_descr;
+        const std::vector<VkVertexInputAttributeDescription> attribute_descr;
     };
     enum class PrimitiveTopology {
         kTriangleList = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -58,8 +59,8 @@ public:
         std::string name;
         // programmable stage
         const std::vector<ShaderStageParams> shader_stages;
+        const VertexInputParamts vertex_input;
         // Fixed stage
-        // TODO: vertex input stage here ... VertexInputParamts
         const InputAssemblyParams input_assembly;
         const RasterizationParams rasterization;
         const MultisampleParams multisample;

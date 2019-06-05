@@ -12,6 +12,7 @@ public:
     Device(Device const&) = delete;
     Device operator=(Device const&) = delete;
     const VkPhysicalDevice& GetGPU() const;
+    const VkPhysicalDeviceMemoryProperties GetGPUMemoryProperties() const;
     const VkDevice& Get() const;
     // Get queue abstraction instead of actual queue
     const DeviceQueue& GetQueue() const;

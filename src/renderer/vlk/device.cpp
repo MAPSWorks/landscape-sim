@@ -25,6 +25,13 @@ const VkPhysicalDevice& Device::GetGPU() const {
     return gpu_;
 }
 
+// TODO: for performance should store this variable once and later just return it here
+const VkPhysicalDeviceMemoryProperties Device::GetGPUMemoryProperties() const {
+    VkPhysicalDeviceMemoryProperties mem_properties;
+    vkGetPhysicalDeviceMemoryProperties(gpu_, &mem_properties);
+    return mem_properties;
+}
+
 const VkDevice& Device::Get() const {
     return device_;
 }

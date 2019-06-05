@@ -23,6 +23,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\objects\i_object.cpp" />
     <ClCompile Include="src\objects\triangle.cpp" />
+    <ClCompile Include="src\objects\triangle_vb.cpp" />
     <ClCompile Include="src\platform\i_application.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\frame_manager.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="src\renderer\vlk\surface.cpp" />
     <ClCompile Include="src\renderer\vlk\swapchain.cpp" />
     <ClCompile Include="src\renderer\vlk\validation.cpp" />
+    <ClCompile Include="src\renderer\vlk\vertex_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\vulkan_shared.cpp" />
     <ClCompile Include="src\renderer\window.cpp" />
     <ClCompile Include="src\scene\scene_manager.cpp" />
@@ -51,6 +53,7 @@
     <ClInclude Include="src\application\alpha_app.h" />
     <ClInclude Include="src\objects\i_object.h" />
     <ClInclude Include="src\objects\triangle.h" />
+    <ClInclude Include="src\objects\triangle_vb.h" />
     <ClInclude Include="src\objects\types.h" />
     <ClInclude Include="src\platform\i_application.h" />
     <ClInclude Include="src\renderer\context.h" />
@@ -74,6 +77,7 @@
     <ClInclude Include="src\renderer\vlk\swapchain.h" />
     <ClInclude Include="src\renderer\vlk\types.h" />
     <ClInclude Include="src\renderer\vlk\validation.h" />
+    <ClInclude Include="src\renderer\vlk\vertex_buffer.h" />
     <ClInclude Include="src\renderer\vlk\vulkan_shared.h" />
     <ClInclude Include="src\base\log.h" />
     <ClInclude Include="src\base\types.h" />
@@ -84,6 +88,8 @@
   <ItemGroup>
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
+    <None Include="shaders\shader_vb.frag" />
+    <None Include="shaders\shader_vb.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

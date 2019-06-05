@@ -71,10 +71,13 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     // Vertex input
     VkPipelineVertexInputStateCreateInfo vertex_input_create_info {};
     vertex_input_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertex_input_create_info.vertexBindingDescriptionCount = 0;
-    vertex_input_create_info.pVertexBindingDescriptions = nullptr; // Optional
-    vertex_input_create_info.vertexAttributeDescriptionCount = 0;
-    vertex_input_create_info.pVertexAttributeDescriptions = nullptr; // Optional
+    // Bindings describe how chunks of vertex buffer should be interpreted
+    // If the whole vertex buffer is used, there is only one binding with index 0
+    vertex_input_create_info.vertexBindingDescriptionCount = static_cast<uint32_t>(create_params.vertex_input.binding_descr.size());
+    vertex_input_create_info.pVertexBindingDescriptions = create_params.vertex_input.binding_descr.data();
+    // Attribute description describes how are each vertex attribute to be read per binding
+    vertex_input_create_info.vertexAttributeDescriptionCount = static_cast<uint32_t>(create_params.vertex_input.attribute_descr.size());;
+    vertex_input_create_info.pVertexAttributeDescriptions = create_params.vertex_input.attribute_descr.data();
     // Input assambly
     VkPipelineInputAssemblyStateCreateInfo input_assembly_create_info {};
     input_assembly_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

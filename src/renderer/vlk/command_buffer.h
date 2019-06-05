@@ -16,6 +16,7 @@ public:
         const VkExtent2D& render_area_extent) const;
     void EndRenderPass() const;
     void BindGraphicsPipeline(const VkPipeline& pipeline) const;
+    void BindBuffer(const VkBuffer& buffer, uint32_t binding_index = 0) const;
     void Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, uint32_t first_instance) const;
 
 private:

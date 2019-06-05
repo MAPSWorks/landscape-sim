@@ -19,8 +19,7 @@ void Triangle::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_b
     command_buffer.Draw(3, 1, 0, 0);
 }
 
-renderer::vlk::GraphicsPipeline::CreateParams Triangle::GetPipelineDescription()
-{
+renderer::vlk::GraphicsPipeline::CreateParams Triangle::GetPipelineDescription() {
     auto description = renderer::vlk::GraphicsPipeline::CreateParams{
         // Pipeline descriptive name, should differ for different pipelines
         "Triangle pipeline",
@@ -29,6 +28,11 @@ renderer::vlk::GraphicsPipeline::CreateParams Triangle::GetPipelineDescription()
             // Shader stages
             {"shaders/vert.spv", renderer::vlk::GraphicsPipeline::ShaderStage::kVertex },
             {"shaders/frag.spv", renderer::vlk::GraphicsPipeline::ShaderStage::kFragment },
+        },
+        // Vertex input params
+        {
+            // Vertex data is hardcoded into vertex shader
+            {},{}
         },
         // Fixed function state
         // Primitive assembly

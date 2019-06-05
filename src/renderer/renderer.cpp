@@ -9,7 +9,8 @@ Renderer::Renderer(vlk::Settings settings, GLFWwindow* window) :
     context_(settings, window),
     window_(context_),
     pipeline_manager_(context_.device.Get()),
-    frame_manager_(context_.device.Get(), context_.device.GetQueue().GetFamilyIndices().graphics.value(), FRAMES_IN_FLIGHT) {
+    frame_manager_(context_.device.Get(), 
+        context_.device.GetQueue().GetFamilyIndices().graphics.value(), FRAMES_IN_FLIGHT) {
     base::Log::Info("Renderer: renderer initialized");
 }
 

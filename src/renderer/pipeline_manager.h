@@ -3,9 +3,9 @@
 #include <memory>
 #include <vulkan/vulkan.h>
 #include "vlk/graphics_pipeline.h"
-#include"types.h"
 
 namespace renderer {
+using PipelineId = uint32_t;
 // Stores and manages pipelines required to render a particular scene
 class PipelineManager {
 public:

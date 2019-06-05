@@ -49,6 +49,12 @@ void CommandBuffer::BindGraphicsPipeline(const VkPipeline& pipeline) const {
     vkCmdBindPipeline(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 
+void CommandBuffer::BindBuffer(const VkBuffer& buffer, uint32_t binding_index) const {
+    VkBuffer vertex_buffers[] = { buffer };
+    VkDeviceSize offsets[] = { 0 };
+    vkCmdBindVertexBuffers(command_buffer_, binding_index, 1, vertex_buffers, offsets);
+}
+
 void CommandBuffer::Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, 
     uint32_t first_instance) const {
     vkCmdDraw(command_buffer_, vertex_count, instance_count, first_vertex, first_instance);
