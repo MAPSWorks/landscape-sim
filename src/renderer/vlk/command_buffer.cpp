@@ -3,7 +3,8 @@
 
 namespace renderer::vlk {
 CommandBuffer::CommandBuffer(const CommandPool& command_pool) :
-    command_buffer_(command_pool.AllocateCommandPrimaryBuffer()) {
+    command_pool_(command_pool),
+    command_buffer_(command_pool_.AllocateCommandPrimaryBuffer()) {
     base::Log::Info("Renderer: primary command buffer allocated");
 }
 
@@ -11,13 +12,16 @@ const VkCommandBuffer& CommandBuffer::Get() const {
     return command_buffer_;
 }
 
+// Freeing is not mandatory because command buffers get destroyed together with comand pool
+void CommandBuffer::Free(const VkDevice& device) const {
+    vkFreeCommandBuffers(device, command_pool_.Get(), 1, &command_buffer_);
+}
+
 // Recording
-void CommandBuffer::Begin() const {
+void CommandBuffer::Begin(Usage usage) const {
     VkCommandBufferBeginInfo begin_info = {};
     begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    // Specifies that each recording of the command buffer will only be submitted once, and the 
-    // command buffer will be reset and recorded again between each submission.
-    begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT; //VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+    begin_info.flags = static_cast<VkCommandBufferUsageFlagBits>(usage);
     ErrorCheck(vkBeginCommandBuffer(command_buffer_, &begin_info));
 }
 
@@ -58,5 +62,14 @@ void CommandBuffer::BindBuffer(const VkBuffer& buffer, uint32_t binding_index) c
 void CommandBuffer::Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, 
     uint32_t first_instance) const {
     vkCmdDraw(command_buffer_, vertex_count, instance_count, first_vertex, first_instance);
+}
+
+void CommandBuffer::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
+    VkDeviceSize size, VkDeviceSize src_offset, VkDeviceSize dst_offset) const {
+    VkBufferCopy copy_region {};
+    copy_region.srcOffset = src_offset;
+    copy_region.dstOffset = dst_offset;
+    copy_region.size = size;
+    vkCmdCopyBuffer(command_buffer_, src_buffer, dst_buffer, 1, &copy_region);
 }
 };

@@ -3,7 +3,7 @@
 
 // TODO: Global data, probably should be in json 
 const t::Size window_size(800, 600);
-const renderer::vlk::Settings renderer_settings{ "Alpha app", 1, "W2GPU", 1 };
+const renderer::vlk::Settings renderer_settings{ "Alpha app", 1, "W2GPU", 1, 2 /*frames in flight*/};
 const scene::Settings scene_settings{ };
 // Objects and positions and camera position are all initial and can change
 // while scene is running

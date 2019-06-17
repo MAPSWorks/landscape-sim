@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\alpha_app.cpp" />
+    <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\objects\i_object.cpp" />
     <ClCompile Include="src\objects\triangle.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="src\renderer\frame_resource.cpp" />
     <ClCompile Include="src\renderer\pipeline_manager.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\vlk\buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_pool.cpp" />
     <ClCompile Include="src\renderer\vlk\device.cpp" />
@@ -38,6 +40,7 @@
     <ClCompile Include="src\renderer\vlk\frame_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\graphics_pipeline.cpp" />
     <ClCompile Include="src\renderer\vlk\instance.cpp" />
+    <ClCompile Include="src\renderer\vlk\memory_allocator.cpp" />
     <ClCompile Include="src\renderer\vlk\render_pass.cpp" />
     <ClCompile Include="src\renderer\vlk\semaphore.cpp" />
     <ClCompile Include="src\renderer\vlk\shader_module.cpp" />
@@ -51,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\alpha_app.h" />
+    <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
     <ClInclude Include="src\objects\i_object.h" />
     <ClInclude Include="src\objects\triangle.h" />
     <ClInclude Include="src\objects\triangle_vb.h" />
@@ -62,6 +66,7 @@
     <ClInclude Include="src\renderer\pipeline_manager.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\types.h" />
+    <ClInclude Include="src\renderer\vlk\buffer.h" />
     <ClInclude Include="src\renderer\vlk\command_buffer.h" />
     <ClInclude Include="src\renderer\vlk\command_pool.h" />
     <ClInclude Include="src\renderer\vlk\device.h" />
@@ -70,6 +75,7 @@
     <ClInclude Include="src\renderer\vlk\frame_buffer.h" />
     <ClInclude Include="src\renderer\vlk\graphics_pipeline.h" />
     <ClInclude Include="src\renderer\vlk\instance.h" />
+    <ClInclude Include="src\renderer\vlk\memory_allocator.h" />
     <ClInclude Include="src\renderer\vlk\render_pass.h" />
     <ClInclude Include="src\renderer\vlk\semaphore.h" />
     <ClInclude Include="src\renderer\vlk\shader_module.h" />

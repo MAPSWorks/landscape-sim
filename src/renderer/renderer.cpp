@@ -1,16 +1,14 @@
 #include "renderer.h"
 #include <base/log.h>
 
-// TODO: obviously ...
-#define FRAMES_IN_FLIGHT 2
-
 namespace renderer {
 Renderer::Renderer(vlk::Settings settings, GLFWwindow* window) :
     context_(settings, window),
     window_(context_),
     pipeline_manager_(context_.device.Get()),
     frame_manager_(context_.device.Get(), 
-        context_.device.GetQueue().GetFamilyIndices().graphics.value(), FRAMES_IN_FLIGHT) {
+        context_.device.GetQueue().GetFamilyIndices().graphics.value(), settings.frames_in_flight),
+    memory_allocator_(context_.device) {
     base::Log::Info("Renderer: renderer initialized");
 }
 
@@ -45,7 +43,7 @@ void Renderer::Resize() {
 
 void Renderer::BeginRecordCurrentCommandBuffer() {
     const FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
-    current_frame.command_buffer.Begin();
+    current_frame.command_buffer.Begin(vlk::CommandBuffer::Usage::kOneTimeSubmit);
     current_frame.command_buffer.BeginRenderPass(window_.GetRenderPass(), current_frame.frame_buffer.Get(), 
         window_.GetSwapchainObject().GetExtent());
 }
@@ -82,7 +80,7 @@ void Renderer::FrameBegin() {
 void Renderer::FrameEnd() {
     const FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
     // Send to GPU
-    context_.device.GetQueue().GraphicsSubmit(current_frame.command_buffer.Get(),
+    context_.device.GetQueue().SubmitGraphics(current_frame.command_buffer.Get(),
         current_frame.image_acquired_semaphore.Get(),
         current_frame.ready_to_present_semaphore.Get(),
         current_frame.drawing_finished_fence.Get());
@@ -90,5 +88,9 @@ void Renderer::FrameEnd() {
         current_frame.ready_to_present_semaphore.Get());
     // Switch to other frame resource to process next
     frame_manager_.Update();
+}
+
+const vlk::MemoryAllocator& Renderer::GetMemoryAllocator() const {
+    return memory_allocator_;
 }
 }; // renderer

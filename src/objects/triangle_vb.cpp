@@ -7,8 +7,8 @@ TriangleVB::TriangleVB(renderer::Renderer& renderer) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     vertices_(GetVertices()),
-    vertex_buffer_(renderer_.GetContext().device, (uint64_t)(vertices_.size() * sizeof(vertices_[0]) )) {
-    vertex_buffer_.Fill(vertices_.data());
+    vertex_buffer_("triangle vb vertices", renderer_.GetMemoryAllocator(), 
+        (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()) {
     base::Log::Info("Objects: triangle vb created");
 }
 

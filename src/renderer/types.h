@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "vlk/vulkan_shared.h"
+#include <vulkan/vulkan.h>
 #include <base/types.h>
 
 // Renderer common types

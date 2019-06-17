@@ -10,8 +10,9 @@ SceneManager::SceneManager(const Settings& settings, const Description& scene_de
     renderer::Renderer& renderer) :
     renderer_(renderer),
     camera_world_position_(scene_description.camera_position),
-    objects_(InitObjects(scene_description.objects)) {
+    objects_(InitObjects(scene_description.objects))  {
     base::Log::Info("Scene: scene manager initialized");
+    renderer_.GetMemoryAllocator().DebugPrint();
 }
 
 SceneManager::~SceneManager() {

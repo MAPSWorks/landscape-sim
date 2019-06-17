@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <optional>
+#include "types.h"
 #include "vulkan_shared.h"
 
 namespace renderer::vlk {
@@ -15,8 +16,8 @@ class DeviceQueue {
 public:
     // Required device queue family types and their existance
     struct FamilyIndices {
-        std::optional<uint32_t> graphics;
-        std::optional<uint32_t> present;
+        std::optional<QueueFamilyIndex> graphics;
+        std::optional<QueueFamilyIndex> present;
         bool IsComplete() const {
             return graphics.has_value() && present.has_value();
         }
@@ -33,8 +34,16 @@ public:
     void SetPresent(VkQueue queue);
     const VkQueue& GetGraphics() const;
     const VkQueue& GetPresent() const;
+    // Submit of given command buffer to given queue 
+    // All other submit functions call this function
+    void Submit(const VkQueue& queue, const std::vector<VkCommandBuffer>& command_buffers,
+        const std::vector<VkSemaphore>& wait_semaphores, const std::vector<VkPipelineStageFlags>& wait_stages,
+        const std::vector<VkSemaphore>& signal_semaphores, const VkFence& fence) const;
+    // Simplified submit of command buffer without synchronization
+    void Submit(const VkQueue& queue, const VkCommandBuffer& command_buffer) const;
+    // Submit specific for rendering
     // Submit command buffer to graphics queue
-    void GraphicsSubmit(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore,
+    void SubmitGraphics(const VkCommandBuffer& command_buffer, const VkSemaphore& wait_semaphore,
         const VkSemaphore& signal_semaphore, const VkFence& fence) const;
     // Present image to swapchain
     VkResult Present(const VkSwapchainKHR& swapchain, uint32_t image_index, const VkSemaphore& wait_semaphore) const;

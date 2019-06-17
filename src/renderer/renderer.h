@@ -7,6 +7,7 @@
 #include "pipeline_manager.h"
 #include "frame_resource.h"
 #include "frame_manager.h"
+#include "vlk/memory_allocator.h"
 
 // General rendering class used to set-up means to render and render data in
 // it's pure form (without knowing details of what is being rendered)
@@ -31,6 +32,8 @@ public:
     // Frame is rendered between these calls
     void FrameBegin();
     void FrameEnd();
+    // Access memory allocator object for buffer creation
+    const vlk::MemoryAllocator& GetMemoryAllocator() const;
 private:
     // Constant throughout the life of the renderer
     const Context context_;
@@ -38,5 +41,7 @@ private:
     Window window_;
     PipelineManager pipeline_manager_;
     FrameManager frame_manager_;
+    // Keeps track and manages buffer memory allocations
+    vlk::MemoryAllocator memory_allocator_;
 };
 }; // renderer
