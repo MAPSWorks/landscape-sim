@@ -4,6 +4,7 @@
 #include <objects/types.h>
 #include <objects/triangle.h>
 #include <objects/triangle_vb.h>
+#include <objects/rectangle.h>
 
 namespace scene {
 SceneManager::SceneManager(const Settings& settings, const Description& scene_description,
@@ -43,6 +44,10 @@ UniqueObjectVector SceneManager::InitObjects(const std::vector<ObjectDescription
         case object::Type::kTriangleVB:
             objects.push_back(std::make_unique<object::TriangleVB>(renderer_));
             base::Log::Info("Scene: Triangle vb object added to scene");
+            break;
+        case object::Type::kRectangle:
+            objects.push_back(std::make_unique<object::Rectangle>(renderer_));
+            base::Log::Info("Scene: Rectangle object added to scene");
             break;
         default:
             base::Log::Error("Scene: ERROR: object of unknown type in scene decription");

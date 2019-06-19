@@ -28,8 +28,11 @@ public:
         const VkExtent2D& render_area_extent) const;
     void EndRenderPass() const;
     void BindGraphicsPipeline(const VkPipeline& pipeline) const;
-    void BindBuffer(const VkBuffer& buffer, uint32_t binding_index = 0) const;
+    void BindVertexBuffer(const VkBuffer& buffer, uint32_t binding_index = 0) const;
+    void BindIndexBuffer32(const VkBuffer& buffer) const;
     void Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, uint32_t first_instance) const;
+    void DrawIndexed(uint32_t index_count, uint32_t instance_count, uint32_t first_index,
+        uint32_t vertex_offset, uint32_t first_instance) const;
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
 private:

@@ -8,7 +8,8 @@ const scene::Settings scene_settings{ };
 // Objects and positions and camera position are all initial and can change
 // while scene is running
 const scene::ObjectDescription triangle_description{ //object::Type::kTriangle, t::Vec3(0.0),
-                                                      object::Type::kTriangleVB, t::Vec3(0.0),
+                                                     //object::Type::kTriangleVB, t::Vec3(0.0),
+                                                       object::Type::kRectangle, t::Vec3(0.0)
                                                     };
 const std::vector<scene::ObjectDescription> scene_objects{ triangle_description };
 const scene::Description scene_description{ t::Vec3(0.0) , scene_objects };

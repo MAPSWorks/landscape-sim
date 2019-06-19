@@ -19,7 +19,7 @@ TriangleVB::~TriangleVB() {
 // Add command to given command buffer that is already in recording state
 void TriangleVB::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
     command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));
-    command_buffer.BindBuffer(vertex_buffer_.Get());
+    command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.Draw(static_cast<uint32_t>(vertices_.size()), 1, 0, 0);
 }
 

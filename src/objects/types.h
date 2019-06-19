@@ -7,5 +7,7 @@ enum class Type {
     kTriangle = 0,
     // Triangle , data comes from vertex buffer
     kTriangleVB = 1,
+    // Rectangle , data comes from vertex buffer and index buffer
+    kRectangle = 2,
 };
 }
