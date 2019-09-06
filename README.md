@@ -42,12 +42,11 @@ Used as a meta-information of the scene file.
 "version": "1.0"
 ```    
 Version of the file structure. Used internally to identify the file.
-#### Cameras
+#### cameras
 Cameras define the vantage points of the scene. There can be only one camera per scene.  
 There are two camera types:  
 - Perspective
 - Orthographics  
-
 ##### Perspective
 To describe perspective camera use:  
 - *'type'* property defines the type of the camera.
@@ -82,16 +81,42 @@ To describe orthographic camera use:
 	"orthographic": {
 		"yfov": 0.7,
 		"zfar": 100,
-		"xmag": 0.01,
-		"ymag": 0.05
+		"xmag": 1.0,
+		"ymag": 1.5
 	},
 	"translation": [ 0.5, 0.5, 3.0 ]
 }
 ```  
+### Settings file description
+Setting describe properties of the application. The file *settings.json* is located in *'/ini'* folder
+relative to projects executable file. The description of the properties is as follows:
+```javascript
+{
+"windowSize": [ 800, 600 ],
+"fullscreen": false,
+"renderer": {
+	"appName": "World to GPU",
+	"appVersion": 1,
+	"engineName": "W2GPU",
+	"engineVersion": 1,
+	"framesInFlight": 2
+}
+}
+``` 
+- *'windowSize'* size of the output screen in pixels.
+- *'fullscreen'* whether the application runs in fullscreen mode.
+- *'appName'* name of the application. Used internally as identifier and as an output window title. 
+- *'appVersion'* version of the application. 
+- *'engineName'* name of the engine that this application uses. Used by Vulkan drivers to optimize if it is
+well known engine. Has no effect in our case.
+- *'engineVersion'* version of the engine used.
+- *'framesInFlight'* technical parameter that describes how many frames are processed simultaneously by the GPU. Can 
+affect performance.
 ### Development
 #### Goals
 The development is guided by two main goals:
 - real-time performance
-- photorealism
+- photorealism  
+
 Real-time performance is achieved using the power of modern C++ and Vulkan 3d API for optimal GPU utilization. 
 Photorealism is achieved using modern rendering techniques that are real-time aproximations of physically-based approach to rendeing.
