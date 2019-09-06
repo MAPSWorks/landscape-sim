@@ -33,35 +33,6 @@ public:
             (std::cerr << ... << std::forward<Args>(args)) << '\n';
         }
     }
-    /*
-    template<typename T>
-    inline static void Info(T &&t) {
-        if (enabled && output == kClog && detail == kInfo) {
-            std::clog << t << "\n";
-        }
-    }
-    template<typename T>
-    inline static void Error(T &&t) {
-        if (enabled && output == kClog && detail <= kError) {
-            //HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-            //SetConsoleTextAttribute(hConsole, 12);
-            std::cerr << t << "\n";
-        }
-    }
-    template<typename Head, typename... Tail>
-    inline static void Info(Head &&head, Tail&&... tail) {
-        if (enabled && output == kClog && detail == kInfo) {
-            std::clog << head;
-            Info(std::forward<Tail>(tail)...);
-        }
-    }
-    template<typename Head, typename... Tail>
-    inline static void Error(Head &&head, Tail&&... tail) {
-        if (enabled && output == kClog && detail <= kError) {
-            std::cerr << head;
-            Error(std::forward<Tail>(tail)...);
-        }
-    }*/
 
     // When disabled nothing is written to log
 #ifdef NDEBUG
