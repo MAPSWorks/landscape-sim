@@ -19,13 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\application\alpha_app.cpp" />
+    <ClCompile Include="src\application\world_to_gpu.cpp" />
+    <ClCompile Include="src\base\cmd_line_parser.cpp" />
+    <ClCompile Include="src\base\json_loader.cpp" />
     <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\objects\i_object.cpp" />
-    <ClCompile Include="src\objects\rectangle.cpp" />
-    <ClCompile Include="src\objects\triangle.cpp" />
-    <ClCompile Include="src\objects\triangle_vb.cpp" />
+    <ClCompile Include="src\renderable\i_renderable.cpp" />
+    <ClCompile Include="src\renderable\rectangle.cpp" />
+    <ClCompile Include="src\renderable\triangle.cpp" />
+    <ClCompile Include="src\renderable\triangle_vb.cpp" />
     <ClCompile Include="src\platform\i_application.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\frame_manager.cpp" />
@@ -35,6 +37,7 @@
     <ClCompile Include="src\renderer\vlk\buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_pool.cpp" />
+    <ClCompile Include="src\renderer\vlk\descriptor_set_layout.cpp" />
     <ClCompile Include="src\renderer\vlk\device.cpp" />
     <ClCompile Include="src\renderer\vlk\device_queue.cpp" />
     <ClCompile Include="src\renderer\vlk\fence.cpp" />
@@ -48,20 +51,29 @@
     <ClCompile Include="src\renderer\vlk\shader_module.cpp" />
     <ClCompile Include="src\renderer\vlk\surface.cpp" />
     <ClCompile Include="src\renderer\vlk\swapchain.cpp" />
+    <ClCompile Include="src\renderer\vlk\uniform_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\validation.cpp" />
     <ClCompile Include="src\renderer\vlk\vertex_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\vulkan_shared.cpp" />
     <ClCompile Include="src\renderer\window.cpp" />
+    <ClCompile Include="src\scene\i_camera.cpp" />
+    <ClCompile Include="src\scene\orthographic_camera.cpp" />
+    <ClCompile Include="src\scene\perspective_camera.cpp" />
+    <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\scene_manager.cpp" />
+    <ClCompile Include="src\scene\scene_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\application\alpha_app.h" />
+    <ClInclude Include="src\application\world_to_gpu.h" />
+    <ClInclude Include="src\base\cmd_line_parser.h" />
+    <ClInclude Include="src\base\json_loader.h" />
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
-    <ClInclude Include="src\objects\i_object.h" />
-    <ClInclude Include="src\objects\rectangle.h" />
-    <ClInclude Include="src\objects\triangle.h" />
-    <ClInclude Include="src\objects\triangle_vb.h" />
-    <ClInclude Include="src\objects\types.h" />
+    <ClInclude Include="src\external\json\json.hpp" />
+    <ClInclude Include="src\renderable\i_renderable.h" />
+    <ClInclude Include="src\renderable\rectangle.h" />
+    <ClInclude Include="src\renderable\triangle.h" />
+    <ClInclude Include="src\renderable\triangle_vb.h" />
+    <ClInclude Include="src\renderable\types.h" />
     <ClInclude Include="src\platform\i_application.h" />
     <ClInclude Include="src\renderer\context.h" />
     <ClInclude Include="src\renderer\frame_manager.h" />
@@ -72,6 +84,7 @@
     <ClInclude Include="src\renderer\vlk\buffer.h" />
     <ClInclude Include="src\renderer\vlk\command_buffer.h" />
     <ClInclude Include="src\renderer\vlk\command_pool.h" />
+    <ClInclude Include="src\renderer\vlk\descriptor_set_layout.h" />
     <ClInclude Include="src\renderer\vlk\device.h" />
     <ClInclude Include="src\renderer\vlk\device_queue.h" />
     <ClInclude Include="src\renderer\vlk\fence.h" />
@@ -86,16 +99,24 @@
     <ClInclude Include="src\renderer\vlk\surface.h" />
     <ClInclude Include="src\renderer\vlk\swapchain.h" />
     <ClInclude Include="src\renderer\vlk\types.h" />
+    <ClInclude Include="src\renderer\vlk\uniform_buffer.h" />
     <ClInclude Include="src\renderer\vlk\validation.h" />
     <ClInclude Include="src\renderer\vlk\vertex_buffer.h" />
     <ClInclude Include="src\renderer\vlk\vulkan_shared.h" />
     <ClInclude Include="src\base\log.h" />
     <ClInclude Include="src\base\types.h" />
     <ClInclude Include="src\renderer\window.h" />
+    <ClInclude Include="src\scene\i_camera.h" />
+    <ClInclude Include="src\scene\orthographic_camera.h" />
+    <ClInclude Include="src\scene\perspective_camera.h" />
+    <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\scene\scene_manager.h" />
+    <ClInclude Include="src\scene\scene_parser.h" />
     <ClInclude Include="src\scene\types.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="product\ini\settings.json" />
+    <None Include="product\scenes\scene_alpha.json" />
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
     <None Include="shaders\shader_vb.frag" />
@@ -192,7 +213,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)src\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -232,7 +253,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)src\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

@@ -15,7 +15,7 @@ public:
     const VkSurfaceKHR& Get() const;
 private:
     VkSurfaceKHR Create(GLFWwindow* window) const;
-    // Reference to resource this object was created with
+    // Reference to resource this renderable was created with
     const VkInstance& instance_;
     // Images are presented to surface
     const VkSurfaceKHR surface_ = VK_NULL_HANDLE;

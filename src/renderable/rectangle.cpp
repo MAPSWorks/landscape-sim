@@ -1,7 +1,7 @@
 #include "rectangle.h"
 #include <base/log.h>
 
-namespace object {
+namespace renderable {
 Rectangle::Rectangle(renderer::Renderer& renderer) :
     renderer_(renderer),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
@@ -63,7 +63,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Rectangle::GetPipelineDescription(
     },
     // Pipeline layout
     {
-        0
+        {}
     }
     };
     return description;

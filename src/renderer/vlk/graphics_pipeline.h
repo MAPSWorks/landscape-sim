@@ -51,7 +51,10 @@ public:
     };
     // Pipeline layout configuration
     struct LayoutParams {
-        const uint32_t layout_count = 0;
+        // Describes descriptors that are to be used in pipeline
+        // Resources with handles VkDescriptorSetLayout should stick around while pipeline is used
+        const std::vector<VkDescriptorSetLayout>& layouts;
+        // ... TODO push constants here
     };
     // Actual parameter structure
     struct CreateParams {
@@ -66,7 +69,7 @@ public:
         const MultisampleParams multisample;
         // TODO: depth stencil params
         const ColorBlendParams color_blend;
-        // TODO: when pipeline layout is moved out, this param should be removed
+        // Descriptor sets and pus constants
         const LayoutParams layout;
     };
 
@@ -83,7 +86,7 @@ private:
     VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
     VkPipeline Create(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent, 
         const CreateParams& create_params) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     // Parameters with whitch this pipeline was created
     const CreateParams create_params_;

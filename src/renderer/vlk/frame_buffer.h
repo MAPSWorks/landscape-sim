@@ -20,7 +20,7 @@ public:
     // Can be called explicitly
     void Destroy();
 private:
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     VkFramebuffer frame_buffer_ = VK_NULL_HANDLE;
 };

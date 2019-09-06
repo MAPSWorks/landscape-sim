@@ -38,7 +38,7 @@ void Window::RecreateSwapchain() {
     CreateSwapchain();
 }
 
-// Create swachain object and objects dependant on swapchain format
+// Create swachain renderable and objects dependant on swapchain format
 void Window::CreateSwapchain() {
     swapchain_ = std::make_unique<vlk::Swapchain>(context_.device, context_.surface.Get(), context_.window_glfw);
     render_pass_ = std::make_unique<vlk::RenderPass>(context_.device.Get(),

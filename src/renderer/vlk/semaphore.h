@@ -11,7 +11,7 @@ public:
     const VkSemaphore& Get() const;
 private:
     VkSemaphore Create() const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     const VkSemaphore semaphore_ = VK_NULL_HANDLE;
 };

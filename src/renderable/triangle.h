@@ -1,10 +1,10 @@
 #pragma once
-#include "i_object.h"
+#include "i_renderable.h"
 #include <renderer/renderer.h>
 
 // Data hard coded in vertex shader
-namespace object {
-class Triangle : public IObject {
+namespace renderable {
+class Triangle : public IRenderable {
 public:
     Triangle(renderer::Renderer& renderer);
     ~Triangle();
@@ -18,4 +18,4 @@ private:
     // resize. But id is tied to specific location in pipeline catche
     const renderer::PipelineId pipeline_id_;
 };
-}; // object
+}; // renderable

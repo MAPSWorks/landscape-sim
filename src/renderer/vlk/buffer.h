@@ -4,7 +4,7 @@
 #include "memory_allocator.h"
 #include "vulkan_shared.h"
 
-// Abstraction of buffer object in general.
+// Abstraction of buffer renderable in general.
 // Creates buffer and allocates memory.
 // Further used to inmplement vertex, index buffers, etc  
 namespace renderer::vlk {
@@ -21,6 +21,7 @@ public:
     Buffer(Buffer const&) = delete;
     Buffer operator=(Buffer const&) = delete;
     const VkBuffer& Get() const;
+    const BufferSize GetSize() const;
     // Works for mappable memory type
     void MapAndFill(BufferSize buffer_size, const void* vertex_data) const;
     // Retrieve information about current allocation
@@ -31,13 +32,17 @@ private:
         VmaAllocation& allocation);
     // Informative name of a buffer, mainly for debugging purposes
     const std::string name_;
-    // Reference to resource this object is created with.
-    // This global object manages all allocations, each separate allocation is stored in
+    // Reference to resource this renderable is created with.
+    // This global renderable manages all allocations, each separate allocation is stored in
     // alocator_ member
     const MemoryAllocator& allocator_;
     // Object that represents memory assigned to this buffer.It can be queried 
     // for parameters like Vulkan memory handleand offset.
     VmaAllocation allocation_;
     const VkBuffer buffer_ = VK_NULL_HANDLE;
+    // Buffer size upon creation
+    // This value is recieved and stored in constructor.
+    // NOTE: in some cases actual size that is filled might be different than the one created
+    const BufferSize size_;
 };
 }; // renderer::vlk

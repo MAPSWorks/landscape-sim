@@ -6,7 +6,8 @@ Buffer::Buffer(const std::string name, const MemoryAllocator& allocator, BufferS
     VmaMemoryUsage memory_usage) :
     name_(name),
     allocator_(allocator),
-    buffer_(Create(name_, size, usage, memory_usage, allocation_)) {
+    buffer_(Create(name_, size, usage, memory_usage, allocation_)),
+    size_(size) {
     base::Log::Info("Renderer: buffer '",name_,"' created");
     AllocationDebugPrint();
 }
@@ -18,6 +19,10 @@ Buffer::~Buffer() {
 
 const VkBuffer& Buffer::Get() const {
     return buffer_;
+}
+
+const BufferSize Buffer::GetSize() const {
+    return size_;
 }
 
 void Buffer::MapAndFill(BufferSize buffer_size, const void* vertex_data) const {

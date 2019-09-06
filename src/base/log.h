@@ -20,7 +20,20 @@ public:
         kError = 1
     };
 
-    // Write data to output 
+    // Logging
+    template<typename ...Args>
+    inline static void Info(Args&& ... args) {
+        if (enabled && output == kClog && detail == kInfo) {
+            (std::clog << ... << std::forward<Args>(args)) << '\n';
+        }
+    }
+    template<typename ...Args>
+    inline static void Error(Args&& ... args) {
+        if (enabled && output == kClog && detail <= kError) {
+            (std::cerr << ... << std::forward<Args>(args)) << '\n';
+        }
+    }
+    /*
     template<typename T>
     inline static void Info(T &&t) {
         if (enabled && output == kClog && detail == kInfo) {
@@ -35,7 +48,6 @@ public:
             std::cerr << t << "\n";
         }
     }
-
     template<typename Head, typename... Tail>
     inline static void Info(Head &&head, Tail&&... tail) {
         if (enabled && output == kClog && detail == kInfo) {
@@ -49,7 +61,7 @@ public:
             std::cerr << head;
             Error(std::forward<Tail>(tail)...);
         }
-    }
+    }*/
 
     // When disabled nothing is written to log
 #ifdef NDEBUG

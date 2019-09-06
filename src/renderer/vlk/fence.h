@@ -14,7 +14,7 @@ public:
     void Reset() const;
 private:
     VkFence Create(bool signaled) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     const VkFence fence_ = VK_NULL_HANDLE;
 };

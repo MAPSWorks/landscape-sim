@@ -7,7 +7,7 @@ FrameManager::FrameManager(const VkDevice& device, uint32_t family_index, uint32
     command_pool_(device, family_index, true),
     frame_resources_(GetFrameResources(device)) {
     Reset();
-    base::Log::Info("Renderer: frame manager initialized");
+    base::Log::Info("Renderer: frame manager initialized. Frames in flight: ", kFramesInFlight);
 }
 
 FrameManager::~FrameManager() {

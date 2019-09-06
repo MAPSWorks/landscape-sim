@@ -1,7 +1,7 @@
 #include "triangle.h"
 #include <base/log.h>
 
-namespace object {
+namespace renderable {
 Triangle::Triangle(renderer::Renderer& renderer) :
     renderer_(renderer),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(), 
@@ -55,7 +55,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Triangle::GetPipelineDescription()
         },
         // Pipeline layout
         {
-            0
+            {}
         }
     };
 

@@ -7,9 +7,9 @@ Ideas:
 #include <base/log.h>
 
 namespace renderer {
-Context::Context(const vlk::Settings& settings, GLFWwindow* window) :
+Context::Context(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     window_glfw(window),
-    instance(settings),
+    instance(setting_loader),
     surface(instance.Get(), window_glfw),
     device(instance.Get(), surface.Get()) {
     base::Log::Info("Renderer: context created");

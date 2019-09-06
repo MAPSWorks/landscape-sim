@@ -1,20 +1,23 @@
 #pragma once
 #include <platform/i_application.h>
 #include <renderer/renderer.h>
+#include <scene/scene.h>
 #include <scene/scene_manager.h>
 
-// Application for engine tests
+// Collects and executes subsystems that make up a complete application
 namespace application {
-class AlphaApp : public platform::IApplication {
+class WorldToGPU : public platform::IApplication {
 public:
-    AlphaApp();
-    ~AlphaApp();
+    // Parameters from main() function arguments
+    WorldToGPU(uint32_t argc, char* argv[]);
+    ~WorldToGPU();
 private:
     virtual void Update() override;
     virtual void RenderFrame() override;
     virtual void Resize(const t::Size& win_size) override;
     virtual void OnExit() const override;
     renderer::Renderer renderer_;
+    scene::Scene scene_;
     scene::SceneManager scene_manager_;
 };
-}; //application
+}; // application

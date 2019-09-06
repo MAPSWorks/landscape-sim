@@ -8,7 +8,7 @@ namespace renderer::vlk {
 Validation::Validation() : layers_({ "VK_LAYER_KHRONOS_validation" }) {
     if (enabled_) {
         CheckSupport();
-        base::Log::Info("Renderer: validation initialized");
+        base::Log::Info("Renderer: validation enabled");
     }
 }
 
@@ -34,7 +34,7 @@ void Validation::AppendExtentions(ExtentionVector& extensions) const {
 }
 
 // Create messanger from instance that will report back from layers
-// NOTE: we can't use RAII here because validation object is created
+// NOTE: we can't use RAII here because validation renderable is created
 // before instance (we need to check layer availability first)
 // but messanger needs to be created after instance and destroyed before instance is
 // destroyed.

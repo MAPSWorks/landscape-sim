@@ -1,7 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <base/types.h>
-#include "vlk/types.h"
+#include <base/json_loader.h>
 #include "context.h"
 #include "window.h"
 #include "pipeline_manager.h"
@@ -14,7 +14,7 @@
 namespace renderer {
 class Renderer {
 public:
-    Renderer(vlk::Settings settings, GLFWwindow* window);
+    Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window);
     ~Renderer();
     const Context& GetContext() const;
     const Window& GetWindow() const;
@@ -32,7 +32,7 @@ public:
     // Frame is rendered between these calls
     void FrameBegin();
     void FrameEnd();
-    // Access memory allocator object for buffer creation
+    // Access memory allocator renderable for buffer creation
     const vlk::MemoryAllocator& GetMemoryAllocator() const;
 private:
     // Constant throughout the life of the renderer

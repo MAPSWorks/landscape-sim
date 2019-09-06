@@ -1,11 +1,16 @@
 #include "i_application.h"
-#include <string>
 #include <base/log.h>
 
 namespace platform {
-IApplication::IApplication(t::Size win_size) {
-    Init(win_size);
-    base::Log::Info("Platform initialized");
+IApplication::IApplication(uint32_t argc, char* argv[]) :
+    cmd_line_parser_(argc, argv),
+    settings_loader_("ini/settings.json") {
+    Init(t::Size(settings_loader_.Get().at("windowSize").at(0).get<uint32_t>(),
+        settings_loader_.Get().at("windowSize").at(1).get<uint32_t>()),
+        settings_loader_.Get().at("renderer").at("appName").get<std::string>());
+    int width, height;
+    glfwGetFramebufferSize(window_, &width, &height);
+    base::Log::Info("Platform initialized. Window size: ",width, " ", height);
 }
 
 IApplication::~IApplication() {
@@ -22,10 +27,6 @@ void IApplication::Run() {
     OnExit();
 }
 
-GLFWwindow* IApplication::GetWindowHandle() const {
-    return window_;
-}
-
 // static
 void IApplication::ResizeCallback(GLFWwindow* window, int width, int height) {
     // Retrieve current window pointer to acess member variables
@@ -33,13 +34,12 @@ void IApplication::ResizeCallback(GLFWwindow* window, int width, int height) {
     this_obj->Resize(t::Size(width, height));
 }
 
-void IApplication::Init(const t::Size& win_size) {
+void IApplication::Init(const t::Size& win_size, std::string_view title) {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    std::string window_title = "<App name>";
-    window_ = glfwCreateWindow(win_size.width, win_size.height, window_title.c_str(), nullptr, nullptr);
-    // Set window pointer to use current object in callback function
+    window_ = glfwCreateWindow(win_size.width, win_size.height, title.data(), nullptr, nullptr);
+    // Set window pointer to use current renderable in callback function
     glfwSetWindowUserPointer(window_, this);
     // Callbacks
     glfwSetFramebufferSizeCallback(window_, ResizeCallback);

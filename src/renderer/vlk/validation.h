@@ -15,11 +15,11 @@ public:
     // Add required extentions for our validation layers to given extentions vector
     void AppendExtentions(ExtentionVector& extensions) const;
     // Create messanger from instance that will report back from layers
-    // NOTE: we can't use RAII here because validation object is created
+    // NOTE: we can't use RAII here because validation renderable is created
     // before instance (we need to check layer availability first)
     // but messanger needs to be created after instance and destroyed before instance is
     // destroyed.
-    // As an alternative add it to instance as another object, but this would put validation
+    // As an alternative add it to instance as another renderable, but this would put validation
     // in two files not one, like in this case.
     // NOTE: Use this method after instance has been initialized
     void CreateMessanger(const VkInstance& instance);

@@ -11,7 +11,7 @@ public:
     const VkRenderPass& Get() const;
 private:
     VkRenderPass Create(const VkFormat& swapchain_format) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     const VkRenderPass render_pass_ = VK_NULL_HANDLE;
 };

@@ -5,7 +5,7 @@
 #include "device.h"
 #include "command_pool.h"
 
-// Wrapper around AMD vulkan memory allocatr application wide object that manages
+// Wrapper around AMD vulkan memory allocatr application wide renderable that manages
 // buffer memory allocations.
 // Only single instance of this class should exist
 // Also provide several helpers in buffer operations. These helpers hould probably be elshere.
@@ -24,7 +24,7 @@ public:
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer, BufferSize size) const;
 private:
     VmaAllocator Create(const Device& device) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const Device& device_;
     // AMD memory allocator
     const VmaAllocator allocator_;

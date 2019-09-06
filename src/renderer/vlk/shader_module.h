@@ -20,7 +20,7 @@ private:
     // Used to load SPIR-V data
     static std::vector<char> ReadBinaryFile(const std::string& file_name);
     VkShaderModule Create(const std::string& file_name) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     // For logging
     const std::string file_name_;

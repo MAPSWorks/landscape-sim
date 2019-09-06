@@ -14,7 +14,7 @@ public:
     VkCommandBuffer AllocateCommandPrimaryBuffer() const;
 private:
     VkCommandPool Create(QueueFamilyIndex family_index, bool is_resetable, bool is_transient) const;
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const VkDevice& device_;
     const VkCommandPool command_pool_ = VK_NULL_HANDLE;
 };

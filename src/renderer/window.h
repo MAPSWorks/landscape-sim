@@ -14,7 +14,7 @@ public:
     Window(const Context& context);
     ~Window();
     const VkSwapchainKHR& GetSwapchain() const;
-    // Get wrapper object
+    // Get wrapper renderable
     const vlk::Swapchain& GetSwapchainObject() const;
     const VkRenderPass& GetRenderPass() const;
     // Delete and recreate swapchain and all objects depending on swapchine format

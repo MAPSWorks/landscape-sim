@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <string>
+//#include <string>
 #include <vulkan/vulkan.h>
 
 // Graphics vulkan commonly used types
@@ -11,6 +11,7 @@ using LayerVector = std::vector<const char*>;
 using BufferSize = VkDeviceSize;
 using QueueFamilyIndex = uint32_t;
 // Structures
+/*
 // Settings for the renderer
 struct Settings {
     std::string app_name;
@@ -20,4 +21,5 @@ struct Settings {
     // Number of frames that are processed in paralel
     uint32_t frames_in_flight;
 };
+*/
 };

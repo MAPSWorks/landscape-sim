@@ -32,7 +32,7 @@ private:
     // Retrieve list of images from swapchain
     std::vector<VkImage> GetImages() const;
     std::vector<VkImageView> CreateImageViews(const std::vector<VkImage> &images) const;
-    // To store reference to resource this object was created with
+    // To store reference to resource this renderable was created with
     const VkDevice& device_;
     // Parameters below is not constant because they can probably change
     // NOTE: These params should be above swapchain_, because they get initialized 

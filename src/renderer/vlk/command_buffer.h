@@ -36,7 +36,7 @@ public:
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
 private:
-    // Reference to resource this object is created with
+    // Reference to resource this renderable is created with
     const CommandPool& command_pool_;
     VkCommandBuffer command_buffer_ = VK_NULL_HANDLE;;
 };

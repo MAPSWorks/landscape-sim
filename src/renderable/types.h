@@ -1,6 +1,6 @@
 #pragma once
 
-namespace object {
+namespace renderable {
 // Enumeration of object types available for application
 enum class Type {
     // Simple triangle, used for testing

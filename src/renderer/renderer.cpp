@@ -2,12 +2,13 @@
 #include <base/log.h>
 
 namespace renderer {
-Renderer::Renderer(vlk::Settings settings, GLFWwindow* window) :
-    context_(settings, window),
+Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
+    context_(setting_loader, window),
     window_(context_),
     pipeline_manager_(context_.device.Get()),
     frame_manager_(context_.device.Get(), 
-        context_.device.GetQueue().GetFamilyIndices().graphics.value(), settings.frames_in_flight),
+        context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
+        setting_loader.Get().at("renderer").at("framesInFlight").get<uint32_t>()),
     memory_allocator_(context_.device) {
     base::Log::Info("Renderer: renderer initialized");
 }

@@ -144,8 +144,8 @@ them before every `#include` of this library.
 
 At program startup:
 
--# Initialize Vulkan to have `VkPhysicalDevice` and `VkDevice` object.
--# Fill VmaAllocatorCreateInfo structure and create #VmaAllocator object by
+-# Initialize Vulkan to have `VkPhysicalDevice` and `VkDevice` renderable.
+-# Fill VmaAllocatorCreateInfo structure and create #VmaAllocator renderable by
    calling vmaCreateAllocator().
 
 \code
@@ -374,7 +374,7 @@ When mapping, you may see a warning from Vulkan validation layer similar to this
 It happens because the library maps entire `VkDeviceMemory` block, where different
 types of images and buffers may end up together, especially on GPUs with unified memory like Intel.
 You can safely ignore it if you are sure you access only memory of the intended
-object that you wanted to map.
+renderable that you wanted to map.
 
 
 \section memory_mapping_persistently_mapped_memory Persistently mapped memory
@@ -429,7 +429,7 @@ you need to manually invalidate cache before reading of mapped pointer
 and flush cache after writing to mapped pointer.
 Vulkan provides following functions for this purpose `vkFlushMappedMemoryRanges()`,
 `vkInvalidateMappedMemoryRanges()`, but this library provides more convenient
-functions that refer to given allocation object: vmaFlushAllocation(),
+functions that refer to given allocation renderable: vmaFlushAllocation(),
 vmaInvalidateAllocation().
 
 Regions of memory specified for flush/invalidate must be aligned to
@@ -621,7 +621,7 @@ optimize memory usage. This way you can allocate and free objects in any order.
 Sometimes there is a need to use simpler, linear allocation algorithm. You can
 create custom pool that uses such algorithm by adding flag
 #VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT to VmaPoolCreateInfo::flags while creating
-#VmaPool object. Then an alternative metadata management is used. It always
+#VmaPool renderable. Then an alternative metadata management is used. It always
 creates new allocations after last one and doesn't reuse free regions after
 allocations freed in the middle. It results in better allocation performance and
 less memory consumed by metadata.
@@ -719,7 +719,7 @@ or other sources that describe this concept in general.
 
 To use buddy allocation algorithm with a custom pool, add flag
 #VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT to VmaPoolCreateInfo::flags while creating
-#VmaPool object.
+#VmaPool renderable.
 
 Several limitations apply to pools that use buddy algorithm:
 
@@ -946,7 +946,7 @@ Here are steps needed to do this:
 -# If you want to create a flag that would enable your algorithm or pass some additional
    flags to configure it, add them to `VmaDefragmentationFlagBits` and use them in
    VmaDefragmentationInfo2::flags.
--# Modify function `VmaBlockVectorDefragmentationContext::Begin` to create object
+-# Modify function `VmaBlockVectorDefragmentationContext::Begin` to create renderable
    of your new class whenever needed.
 
 
@@ -1306,7 +1306,7 @@ application. It can be useful to:
 
 <b>To record sequence of calls to a file:</b> Fill in
 VmaAllocatorCreateInfo::pRecordSettings member while creating #VmaAllocator
-object. File is opened and written during whole lifetime of the allocator.
+renderable. File is opened and written during whole lifetime of the allocator.
 
 <b>To replay file:</b> Use VmaReplay - standalone command-line program.
 Precompiled binary can be found in "bin" directory.
@@ -1504,7 +1504,7 @@ memory blocks from GPU VRAM to system RAM (which degrades performance). This
 behavior is implementation-dependant - it depends on GPU vendor and graphics
 driver.
 
-On AMD cards it can be controlled while creating Vulkan device object by using
+On AMD cards it can be controlled while creating Vulkan device renderable by using
 VK_AMD_memory_allocation_behavior extension, if available.
 
 Alternatively, if you want to test how your program behaves with limited amount of Vulkan device
@@ -1575,11 +1575,11 @@ To learn more about this extension, see:
   are safe to call from multiple threads simultaneously because they are
   synchronized internally when needed.
 - When the allocator is created with #VMA_ALLOCATOR_CREATE_EXTERNALLY_SYNCHRONIZED_BIT
-  flag, calls to functions that take such #VmaAllocator object must be
+  flag, calls to functions that take such #VmaAllocator renderable must be
   synchronized externally.
-- Access to a #VmaAllocation object must be externally synchronized. For example,
+- Access to a #VmaAllocation renderable must be externally synchronized. For example,
   you must not call vmaGetAllocationInfo() and vmaMapMemory() from different
-  threads at the same time if you pass the same #VmaAllocation object to these
+  threads at the same time if you pass the same #VmaAllocation renderable to these
   functions.
 
 \section general_considerations_validation_layer_warnings Validation layer warnings
@@ -1597,7 +1597,7 @@ to just ignore them.
     up together, especially on GPUs with unified memory like Intel.
 - *Non-linear image 0xebc91 is aliased with linear buffer 0xeb8e4 which may indicate a bug.*
   - It happens when you use lost allocations, and a new image or buffer is
-    created in place of an existing object that bacame lost.
+    created in place of an existing renderable that bacame lost.
   - It may happen also when you use [defragmentation](@ref defragmentation).
 
 \section general_considerations_allocation_algorithm Allocation algorithm
@@ -1622,7 +1622,7 @@ Features deliberately excluded from the scope of this library:
 
 - Data transfer. Uploading (straming) and downloading data of buffers and images
   between CPU and GPU memory and related synchronization is responsibility of the user.
-  Defining some "texture" object that would automatically stream its data from a
+  Defining some "texture" renderable that would automatically stream its data from a
   staging copy in CPU memory to GPU memory would rather be a feature of another,
   higher-level library implemented on top of VMA.
 - Allocations for imported/exported external memory. They tend to require
@@ -1633,7 +1633,7 @@ Features deliberately excluded from the scope of this library:
   buffer and image creation (vmaCreateBuffer(), vmaCreateImage()), you need to
   recreate these objects yourself after defragmentation. That's because the big
   structures `VkBufferCreateInfo`, `VkImageCreateInfo` are not stored in
-  #VmaAllocation object.
+  #VmaAllocation renderable.
 - Handling CPU memory allocation failures. When dynamically creating small C++
   objects in CPU memory (not Vulkan memory), allocation failures are not checked
   and handled gracefully, because that would complicate code significantly and
@@ -1680,12 +1680,12 @@ available through VmaAllocatorCreateInfo::pRecordSettings.
 #endif
 
 /** \struct VmaAllocator
-\brief Represents main object of this library initialized.
+\brief Represents main renderable of this library initialized.
 
 Fill structure #VmaAllocatorCreateInfo and call function vmaCreateAllocator() to create it.
 Call function vmaDestroyAllocator() to destroy it.
 
-It is recommended to create just one object of this type per `VkDevice` object,
+It is recommended to create just one renderable of this type per `VkDevice` renderable,
 right after Vulkan is initialized and keep it alive until before Vulkan device is destroyed.
 */
 VK_DEFINE_HANDLE(VmaAllocator)
@@ -1801,8 +1801,8 @@ typedef struct VmaRecordSettings
 
     Suggested extension: "csv".
     If the file already exists, it will be overwritten.
-    It will be opened for the whole time #VmaAllocator object is alive.
-    If opening this file fails, creation of the whole allocator object fails.
+    It will be opened for the whole time #VmaAllocator renderable is alive.
+    If opening this file fails, creation of the whole allocator renderable fails.
     */
     const char* pFilePath;
 } VmaRecordSettings;
@@ -1882,17 +1882,17 @@ typedef struct VmaAllocatorCreateInfo
 
     If not null, it enables recording of calls to VMA functions to a file.
     If support for recording is not enabled using `VMA_RECORDING_ENABLED` macro,
-    creation of the allocator object fails with `VK_ERROR_FEATURE_NOT_PRESENT`.
+    creation of the allocator renderable fails with `VK_ERROR_FEATURE_NOT_PRESENT`.
     */
     const VmaRecordSettings* pRecordSettings;
 } VmaAllocatorCreateInfo;
 
-/// Creates Allocator object.
+/// Creates Allocator renderable.
 VkResult vmaCreateAllocator(
     const VmaAllocatorCreateInfo* pCreateInfo,
     VmaAllocator* pAllocator);
 
-/// Destroys allocator object.
+/// Destroys allocator renderable.
 void vmaDestroyAllocator(
     VmaAllocator allocator);
 
@@ -2390,9 +2390,9 @@ typedef struct VmaPoolStats {
     size_t blockCount;
 } VmaPoolStats;
 
-/** \brief Allocates Vulkan device memory and creates #VmaPool object.
+/** \brief Allocates Vulkan device memory and creates #VmaPool renderable.
 
-@param allocator Allocator object.
+@param allocator Allocator renderable.
 @param pCreateInfo Parameters of pool to create.
 @param[out] pPool Handle to created pool.
 */
@@ -2401,16 +2401,16 @@ VkResult vmaCreatePool(
 	const VmaPoolCreateInfo* pCreateInfo,
 	VmaPool* pPool);
 
-/** \brief Destroys #VmaPool object and frees Vulkan device memory.
+/** \brief Destroys #VmaPool renderable and frees Vulkan device memory.
 */
 void vmaDestroyPool(
     VmaAllocator allocator,
     VmaPool pool);
 
-/** \brief Retrieves statistics of existing #VmaPool object.
+/** \brief Retrieves statistics of existing #VmaPool renderable.
 
-@param allocator Allocator object.
-@param pool Pool object.
+@param allocator Allocator renderable.
+@param pool Pool renderable.
 @param[out] pPoolStats Statistics of specified pool.
 */
 void vmaGetPoolStats(
@@ -2420,7 +2420,7 @@ void vmaGetPoolStats(
 
 /** \brief Marks all allocations in given pool as lost if they are not used in current frame or VmaPoolCreateInfo::frameInUseCount back from now.
 
-@param allocator Allocator object.
+@param allocator Allocator renderable.
 @param pool Pool.
 @param[out] pLostAllocationCount Number of allocations marked as lost. Optional - pass null if you don't need this information.
 */
@@ -2451,18 +2451,18 @@ VkResult vmaCheckPoolCorruption(VmaAllocator allocator, VmaPool pool);
 It may be either dedicated block of `VkDeviceMemory` or a specific region of a bigger block of this type
 plus unique offset.
 
-There are multiple ways to create such object.
+There are multiple ways to create such renderable.
 You need to fill structure VmaAllocationCreateInfo.
 For more information see [Choosing memory type](@ref choosing_memory_type).
 
 Although the library provides convenience functions that create Vulkan buffer or image,
 allocate memory for it and bind them together,
 binding of the allocation to a buffer or an image is out of scope of the allocation itself.
-Allocation object can exist without buffer/image bound,
+Allocation renderable can exist without buffer/image bound,
 binding can be done manually by the user, and destruction of it can be done
 independently of destruction of the allocation.
 
-The object also remembers its size and some other information.
+The renderable also remembers its size and some other information.
 To retrieve this information, use function vmaGetAllocationInfo() and inspect
 returned structure VmaAllocationInfo.
 
@@ -2479,16 +2479,16 @@ typedef struct VmaAllocationInfo {
     It never changes.
     */
     uint32_t memoryType;
-    /** \brief Handle to Vulkan memory object.
+    /** \brief Handle to Vulkan memory renderable.
 
-    Same memory object can be shared by multiple allocations.
+    Same memory renderable can be shared by multiple allocations.
     
     It can change after call to vmaDefragment() if this allocation is passed to the function, or if allocation is lost.
 
     If the allocation is lost, it is equal to `VK_NULL_HANDLE`.
     */
     VkDeviceMemory deviceMemory;
-    /** \brief Offset into deviceMemory object to the beginning of this allocation, in bytes. (deviceMemory, offset) pair is unique to this allocation.
+    /** \brief Offset into deviceMemory renderable to the beginning of this allocation, in bytes. (deviceMemory, offset) pair is unique to this allocation.
 
     It can change after call to vmaDefragment() if this allocation is passed to the function, or if allocation is lost.
     */
@@ -2533,7 +2533,7 @@ VkResult vmaAllocateMemory(
 
 /** \brief General purpose memory allocation for multiple allocation objects at once.
 
-@param allocator Allocator object.
+@param allocator Allocator renderable.
 @param pVkMemoryRequirements Memory requirements for each allocation.
 @param pCreateInfo Creation parameters for each alloction.
 @param allocationCount Number of allocations to make.
@@ -2688,7 +2688,7 @@ void vmaSetAllocationUserData(
 
 It can be useful if you need a dummy, non-null allocation.
 
-You still need to destroy created object using vmaFreeMemory().
+You still need to destroy created renderable using vmaFreeMemory().
 
 Returned allocation is not tied to any specific memory pool or memory type and
 not bound to any image or buffer. It has size = 0. It cannot be turned into
@@ -2800,7 +2800,7 @@ Possible return values:
 VkResult vmaCheckCorruption(VmaAllocator allocator, uint32_t memoryTypeBits);
 
 /** \struct VmaDefragmentationContext
-\brief Represents Opaque object that represents started defragmentation process.
+\brief Represents Opaque renderable that represents started defragmentation process.
 
 Fill structure #VmaDefragmentationInfo2 and call function vmaDefragmentationBegin() to create it.
 Call function vmaDefragmentationEnd() to destroy it.
@@ -2920,10 +2920,10 @@ typedef struct VmaDefragmentationStats {
 
 /** \brief Begins defragmentation process.
 
-@param allocator Allocator object.
+@param allocator Allocator renderable.
 @param pInfo Structure filled with parameters of defragmentation.
 @param[out] pStats Optional. Statistics of defragmentation. You can pass null if you are not interested in this information.
-@param[out] pContext Context object that must be passed to vmaDefragmentationEnd() to finish defragmentation.
+@param[out] pContext Context renderable that must be passed to vmaDefragmentationEnd() to finish defragmentation.
 @return `VK_SUCCESS` and `*pContext == null` if defragmentation finished within this function call. `VK_NOT_READY` and `*pContext != null` if defragmentation has been started and you need to call vmaDefragmentationEnd() to finish it. Negative value in case of error.
 
 Use this function instead of old, deprecated vmaDefragment().
@@ -2990,7 +2990,7 @@ allocations are considered nonmovable in this call. Basic rules:
 - Both allocations made with or without #VMA_ALLOCATION_CREATE_MAPPED_BIT
   flag can be compacted. If not persistently mapped, memory will be mapped
   temporarily inside this function if needed.
-- You must not pass same #VmaAllocation object multiple times in `pAllocations` array.
+- You must not pass same #VmaAllocation renderable multiple times in `pAllocations` array.
 
 The function also frees empty `VkDeviceMemory` blocks.
 
@@ -3016,7 +3016,7 @@ Binds specified buffer to region of memory represented by specified allocation.
 Gets `VkDeviceMemory` handle and offset from the allocation.
 If you want to create a buffer, allocate memory for it and bind them together separately,
 you should use this function for binding instead of standard `vkBindBufferMemory()`,
-because it ensures proper synchronization so that when a `VkDeviceMemory` object is used by multiple
+because it ensures proper synchronization so that when a `VkDeviceMemory` renderable is used by multiple
 allocations, calls to `vkBind*Memory()` or `vkMapMemory()` won't happen from multiple threads simultaneously
 (which is illegal in Vulkan).
 
@@ -3033,7 +3033,7 @@ Binds specified image to region of memory represented by specified allocation.
 Gets `VkDeviceMemory` handle and offset from the allocation.
 If you want to create an image, allocate memory for it and bind them together separately,
 you should use this function for binding instead of standard `vkBindImageMemory()`,
-because it ensures proper synchronization so that when a `VkDeviceMemory` object is used by multiple
+because it ensures proper synchronization so that when a `VkDeviceMemory` renderable is used by multiple
 allocations, calls to `vkBind*Memory()` or `vkMapMemory()` won't happen from multiple threads simultaneously
 (which is illegal in Vulkan).
 
@@ -5146,7 +5146,7 @@ private:
         bool m_CanBecomeLost;
     };
 
-    // Allocation for an object that has its own private VkDeviceMemory.
+    // Allocation for an renderable that has its own private VkDeviceMemory.
     struct DedicatedAllocation
     {
         uint32_t m_MemoryTypeIndex;
@@ -5158,7 +5158,7 @@ private:
     {
         // Allocation out of VmaDeviceMemoryBlock.
         BlockAllocation m_BlockAllocation;
-        // Allocation for an object that has its own private VkDeviceMemory.
+        // Allocation for an renderable that has its own private VkDeviceMemory.
         DedicatedAllocation m_DedicatedAllocation;
     };
 
@@ -5252,7 +5252,7 @@ public:
     virtual ~VmaBlockMetadata() { }
     virtual void Init(VkDeviceSize size) { m_Size = size; }
 
-    // Validates all data structures inside this object. If not valid, returns false.
+    // Validates all data structures inside this renderable. If not valid, returns false.
     virtual bool Validate() const = 0;
     VkDeviceSize GetSize() const { return m_Size; }
     virtual size_t GetAllocationCount() const = 0;
@@ -5643,7 +5643,7 @@ private:
 
 Node at level 0 has size = m_UsableSize.
 Each next level contains nodes with size 2 times smaller than current level.
-m_LevelCount is the maximum number of levels to use in the current object.
+m_LevelCount is the maximum number of levels to use in the current renderable.
 */
 class VmaBlockMetadata_Buddy : public VmaBlockMetadata
 {
@@ -5819,7 +5819,7 @@ public:
     uint32_t GetId() const { return m_Id; }
     void* GetMappedData() const { return m_pMappedData; }
 
-    // Validates all data structures inside this object. If not valid, returns false.
+    // Validates all data structures inside this renderable. If not valid, returns false.
     bool Validate() const;
 
     VkResult CheckCorruption(VmaAllocator hAllocator);
@@ -6432,7 +6432,7 @@ private:
     VmaBlockVector* const m_pBlockVector;
     const uint32_t m_CurrFrameIndex;
     const uint32_t m_AlgorithmFlags;
-    // Owner of this object.
+    // Owner of this renderable.
     VmaDefragmentationAlgorithm* m_pAlgorithm;
 
     struct AllocInfo
@@ -6465,9 +6465,9 @@ public:
 
     /*
     Returns:
-    - `VK_SUCCESS` if succeeded and object can be destroyed immediately.
-    - `VK_NOT_READY` if succeeded but the object must remain alive until vmaDefragmentationEnd().
-    - Negative value if error occured and object can be destroyed immediately.
+    - `VK_SUCCESS` if succeeded and renderable can be destroyed immediately.
+    - `VK_NOT_READY` if succeeded but the renderable must remain alive until vmaDefragmentationEnd().
+    - Negative value if error occured and renderable can be destroyed immediately.
     */
     VkResult Defragment(
         VkDeviceSize maxCpuBytesToMove, uint32_t maxCpuAllocationsToMove,
@@ -6635,7 +6635,7 @@ private:
     VmaPoolAllocator<VmaAllocation_T> m_Allocator;
 };
 
-// Main allocator object.
+// Main allocator renderable.
 struct VmaAllocator_T
 {
     VMA_CLASS_NO_COPY(VmaAllocator_T)
@@ -8384,7 +8384,7 @@ bool VmaBlockMetadata_Generic::ResizeAllocation(const VmaAllocation alloc, VkDev
                 m_SumFreeSize -= sizeDiff;
             }
 
-            // We cannot call Validate() here because alloc object is updated to new size outside of this call.
+            // We cannot call Validate() here because alloc renderable is updated to new size outside of this call.
             return true;
         }
     }

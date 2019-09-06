@@ -1,0 +1,12 @@
+{
+  "windowSize": [ 800, 600 ],
+  "fullscreen": false,
+  "renderer": {
+    "appName": "World to GPU",
+    "appVersion": 1,
+    "engineName": "W2GPU",
+    "engineVersion": 1,
+    "framesInFlight": 2
+  }
+
+}

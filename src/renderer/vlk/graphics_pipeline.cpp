@@ -35,8 +35,8 @@ const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const 
 VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
     VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
     pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipeline_layout_create_info.setLayoutCount = params.layout_count; // Optional
-    pipeline_layout_create_info.pSetLayouts = nullptr; // Optional
+    pipeline_layout_create_info.setLayoutCount = static_cast<uint32_t>(params.layouts.size());
+    pipeline_layout_create_info.pSetLayouts = params.layouts.data();
     pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional
     pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
     VkPipelineLayout pipeline_layout;
@@ -53,7 +53,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     std::vector<VkPipelineShaderStageCreateInfo> stage_create_infos;
     // Shader modules are OK to be destroyed only after pipeline is created
     // That's why we make sure that modules are not created inside any brackets
-    // NOTE: Deque is used here instead of vector because vector requires object to be copy-constructable,
+    // NOTE: Deque is used here instead of vector because vector requires renderable to be copy-constructable,
     // but this class does not have it
     std::deque<ShaderModule> shader_modules;
     for (const auto& stage_params : create_params.shader_stages) {
