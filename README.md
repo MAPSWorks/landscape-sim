@@ -116,9 +116,10 @@ affect performance.
 The dependancies are:  
 - Vulkan SDK.
 - GLFW multi-platform library for creating window, loading Vulkan, receiving input.
-- @g-truc GLM optimized linear math library.
-- @nlohmann json library.
-- @AMD vulkan memory allocation library.
+- [GLM](https://github.com/g-truc) optimized linear math library.
+- [JSON](https://github.com/nlohmann) library.
+- [AMD](https://github.com/amd) vulkan memory allocation library.  
+
 All libraries are included in the project.
 ### Development
 #### Goals
