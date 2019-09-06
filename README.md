@@ -112,6 +112,14 @@ well known engine. Has no effect in our case.
 - *'engineVersion'* version of the engine used.
 - *'framesInFlight'* technical parameter that describes how many frames are processed simultaneously by the GPU. Can 
 affect performance.
+### Dependancies
+The dependancies are:  
+- Vulkan SDK.
+- GLFW multi-platform library for creating window, loading Vulkan, receiving input.
+- @g-truc GLM optimized linear math library.
+- @nlohmann json library.
+- @AMD vulkan memory allocation library.
+All libraries are included in the project.
 ### Development
 #### Goals
 The development is guided by two main goals:
