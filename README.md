@@ -129,3 +129,38 @@ The development is guided by two main goals:
 
 Real-time performance is achieved using the power of modern C++ and Vulkan 3d API for optimal GPU utilization. 
 Photorealism is achieved using modern rendering techniques that are real-time aproximations of physically-based approach to rendeing.
+#### Shader compilation
+Shaders are written in GLSL language Vulkan *dialect*. Source code for the shaders is in *'/shader'* folder
+in project root directory. Shaders are compiled to *.spv* format using *glslangValidator.exe* that can be found in VulkanSDK and 
+are then placed in *'/shaders'* folder in *'/product'* directory.
+#### Code organization and design philosophy
+Project source code is divided into the following modules. Each module is placed in separate subfolder in *'/src'* directory.
+#### external
+Contains external libraries that are used in the project.
+#### application
+The main application container. Stores and runs main modules of the application. There can be multiple applications
+defined but only can be active at a time.
+#### platform
+Contains platform related functionality. Defines base class for all applications that are to be defined. This base class
+provides basic OS related functionality that is common among different applications and has no need to be duplicated.
+#### base
+Lowest level module that provides basic type definitions and common functionality like logging, file loading, parsing etc.
+All other modules are built on top of it.
+#### renderer
+Renderer module is concerned with rendering whatever it is told to. It is *blind* to the rest of the engine in a *sence* that
+it knows nothing about the objects to be rendered and nothing about the properties of the scene. All objects, however, *use* the renderer
+to draw themselves.  
+Renderers source code, by and large, consists of Vulkan API abstractions and Vulkan concopt abstractions
+that are not dependant on the underlying API. 
+#### renderable
+Renderables are objects to be rendered by the application. All objects have base class that they inherit from which allows
+renderables to be processed in a common way. Renderables store information about themselves and *know* how to use *'renderer'*
+module to render themselves.
+#### scene
+This module is conserned with organization of the scene and delegation of the tasks to various parts of the engine.
+'Scene manager' can be thought as the *'king'* submodule of the engine for it tells other submodules what to *do*
+and how to act. It is the highest level submodule in the engine.  
+Scene submodule itself merely generates and stores the scene description.  
+Cameras definitions are also contained in the *scene* module.
+
+
