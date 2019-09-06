@@ -188,6 +188,7 @@ and how to *act*. It is the highest level submodule in the engine.
 Scene submodule itself merely generates and stores the scene description.  
 Camera definitions are also contained in the *scene* module.
 #### Module interaction scheme
-<img src="drawing.png" alt="Design scheme" width = "500"/> 
+<img src="drawing.png" alt="Design scheme" width = "500"/>  
+
 ## Author
 Designed and developed by [Ivars Rb.](https://github.com/ivarsrb)
