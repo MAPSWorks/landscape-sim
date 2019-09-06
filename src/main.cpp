@@ -3,9 +3,6 @@
 #include "application/world_to_gpu.h"
 
 int main(int argc, char* argv[]) {
-#ifndef NDEBUG
-    base::Log::Info("Debug mode");
-#endif
     try {
         application::WorldToGPU app(argc, argv);
         app.Run();
