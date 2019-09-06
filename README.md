@@ -1,5 +1,30 @@
 # World to GPU - 3D real-time renderer leveraging the power of Vulkan API.
-
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Usage](#usage)
+	* [Usage example](#usage-example)
+	* [For developers](#for-developers)
+* [Scene file description](#scene-file-description)
+	* [Asset](#asset)
+	* [Cameras](#cameras)
+		* [Perspective](#perspective)
+		* [Orthographic](#orthographic)
+* [Settings file description](#settings-file-description)
+* [Dependancies](#dependancies)
+* [Development](#development)
+	* [Goals](#goals)
+	* [Shader compilation](#shader-compilation)
+	* [Code organization and design philosophy](#code-organization-and-design-philosophy)
+		* [External](#external)
+		* [Application](#application)
+		* [Platform](#platform)
+		* [Base](#base)
+		* [Renderer](#renderer)
+		* [Renderable](#renderable)
+		* [Scene](#scene)
+	* [Module interaction scheme](#module-interaction-scheme)
+* [Author](#author)
 ## General info
 *Vulkan* is a new powerful low-level graphics API that allows developers to design high-performance rendering engines in 
 a way that is different from the way it was done before. But with great power come great responsibilities.
@@ -36,13 +61,13 @@ Scenes are described in *.json* files with the following pseudo-structure:
 }
 ```  
 Each of the items are described below.
-#### asset
+#### Asset
 Used as a meta-information of the scene file.
 ```javascript
 "version": "1.0"
 ```    
 Version of the file structure. Used internally to identify the file.
-#### cameras
+#### Cameras
 Cameras define the vantage points of the scene. There can be only one camera per scene.  
 There are two camera types:  
 - Perspective
@@ -66,7 +91,7 @@ To describe perspective camera use:
 	"translation": [ 0.5, 0.5, 3.0 ]
 }
 ```  
-##### Orthographics
+##### Orthographic
 To describe orthographic camera use:  
 - *'type'* property defines the type of the camera.
 - *'translation'* describes the position of the camera in 3d space.
@@ -135,7 +160,7 @@ in project root directory. Shaders are compiled to *.spv* format using *glslangV
 are then placed in *'/shaders'* folder in *'/product'* directory.
 #### Code organization and design philosophy
 Project source code is divided into the following modules. Each module is placed in separate subfolder in *'/src'* directory.
-#### External
+##### External
 Contains external libraries that are used in the project.
 ##### Application
 The main application container. Stores and runs main modules of the application. There can be multiple applications
@@ -163,4 +188,6 @@ and how to *act*. It is the highest level submodule in the engine.
 Scene submodule itself merely generates and stores the scene description.  
 Camera definitions are also contained in the *scene* module.
 #### Module interaction scheme
-<img src="drawing.png" alt="Design scheme"/> 
+<img src="drawing.png" alt="Design scheme" width = "500"/> 
+## Author
+Designed and developed by [Ivars Rb.](https://github.com/ivarsrb)
