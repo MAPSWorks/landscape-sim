@@ -3,7 +3,7 @@
 #include <base/log.h>
 
 namespace scene {
-PerspectiveCamera::PerspectiveCamera(PerspectiveCamera::Parameters params) :
+PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params) :
     ICamera((params.world_translation)),
     z_near_(params.znear),
     z_far_(params.zfar),
@@ -12,8 +12,7 @@ PerspectiveCamera::PerspectiveCamera(PerspectiveCamera::Parameters params) :
         z_near_, ", zfar - ", z_far_, ", yfov - ", y_field_of_view_);
 }
 
-void PerspectiveCamera::Update()
-{
+void PerspectiveCamera::Update() {
     
 }
 }; // scene

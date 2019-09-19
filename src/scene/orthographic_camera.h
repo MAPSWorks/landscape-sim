@@ -16,7 +16,7 @@ public:
         t::F32 xmag;
         t::F32 ymag;
     };
-    OrthographicCamera(Parameters params);
+    OrthographicCamera(const Parameters& params);
     void Update() override;
 private:
     // Camera matrix parameters

@@ -3,7 +3,7 @@
 #include <base/log.h>
 
 namespace scene {
-OrthographicCamera::OrthographicCamera(OrthographicCamera::Parameters params) :
+OrthographicCamera::OrthographicCamera(const OrthographicCamera::Parameters& params) :
     ICamera((params.world_translation)),
     z_near_(params.znear),
     z_far_(params.zfar),
@@ -13,8 +13,7 @@ OrthographicCamera::OrthographicCamera(OrthographicCamera::Parameters params) :
         z_near_, ", zfar - ", z_far_, ", xmag - ", x_mag_, ", ymag - ", y_mag_);
 }
 
-void OrthographicCamera::Update()
-{
+void OrthographicCamera::Update() {
 
 }
 

@@ -15,7 +15,7 @@ public:
         // Vertical field of view
         t::F32 yfov;
     };
-    PerspectiveCamera(Parameters params);
+    PerspectiveCamera(const Parameters& params);
     void Update() override;
 private:
     /*

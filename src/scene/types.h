@@ -9,9 +9,7 @@
 namespace scene {
 // Types
 using UniqueObjectVector = std::vector<std::unique_ptr<renderable::IRenderable>>;
-
 // Structures
-
 // Structure to describe objects in scene without knowing the details of them
 struct ObjectDescription {
     // Object type
