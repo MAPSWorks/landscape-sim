@@ -3,13 +3,13 @@
 #include <base/util.h>
 
 namespace platform {
-IApplication::IApplication(uint32_t argc, char* argv[]) :
+IApplication::IApplication(t::U32 argc, char* argv[]) :
     setting_file_("ini/settings.json"),
     scene_folder_("scenes/"),
     cmd_line_parser_(argc, argv),
     settings_loader_(setting_file_) {
-    Init(t::Size32(settings_loader_.Get().at("windowSize").at(0).get<uint32_t>(),
-        settings_loader_.Get().at("windowSize").at(1).get<uint32_t>()),
+    Init(t::Size32(settings_loader_.Get().at("windowSize").at(0).get<t::U32>(),
+        settings_loader_.Get().at("windowSize").at(1).get<t::U32>()),
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
     int width, height;
     glfwGetFramebufferSize(window_, &width, &height);

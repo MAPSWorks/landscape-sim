@@ -2,7 +2,7 @@
 #include <base/log.h>
 
 namespace application {
-WorldToGPU::WorldToGPU(uint32_t argc, char* argv[]) :
+WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     platform::IApplication(argc, argv),
     renderer_(settings_loader_, window_),
     scene_(GetSceneFileName()),

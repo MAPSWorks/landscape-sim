@@ -11,7 +11,7 @@ namespace platform {
 class IApplication {
 public:
     // Parameters are the same as from main() arguments
-    IApplication(uint32_t argc, char* argv[]);
+    IApplication(t::U32 argc, char* argv[]);
     virtual ~IApplication();
     IApplication(IApplication const&) = delete;
     // Copy-assignment is not allowed doe to pure virtual functions

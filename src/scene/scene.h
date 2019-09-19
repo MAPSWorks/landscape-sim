@@ -13,7 +13,7 @@ public:
     };
     Scene(const std::string& file_name);
     const Contents& GetContents() const;
-    // Generate scene objects and structure from given parameters, return the contents
+    // Generate scene objects and structure from given scene file, return the contents
     Contents GenerateContents(const std::string& file_name) const;
 private:
     // Contents potentially change
