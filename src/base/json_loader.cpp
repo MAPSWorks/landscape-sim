@@ -9,14 +9,14 @@ JSONLoader::JSONLoader(const std::string& file_name) :
     base::Log::Info("Base: parsing of '", file_name, "' complete");
 }
 
-const nlohmann::json JSONLoader::Get() const {
+const JSONLoader::JsonType JSONLoader::Get() const {
     return parsed_data_;
 }
 
 // NOTE: string_view could have been passed if: ifstream accepted it (this can be solved through data() f-tion)
 //       but the main problem is lack of + operator for string view to use it in exception description, 
 //       maybe this will change in the future.
-nlohmann::json JSONLoader::Init(const std::string& file_name) const {
+JSONLoader::JsonType JSONLoader::Init(const std::string& file_name) const {
     base::Log::Info("Base: parsing json file '", file_name, "' ...");
     std::ifstream file_stream(file_name, std::ifstream::in);
     if (file_stream.fail()) {
