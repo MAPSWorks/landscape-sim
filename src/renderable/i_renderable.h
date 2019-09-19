@@ -9,7 +9,7 @@ public:
     IRenderable();
     // Deleting a derived class renderable using a pointer to a base class
     // that has a non-virtual destructor results in undefined behavior
-    virtual ~IRenderable() {};
+    virtual ~IRenderable() = default;
     // Write command to given command buffer that is already in recording state
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const = 0;
 private: // TODO: probably should be protected
