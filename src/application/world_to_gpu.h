@@ -14,7 +14,7 @@ public:
 private:
     virtual void Update() override;
     virtual void RenderFrame() override;
-    virtual void Resize(const t::Size& win_size) override;
+    virtual void Resize(const t::Size32& win_size) override;
     virtual void OnExit() const override;
     renderer::Renderer renderer_;
     scene::Scene scene_;

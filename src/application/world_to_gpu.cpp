@@ -22,7 +22,7 @@ void WorldToGPU::RenderFrame() {
     scene_manager_.RenderFrame();
 }
 
-void WorldToGPU::Resize(const t::Size& win_size) {
+void WorldToGPU::Resize(const t::Size32& win_size) {
     renderer_.Resize();
 }
 

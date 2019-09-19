@@ -8,7 +8,7 @@ IApplication::IApplication(uint32_t argc, char* argv[]) :
     scene_folder_("scenes/"),
     cmd_line_parser_(argc, argv),
     settings_loader_(setting_file_) {
-    Init(t::Size(settings_loader_.Get().at("windowSize").at(0).get<uint32_t>(),
+    Init(t::Size32(settings_loader_.Get().at("windowSize").at(0).get<uint32_t>(),
         settings_loader_.Get().at("windowSize").at(1).get<uint32_t>()),
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
     int width, height;
@@ -39,10 +39,10 @@ std::string IApplication::GetSceneFileName() const {
 void IApplication::ResizeCallback(GLFWwindow* window, int width, int height) {
     // Retrieve current window pointer to acess member variables
     IApplication* this_obj = static_cast<IApplication*>(glfwGetWindowUserPointer(window));
-    this_obj->Resize(t::Size(width, height));
+    this_obj->Resize(t::Size32(width, height));
 }
 
-void IApplication::Init(const t::Size& win_size, std::string_view title) {
+void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);

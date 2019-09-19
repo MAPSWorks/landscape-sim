@@ -10,19 +10,19 @@ public:
     struct Parameters {
         // Actual position of camera in world space
         t::Vec3 world_translation;
-        t::Real32 znear;
-        t::Real32 zfar;
+        t::F32 znear;
+        t::F32 zfar;
         // Magnification of camera
-        t::Real32 xmag;
-        t::Real32 ymag;
+        t::F32 xmag;
+        t::F32 ymag;
     };
     OrthographicCamera(Parameters params);
     void Update() override;
 private:
     // Camera matrix parameters
-    t::Real32 z_near_;
-    t::Real32 z_far_;
-    t::Real32 x_mag_;
-    t::Real32 y_mag_;
+    t::F32 z_near_;
+    t::F32 z_far_;
+    t::F32 x_mag_;
+    t::F32 y_mag_;
 };
 }; // scene

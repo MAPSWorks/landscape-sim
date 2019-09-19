@@ -10,10 +10,10 @@ public:
     struct Parameters {
         // Actual position of camera in world space
         t::Vec3 world_translation;
-        t::Real32 znear;
-        t::Real32 zfar;
+        t::F32 znear;
+        t::F32 zfar;
         // Vertical field of view
-        t::Real32 yfov;
+        t::F32 yfov;
     };
     PerspectiveCamera(Parameters params);
     void Update() override;
@@ -28,9 +28,9 @@ private:
     t::Vec3 right_;
     */
     // Camera matrix parameters
-    t::Real32 z_near_;
-    t::Real32 z_far_;
+    t::F32 z_near_;
+    t::F32 z_far_;
     // Vertical field of view, for perspective type only
-    t::Real32 y_field_of_view_;
+    t::F32 y_field_of_view_;
 };
 }; // scene
