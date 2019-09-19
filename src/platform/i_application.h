@@ -17,6 +17,12 @@ public:
     // Copy-assignment is not allowed doe to pure virtual functions
     void Run();
 protected:
+    // File where application settings are stored
+    const std::string setting_file_;
+    // Folder where scene files are stored
+    const std::string scene_folder_;
+    // Get the currently supplied scene file name
+    std::string GetSceneFileName() const;
     // Data from command line that provides contents of the scene
     const base::CmdLineParser cmd_line_parser_;
     // Application and subsystem settings
@@ -32,7 +38,6 @@ private:
     virtual void OnExit() const = 0;
     void Init(const t::Size& win_size, std::string_view title);
     void Shutdown();
-  
 };
 
 }; // platform

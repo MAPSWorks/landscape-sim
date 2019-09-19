@@ -1,16 +1,19 @@
 #include "i_application.h"
 #include <base/log.h>
+#include <base/util.h>
 
 namespace platform {
 IApplication::IApplication(uint32_t argc, char* argv[]) :
+    setting_file_("ini/settings.json"),
+    scene_folder_("scenes/"),
     cmd_line_parser_(argc, argv),
-    settings_loader_("ini/settings.json") {
+    settings_loader_(setting_file_) {
     Init(t::Size(settings_loader_.Get().at("windowSize").at(0).get<uint32_t>(),
         settings_loader_.Get().at("windowSize").at(1).get<uint32_t>()),
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
     int width, height;
     glfwGetFramebufferSize(window_, &width, &height);
-    base::Log::Info("Platform initialized. Window size: ",width, " ", height);
+    base::Log::Info("Platform initialized. Window size: (",width, " ", height,")");
 }
 
 IApplication::~IApplication() {
@@ -25,6 +28,11 @@ void IApplication::Run() {
         RenderFrame();
     }
     OnExit();
+}
+
+// Scene file name is recieved through command line by app user
+std::string IApplication::GetSceneFileName() const {
+    return scene_folder_ + base::StripIlligallChars(cmd_line_parser_.GetOption("-s"));
 }
 
 // static
