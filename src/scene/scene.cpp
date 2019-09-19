@@ -16,6 +16,7 @@ Scene::Contents Scene::GenerateContents(const std::string& file_name) const{
     SceneParser scene_parser(file_name);
     Contents contents;
     contents.camera = scene_parser.GetCamera();
+    contents.renderables = scene_parser.GetRenderables();
     return contents;
 }
 }; // scene

@@ -41,4 +41,11 @@ std::unique_ptr<ICamera> SceneParser::GetCamera() const {
     }
     return camera;
 }
+
+Scene::RenderableVector SceneParser::GetRenderables() const {
+    Scene::RenderableVector renderables;
+
+
+    return renderables;
+}
 };
