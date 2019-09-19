@@ -11,7 +11,7 @@ public:
     JSONLoader(const std::string& file_name);
     // Data in structure is acessed by at() and get() methods
     // Example: at("field1").at("sub_field1").get<std::string>();
-    const JsonType Get() const;
+    const JsonType& Get() const;
 private:
     JsonType Init(const std::string& file_name) const;
     // Handle to parsed data structure

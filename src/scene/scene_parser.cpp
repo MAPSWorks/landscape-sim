@@ -14,8 +14,7 @@ SceneParser::SceneParser(const std::string& file_name) :
 // Camera can be of different type
 std::unique_ptr<ICamera> SceneParser::GetCamera() const {
     std::unique_ptr<ICamera> camera;
-    const base::JSONLoader::JsonType& data = loader_.Get();
-    const base::JSONLoader::JsonType& scene_data_camera = data.at("camera");
+    const base::JSONLoader::JsonType& scene_data_camera = data_catche_.at("camera");
     const std::string camera_type = scene_data_camera.at("type").get<std::string>();
     const std::vector<t::F32> camera_translation = scene_data_camera.at("translation");
     // Perspective camera
