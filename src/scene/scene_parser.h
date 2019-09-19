@@ -20,7 +20,7 @@ public:
     Scene::RenderableVector GetRenderables() const;
 private:
     // Parses given file and stores parsed data
-    base::JSONLoader loader_;
+    const base::JSONLoader loader_;
     // Reference to data loaded from loader
     const base::JSONLoader::JsonType& data_catche_;
 };

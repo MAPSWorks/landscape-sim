@@ -15,6 +15,6 @@ public:
 private:
     JsonType Init(const std::string& file_name) const;
     // Handle to parsed data structure
-    JsonType parsed_data_;
+    const JsonType parsed_data_;
 };
 };
