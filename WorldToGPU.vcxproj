@@ -26,10 +26,7 @@
     <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderable\i_renderable.cpp" />
-    <ClCompile Include="src\renderable\rectangle.cpp" />
     <ClCompile Include="src\renderable\terrain.cpp" />
-    <ClCompile Include="src\renderable\triangle.cpp" />
-    <ClCompile Include="src\renderable\triangle_vb.cpp" />
     <ClCompile Include="src\platform\i_application.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\frame_manager.cpp" />
@@ -73,10 +70,7 @@
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
     <ClInclude Include="src\external\json\json.hpp" />
     <ClInclude Include="src\renderable\i_renderable.h" />
-    <ClInclude Include="src\renderable\rectangle.h" />
     <ClInclude Include="src\renderable\terrain.h" />
-    <ClInclude Include="src\renderable\triangle.h" />
-    <ClInclude Include="src\renderable\triangle_vb.h" />
     <ClInclude Include="src\renderable\types.h" />
     <ClInclude Include="src\platform\i_application.h" />
     <ClInclude Include="src\renderer\context.h" />

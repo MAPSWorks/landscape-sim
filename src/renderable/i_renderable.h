@@ -12,7 +12,5 @@ public:
     virtual ~IRenderable() = default;
     // Write command to given command buffer that is already in recording state
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const = 0;
-private: // TODO: probably should be protected
-    t::Vec3 world_position_;
 };
 }; // renderable
