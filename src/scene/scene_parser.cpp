@@ -52,7 +52,6 @@ Scene::RenderableVector SceneParser::GetRenderables() const {
         const auto& scene_data_terrain = data_catche_.at("terrain");
 
     }
-
     return renderables;
 }
 };
