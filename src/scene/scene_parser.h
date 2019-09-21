@@ -4,6 +4,7 @@
 #include <base/json_loader.h>
 #include "scene.h"
 #include "i_camera.h"
+#include <renderer/renderer.h>
 
 // Parses scene json file and return scene contents
 // Upon initialization scene data is catched and each individual getter gets
@@ -17,7 +18,7 @@ public:
     // Return pointer to derived camera object
     std::unique_ptr<ICamera> GetCamera() const;
     // Returns list of renderable scene objects
-    Scene::RenderableVector GetRenderables() const;
+    Scene::RenderableVector GetRenderables(renderer::Renderer& renderer) const;
 private:
     // Parses given file and stores parsed data
     const base::JSONLoader loader_;

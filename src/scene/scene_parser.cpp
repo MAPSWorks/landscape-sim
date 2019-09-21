@@ -3,6 +3,7 @@
 #include <base/log.h>
 #include "perspective_camera.h"
 #include "orthographic_camera.h"
+#include <renderable/terrain.h>
 
 namespace scene {
 SceneParser::SceneParser(const std::string& file_name) : 
@@ -45,12 +46,12 @@ std::unique_ptr<ICamera> SceneParser::GetCamera() const {
 }
 
 // Add renderable objects
-Scene::RenderableVector SceneParser::GetRenderables() const {
+Scene::RenderableVector SceneParser::GetRenderables(renderer::Renderer& renderer) const {
     Scene::RenderableVector renderables;
     // Terrain, if is defined
     if (data_catche_.find("terrain") != data_catche_.end()) {
         const auto& scene_data_terrain = data_catche_.at("terrain");
-
+        renderables.push_back(std::make_unique<renderable::Terrain>(renderer));
     }
     return renderables;
 }

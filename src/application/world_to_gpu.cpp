@@ -5,7 +5,7 @@ namespace application {
 WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     platform::IApplication(argc, argv),
     renderer_(settings_loader_, window_),
-    scene_(GetSceneFileName()),
+    scene_(GetSceneFileName(), renderer_),
     scene_manager_(renderer_, scene_) {
     base::Log::Info("'World to GPU' initialized");
 }
