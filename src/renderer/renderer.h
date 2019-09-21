@@ -15,7 +15,6 @@ namespace renderer {
 class Renderer {
 public:
     Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window);
-    ~Renderer();
     const Context& GetContext() const;
     const Window& GetWindow() const;
     PipelineManager& GetPipelineManager();

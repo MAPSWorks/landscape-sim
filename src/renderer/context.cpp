@@ -14,8 +14,4 @@ Context::Context(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     device(instance.Get(), surface.Get()) {
     base::Log::Info("Renderer: context created");
 }
-
-Context::~Context() {
-    base::Log::Info("Renderer: context destroying...");
-}
 }; // graphics vlk

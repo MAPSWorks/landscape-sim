@@ -8,7 +8,6 @@ namespace scene {
 class SceneManager {
 public:
     SceneManager(renderer::Renderer &renderer, const Scene& scene);
-    ~SceneManager();
     void Update() const;
     void RenderFrame() const;
 private:

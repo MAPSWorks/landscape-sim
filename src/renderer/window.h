@@ -12,7 +12,6 @@ namespace renderer {
 class Window {
 public:
     Window(const Context& context);
-    ~Window();
     const VkSwapchainKHR& GetSwapchain() const;
     // Get wrapper renderable
     const vlk::Swapchain& GetSwapchainObject() const;

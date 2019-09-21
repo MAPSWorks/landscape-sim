@@ -10,7 +10,6 @@ using PipelineId = uint32_t;
 class PipelineManager {
 public:
     PipelineManager(const VkDevice& device);
-    ~PipelineManager();
     // Add pipeline to collection and return it's id
     PipelineId AddGraphicsPipeline(const vlk::GraphicsPipeline::CreateParams& create_params, 
         const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent);

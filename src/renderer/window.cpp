@@ -8,10 +8,6 @@ Window::Window(const Context& context) :
     base::Log::Info("Renderer: windowed objects created");
 }
 
-Window::~Window() {
-    base::Log::Info("Renderer: windowed objects destroying..");
-}
-
 const VkSwapchainKHR& Window::GetSwapchain() const {
     return swapchain_.get()->Get();
 }

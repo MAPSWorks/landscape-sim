@@ -13,10 +13,6 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     base::Log::Info("Renderer: renderer initialized");
 }
 
-Renderer::~Renderer() {
-    base::Log::Info("Renderer: renderer shutting down...");
-}
-
 const Context& Renderer::GetContext() const {
     return context_;
 }

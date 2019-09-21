@@ -9,10 +9,6 @@ SceneManager::SceneManager(renderer::Renderer& renderer, const Scene& scene) :
     renderer_.GetMemoryAllocator().DebugPrint();
 }
 
-SceneManager::~SceneManager() {
-    base::Log::Info("Scene: scene manager shutting down..."); 
-}
-
 // Update the state of the world
 // NOTE: updating frequency is not the same as frame rendering frequency
 void SceneManager::Update() const {

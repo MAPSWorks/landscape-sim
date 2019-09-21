@@ -10,7 +10,6 @@ class WorldToGPU : public platform::IApplication {
 public:
     // Parameters from main() function arguments
     WorldToGPU(t::U32 argc, char* argv[]);
-    virtual ~WorldToGPU();
 private:
     virtual void Update() override;
     virtual void RenderFrame() override;

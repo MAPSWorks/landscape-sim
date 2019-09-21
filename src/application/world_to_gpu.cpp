@@ -10,10 +10,6 @@ WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     base::Log::Info("'World to GPU' initialized");
 }
 
-WorldToGPU::~WorldToGPU() {
-    base::Log::Info("'World to GPU' shutting down...");
-}
-
 void WorldToGPU::Update() {
     scene_manager_.Update();
 }

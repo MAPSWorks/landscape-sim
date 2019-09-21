@@ -17,7 +17,6 @@ namespace renderer {
 class Context {
 public:
     Context(const base::JSONLoader& setting_loader, GLFWwindow* window);
-    ~Context();
     // Store the pointer to window handle
     // TODO: maybe it is enaugh to just pass pointer and not store here
     GLFWwindow* window_glfw;

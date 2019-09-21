@@ -11,7 +11,6 @@
 namespace renderer {
 struct FrameResource {
     FrameResource(const VkDevice& device, const vlk::CommandPool& command_pool);
-    ~FrameResource();
     // While one command buffer is rendered, the other one is written to at the same time
     const vlk::CommandBuffer command_buffer;
     const vlk::Semaphore image_acquired_semaphore;

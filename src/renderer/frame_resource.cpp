@@ -10,9 +10,4 @@ FrameResource::FrameResource(const VkDevice& device, const vlk::CommandPool& com
     frame_buffer(device) {
     base::Log::Info("Renderer: frame resource initialized");
 }
-
-FrameResource::~FrameResource() {
-    base::Log::Info("Renderer: frame resource shutting down...");
-}
-
 }; // renderer

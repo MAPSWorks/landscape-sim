@@ -12,12 +12,6 @@ Validation::Validation() : layers_({ "VK_LAYER_KHRONOS_validation" }) {
     }
 }
 
-Validation::~Validation() {
-    if (enabled_) {
-        base::Log::Info("Renderer: validation shutting down...");
-    }
-}
-
 bool Validation::IsEnabled() const {
     return enabled_;
 }

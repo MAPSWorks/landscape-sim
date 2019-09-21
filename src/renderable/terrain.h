@@ -7,7 +7,6 @@ namespace renderable {
 class Terrain : public IRenderable {
 public:
     Terrain(renderer::Renderer& renderer);
-    ~Terrain();
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const override;
 private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();

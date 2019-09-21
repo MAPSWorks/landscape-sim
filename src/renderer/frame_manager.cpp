@@ -10,10 +10,6 @@ FrameManager::FrameManager(const VkDevice& device, uint32_t family_index, uint32
     base::Log::Info("Renderer: frame manager initialized. Frames in flight: ", kFramesInFlight);
 }
 
-FrameManager::~FrameManager() {
-    base::Log::Info("Renderer: frame manager shutting down...");
-}
-
 void FrameManager::Reset() {
     // TODO: dont forget device idle call here
     frame_index_ = 0;

@@ -9,7 +9,6 @@ namespace renderer::vlk {
 class Validation {
 public:
     Validation();
-    ~Validation();
     bool IsEnabled() const;
     const LayerVector& GetLayers() const;
     // Add required extentions for our validation layers to given extentions vector

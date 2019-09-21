@@ -8,7 +8,6 @@ namespace renderer {
 class FrameManager {
 public:
     FrameManager(const VkDevice& device, uint32_t family_index, uint32_t frames_in_flight);
-    ~FrameManager();
     // Sets the frame resources in their default state 
     // as if rendering for the first time
     // TODO: not fully implemented, check komments inside a function

@@ -9,10 +9,6 @@ Terrain::Terrain(renderer::Renderer& renderer) :
     base::Log::Info("Renderable: terrain created");
 }
 
-Terrain::~Terrain() {
-    base::Log::Info("Renderable: terrain destroying...");
-}
-
 // Add command to given command buffer that is already in recording state
 void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
     command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));

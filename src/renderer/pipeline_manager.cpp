@@ -8,10 +8,6 @@ PipelineManager::PipelineManager(const VkDevice& device) :
     base::Log::Info("Renderer: pipeline manager initialized");
 }
 
-PipelineManager::~PipelineManager() {
-    base::Log::Info("Renderer: pipeline manager down...");
-}
-
 // Adds pipeline and returns id by which it is uniquelly identifieable
 // If pipeline already exists return the same existing id and don't add anything new
 PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::CreateParams& create_params,
