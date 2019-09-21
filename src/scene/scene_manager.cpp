@@ -28,10 +28,9 @@ void SceneManager::Update() const {
 void SceneManager::RenderFrame() const {
     renderer_.FrameBegin();
     renderer_.BeginRecordCurrentCommandBuffer();
-    /*
-    for (const auto& renderable : scene_.objects) {
+    for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer());
-    }*/
+    }
     renderer_.EndRecordCurrentCommandBuffer();
     renderer_.FrameEnd();
 }
