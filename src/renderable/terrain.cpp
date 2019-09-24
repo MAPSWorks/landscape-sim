@@ -8,7 +8,6 @@ Terrain::Terrain(renderer::Renderer& renderer) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())) {
     base::Log::Info("Renderable: terrain created");
-    height_grid_.Log();
 }
 
 // Add command to given command buffer that is already in recording state
@@ -60,10 +59,11 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
     return description;
 }
 
+// Generate height grid values for given area size and return
 base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
     base::Matrix<t::F32> height_grid(size, size);
-    height_grid(0, 0) = 2.0;
-
+    height_grid(0, 0) = 1.0;
+    height_grid(size - 1, size - 1) = 2.0;
 
     return height_grid;
 }
