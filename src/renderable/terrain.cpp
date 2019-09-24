@@ -3,13 +3,11 @@
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer) :
-    height_grid_(5, 4, 11),
+    height_grid_(GenerateHeightGrid(5)),
     renderer_(renderer),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())) {
     base::Log::Info("Renderable: terrain created");
-
-    height_grid_.Log();
 }
 
 // Add command to given command buffer that is already in recording state
@@ -59,5 +57,13 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
     };
 
     return description;
+}
+
+base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
+    base::Matrix<t::F32> height_grid(size, size);
+    //height_grid(0, 0) = 2.0;
+
+
+    return height_grid;
 }
 }; // renderable

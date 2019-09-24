@@ -11,8 +11,11 @@ public:
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const override;
 private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
+    // Generate and return height grid populated with height values that define
+    // terrain height.
+    base::Matrix<t::F32> GenerateHeightGrid(t::U16 size) const;
     // Height grid representation as 2d matrix
-    base::Matrix<t::F32> height_grid_;
+    const base::Matrix<t::F32> height_grid_;
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
     // Id of pipeline that is going to be used for rendering
