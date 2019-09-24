@@ -8,9 +8,9 @@ GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& r
     const CreateParams& create_params) :
     device_(device),
     create_params_(create_params),
-    name_(create_params.name),
-    pipeline_layout_(CreatePipelineLayout(create_params.layout)),
-    pipeline_(Create(render_pass, swapchain_extent, create_params)) {
+    name_(create_params_.name),
+    pipeline_layout_(CreatePipelineLayout(create_params_.layout)),
+    pipeline_(Create(render_pass, swapchain_extent, create_params_)) {
     base::Log::Info("Renderer: graphics pipeline '", name_, "' created");
 }
 

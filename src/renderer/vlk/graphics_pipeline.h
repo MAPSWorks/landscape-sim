@@ -53,7 +53,8 @@ public:
     struct LayoutParams {
         // Describes descriptors that are to be used in pipeline
         // Resources with handles VkDescriptorSetLayout should stick around while pipeline is used
-        const std::vector<VkDescriptorSetLayout>& layouts;
+        // NOTE: originally this was reference vector, be arefull if reference needed again
+        const std::vector<VkDescriptorSetLayout> layouts;
         // ... TODO push constants here
     };
     // Actual parameter structure
