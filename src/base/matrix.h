@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <sstream> 
+#include <utility> 
 #include "log.h"
 
 // Wraps 1d vector to get 2d matrix semantics
@@ -19,6 +20,7 @@ public:
     // Get costant reference for given indexes.
     // Throws if bounds are incorrect.
     const T& operator()(size_t row, size_t column) const;
+    T& operator()(size_t row, size_t column);
     size_t GetRows() const;
     size_t GetCols() const;
     // Log contents
@@ -29,7 +31,7 @@ private:
     // 2d matrix is stored as a vector and index combination
     // is used to access elements as if it is 2d array.
     // Elements are stored row-by-row
-    const std::vector<T> matrix_;
+    std::vector<T> matrix_;
 };
 
 template <typename T>
@@ -56,6 +58,12 @@ inline const T& Matrix<T>::operator()(size_t row, size_t column) const {
             std::to_string(column) + ")");
     }
     return matrix_.at(row + columns_ * column);
+}
+
+// Cast away constness from const version (Scott Meyer's pattern)
+template<typename T>
+inline T& Matrix<T>::operator()(size_t row, size_t column) {
+    return const_cast<T&>(std::as_const(*this)(row, column));
 }
 
 template<typename T>
