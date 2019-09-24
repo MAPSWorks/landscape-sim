@@ -3,10 +3,13 @@
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer) :
+    height_grid_(5, 4, 11),
     renderer_(renderer),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())) {
     base::Log::Info("Renderable: terrain created");
+
+    height_grid_.Log();
 }
 
 // Add command to given command buffer that is already in recording state

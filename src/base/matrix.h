@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
 #include <stdexcept>
-#include <iostream>
+#include <string>
+#include <sstream> 
+#include "log.h"
 
 // Wraps 1d vector to get 2d matrix semantics
 // Row-major storage
@@ -19,7 +21,8 @@ public:
     const T& operator()(size_t row, size_t column) const;
     size_t GetRows() const;
     size_t GetCols() const;
-    friend std::ostream& operator<<(std::ostream& out, const Matrix& in);
+    // Log contents
+    void Log() const;
 private:
     const size_t rows_;
     const size_t columns_;
@@ -49,7 +52,8 @@ template<typename T>
 inline const T& Matrix<T>::operator()(size_t row, size_t column) const {
     // Bound check
     if (row > rows_ || column > columns_) {
-        throw std::invalid_argument("Base: matrix access index(es) are out of bounds - (",row ,",",column, ")");
+        throw std::invalid_argument("Base: matrix access index(es) are out of bounds - ("+std::to_string(row) +","+
+            std::to_string(column) + ")");
     }
     return matrix_.at(row + columns_ * column);
 }
@@ -64,15 +68,16 @@ inline size_t Matrix<T>::GetCols() const {
     return columns_;
 }
 
-template <typename T>
-std::ostream& operator<<(std::ostream& out, const Matrix<T>& in) {
-    for (int i = 0; i < in.GetRows(); i++) {
-        for (int j = 0; j < in.GetCols()(); j++) {
-            out << in(i, j) << ' ';
+template<typename T>
+inline void Matrix<T>::Log() const {
+    std::ostringstream matrix_log_str;
+    for (size_t i = 0; i < GetRows(); i++) {
+        for (size_t j = 0; j < GetCols(); j++) {
+            matrix_log_str << (*this)(i, j) << ' ';
         }
-        out << std::endl;
+        matrix_log_str << "\n";
     }
-    return out;
+    Log::Info("Base: matrix contents - \n", matrix_log_str.str());
 }
 
 };
