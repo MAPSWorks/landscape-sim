@@ -66,6 +66,7 @@
     <ClInclude Include="src\application\world_to_gpu.h" />
     <ClInclude Include="src\base\cmd_line_parser.h" />
     <ClInclude Include="src\base\json_loader.h" />
+    <ClInclude Include="src\base\matrix.h" />
     <ClInclude Include="src\base\util.h" />
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
     <ClInclude Include="src\external\json\json.hpp" />
