@@ -8,8 +8,11 @@ Terrain::Terrain(renderer::Renderer& renderer) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     vertices_(GetVertices()),
+    indices_(GetIndices()),
     vertex_buffer_("terrain vertices", renderer_.GetMemoryAllocator(),
-        (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()) {
+        (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
+    index_buffer_("terrain indices", renderer_.GetMemoryAllocator(),
+        (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()) {
     base::Log::Info("Renderable: terrain created");
 }
 
@@ -17,7 +20,8 @@ Terrain::Terrain(renderer::Renderer& renderer) :
 void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
     command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
-    command_buffer.Draw(static_cast<uint32_t>(vertices_.size()), 1, 0, 0);
+    command_buffer.BindIndexBuffer32(index_buffer_.Get());
+    command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
 renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() {
@@ -73,11 +77,19 @@ base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
 
 // Generate vertices from height grid
 std::vector<renderer::VertexPos2dColor> Terrain::GetVertices() const {
-    std::vector<renderer::VertexPos2dColor> vertices = {
-        {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-        {{0.5f, 0.5f}, {0.0f, 0.5f, 0.0f}},
-        {{-0.5f, 0.5f}, {1.0f, 0.0f, 1.0f}}
+    const std::vector<renderer::VertexPos2dColor> vertices = {
+            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
         };
     return vertices;
+}
+
+std::vector<t::U32> Terrain::GetIndices() const {
+    const std::vector<t::U32> indices = {
+        0, 1, 2, 2, 3, 0
+    };
+    return indices;
 }
 }; // renderable

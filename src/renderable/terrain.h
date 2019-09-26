@@ -4,6 +4,7 @@
 #include <renderer/types.h>
 #include <renderer/renderer.h>
 #include <renderer/vlk/vertex_buffer.h>
+#include <renderer/vlk/index_buffer.h>
 #include <base/matrix.h>
 
 // Terrain representation as a renderable object
@@ -18,6 +19,7 @@ private:
     // terrain height.
     base::Matrix<t::F32> GenerateHeightGrid(t::U16 size) const;
     std::vector<renderer::VertexPos2dColor> GetVertices() const;
+    std::vector<t::U32> GetIndices() const;
     // Height grid representation as 2d matrix
     const base::Matrix<t::F32> height_grid_;
     // Reference to renderer this triangle is tied with
@@ -27,6 +29,8 @@ private:
     // resize. But id is tied to specific location in pipeline catche
     const renderer::PipelineId pipeline_id_;
     const std::vector<renderer::VertexPos2dColor> vertices_;
+    const std::vector<t::U32> indices_;
     const renderer::vlk::VertexBuffer vertex_buffer_;
+    const renderer::vlk::IndexBuffer index_buffer_;
 };
 }; // renderable
