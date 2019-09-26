@@ -1,5 +1,6 @@
 #include "graphics_pipeline.h"
 #include <deque>
+#include <base/types.h>
 #include <base/log.h>
 #include "shader_module.h"
 
@@ -35,7 +36,7 @@ const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const 
 VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
     VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
     pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipeline_layout_create_info.setLayoutCount = static_cast<uint32_t>(params.layouts.size());
+    pipeline_layout_create_info.setLayoutCount = static_cast<t::U32>(params.layouts.size());
     pipeline_layout_create_info.pSetLayouts = params.layouts.data();
     pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional
     pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
@@ -73,10 +74,10 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     vertex_input_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     // Bindings describe how chunks of vertex buffer should be interpreted
     // If the whole vertex buffer is used, there is only one binding with index 0
-    vertex_input_create_info.vertexBindingDescriptionCount = static_cast<uint32_t>(create_params.vertex_input.binding_descr.size());
+    vertex_input_create_info.vertexBindingDescriptionCount = static_cast<t::U32>(create_params.vertex_input.binding_descr.size());
     vertex_input_create_info.pVertexBindingDescriptions = create_params.vertex_input.binding_descr.data();
     // Attribute description describes how are each vertex attribute to be read per binding
-    vertex_input_create_info.vertexAttributeDescriptionCount = static_cast<uint32_t>(create_params.vertex_input.attribute_descr.size());;
+    vertex_input_create_info.vertexAttributeDescriptionCount = static_cast<t::U32>(create_params.vertex_input.attribute_descr.size());;
     vertex_input_create_info.pVertexAttributeDescriptions = create_params.vertex_input.attribute_descr.data();
     // Input assambly
     VkPipelineInputAssemblyStateCreateInfo input_assembly_create_info {};
@@ -162,7 +163,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     // The pipeline itself
     VkGraphicsPipelineCreateInfo create_info {};
     create_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    create_info.stageCount = static_cast<uint32_t>(stage_create_infos.size());
+    create_info.stageCount = static_cast<t::U32>(stage_create_infos.size());
     create_info.pStages = stage_create_infos.data();
     create_info.pVertexInputState = &vertex_input_create_info;
     create_info.pInputAssemblyState = &input_assembly_create_info;
