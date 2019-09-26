@@ -38,14 +38,13 @@ PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::Cre
 }
 
 const VkPipeline& PipelineManager::GetGraphicsPipeline(PipelineId id) const {
-    return graphics_pipelines_.at(id).get()->Get();
+    return graphics_pipelines_.at(id)->Get();
 }
 
 void PipelineManager::RecreatePipelines(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent) {
-    for (size_t i = 0; i < graphics_pipelines_.size(); i++) {
-        auto& pipeline = graphics_pipelines_.at(i);
+    for (auto& pipeline : graphics_pipelines_) {
         // Get parameters this pipeline was created with
-        const auto create_params = pipeline.get()->GetCreateParams();
+        const auto create_params = pipeline->GetCreateParams();
         // Destroy eisting pipeline
         pipeline.reset();
         // Create the new one instead keeping the index the same
