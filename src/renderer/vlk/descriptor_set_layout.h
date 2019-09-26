@@ -1,5 +1,5 @@
 #pragma once
-#include <base/types.h>>
+#include <base/types.h>
 #include "vulkan_shared.h"
 #include "device.h"
 
@@ -14,7 +14,7 @@ public:
         // Type of descriptor layout. Uniform buffer, image sampler etc
         VkDescriptorType type;
         // In what stage it descriptor is going to be accessible
-        VkShaderStageFlags stage;
+        ShaderStage stage;
         // Number of descriptors contained in the binding, accessed in a shader as an array
         t::U32 count = 1;
     };

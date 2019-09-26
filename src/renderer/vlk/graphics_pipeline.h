@@ -9,11 +9,6 @@ class GraphicsPipeline {
 public:
     // Graphical pipeline is created using create structure that is not tied to Vulkan
     // TODO: incomplete ... add things as needed ...
-    // Redefine vulkan values to decouple Vulkan and context where we use this library
-    enum class ShaderStage {
-        kVertex = VK_SHADER_STAGE_VERTEX_BIT,
-        kFragment = VK_SHADER_STAGE_FRAGMENT_BIT
-    };
     struct ShaderStageParams {
         const std::string file_name;
         const ShaderStage stage;
@@ -53,7 +48,6 @@ public:
     struct LayoutParams {
         // Describes descriptors that are to be used in pipeline
         // Resources with handles VkDescriptorSetLayout should stick around while pipeline is used
-        // NOTE: originally this was reference vector, be arefull if reference needed again
         const std::vector<VkDescriptorSetLayout> layouts;
         // ... TODO push constants here
     };

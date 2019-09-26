@@ -5,14 +5,15 @@ namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer) :
     height_grid_(GenerateHeightGrid(5)),
     renderer_(renderer),
-    pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
-        renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     vertices_(GetVertices()),
     indices_(GetIndices()),
     vertex_buffer_("terrain vertices", renderer_.GetMemoryAllocator(),
         (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
     index_buffer_("terrain indices", renderer_.GetMemoryAllocator(),
-        (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()) {
+        (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()),
+    descriptor_set_layout_( renderer_.GetContext().device.Get() , GetDescriptorSetBindings()),
+    pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
+        renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())) {
     base::Log::Info("Renderable: terrain created");
 }
 
@@ -31,8 +32,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         // Programmable stage
         {
             // Shader stages
-            {"shaders/vert_vb.spv", renderer::vlk::GraphicsPipeline::ShaderStage::kVertex },
-            {"shaders/frag_vb.spv", renderer::vlk::GraphicsPipeline::ShaderStage::kFragment },
+            {"shaders/vert_vb.spv", renderer::vlk::ShaderStage::kVertex },
+            {"shaders/frag_vb.spv", renderer::vlk::ShaderStage::kFragment },
         },
         // Vertex input params
         {
@@ -60,7 +61,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Pipeline layout
         {
-            {}
+            // Vector of layouts
+            { descriptor_set_layout_.Get() }
         }
     };
 
@@ -91,5 +93,18 @@ std::vector<t::U32> Terrain::GetIndices() const {
         0, 1, 2, 2, 3, 0
     };
     return indices;
+}
+
+// Single uniform buffer object is being bound to pipeline shader stage
+std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorSetBindings() const {
+    std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
+    renderer::vlk::DescriptorSetLayout::Binding binding;
+    // Binding index (location), corresponds to layout(binding = n)  in shader
+    binding.index = 0;
+    binding.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.stage = renderer::vlk::ShaderStage::kVertex;
+    binding.count = 1;
+    bindings.push_back(binding);
+    return bindings;
 }
 }; // renderable
