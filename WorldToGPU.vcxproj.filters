@@ -298,5 +298,7 @@
     <None Include="shaders\shader_vb.vert" />
     <None Include="product\scenes\scene_alpha.json" />
     <None Include="product\ini\settings.json" />
+    <None Include="shaders\terrain.frag" />
+    <None Include="shaders\terrain.vert" />
   </ItemGroup>
 </Project>
