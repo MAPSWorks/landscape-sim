@@ -31,7 +31,7 @@ VkDescriptorSetLayout DescriptorSetLayout::Create(const std::vector<Binding>& bi
     }
     VkDescriptorSetLayoutCreateInfo layout_info = {};
     layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layout_info.bindingCount = static_cast<uint32_t>(layout_bindings.size());
+    layout_info.bindingCount = static_cast<t::U32>(layout_bindings.size());
     layout_info.pBindings = layout_bindings.data();
     VkDescriptorSetLayout descriptor_set_layout;
     ErrorCheck(vkCreateDescriptorSetLayout(device_, &layout_info, nullptr, &descriptor_set_layout));

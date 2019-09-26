@@ -7,6 +7,12 @@
 #include <renderer/vlk/index_buffer.h>
 #include <base/matrix.h>
 
+struct UniformBufferObject {
+    t::Mat4 world_from_local;
+    t::Mat4 view_from_world;
+    t::Mat4 projection_from_view;
+};
+
 // Terrain representation as a renderable object
 namespace renderable {
 class Terrain : public IRenderable {
