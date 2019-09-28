@@ -27,8 +27,10 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
 
 renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() {
     auto description = renderer::vlk::GraphicsPipeline::CreateParams{
-        // Pipeline descriptive name, should differ for different pipelines
-        "Terrain pipeline",
+        // Pipeline id name, should differ for different pipelines.
+        // In case multiple instances of this class is used, only one actual
+        // pipeline will be used by the pipeline manager.
+        "terrain",
         // Programmable stage
         {
             // Shader stages

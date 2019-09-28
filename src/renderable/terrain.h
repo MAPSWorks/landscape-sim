@@ -44,7 +44,7 @@ private:
     const renderer::vlk::DescriptorSetLayout descriptor_set_layout_;
     // Id of pipeline that is going to be used for rendering
     // Can't store pipeline handle directly, because pipelines are recreated upon screen
-    // resize. But id is tied to specific location in pipeline catche
+    // resize. But id is tied to specific location in pipeline cache
     const renderer::PipelineId pipeline_id_;
 
 };

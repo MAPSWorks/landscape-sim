@@ -54,7 +54,7 @@ public:
     // Actual parameter structure
     struct CreateParams {
         // Name of a pipeline (text in free form)
-        std::string name;
+        const std::string name;
         // programmable stage
         const std::vector<ShaderStageParams> shader_stages;
         const VertexInputParamts vertex_input;
@@ -67,8 +67,6 @@ public:
         // Descriptor sets and pus constants
         const LayoutParams layout;
     };
-
-    // TODO: give pipeline some name through parameter?
     GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent,  
         const CreateParams& create_params);
     ~GraphicsPipeline();
