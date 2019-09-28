@@ -11,7 +11,7 @@ Terrain::Terrain(renderer::Renderer& renderer) :
         (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
     index_buffer_("terrain indices", renderer_.GetMemoryAllocator(),
         (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()),
-    descriptor_set_layout_( renderer_.GetContext().device.Get() , GetDescriptorSetBindings()),
+    descriptor_set_layout_(renderer_.GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())) {
     base::Log::Info("Renderable: terrain created");
@@ -63,7 +63,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Pipeline layout
         {
-            // Vector of layouts
+            // Vector of descriptor set layouts that are used to create pipeline layout
             { descriptor_set_layout_.Get() }
         }
     };

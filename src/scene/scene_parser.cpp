@@ -53,6 +53,9 @@ Scene::RenderableVector SceneParser::GetRenderables(renderer::Renderer& renderer
         const auto& scene_data_terrain = data_catche_.at("terrain");
         renderables.push_back(std::make_unique<renderable::Terrain>(renderer));
     }
+
+    renderables.push_back(std::make_unique<renderable::Terrain>(renderer));
+
     return renderables;
 }
 };

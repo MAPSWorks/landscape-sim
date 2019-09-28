@@ -5,6 +5,7 @@ namespace renderer {
 Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     context_(setting_loader, window),
     window_(context_),
+    descriptor_set_layout_cache_(context_.device.Get()),
     pipeline_manager_(context_.device.Get()),
     frame_manager_(context_.device.Get(), 
         context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
@@ -19,6 +20,10 @@ const Context& Renderer::GetContext() const {
 
 const Window& Renderer::GetWindow() const {
     return window_;
+}
+
+DescriptorSetLayoutCache& Renderer::GetDescriptorSetLayoutCache() {
+    return descriptor_set_layout_cache_;
 }
 
 PipelineManager& Renderer::GetPipelineManager() {

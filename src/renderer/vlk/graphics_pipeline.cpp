@@ -36,8 +36,10 @@ const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const 
 VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
     VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
     pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    // Descriptor set layout
     pipeline_layout_create_info.setLayoutCount = static_cast<t::U32>(params.layouts.size());
     pipeline_layout_create_info.pSetLayouts = params.layouts.data();
+    // Push constants
     pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional
     pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
     VkPipelineLayout pipeline_layout;

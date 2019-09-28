@@ -37,11 +37,9 @@ private:
     const std::vector<t::U32> indices_;
     const renderer::vlk::VertexBuffer vertex_buffer_;
     const renderer::vlk::IndexBuffer index_buffer_;
-    // Describes uniform buffer object to pipeline.
-    // This object should be created before pipeline.
-    // This object should be alive until pipeline is destroyed, 
-    // because handles to DescriptorSetLayout are used in the pipeline.
-    const renderer::vlk::DescriptorSetLayout descriptor_set_layout_;
+    // A reference to an object that describes resource binding to pipeline
+    // Actual objects are stored in descriptor set layout cache for reuse
+    const renderer::vlk::DescriptorSetLayout& descriptor_set_layout_;
     // Id of pipeline that is going to be used for rendering
     // Can't store pipeline handle directly, because pipelines are recreated upon screen
     // resize. But id is tied to specific location in pipeline cache

@@ -4,7 +4,8 @@
 namespace renderer::vlk {
 DescriptorSetLayout::DescriptorSetLayout(const VkDevice& device, const std::vector<Binding>& bindings) :
     device_(device),
-    layout_(Create(bindings)) {
+    bindings_(bindings),
+    layout_(Create(bindings_)) {
     base::Log::Info("Renderer: descriptor set layout created");
 }
 
@@ -15,6 +16,10 @@ DescriptorSetLayout::~DescriptorSetLayout() {
 
 const VkDescriptorSetLayout& DescriptorSetLayout::Get() const {
     return layout_;
+}
+
+const std::vector<DescriptorSetLayout::Binding>& DescriptorSetLayout::GetBindings() const {
+    return bindings_;
 }
 
 // bindings - array of bindings of descriptors in shader stages
@@ -35,7 +40,7 @@ VkDescriptorSetLayout DescriptorSetLayout::Create(const std::vector<Binding>& bi
     layout_info.pBindings = layout_bindings.data();
     VkDescriptorSetLayout descriptor_set_layout;
     ErrorCheck(vkCreateDescriptorSetLayout(device_, &layout_info, nullptr, &descriptor_set_layout));
-    base::Log::Info("Renderer: ", layout_info.bindingCount," bindings in layout set");
+    base::Log::Info("Renderer: (", layout_info.bindingCount,") bindings in layout set");
     return descriptor_set_layout;
 }
 }; // renderer vlk

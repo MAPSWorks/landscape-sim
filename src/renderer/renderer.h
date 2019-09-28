@@ -4,6 +4,7 @@
 #include <base/json_loader.h>
 #include "context.h"
 #include "window.h"
+#include "descriptor_set_layout_cache.h"
 #include "pipeline_manager.h"
 #include "frame_resource.h"
 #include "frame_manager.h"
@@ -17,6 +18,7 @@ public:
     Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window);
     const Context& GetContext() const;
     const Window& GetWindow() const;
+    DescriptorSetLayoutCache& GetDescriptorSetLayoutCache();
     PipelineManager& GetPipelineManager();
     // Used to ensure nothing is currently in use on GPU
     void WaitForGPUIdle() const;
@@ -38,6 +40,7 @@ private:
     const Context context_;
     // Changed upon window resize (dependant on window siize)
     Window window_;
+    DescriptorSetLayoutCache descriptor_set_layout_cache_;
     PipelineManager pipeline_manager_;
     FrameManager frame_manager_;
     // Keeps track and manages buffer memory allocations
