@@ -103,7 +103,7 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
     renderer::vlk::DescriptorSetLayout::Binding binding;
     // Binding index (location), corresponds to layout(binding = n)  in shader
     binding.index = 0;
-    binding.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.type = renderer::vlk::DescriptorSetLayout::DescriptorType::kUniformBuffer;
     binding.stage = renderer::vlk::ShaderStage::kVertex;
     binding.count = 1;
     bindings.push_back(binding);

@@ -23,7 +23,7 @@ VkDescriptorSetLayout DescriptorSetLayout::Create(const std::vector<Binding>& bi
     for (const auto& binding : bindings) {
         VkDescriptorSetLayoutBinding layout_binding {};
         layout_binding.binding = binding.index;
-        layout_binding.descriptorType = binding.type;
+        layout_binding.descriptorType = static_cast<VkDescriptorType>(binding.type);
         layout_binding.descriptorCount = binding.count;
         layout_binding.pImmutableSamplers = nullptr;
         layout_binding.stageFlags = static_cast<VkShaderStageFlagBits>(binding.stage);

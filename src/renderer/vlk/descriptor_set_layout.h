@@ -7,12 +7,15 @@
 namespace renderer::vlk {
 class DescriptorSetLayout {
 public:
+    enum class DescriptorType {
+        kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+    };
     // Describes the descriptor set binding
     struct Binding {
         // corresponds to layout(binding = n)  in shader
         t::U32 index;
         // Type of descriptor layout. Uniform buffer, image sampler etc
-        VkDescriptorType type;
+        DescriptorType type;
         // In what stage it descriptor is going to be accessible
         ShaderStage stage;
         // Number of descriptors contained in the binding, accessed in a shader as an array
