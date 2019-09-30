@@ -29,6 +29,10 @@ const std::string& GraphicsPipeline::GetName() const {
     return name_;
 }
 
+const VkPipelineLayout& GraphicsPipeline::GetLayout() const {
+    return pipeline_layout_;
+}
+
 const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const {
     return create_params_;
 }

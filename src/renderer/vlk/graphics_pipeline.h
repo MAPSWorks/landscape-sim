@@ -74,6 +74,7 @@ public:
     GraphicsPipeline operator=(GraphicsPipeline const&) = delete;
     const VkPipeline& Get() const;
     const std::string& GetName() const;
+    const VkPipelineLayout& GetLayout() const;
     const CreateParams& GetCreateParams() const;
 private:
     VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
