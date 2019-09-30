@@ -30,7 +30,6 @@ void Buffer::MapAndFill(BufferSize buffer_size, const void* vertex_data) const {
     ErrorCheck(vmaMapMemory(allocator_.Get(), allocation_, &data));
     memcpy(data, vertex_data, (size_t)buffer_size);
     vmaUnmapMemory(allocator_.Get(), allocation_);
-    base::Log::Info("Renderer: buffer '", name_, "' mapped and filled with data, size - ", buffer_size);
 } 
 
 // NOTE: When info is retrieved, allocation is automatically 'touched'

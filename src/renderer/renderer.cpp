@@ -1,17 +1,19 @@
 #include "renderer.h"
 #include <base/log.h>
+#include "types.h"
 
 namespace renderer {
 Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     context_(setting_loader, window),
     window_(context_),
+    memory_allocator_(context_.device),
     descriptor_set_layout_cache_(context_.device.Get()),
     pipeline_manager_(context_.device.Get()),
-    descriptor_pool_(context_.device.Get(), { vlk::DescriptorPool::PoolSize({vlk::DescriptorType::kUniformBuffer, 1}) }, 1),
+    descriptor_pool_(context_.device.Get(), { vlk::DescriptorPool::PoolSize({vlk::DescriptorType::kUniformBuffer, 1}) }, 2),
     frame_manager_(context_.device.Get(), 
         context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
-        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
-    memory_allocator_(context_.device) {
+        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>(), GetMemoryAllocator(), 
+        sizeof(UniformBufferObject)) {
     base::Log::Info("Renderer: renderer initialized");
 }
 
@@ -61,6 +63,10 @@ const vlk::CommandBuffer& Renderer::GetCurrentCommandBuffer() {
     return frame_manager_.GetCurrentFrameResource().command_buffer;
 }
 
+const vlk::UniformBuffer& Renderer::GetCurrentUniformBuffer() {
+    return frame_manager_.GetCurrentFrameResource().uniform_buffer;
+}
+
 void Renderer::FrameBegin() {
     // Get currently processed frame 
     // (processed on CPU, not GPU. On GPU some other frame is processed right now)
@@ -95,5 +101,13 @@ void Renderer::FrameEnd() {
 
 const vlk::MemoryAllocator& Renderer::GetMemoryAllocator() const {
     return memory_allocator_;
+}
+
+const vlk::DescriptorPool& Renderer::GetDescriptorPool() const {
+    return descriptor_pool_;
+}
+
+const FrameManager& Renderer::GetFrameManager() const {
+    return frame_manager_;
 }
 }; // renderer

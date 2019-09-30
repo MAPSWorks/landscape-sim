@@ -16,8 +16,13 @@ public:
     // set_count - descriptor set count to create (usually same as frames-in-flight count)
     DescriptorSets(const VkDevice& device, const VkDescriptorPool& pool, const VkDescriptorSetLayout& layout, 
         t::U32 set_count);
+    // Get descriptor set with given index
+    const VkDescriptorSet& Get(t::U32 index) const;
+    void UpdateBuffer(const std::vector<VkBuffer>& buffer, t::U32 buffer_size) const;
 private:
-    std::vector<VkDescriptorSet> Allocate(const VkDevice& device, const VkDescriptorPool& pool, 
+    // Reference to resource this renderable is created with
+    const VkDevice& device_;
+    std::vector<VkDescriptorSet> Allocate(const VkDescriptorPool& pool, 
         const VkDescriptorSetLayout& layout, t::U32 set_count) const;
     const std::vector<VkDescriptorSet> descriptor_sets_;
 };

@@ -5,14 +5,10 @@
 #include <renderer/renderer.h>
 #include <renderer/vlk/vertex_buffer.h>
 #include <renderer/vlk/index_buffer.h>
+#include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
 #include <base/matrix.h>
-
-struct UniformBufferObject {
-    t::Mat4 world_from_local;
-    t::Mat4 view_from_world;
-    t::Mat4 projection_from_view;
-};
+#include <renderer/vlk/descriptor_sets.h>
 
 // Terrain representation as a renderable object
 namespace renderable {
@@ -20,6 +16,7 @@ class Terrain : public IRenderable {
 public:
     Terrain(renderer::Renderer& renderer);
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const override;
+    virtual void UpdateUniformBuffer(const renderer::vlk::UniformBuffer& cuniform_buffer) const override;
 private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
@@ -44,6 +41,6 @@ private:
     // Can't store pipeline handle directly, because pipelines are recreated upon screen
     // resize. But id is tied to specific location in pipeline cache
     const renderer::PipelineId pipeline_id_;
-
+    renderer::vlk::DescriptorSets descriptor_sets_;
 };
 }; // renderable

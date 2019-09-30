@@ -9,9 +9,7 @@
 #include "frame_resource.h"
 #include "frame_manager.h"
 #include "vlk/memory_allocator.h"
-
 #include "vlk/descriptor_pool.h"
-
 
 // General rendering class used to set-up means to render and render data in
 // it's pure form (without knowing details of what is being rendered)
@@ -33,23 +31,27 @@ public:
     void EndRecordCurrentCommandBuffer();
     // Get command buffer from currently CPU processed resources
     const vlk::CommandBuffer& GetCurrentCommandBuffer();
+    const vlk::UniformBuffer& GetCurrentUniformBuffer();
     // Frame is rendered between these calls
     void FrameBegin();
     void FrameEnd();
     // Access memory allocator renderable for buffer creation
     const vlk::MemoryAllocator& GetMemoryAllocator() const;
+    const vlk::DescriptorPool& GetDescriptorPool() const;
+    const FrameManager& GetFrameManager() const;
 private:
     // Constant throughout the life of the renderer
     const Context context_;
     // Changed upon window resize (dependant on window siize)
     Window window_;
+    // Keeps track and manages buffer memory allocations
+    vlk::MemoryAllocator memory_allocator_;
     DescriptorSetLayoutCache descriptor_set_layout_cache_;
     PipelineManager pipeline_manager_;
     // TODO: Temporary here, needs to have manager because it is created later when
     // we know what descriptor are going to be needed
     vlk::DescriptorPool descriptor_pool_;
     FrameManager frame_manager_;
-    // Keeps track and manages buffer memory allocations
-    vlk::MemoryAllocator memory_allocator_;
+
 };
 }; // renderer

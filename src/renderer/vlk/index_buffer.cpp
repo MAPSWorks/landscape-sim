@@ -22,6 +22,7 @@ void IndexBuffer::FillBuffer(const std::string name, const MemoryAllocator& allo
     // GPU local memory buffer which is faster.
     const Buffer staging_buffer_(name + " staging", allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
     staging_buffer_.MapAndFill(buffer_size, buffer_data);
+    base::Log::Info("Renderer: index staging buffer '", name, "' mapped and filled with data, size - ", buffer_size);
     allocator.CopyBuffer(staging_buffer_.Get(), buffer, buffer_size);
 }
 }; // renderer vlk

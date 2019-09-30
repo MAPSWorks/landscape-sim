@@ -4,7 +4,7 @@
 namespace renderer::vlk {
 UniformBuffer::UniformBuffer(const std::string name, const MemoryAllocator& allocator, BufferSize buffer_size):
     // Uniform buffer updates happen frequently therefore staging buffers are not recomended.
-                                                                            // VMA_MEMORY_USAGE_CPU_TO_GPU,
+                                                       //VMA_MEMORY_USAGE_CPU_ONLY  // VMA_MEMORY_USAGE_CPU_TO_GPU,
     buffer_(name, allocator, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_ONLY) {
     base::Log::Info("Renderer: dynamic uniform buffer '", name, "' initialized, but no data set");
 }

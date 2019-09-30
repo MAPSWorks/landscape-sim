@@ -20,6 +20,7 @@ void SceneManager::RenderFrame() const {
     renderer_.FrameBegin();
     renderer_.BeginRecordCurrentCommandBuffer();
     for (const auto& renderable : scene_.GetContents().renderables) {
+        renderable->UpdateUniformBuffer(renderer_.GetCurrentUniformBuffer());
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer());
     }
     renderer_.EndRecordCurrentCommandBuffer();

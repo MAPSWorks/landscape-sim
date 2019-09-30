@@ -26,7 +26,9 @@ VkDescriptorPool DescriptorPool::Create(const std::vector<PoolSize>& pool_sizes,
         // What type of descriptors
         descriptor_pool_size.type = static_cast<VkDescriptorType>(pool_size.type);
         // How many descriptors of this type
-        descriptor_pool_size.descriptorCount = pool_size.descriptor_count;
+        // If we have only one descriptor per type but want to have multiple sets, 
+        // it appears that descriptor count also must be multiplied by set count, otherwise error
+        descriptor_pool_size.descriptorCount = pool_size.descriptor_count * sets_max;
         descriptor_pool_sizes.push_back(descriptor_pool_size);
     }
     VkDescriptorPoolCreateInfo pool_create_info {};

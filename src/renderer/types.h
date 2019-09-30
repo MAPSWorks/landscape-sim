@@ -6,7 +6,12 @@
 // Renderer common types
 namespace renderer {
 // Types
-
+// TODO: does not belong here
+struct UniformBufferObject {
+    t::Mat4 world_from_local;
+    t::Mat4 view_from_world;
+    t::Mat4 projection_from_view;
+};
 // Structures
 // Vertex attribute structures
 // Attribute location in vertex shader (should match layout(location = n) in)
