@@ -53,7 +53,7 @@ void CommandBuffer::BindGraphicsPipeline(const VkPipeline& pipeline) const {
     vkCmdBindPipeline(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 
-void CommandBuffer::BindVertexBuffer(const VkBuffer& buffer, uint32_t binding_index) const {
+void CommandBuffer::BindVertexBuffer(const VkBuffer& buffer, t::U32 binding_index) const {
     VkBuffer vertex_buffers[] = { buffer };
     VkDeviceSize offsets[] = { 0 };
     vkCmdBindVertexBuffers(command_buffer_, binding_index, 1, vertex_buffers, offsets);
@@ -64,12 +64,12 @@ void CommandBuffer::BindIndexBuffer32(const VkBuffer& buffer) const {
     vkCmdBindIndexBuffer(command_buffer_, buffer, offset, VK_INDEX_TYPE_UINT32);
 }
 
-void CommandBuffer::Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, 
+void CommandBuffer::Draw(t::U32 vertex_count, t::U32 instance_count, t::U32 first_vertex,
     uint32_t first_instance) const {
     vkCmdDraw(command_buffer_, vertex_count, instance_count, first_vertex, first_instance);
 }
 
-void CommandBuffer::DrawIndexed(uint32_t index_count, uint32_t instance_count, uint32_t first_index,
+void CommandBuffer::DrawIndexed(t::U32 index_count, t::U32 instance_count, t::U32 first_index,
     uint32_t vertex_offset, uint32_t first_instance) const {
     vkCmdDrawIndexed(command_buffer_, index_count, instance_count, first_index, vertex_offset, first_instance);
 }
@@ -81,5 +81,12 @@ void CommandBuffer::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_b
     copy_region.dstOffset = dst_offset;
     copy_region.size = size;
     vkCmdCopyBuffer(command_buffer_, src_buffer, dst_buffer, 1, &copy_region);
+}
+
+void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout) const {
+    // Currently one descriptor set is binded
+    // TODO: If this changes add 's' to function name
+    t::U32 descriptor_set_count = 1;
+    vkCmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, descriptor_set_count, &descriptor_set, 0, nullptr);
 }
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "vulkan_shared.h"
 #include "command_pool.h"
+#include <base/types.h>
 
 // Command buffer is not created explicitly, but allocated from command pool
 // It is also implicitly destroyed when command pool that created it is destroyed
@@ -28,13 +29,15 @@ public:
         const VkExtent2D& render_area_extent) const;
     void EndRenderPass() const;
     void BindGraphicsPipeline(const VkPipeline& pipeline) const;
-    void BindVertexBuffer(const VkBuffer& buffer, uint32_t binding_index = 0) const;
+    void BindVertexBuffer(const VkBuffer& buffer, t::U32 binding_index = 0) const;
     void BindIndexBuffer32(const VkBuffer& buffer) const;
-    void Draw(uint32_t vertex_count, uint32_t instance_count, uint32_t first_vertex, uint32_t first_instance) const;
-    void DrawIndexed(uint32_t index_count, uint32_t instance_count, uint32_t first_index,
-        uint32_t vertex_offset, uint32_t first_instance) const;
+    void Draw(t::U32 vertex_count, t::U32 instance_count, t::U32 first_vertex, t::U32 first_instance) const;
+    void DrawIndexed(t::U32 index_count, t::U32 instance_count, t::U32 first_index,
+        t::U32 vertex_offset, t::U32 first_instance) const;
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
+    // Bind given descriptor sets to graphics binding point based on given pipeline layout
+    void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout) const;
 private:
     // Reference to resource this renderable is created with
     const CommandPool& command_pool_;
