@@ -9,8 +9,9 @@ DescriptorPool::DescriptorPool(const VkDevice& device, const std::vector<PoolSiz
 }
 
 DescriptorPool::~DescriptorPool() {
-    base::Log::Info("Renderer: descriptor pool destroying...");
+    base::Log::Info("Renderer: descriptor pool (and implicitly descriptor sets) destroying...");
     vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
+    // Descriptor sets allocated from this pool will be destroyed here implicitly
 }
 
 const VkDescriptorPool& DescriptorPool::Get() const {

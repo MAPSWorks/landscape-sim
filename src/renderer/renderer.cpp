@@ -10,7 +10,7 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     descriptor_pool_(context_.device.Get(), { vlk::DescriptorPool::PoolSize({vlk::DescriptorType::kUniformBuffer, 1}) }, 1),
     frame_manager_(context_.device.Get(), 
         context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
-        setting_loader.Get().at("renderer").at("framesInFlight").get<uint32_t>()),
+        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
     memory_allocator_(context_.device) {
     base::Log::Info("Renderer: renderer initialized");
 }
