@@ -3,13 +3,10 @@
 #include "vulkan_shared.h"
 #include "device.h"
 
-// Describe what descriptor bindings are going to be used in what shader stages
+// Descriptor set layout describes the type of descriptors that can be bound.
 namespace renderer::vlk {
 class DescriptorSetLayout {
 public:
-    enum class DescriptorType {
-        kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-    };
     // Describes the descriptor set binding
     struct Binding {
         // corresponds to layout(binding = n)  in shader

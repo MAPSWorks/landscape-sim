@@ -7,7 +7,7 @@
 // POD
 // Collection of resources directly tied to rendering of a single frame
 // Many of the data must have per-frame-in-flight copies of themselves because
-// it is processed in paralel. All data like that is stored here
+// it is processed in paralel. All data like that is stored here.
 namespace renderer {
 struct FrameResource {
     FrameResource(const VkDevice& device, const vlk::CommandPool& command_pool);
@@ -21,9 +21,9 @@ struct FrameResource {
     // and image vie and its size. This is not optimal but reduces complexity
     // for storing all kinds of framebuffers and resizing them.
     // Alternatives:
-    // * pre-create all buffers and resize them
-    // * create framebuffer manager with catche that stores already created framebuffers in catche
-    // and adds only new ones
+    // * pre-create all buffers and resize them.
+    // * create framebuffer manager with cache that stores already created framebuffers in cache
+    // and adds only new ones.
     vlk::FrameBuffer frame_buffer;
     // Swapchain image index that is acquired during renderign current frame
     uint32_t image_index = 0;

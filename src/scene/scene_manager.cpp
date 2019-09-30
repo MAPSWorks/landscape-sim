@@ -12,7 +12,7 @@ SceneManager::SceneManager(renderer::Renderer& renderer, const Scene& scene) :
 // Update the state of the world
 // NOTE: updating frequency is not the same as frame rendering frequency
 void SceneManager::Update() const {
-
+    scene_.GetContents().camera->Update();
 }
 
 // Render the current state of the world

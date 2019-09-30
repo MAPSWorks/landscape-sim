@@ -10,7 +10,7 @@ public:
     FrameManager(const VkDevice& device, uint32_t family_index, uint32_t frames_in_flight);
     // Sets the frame resources in their default state 
     // as if rendering for the first time
-    // TODO: not fully implemented, check komments inside a function
+    // TODO: not fully implemented, check comments inside a function
     void Reset();
     // Updates resource index
     void Update();
