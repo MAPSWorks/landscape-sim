@@ -32,8 +32,8 @@ PipelineId PipelineManager::AddGraphicsPipeline(const vlk::GraphicsPipeline::Cre
 }
 
 // If no element is found, exception will be thrown.
-const VkPipeline& PipelineManager::GetGraphicsPipeline(const PipelineId& id) const {
-    return graphics_pipelines_.at(id).Get();
+const vlk::GraphicsPipeline& PipelineManager::GetGraphicsPipeline(const PipelineId& id) const {
+    return graphics_pipelines_.at(id);
 }
 
 // Erase pipelines and recreate them with new parameter values.

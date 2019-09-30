@@ -19,10 +19,12 @@ Terrain::Terrain(renderer::Renderer& renderer) :
 
 // Add command to given command buffer that is already in recording state
 void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
-    command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_));
+    command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).Get());
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.BindIndexBuffer32(index_buffer_.Get());
-    //command_buffer.BindGraphicsDescriptorSet();
+    
+    //command_buffer.BindGraphicsDescriptorSet(
+    //    renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout());
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 

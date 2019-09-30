@@ -16,7 +16,7 @@ public:
     // Add pipeline to collection and return it's id.
     PipelineId AddGraphicsPipeline(const vlk::GraphicsPipeline::CreateParams& create_params, 
         const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent);
-    const VkPipeline& GetGraphicsPipeline(const PipelineId& id) const;
+    const vlk::GraphicsPipeline& GetGraphicsPipeline(const PipelineId& id) const;
     // Delete and creates pipelines with new extent and render pass.
     // Happens when window is resized.
     void RecreatePipelines(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent);
