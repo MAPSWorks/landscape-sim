@@ -7,6 +7,7 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     window_(context_),
     descriptor_set_layout_cache_(context_.device.Get()),
     pipeline_manager_(context_.device.Get()),
+    descriptor_pool_(context_.device.Get(), { vlk::DescriptorPool::PoolSize({vlk::DescriptorType::kUniformBuffer, 1}) }, 1),
     frame_manager_(context_.device.Get(), 
         context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
         setting_loader.Get().at("renderer").at("framesInFlight").get<uint32_t>()),
