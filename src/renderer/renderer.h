@@ -45,12 +45,12 @@ private:
     Window window_;
     // Keeps track and manages buffer memory allocations
     vlk::MemoryAllocator memory_allocator_;
+    // Store per frame data and switch when needed
+    FrameManager frame_manager_;
     // Manages shader resources - stores descriptors and buffers for each frame-in-flight.
     ShaderResources shader_resources_;
     // Caches pipelines and manages their recreation process.
     PipelineManager pipeline_manager_;
-    // TODO: move this higher if OK
-    FrameManager frame_manager_;
 
 };
 }; // renderer

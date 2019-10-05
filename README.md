@@ -23,6 +23,7 @@
 		* [Renderer](#renderer)
 		* [Renderable](#renderable)
 		* [Scene](#scene)
+		* [Renderer design decisions](#renderer-design-decisions)
 	* [Module interaction scheme](#module-interaction-scheme)
 * [Author](#author)
 ## General info
@@ -172,10 +173,10 @@ provides basic OS related functionality that is common among different applicati
 Lowest level module that provides basic type definitions and common functionality like logging, file loading, parsing etc.
 All other modules are built on top of it.
 ##### Renderer
-Renderer module is concerned with rendering whatever it is told to. It is *blind* to the rest of the engine in a *sence* that
+Renderer module is concerned with rendering whatever it is told to. It is *blind* to the rest of the engine in a sence that
 it knows nothing about the objects to be rendered and nothing about the properties of the scene. All objects, however, *use* the renderer
 to draw themselves.  
-Renderers source code, by and large, consists of Vulkan API abstractions and Vulkan concopt abstractions
+Renderers source code, by and large, consists of Vulkan API abstractions and Vulkan concept abstractions
 that are not dependant on the underlying API. 
 ##### Renderable
 Renderables are objects to be rendered by the application. All objects have base class that they inherit from which allows
@@ -187,8 +188,40 @@ This module is concerned with organization of the scene and delegation of the ta
 and how to *act*. It is the highest level submodule in the engine.  
 Scene submodule itself merely generates and stores the scene description.  
 Camera definitions are also contained in the *scene* module.
+#### Renderer design decisions
+Given Vulkan API low-level design philosophy, the most complex part of this engine becomes the renderer. The complexity can be
+managed by implementing higher-level abstractions and such abstractions inevitably lead to countless renderer design decisions along the way. Some
+of those decisions are presented and explained below:
+##### Frames-in-flight
+To (dramatically) speed up the rendering process frames can be processed in parallel, that is, prepare one frame while other 
+is being rendered and vice versa.  
+The number of frames in parallel (or frames-in-flight) are determined in settings. Some applications tie them to swapchain image count 
+but this is debatable since swapchain image count can be different from one machine to another. Usually the count is set to two or three frames
+processed in parallel.  
+Apart from usual API call synchronization, to avoid data-race problems each frame-in-flight *gets* it's own copy of dynamic resources.
+Example of such resources are command buffers, uniform buffers etc.  
+Modules that store resources per frame-in-flight are:  
+- Framem manager -> Frame resources
+- Shader resources  
+Frame-in-flight count can not be changed during application execution.
+##### Pipeline management
+Naive approach is to create a pipeline for each mesh, but there are a couple of problems associated wuth this approach.
+First, many objects can have the same pipelines and storing their copies would be inefficient, to solve this local pipeline caching is implemented 
+(not to be confused with pipeline cache Vulkan object). Pipelines are stored in a single container and referenced in renderable objects that use them.
+Another reason to store pipelines in a single location is simplicity when it comes to pipeline recreation which should be done every time the screen
+size changes (pipelines depend on screen size).
+##### Shader resource management (descriptors)
+Shader resources are managed through shader resource module; renderable modules only store id's or references to those 
+managed resource objects.  
+Shader module stores descriptor set layout cache that is used to cache common layouts and reuse 
+them. Note that caching *destroys* total layout description set count, that is later used to initialize descriptor 
+set pool, so it is counted again per cache usage as a statistics.  
+Per frame-in-flight data for this module is:
+- all uniform buffers used in application
+- descriptor pool used to allocate all descriptor sets
+- all descriptor sets used in application  
+Data is initialized during initialization phase and is not modified during application hot-loop. 
 #### Module interaction scheme
 <img src="drawing.png" alt="Design scheme" width = "500"/>  
-
 ## Author
 Designed and developed by [Ivars Rb.](https://github.com/ivarsrb)

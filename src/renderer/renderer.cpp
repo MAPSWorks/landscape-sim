@@ -7,11 +7,11 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     context_(setting_loader, window),
     window_(context_),
     memory_allocator_(context_.device),
+    frame_manager_(context_.device.Get(),
+        context_.device.GetQueue().GetFamilyIndices().graphics.value(),
+        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
     shader_resources_(context_.device.Get(), GetMemoryAllocator(), setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
-    pipeline_manager_(context_.device.Get()),
-    frame_manager_(context_.device.Get(), 
-        context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
-        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()) {
+    pipeline_manager_(context_.device.Get()) {
     base::Log::Info("Renderer: renderer initialized");
 }
 
