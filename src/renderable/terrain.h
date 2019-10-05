@@ -8,7 +8,6 @@
 #include <renderer/vlk/index_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
-#include <renderer/vlk/descriptor_sets.h>
 
 // Terrain representation as a renderable object
 namespace renderable {

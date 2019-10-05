@@ -40,7 +40,6 @@
     <ClCompile Include="src\renderer\vlk\command_pool.cpp" />
     <ClCompile Include="src\renderer\vlk\descriptor_pool.cpp" />
     <ClCompile Include="src\renderer\vlk\descriptor_set.cpp" />
-    <ClCompile Include="src\renderer\vlk\descriptor_sets.cpp" />
     <ClCompile Include="src\renderer\vlk\descriptor_set_layout.cpp" />
     <ClCompile Include="src\renderer\vlk\device.cpp" />
     <ClCompile Include="src\renderer\vlk\device_queue.cpp" />
@@ -92,7 +91,6 @@
     <ClInclude Include="src\renderer\vlk\command_pool.h" />
     <ClInclude Include="src\renderer\vlk\descriptor_pool.h" />
     <ClInclude Include="src\renderer\vlk\descriptor_set.h" />
-    <ClInclude Include="src\renderer\vlk\descriptor_sets.h" />
     <ClInclude Include="src\renderer\vlk\descriptor_set_layout.h" />
     <ClInclude Include="src\renderer\vlk\device.h" />
     <ClInclude Include="src\renderer\vlk\device_queue.h" />

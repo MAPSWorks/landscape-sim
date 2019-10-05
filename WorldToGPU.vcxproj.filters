@@ -147,9 +147,6 @@
     <ClCompile Include="src\renderer\vlk\descriptor_pool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\vlk\descriptor_sets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\shader_resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -309,9 +306,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\vlk\descriptor_pool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\vlk\descriptor_sets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\shader_resources.h">
