@@ -189,7 +189,7 @@ and how to *act*. It is the highest level submodule in the engine.
 Scene submodule itself merely generates and stores the scene description.  
 Camera definitions are also contained in the *scene* module.
 #### Renderer design decisions
-Given Vulkan API low-level design philosophy, the most complex part of this engine becomes the renderer. The complexity can be
+Given Vulkan API low-level design philosophy, the most complex part of this engine is the renderer. The complexity can be
 managed by implementing higher-level abstractions and such abstractions inevitably lead to countless renderer design decisions along the way. Some
 of those decisions are presented and explained below:
 ##### Frames-in-flight
@@ -203,9 +203,10 @@ Example of such resources are command buffers, uniform buffers etc.
 Modules that store resources per frame-in-flight are:  
 - Framem manager -> Frame resources
 - Shader resources  
+
 Frame-in-flight count can not be changed during application execution.
 ##### Pipeline management
-Naive approach is to create a pipeline for each mesh, but there are a couple of problems associated wuth this approach.
+Naive approach is to create a pipeline for each mesh, but there are a couple of problems associated with this approach.
 First, many objects can have the same pipelines and storing their copies would be inefficient, to solve this local pipeline caching is implemented 
 (not to be confused with pipeline cache Vulkan object). Pipelines are stored in a single container and referenced in renderable objects that use them.
 Another reason to store pipelines in a single location is simplicity when it comes to pipeline recreation which should be done every time the screen
@@ -215,11 +216,12 @@ Shader resources are managed through shader resource module; renderable modules 
 managed resource objects.  
 Shader module stores descriptor set layout cache that is used to cache common layouts and reuse 
 them. Note that caching *destroys* total layout description set count, that is later used to initialize descriptor 
-set pool, so it is counted again per cache usage as a statistics.  
+set pool, so it is counted again per cache object creation as a statistics.  
 Per frame-in-flight data for this module is:
 - all uniform buffers used in application
 - descriptor pool used to allocate all descriptor sets
 - all descriptor sets used in application  
+
 Data is initialized during initialization phase and is not modified during application hot-loop. 
 #### Module interaction scheme
 <img src="drawing.png" alt="Design scheme" width = "500"/>  
