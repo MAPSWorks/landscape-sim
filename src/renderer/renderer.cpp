@@ -7,13 +7,11 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     context_(setting_loader, window),
     window_(context_),
     memory_allocator_(context_.device),
-    descriptor_set_layout_cache_(context_.device.Get()),
+    shader_resources_(context_.device.Get(), GetMemoryAllocator(), setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
     pipeline_manager_(context_.device.Get()),
-    descriptor_pool_(context_.device.Get(), { vlk::DescriptorPool::PoolSize({vlk::DescriptorType::kUniformBuffer, 1}) }, 2),
     frame_manager_(context_.device.Get(), 
         context_.device.GetQueue().GetFamilyIndices().graphics.value(), 
-        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>(), GetMemoryAllocator(), 
-        sizeof(UniformBufferObject)) {
+        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()) {
     base::Log::Info("Renderer: renderer initialized");
 }
 
@@ -25,8 +23,8 @@ const Window& Renderer::GetWindow() const {
     return window_;
 }
 
-DescriptorSetLayoutCache& Renderer::GetDescriptorSetLayoutCache() {
-    return descriptor_set_layout_cache_;
+ShaderResources& Renderer::GetShaderResources() {
+    return shader_resources_;
 }
 
 PipelineManager& Renderer::GetPipelineManager() {
@@ -63,11 +61,7 @@ const vlk::CommandBuffer& Renderer::GetCurrentCommandBuffer() {
     return frame_manager_.GetCurrentFrameResource().command_buffer;
 }
 
-const vlk::UniformBuffer& Renderer::GetCurrentUniformBuffer() {
-    return frame_manager_.GetCurrentFrameResource().uniform_buffer;
-}
-
-void Renderer::FrameBegin() {
+t::U32 Renderer::FrameBegin() {
     // Get currently processed frame 
     // (processed on CPU, not GPU. On GPU some other frame is processed right now)
     FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
@@ -84,6 +78,7 @@ void Renderer::FrameBegin() {
     current_frame.frame_buffer.Create(window_.GetRenderPass(), 
         window_.GetSwapchainObject().GetImageViews().at(current_frame.image_index), 
         window_.GetSwapchainObject().GetExtent());
+    return frame_manager_.GetCurrentFrameIndex();
 }
 
 void Renderer::FrameEnd() {
@@ -101,10 +96,6 @@ void Renderer::FrameEnd() {
 
 const vlk::MemoryAllocator& Renderer::GetMemoryAllocator() const {
     return memory_allocator_;
-}
-
-const vlk::DescriptorPool& Renderer::GetDescriptorPool() const {
-    return descriptor_pool_;
 }
 
 const FrameManager& Renderer::GetFrameManager() const {

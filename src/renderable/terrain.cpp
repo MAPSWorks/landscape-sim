@@ -15,43 +15,45 @@ Terrain::Terrain(renderer::Renderer& renderer) :
         (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
     index_buffer_("terrain indices", renderer_.GetMemoryAllocator(),
         (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()),
-    descriptor_set_layout_(renderer_.GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
+    descriptor_set_layout_(renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
-    descriptor_sets_(renderer.GetContext().device.Get(),renderer.GetDescriptorPool().Get(), descriptor_set_layout_.Get(), 2 /*frames - in -flight*/)
+    uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject)))
 {
-    // Update (init) descriptor sets
-    std::vector<VkBuffer> uniform_buffers;
-    // TODO: remove this method after refactoring
-    const auto& frame_resources = renderer_.GetFrameManager().GetFrameResources();
-    for (auto& resource : frame_resources) {
-        uniform_buffers.push_back(resource.uniform_buffer.Get());
-    }
-    descriptor_sets_.UpdateBuffer(uniform_buffers , sizeof(renderer::UniformBufferObject));
-    
     base::Log::Info("Renderable: terrain created");
 }
 
+// After descriptor pool is created we can add and update descriptor sets
+void Terrain::InitDescriptorSets() {
+    // Add descriptor sets (inside sets for all frame-in-flights are created)
+    descriptor_set_id_ = renderer_.GetShaderResources().AddDescriptorSet(descriptor_set_layout_.Get());
+    // Bind actual uniform buffer to descriptor set
+    renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, 0).UpdateUniformBuffer(renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, 0).Get(),
+        sizeof(UniformBufferObject));
+    renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, 1).UpdateUniformBuffer(renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, 1).Get(),
+        sizeof(UniformBufferObject));
+}
+
 // Add command to given command buffer that is already in recording state
-void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const {
+void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const {
     command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).Get());
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.BindIndexBuffer32(index_buffer_.Get());
-    command_buffer.BindGraphicsDescriptorSet(descriptor_sets_.Get(0),
+    command_buffer.BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, frame_id).Get(),
         renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout());
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
-void Terrain::UpdateUniformBuffer(const renderer::vlk::UniformBuffer& cuniform_buffer) const {
+void Terrain::UpdateUniformBuffer(t::U32 frame_id) const {
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-    renderer::UniformBufferObject ubo  {};
+    UniformBufferObject ubo  {};
     ubo.world_from_local = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.view_from_world = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.projection_from_view = glm::perspective(glm::radians(45.0f), 800 / 600.f, 0.1f, 10.0f);
     ubo.projection_from_view[1][1] *= -1;
-    cuniform_buffer.Update(&ubo);
+    renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
 renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() {

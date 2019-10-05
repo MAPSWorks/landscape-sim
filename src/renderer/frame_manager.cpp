@@ -2,11 +2,10 @@
 #include <base/log.h>
 
 namespace renderer {
-FrameManager::FrameManager(const VkDevice& device, t::U32 family_index, t::U32 frames_in_flight, 
-    const vlk::MemoryAllocator& allocator, vlk::BufferSize uniform_buffer_size) :
+FrameManager::FrameManager(const VkDevice& device, t::U32 family_index, t::U32 frames_in_flight) :
     kFramesInFlight(frames_in_flight),
     command_pool_(device, family_index, true),
-    frame_resources_(GetFrameResources(device, allocator, uniform_buffer_size)) {
+    frame_resources_(GetFrameResources(device)) {
     Reset();
     base::Log::Info("Renderer: frame manager initialized. Frames in flight: ", kFramesInFlight);
 }
@@ -29,15 +28,14 @@ FrameResource& FrameManager::GetCurrentFrameResource() {
     return frame_resources_.at(frame_index_);
 }
 
-const std::deque<FrameResource>& FrameManager::GetFrameResources() const {
-    return frame_resources_;
+t::U32 FrameManager::GetCurrentFrameIndex() const {
+    return frame_index_;
 }
 
-std::deque<FrameResource> FrameManager::GetFrameResources(const VkDevice& device, const vlk::MemoryAllocator& allocator, 
-    vlk::BufferSize uniform_buffer_size) const {
+std::deque<FrameResource> FrameManager::GetFrameResources(const VkDevice& device) const {
     std::deque<FrameResource> frame_resources;
     for (t::U32 i = 0; i < kFramesInFlight; i++) {
-        frame_resources.emplace_back(device, command_pool_, allocator, uniform_buffer_size);
+        frame_resources.emplace_back(device, command_pool_);
     }
     return frame_resources;
 }

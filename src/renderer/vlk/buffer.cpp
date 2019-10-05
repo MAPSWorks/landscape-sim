@@ -2,7 +2,7 @@
 #include <base/log.h>
 
 namespace renderer::vlk {
-Buffer::Buffer(const std::string name, const MemoryAllocator& allocator, BufferSize size, VkBufferUsageFlags usage,
+Buffer::Buffer(std::string_view name, const MemoryAllocator& allocator, BufferSize size, VkBufferUsageFlags usage,
     VmaMemoryUsage memory_usage) :
     name_(name),
     allocator_(allocator),

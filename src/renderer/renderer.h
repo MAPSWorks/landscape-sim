@@ -4,12 +4,12 @@
 #include <base/json_loader.h>
 #include "context.h"
 #include "window.h"
-#include "descriptor_set_layout_cache.h"
+#include "shader_resources.h"
 #include "pipeline_manager.h"
 #include "frame_resource.h"
 #include "frame_manager.h"
 #include "vlk/memory_allocator.h"
-#include "vlk/descriptor_pool.h"
+
 
 // General rendering class used to set-up means to render and render data in
 // it's pure form (without knowing details of what is being rendered)
@@ -19,7 +19,7 @@ public:
     Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window);
     const Context& GetContext() const;
     const Window& GetWindow() const;
-    DescriptorSetLayoutCache& GetDescriptorSetLayoutCache();
+    ShaderResources& GetShaderResources();
     PipelineManager& GetPipelineManager();
     // Used to ensure nothing is currently in use on GPU
     void WaitForGPUIdle() const;
@@ -31,13 +31,12 @@ public:
     void EndRecordCurrentCommandBuffer();
     // Get command buffer from currently CPU processed resources
     const vlk::CommandBuffer& GetCurrentCommandBuffer();
-    const vlk::UniformBuffer& GetCurrentUniformBuffer();
     // Frame is rendered between these calls
-    void FrameBegin();
+    // Returns index of the current frame-in-flight
+    t::U32 FrameBegin();
     void FrameEnd();
     // Access memory allocator renderable for buffer creation
     const vlk::MemoryAllocator& GetMemoryAllocator() const;
-    const vlk::DescriptorPool& GetDescriptorPool() const;
     const FrameManager& GetFrameManager() const;
 private:
     // Constant throughout the life of the renderer
@@ -46,11 +45,11 @@ private:
     Window window_;
     // Keeps track and manages buffer memory allocations
     vlk::MemoryAllocator memory_allocator_;
-    DescriptorSetLayoutCache descriptor_set_layout_cache_;
+    // Manages shader resources - stores descriptors and buffers for each frame-in-flight.
+    ShaderResources shader_resources_;
+    // Caches pipelines and manages their recreation process.
     PipelineManager pipeline_manager_;
-    // TODO: Temporary here, needs to have manager because it is created later when
-    // we know what descriptor are going to be needed
-    vlk::DescriptorPool descriptor_pool_;
+    // TODO: move this higher if OK
     FrameManager frame_manager_;
 
 };

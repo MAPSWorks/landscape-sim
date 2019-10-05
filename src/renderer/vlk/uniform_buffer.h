@@ -6,7 +6,7 @@
 namespace renderer::vlk {
 class UniformBuffer {
 public:
-    UniformBuffer(const std::string name, const MemoryAllocator& allocator, BufferSize buffer_size);
+    UniformBuffer(std::string_view name, const MemoryAllocator& allocator, BufferSize buffer_size);
     const VkBuffer& Get() const;
     // When contents of a buffer change in real time use this
     void Update(const void* buffer_data) const;

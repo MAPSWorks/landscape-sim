@@ -12,6 +12,7 @@ DescriptorSetLayoutCache::DescriptorSetLayoutCache(const VkDevice& device) :
 // Don't add if does exist
 // Return the reference to object
 const vlk::DescriptorSetLayout& DescriptorSetLayoutCache::AddDescriptorSetLayout(const std::vector<vlk::DescriptorSetLayout::Binding>& bindings) {
+    UpdateDescriptorSetStats(bindings);
     // Search for descriptor that has the same binding descriptions as are passed through param
     const auto descriptor_iter = std::find_if(descriptor_set_layouts_.begin(), descriptor_set_layouts_.end(),
         [&bindings](const std::unique_ptr<vlk::DescriptorSetLayout>& obj)
@@ -26,6 +27,22 @@ const vlk::DescriptorSetLayout& DescriptorSetLayoutCache::AddDescriptorSetLayout
     else {
         base::Log::Info("Renderer: no descriptor set layout was added to cache, existing one will be reused");
         return **descriptor_iter;
+    }
+}
+
+const DescriptorSetLayoutCache::DescriptorSetStats& DescriptorSetLayoutCache::GetDescrikptorSetStats() const {
+    return descriptor_set_stats_;
+}
+
+// Update statistic used in descriptor pool initialization.
+// This function is called every time the new set layout is added (or reused from cache).
+void DescriptorSetLayoutCache::UpdateDescriptorSetStats(const std::vector<vlk::DescriptorSetLayout::Binding>& bindings) {
+    // If this function is called it means there going to be descriptor set created with this layout
+    // so increment total set count.
+    descriptor_set_stats_.set_count++;
+    for (const auto& binding : bindings) {
+        // The first tim [] operator is called for type it is zero-initialized.
+        descriptor_set_stats_.descriptor_type_count[binding.type]++;
     }
 }
 };

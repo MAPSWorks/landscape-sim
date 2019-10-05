@@ -1,22 +1,30 @@
 #pragma once
 #include <vector>
 #include "i_renderable.h"
+#include <base/matrix.h>
 #include <renderer/types.h>
 #include <renderer/renderer.h>
 #include <renderer/vlk/vertex_buffer.h>
 #include <renderer/vlk/index_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
-#include <base/matrix.h>
 #include <renderer/vlk/descriptor_sets.h>
 
 // Terrain representation as a renderable object
 namespace renderable {
+// TODO: does not belong here
+struct UniformBufferObject {
+    t::Mat4 world_from_local;
+    t::Mat4 view_from_world;
+    t::Mat4 projection_from_view;
+};
+
 class Terrain : public IRenderable {
 public:
     Terrain(renderer::Renderer& renderer);
-    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const override;
-    virtual void UpdateUniformBuffer(const renderer::vlk::UniformBuffer& cuniform_buffer) const override;
+    virtual void InitDescriptorSets() override;
+    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const override;
+    virtual void UpdateUniformBuffer(t::U32 frame_id) const override;
 private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
@@ -41,6 +49,12 @@ private:
     // Can't store pipeline handle directly, because pipelines are recreated upon screen
     // resize. But id is tied to specific location in pipeline cache
     const renderer::PipelineId pipeline_id_;
-    renderer::vlk::DescriptorSets descriptor_sets_;
+    // Index that represents uniform buffer created from shader resource module
+    // Id because there are as many as frames-in-flight
+    const t::U64 uniform_buffer_id_;
+    // Index that represents descriptor set created from shader resource module
+    // Id because there are as many as frames-in-flight
+    // This is not const because we can assign this value only after constructor initializer list.
+    t::U64 descriptor_set_id_;
 };
 }; // renderable

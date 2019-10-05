@@ -7,6 +7,12 @@ SceneManager::SceneManager(renderer::Renderer& renderer, const Scene& scene) :
     scene_(scene) {
     base::Log::Info("Scene: scene manager initialized");
     renderer_.GetMemoryAllocator().DebugPrint();
+    // Fully initialize shader resources gathered from all renderable objects
+    renderer_.GetShaderResources().Finalize();
+    // After descriptor pool has been created init descriptor sets
+    for (const auto& renderable : scene_.GetContents().renderables) {
+        renderable->InitDescriptorSets();
+    };
 }
 
 // Update the state of the world
@@ -17,11 +23,24 @@ void SceneManager::Update() const {
 
 // Render the current state of the world
 void SceneManager::RenderFrame() const {
-    renderer_.FrameBegin();
+    // Target hot loop
+    // 0. Bind view/scene resources - camera, environment, (set=0)
+    // Foreach shader:
+    //  Bind shader pipeline
+    //  1. Bind shader resources - shader control values
+    //  Foreach material:
+    //   2. Bind material resources - material parameters and textures
+    //   Foreach object:
+    //      3. Bind object resources - object transforms
+    //      Draw object
+
+    t::U32 current_frame_id = renderer_.FrameBegin();
+    for (const auto& renderable : scene_.GetContents().renderables) {
+        renderable->UpdateUniformBuffer(current_frame_id);
+    };
     renderer_.BeginRecordCurrentCommandBuffer();
     for (const auto& renderable : scene_.GetContents().renderables) {
-        renderable->UpdateUniformBuffer(renderer_.GetCurrentUniformBuffer());
-        renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer());
+        renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer(), current_frame_id);
     }
     renderer_.EndRecordCurrentCommandBuffer();
     renderer_.FrameEnd();

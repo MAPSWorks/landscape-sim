@@ -15,7 +15,7 @@ public:
     // size - size of data to be fitted into buffer
     // usage - what this buffer will be used for
     // memory_usage - type of a memory used (GPU local, CPU local etc)
-    Buffer(const std::string name, const MemoryAllocator& allocator, BufferSize size, VkBufferUsageFlags usage, 
+    Buffer(std::string_view name, const MemoryAllocator& allocator, BufferSize size, VkBufferUsageFlags usage, 
         VmaMemoryUsage memory_usage);
     ~Buffer();
     Buffer(Buffer const&) = delete;

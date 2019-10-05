@@ -2,15 +2,13 @@
 #include <deque>
 #include <base/types.h>
 #include "vlk/command_pool.h"
-#include "vlk/memory_allocator.h"
 #include "frame_resource.h"
 
 // Stores and manages frame resources
 namespace renderer {
 class FrameManager {
 public:
-    FrameManager(const VkDevice& device, t::U32 family_index, t::U32 frames_in_flight,
-        const vlk::MemoryAllocator& allocator, vlk::BufferSize uniform_buffer_size);
+    FrameManager(const VkDevice& device, t::U32 family_index, t::U32 frames_in_flight);
     // Sets the frame resources in their default state 
     // as if rendering for the first time
     // TODO: not fully implemented, check comments inside a function
@@ -19,10 +17,10 @@ public:
     void Update();
     // Return currently processed frame resource
     FrameResource& GetCurrentFrameResource();
-    const std::deque<FrameResource>& GetFrameResources() const;
+    // Index of the rame-in-flight currently processed
+    t::U32 GetCurrentFrameIndex() const;
 private:
-    std::deque<FrameResource> GetFrameResources(const VkDevice& device, const vlk::MemoryAllocator& allocator, 
-        vlk::BufferSize uniform_buffer_size) const;
+    std::deque<FrameResource> GetFrameResources(const VkDevice& device) const;
     // Number of total frames that are to be processed in paralel
     const t::U32 kFramesInFlight;
     // Command buffers are allocated from this pool

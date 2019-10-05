@@ -11,8 +11,13 @@ public:
     // Deleting a derived class renderable using a pointer to a base class
     // that has a non-virtual destructor results in undefined behavior
     virtual ~IRenderable() = default;
+    // This function is called after descriptor pool is created.
+    // So we can add and update descriptor sts.
+    virtual void InitDescriptorSets() = 0;
     // Write command to given command buffer that is already in recording state
-    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer) const = 0;
-    virtual void UpdateUniformBuffer(const renderer::vlk::UniformBuffer& cuniform_buffer) const = 0;
+    // frame_id - id of a current frame-in-flight
+    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const = 0;
+    // frame_id - id of a current frame-in-flight
+    virtual void UpdateUniformBuffer(t::U32 frame_id) const = 0;
 };
 }; // renderable

@@ -4,8 +4,6 @@
 #include "vlk/semaphore.h"
 #include "vlk/fence.h"
 #include "vlk/frame_buffer.h"
-#include "vlk/uniform_buffer.h"
-#include "vlk/memory_allocator.h"
 
 // POD
 // Collection of resources directly tied to rendering of a single frame
@@ -13,12 +11,9 @@
 // it is processed in paralel. All data like that is stored here.
 namespace renderer {
 struct FrameResource {
-    FrameResource(const VkDevice& device, const vlk::CommandPool& command_pool, 
-        const vlk::MemoryAllocator& allocator, vlk::BufferSize uniform_buffer_size);
+    FrameResource(const VkDevice& device, const vlk::CommandPool& command_pool);
     // While one command buffer is rendered, the other one is written to at the same time
     const vlk::CommandBuffer command_buffer;
-    // Each frame in flight must have it's own uniform buffer
-    const vlk::UniformBuffer uniform_buffer;
     const vlk::Semaphore image_acquired_semaphore;
     const vlk::Semaphore ready_to_present_semaphore;
     const vlk::Fence drawing_finished_fence;
@@ -32,6 +27,6 @@ struct FrameResource {
     // and adds only new ones.
     vlk::FrameBuffer frame_buffer;
     // Swapchain image index that is acquired during renderign current frame
-    uint32_t image_index = 0;
+    t::U32 image_index = 0;
 };
 }; // renderer
