@@ -9,15 +9,15 @@ Window::Window(const Context& context) :
 }
 
 const VkSwapchainKHR& Window::GetSwapchain() const {
-    return swapchain_.get()->Get();
+    return swapchain_->Get();
 }
 
 const vlk::Swapchain& Window::GetSwapchainObject() const {
-    return *swapchain_.get();
+    return *swapchain_;
 }
 
 const VkRenderPass& Window::GetRenderPass() const {
-    return render_pass_.get()->Get();
+    return render_pass_->Get();
 }
 
 // Force clean-up and create new objects dependant on window format

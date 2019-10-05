@@ -65,7 +65,7 @@ t::U32 Renderer::FrameBegin() {
     // Get currently processed frame 
     // (processed on CPU, not GPU. On GPU some other frame is processed right now)
     FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
-    // Make sure drawing of this frame's resources are already completed
+    // Make sure drawing of this frame's resources is already completed
     current_frame.drawing_finished_fence.WaitFor();
     current_frame.drawing_finished_fence.Reset();
     // Since we recreate framebuffer for every frame destroy previously used now

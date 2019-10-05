@@ -13,7 +13,7 @@ const VkDescriptorSet& DescriptorSet::Get() const {
     return descriptor_set_;
 }
 
-void DescriptorSet::UpdateUniformBuffer(const VkBuffer& buffer, t::U32 buffer_size) const {
+void DescriptorSet::UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_size) const {
     VkDescriptorBufferInfo buffer_info{};
     buffer_info.buffer = buffer;
     buffer_info.offset = 0;

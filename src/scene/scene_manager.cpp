@@ -34,7 +34,7 @@ void SceneManager::RenderFrame() const {
     //      3. Bind object resources - object transforms
     //      Draw object
 
-    t::U32 current_frame_id = renderer_.FrameBegin();
+    auto current_frame_id = renderer_.FrameBegin();
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->UpdateUniformBuffer(current_frame_id);
     };

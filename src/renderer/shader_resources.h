@@ -55,6 +55,8 @@ public:
     // Set descriptor pool from cached descriptor set layouts.
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
     void Finalize();
+    // Bind uniform buffer to descriptor set
+    void UpdateDescriptorSetWithUniformBuffer(t::U64 descriptor_set_id, t::U64 uniform_buffer_id, t::U64 buffer_size) const;
 private:
     // Data that is used per frame and therefore needs a copy for each 
     // frame-in-flight.

@@ -201,7 +201,7 @@ processed in parallel.
 Apart from usual API call synchronization, to avoid data-race problems each frame-in-flight *gets* it's own copy of dynamic resources.
 Example of such resources are command buffers, uniform buffers etc.  
 Modules that store resources per frame-in-flight are:  
-- Framem manager -> Frame resources
+- Frame manager -> Frame resources
 - Shader resources  
 
 Frame-in-flight count can not be changed during application execution.

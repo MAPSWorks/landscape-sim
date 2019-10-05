@@ -27,11 +27,8 @@ Terrain::Terrain(renderer::Renderer& renderer) :
 void Terrain::InitDescriptorSets() {
     // Add descriptor sets (inside sets for all frame-in-flights are created)
     descriptor_set_id_ = renderer_.GetShaderResources().AddDescriptorSet(descriptor_set_layout_.Get());
-    // Bind actual uniform buffer to descriptor set
-    renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, 0).UpdateUniformBuffer(renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, 0).Get(),
-        sizeof(UniformBufferObject));
-    renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, 1).UpdateUniformBuffer(renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, 1).Get(),
-        sizeof(UniformBufferObject));
+    // Bind descriptor set to uniform buffer
+    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_, sizeof(UniformBufferObject));
 }
 
 // Add command to given command buffer that is already in recording state
