@@ -15,7 +15,8 @@ public:
     // Get descriptor set with given index
     const VkDescriptorSet& Get() const;
     // Update descriptor set with given uniform buffer
-    void UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_size) const;
+    // If buffer size is passed 0, use whole buffer size to bind
+    void UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_size = 0) const;
 private:
     // Reference to resource this renderable is created with
     const VkDevice& device_;

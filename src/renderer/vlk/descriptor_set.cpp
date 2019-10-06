@@ -17,7 +17,8 @@ void DescriptorSet::UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_si
     VkDescriptorBufferInfo buffer_info{};
     buffer_info.buffer = buffer;
     buffer_info.offset = 0;
-    buffer_info.range = buffer_size;
+    // Update with given buffer size, except when passed 0 - use whole size
+    buffer_size == 0 ? buffer_info.range = VK_WHOLE_SIZE : buffer_info.range = buffer_size;
     VkWriteDescriptorSet descriptor_write{};
     descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     descriptor_write.dstSet = descriptor_set_;

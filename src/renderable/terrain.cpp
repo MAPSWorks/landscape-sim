@@ -4,7 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
 
-
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer) :
     height_grid_(GenerateHeightGrid(5)),
@@ -28,7 +27,7 @@ void Terrain::InitDescriptorSets() {
     // Add descriptor sets (inside sets for all frame-in-flights are created)
     descriptor_set_id_ = renderer_.GetShaderResources().AddDescriptorSet(descriptor_set_layout_.Get());
     // Bind descriptor set to uniform buffer
-    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_, sizeof(UniformBufferObject));
+    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_);
 }
 
 // Add command to given command buffer that is already in recording state
@@ -125,7 +124,7 @@ std::vector<t::U32> Terrain::GetIndices() const {
     return indices;
 }
 
-// Single uniform buffer object is being bound to pipeline shader stage
+// escribe bindings withing a descriptor set layout
 std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorSetBindings() const {
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
     renderer::vlk::DescriptorSetLayout::Binding binding;

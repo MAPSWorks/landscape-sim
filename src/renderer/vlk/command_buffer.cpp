@@ -83,6 +83,7 @@ void CommandBuffer::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_b
     vkCmdCopyBuffer(command_buffer_, src_buffer, dst_buffer, 1, &copy_region);
 }
 
+// Bound DescriptorSets stay active as long as the PipelineLayout for that binding slot is matching.
 void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout) const {
     // Currently one descriptor set is binded
     // TODO: If this changes add 's' to function name
