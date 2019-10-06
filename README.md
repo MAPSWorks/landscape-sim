@@ -225,5 +225,6 @@ Per frame-in-flight data for this module is:
 Data is initialized during initialization phase and is not modified during application hot-loop. 
 #### Module interaction scheme
 <img src="drawing.png" alt="Design scheme" width = "500"/>  
+
 ## Author
 Designed and developed by [Ivars Rb.](https://github.com/ivarsrb)
