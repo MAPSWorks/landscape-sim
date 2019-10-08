@@ -1,6 +1,7 @@
 #pragma once
 #include "vulkan_shared.h"
 #include "device.h"
+#include "pipeline_layout.h"
 
 namespace renderer::vlk {
 // Graphics pipeline creation and storage facilities
@@ -44,13 +45,6 @@ public:
     struct ColorBlendParams {
         const bool blend_enable = false;
     };
-    // Pipeline layout configuration
-    struct LayoutParams {
-        // Describes descriptors that are to be used in pipeline
-        // Resources with handles VkDescriptorSetLayout should stick around while pipeline is used
-        const std::vector<VkDescriptorSetLayout> layouts;
-        // ... TODO push constants here
-    };
     // Actual parameter structure
     struct CreateParams {
         // Name of a pipeline (text in free form)
@@ -65,7 +59,7 @@ public:
         // TODO: depth stencil params
         const ColorBlendParams color_blend;
         // Descriptor sets and pus constants
-        const LayoutParams layout;
+        const PipelineLayout::Params layout;
     };
     GraphicsPipeline(const VkDevice& device, const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent,  
         const CreateParams& create_params);
@@ -73,11 +67,10 @@ public:
     GraphicsPipeline(GraphicsPipeline const&) = delete;
     GraphicsPipeline operator=(GraphicsPipeline const&) = delete;
     const VkPipeline& Get() const;
+    const PipelineLayout& GetLayout() const;
     const std::string& GetName() const;
-    const VkPipelineLayout& GetLayout() const;
     const CreateParams& GetCreateParams() const;
 private:
-    VkPipelineLayout CreatePipelineLayout(const LayoutParams& params) const;
     VkPipeline Create(const VkRenderPass& render_pass, const VkExtent2D& swapchain_extent, 
         const CreateParams& create_params) const;
     // Reference to resource this renderable is created with
@@ -86,7 +79,7 @@ private:
     const CreateParams create_params_;
     // Name of pipeline in free form
     const std::string name_;
-    const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;
+    const PipelineLayout pipeline_layout_;
     const VkPipeline pipeline_ = VK_NULL_HANDLE;
 };
 };  // renderer vlk

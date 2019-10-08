@@ -10,7 +10,7 @@ GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& r
     device_(device),
     create_params_(create_params),
     name_(create_params_.name),
-    pipeline_layout_(CreatePipelineLayout(create_params_.layout)),
+    pipeline_layout_(device, create_params_.layout),
     pipeline_(Create(render_pass, swapchain_extent, create_params_)) {
     base::Log::Info("Renderer: graphics pipeline '", name_, "' created");
 }
@@ -18,39 +18,22 @@ GraphicsPipeline::GraphicsPipeline(const VkDevice& device, const VkRenderPass& r
 GraphicsPipeline::~GraphicsPipeline() {
     base::Log::Info("Renderer: graphics pipeline '", name_, "' destroying...");
     vkDestroyPipeline(device_, pipeline_, nullptr);
-    vkDestroyPipelineLayout(device_, pipeline_layout_, nullptr);
 }
 
 const VkPipeline& GraphicsPipeline::Get() const {
     return pipeline_;
 }
 
+const PipelineLayout& GraphicsPipeline::GetLayout() const {
+    return pipeline_layout_;
+}
+
 const std::string& GraphicsPipeline::GetName() const {
     return name_;
 }
 
-const VkPipelineLayout& GraphicsPipeline::GetLayout() const {
-    return pipeline_layout_;
-}
-
 const GraphicsPipeline::CreateParams& GraphicsPipeline::GetCreateParams() const {
     return create_params_;
-}
-
-VkPipelineLayout GraphicsPipeline::CreatePipelineLayout(const LayoutParams& params) const {
-    VkPipelineLayoutCreateInfo pipeline_layout_create_info {};
-    pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    // Descriptor set layout
-    pipeline_layout_create_info.setLayoutCount = static_cast<t::U32>(params.layouts.size());
-    pipeline_layout_create_info.pSetLayouts = params.layouts.data();
-    // Push constants
-    pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional
-    pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
-    VkPipelineLayout pipeline_layout;
-    ErrorCheck(vkCreatePipelineLayout(device_, &pipeline_layout_create_info, nullptr, &pipeline_layout));
-    base::Log::Info("Renderer: pipeline '", name_, "' pipeline layout created, count - ",
-        pipeline_layout_create_info.setLayoutCount);
-    return pipeline_layout;
 }
 
 // Create pipeline from given outside configurable parameters
@@ -181,7 +164,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     create_info.pColorBlendState = &color_blend_create_info;
     // TODO: some state can be modified without recreating pipeline check : VkPipelineDynamicStateCreateInfo
     create_info.pDynamicState = nullptr; // Optional
-    create_info.layout = pipeline_layout_;
+    create_info.layout = pipeline_layout_.Get();
     create_info.renderPass = render_pass;
     // Subpass index
     create_info.subpass = 0;

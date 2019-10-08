@@ -37,7 +37,7 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.BindIndexBuffer32(index_buffer_.Get());
     command_buffer.BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, frame_id).Get(),
-        renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout(), 1);
+        renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout().Get(), 1);
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
