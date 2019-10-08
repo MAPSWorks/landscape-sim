@@ -3,6 +3,7 @@
 #include "scene.h"
 
 #include <renderer/vlk/descriptor_set_layout.h>
+#include <renderer/vlk/pipeline_layout.h>
 
 // Top-level renderable of the engine - brings otherwise unrelated parts together
 // to initialize, update and render the scene
@@ -19,7 +20,6 @@ public:
 private:
     const renderer::vlk::DescriptorSetLayout& InitDescriptorSetLayout() const;
     void UpdateUniformBuffer(t::U32 frame_id) const;
-    VkPipelineLayout CreatePipelineLayout() const ;
 
     // Renderer will not be changed in runtime therefore grab the reference
     renderer::Renderer& renderer_;
@@ -28,7 +28,7 @@ private:
     const renderer::vlk::DescriptorSetLayout& descriptor_set_layout_view;
     const t::U64 uniform_buffer_id;
     t::U64 descriptor_set_view_id;
-    const VkPipelineLayout dummy_view_pipeline_layout = VK_NULL_HANDLE;
+    const renderer::vlk::PipelineLayout dummy_view_pipeline_layout;
 
 
     // Reference to scene manager will manage

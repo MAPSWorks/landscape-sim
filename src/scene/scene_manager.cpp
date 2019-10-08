@@ -8,7 +8,7 @@ SceneManager::SceneManager(renderer::Renderer& renderer, const Scene& scene) :
     renderer_(renderer),
     descriptor_set_layout_view(InitDescriptorSetLayout()),
     uniform_buffer_id(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer view", sizeof(UniformBufferView))),
-    dummy_view_pipeline_layout(CreatePipelineLayout()),
+    dummy_view_pipeline_layout(renderer_.GetContext().device.Get(), renderer::vlk::PipelineLayout::Params{ {descriptor_set_layout_view.Get()} }),
     scene_(scene)
 {
     base::Log::Info("Scene: scene manager initialized");
@@ -60,7 +60,7 @@ void SceneManager::RenderFrame() const {
     // dummy layout is used to simulate what set=0 wil be for other objects
 
     renderer_.GetCurrentCommandBuffer().BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_view_id, current_frame_id).Get(),
-        dummy_view_pipeline_layout);
+        dummy_view_pipeline_layout.Get());
    
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer(), current_frame_id);
@@ -87,21 +87,5 @@ void SceneManager::UpdateUniformBuffer(t::U32 frame_id) const {
     ubo.projection_from_view = glm::perspective(glm::radians(45.0f), 800 / 600.f, 0.1f, 10.0f);
     ubo.projection_from_view[1][1] *= -1;
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id, frame_id).Update(&ubo);
-}
-
-VkPipelineLayout SceneManager::CreatePipelineLayout() const {
-    VkPipelineLayoutCreateInfo pipeline_layout_create_info{};
-    pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    // Descriptor set layout
-    std::vector<VkDescriptorSetLayout> layouts = { descriptor_set_layout_view.Get() };
-    pipeline_layout_create_info.setLayoutCount = 1;
-    pipeline_layout_create_info.pSetLayouts = layouts.data();
-    // Push constants
-    pipeline_layout_create_info.pushConstantRangeCount = 0; // Optional 
-    pipeline_layout_create_info.pPushConstantRanges = nullptr; // Optional
-    VkPipelineLayout pipeline_layout;
-    renderer::vlk::ErrorCheck(vkCreatePipelineLayout(renderer_.GetContext().device.Get(), &pipeline_layout_create_info,
-        nullptr, &pipeline_layout));
-    return pipeline_layout;
 }
 }; // scene

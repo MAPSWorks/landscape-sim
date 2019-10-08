@@ -13,7 +13,7 @@ public:
     struct Params {
         // Describes descriptors that are to be used in pipeline
         // Resources with handles VkDescriptorSetLayout should stick around while pipeline is used
-        const std::vector<VkDescriptorSetLayout> layouts;
+        std::vector<VkDescriptorSetLayout> layouts;
         // ... TODO push constants here
     };
     PipelineLayout(const VkDevice& device, const Params& params);
