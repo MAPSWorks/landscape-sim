@@ -15,6 +15,7 @@ enum class ShaderStage {
     kVertex = VK_SHADER_STAGE_VERTEX_BIT,
     kFragment = VK_SHADER_STAGE_FRAGMENT_BIT,
     kAllGraphics = VK_SHADER_STAGE_ALL_GRAPHICS
+    // TODO: overload | operator
 };
 enum class DescriptorType {
     kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER

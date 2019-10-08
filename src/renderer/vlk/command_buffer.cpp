@@ -84,10 +84,10 @@ void CommandBuffer::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_b
 }
 
 // Bound DescriptorSets stay active as long as the PipelineLayout for that binding slot is matching.
-void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout) const {
+void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout, t::U32 first_set_at_index) const {
     // Currently one descriptor set is binded
     // TODO: If this changes add 's' to function name
     t::U32 descriptor_set_count = 1;
-    vkCmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, descriptor_set_count, &descriptor_set, 0, nullptr);
+    vkCmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, first_set_at_index, descriptor_set_count, &descriptor_set, 0, nullptr);
 }
 };

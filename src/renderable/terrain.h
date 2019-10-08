@@ -11,11 +11,8 @@
 
 // Terrain representation as a renderable object
 namespace renderable {
-// TODO: does not belong here
 struct UniformBufferObject {
     t::Mat4 world_from_local;
-    t::Mat4 view_from_world;
-    t::Mat4 projection_from_view;
 };
 
 class Terrain : public IRenderable {
@@ -43,6 +40,7 @@ private:
     const renderer::vlk::IndexBuffer index_buffer_;
     // A reference to an object that describes resource binding to pipeline
     // Actual objects are stored in descriptor set layout cache for reuse
+    const renderer::vlk::DescriptorSetLayout& descriptor_set_layout_view_;
     const renderer::vlk::DescriptorSetLayout& descriptor_set_layout_;
     // Id of pipeline that is going to be used for rendering
     // Can't store pipeline handle directly, because pipelines are recreated upon screen

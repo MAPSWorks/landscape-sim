@@ -37,7 +37,8 @@ public:
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
     // Bind given descriptor sets to graphics binding point based on given pipeline layout
-    void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout) const;
+    // first_set_at_index - is the set number of the first descriptor set to be bound.
+    void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout, t::U32 first_set_at_index = 0) const;
 private:
     // Reference to resource this renderable is created with
     const CommandPool& command_pool_;
