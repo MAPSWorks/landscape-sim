@@ -1,31 +1,22 @@
 #include "scene_manager.h"
 #include <base/log.h>
 
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace scene {
 SceneManager::SceneManager(renderer::Renderer& renderer, const Scene& scene) :
     renderer_(renderer),
-    descriptor_set_layout_view(InitDescriptorSetLayout()),
-    uniform_buffer_id(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer view", sizeof(UniformBufferView))),
-    dummy_view_pipeline_layout(renderer_.GetContext().device.Get(), renderer::vlk::PipelineLayout::Params{ {descriptor_set_layout_view.Get()} }),
-    scene_(scene)
-{
-    base::Log::Info("Scene: scene manager initialized");
-    renderer_.GetMemoryAllocator().DebugPrint();
+    scene_(scene),
+    view_(renderer) {
     // Fully initialize shader resources gathered from all renderable objects
+    // Should be called before any descriptor set is created
     renderer_.GetShaderResources().Finalize();
-
-    // Add descriptor sets (inside sets for all frame-in-flights are created)
-    descriptor_set_view_id = renderer_.GetShaderResources().AddDescriptorSet(descriptor_set_layout_view.Get());
-    // Bind uniform buffer to descriptor set
-    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_view_id, uniform_buffer_id);
-
-    
+    // Per view descriptor set (descriptor pool must be created)
+    view_.InitDescriptorSet();
     // After descriptor pool has been created init descriptor sets
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->InitDescriptorSets();
     };
+    base::Log::Info("Scene: scene manager initialized");
+    renderer_.GetMemoryAllocator().DebugPrint();
 }
 
 // Update the state of the world
@@ -48,20 +39,16 @@ void SceneManager::RenderFrame() const {
     //      Draw object
 
     auto current_frame_id = renderer_.FrameBegin();
-
-    UpdateUniformBuffer(current_frame_id);
-
+    // Update uniform buffers
+    view_.UpdateUniformBuffer(current_frame_id);
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->UpdateUniformBuffer(current_frame_id);
     };
+    // Command buffer recording
     renderer_.BeginRecordCurrentCommandBuffer();
-
-    // bind view set (set=0) so it is not to be rebound for each object that has compatable layout
-    // dummy layout is used to simulate what set=0 wil be for other objects
-
-    renderer_.GetCurrentCommandBuffer().BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_view_id, current_frame_id).Get(),
-        dummy_view_pipeline_layout.Get());
-   
+    // Bind per-view resources that later will be used by object for rendering
+    view_.BindDescriptorSet(renderer_.GetCurrentCommandBuffer(), current_frame_id);
+    // Add to command buffer object-by-object
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer(), current_frame_id);
     }
@@ -69,23 +56,4 @@ void SceneManager::RenderFrame() const {
     renderer_.FrameEnd();
 }
 
-const renderer::vlk::DescriptorSetLayout& SceneManager::InitDescriptorSetLayout() const {
-    std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
-    renderer::vlk::DescriptorSetLayout::Binding binding;
-    // Binding index (location), corresponds to layout(binding = n)  in shader
-    binding.index = 0;
-    binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
-    binding.stage = renderer::vlk::ShaderStage::kVertex;
-    binding.count = 1;
-    bindings.push_back(binding);
-    return renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(bindings);
-}
-
-void SceneManager::UpdateUniformBuffer(t::U32 frame_id) const {
-    UniformBufferView ubo{};
-    ubo.view_from_world = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.projection_from_view = glm::perspective(glm::radians(45.0f), 800 / 600.f, 0.1f, 10.0f);
-    ubo.projection_from_view[1][1] *= -1;
-    renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id, frame_id).Update(&ubo);
-}
 }; // scene

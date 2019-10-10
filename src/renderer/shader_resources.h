@@ -54,6 +54,7 @@ public:
     const vlk::DescriptorSet& GetDescriptorSet(t::U64 index, t::U32 frame_in_flight_id) const;
     // Set descriptor pool from cached descriptor set layouts.
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
+    // and before any descriptor set is created.
     void Finalize();
     // Bind uniform buffer to descriptor set
     // If buffer_zize is passed 0, the whole buffer size is bound to descriptor set
