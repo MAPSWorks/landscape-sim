@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <base/log.h>
+#include "types.h"
 
 namespace scene {
 PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params) :
@@ -42,8 +43,6 @@ t::Mat4 PerspectiveCamera::GetViewMatrix() const {
 
 // Calculate front, right and up vectors from current Euler angles
 void PerspectiveCamera::UpdateVectors(t::F32 yaw, t::F32 pitch) {
-    // Y-axis is up
-    t::Vec3 world_up(0.0, 1.0, 0.0);
     // Calculate the new Front vector
     t::Vec3 front;
     front.x = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -51,7 +50,7 @@ void PerspectiveCamera::UpdateVectors(t::F32 yaw, t::F32 pitch) {
     front.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front_ = glm::normalize(front);
     // Also re-calculate the Right and Up vector
-    right_ = glm::normalize(glm::cross(front_, world_up));
+    right_ = glm::normalize(glm::cross(front_, kWorldUpVec));
     up_ = glm::normalize(glm::cross(right_, front_));
 }
 
