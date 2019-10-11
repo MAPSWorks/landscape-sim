@@ -26,4 +26,8 @@ void WorldToGPU::Resize(const t::Size32& win_size) {
 void WorldToGPU::OnExit() const {
     renderer_.WaitForGPUIdle();
 }
+
+void WorldToGPU::KeyPress(const platform::Input& input) {
+    input.PrintKeyData();
+}
 }; // application

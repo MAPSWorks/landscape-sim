@@ -42,6 +42,18 @@ void IApplication::ResizeCallback(GLFWwindow* window, int width, int height) {
     this_obj->Resize(t::Size32(width, height));
 }
 
+// static
+void IApplication::KeyCallback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
+    // Retrieve current window pointer to acess member variables
+    IApplication* this_obj = static_cast<IApplication*>(glfwGetWindowUserPointer(window));
+    // "Built in" key cheking
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+    this_obj->input_.UpdateKeyData(static_cast<Input::Key>(key), static_cast<Input::Action>(action));
+    this_obj->KeyPress(this_obj->input_); //virtual
+}
+
 void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -51,6 +63,7 @@ void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     glfwSetWindowUserPointer(window_, this);
     // Callbacks
     glfwSetFramebufferSizeCallback(window_, ResizeCallback);
+    glfwSetKeyCallback(window_, KeyCallback);
 }
 
 void IApplication::Shutdown() {

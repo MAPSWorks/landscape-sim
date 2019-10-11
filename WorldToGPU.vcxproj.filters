@@ -159,6 +159,9 @@
     <ClCompile Include="src\scene\view.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer\context.h">
@@ -324,6 +327,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

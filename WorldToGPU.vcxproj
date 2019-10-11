@@ -25,6 +25,7 @@
     <ClCompile Include="src\base\util.cpp" />
     <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\platform\input.cpp" />
     <ClCompile Include="src\renderable\i_renderable.cpp" />
     <ClCompile Include="src\renderable\terrain.cpp" />
     <ClCompile Include="src\platform\i_application.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="src\base\util.h" />
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
     <ClInclude Include="src\external\json\json.hpp" />
+    <ClInclude Include="src\platform\input.h" />
     <ClInclude Include="src\renderable\i_renderable.h" />
     <ClInclude Include="src\renderable\terrain.h" />
     <ClInclude Include="src\renderable\types.h" />
