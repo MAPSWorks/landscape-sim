@@ -10,8 +10,8 @@ WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     base::Log::Info("'World to GPU' initialized");
 }
 
-void WorldToGPU::Update() {
-    scene_manager_.Update();
+void WorldToGPU::Update(const platform::Input& input) {
+    scene_manager_.Update(input);
 }
 
 void WorldToGPU::RenderFrame() {
@@ -28,6 +28,6 @@ void WorldToGPU::OnExit() const {
 }
 
 void WorldToGPU::KeyPress(const platform::Input& input) {
-    input.PrintKeyData();
+    
 }
 }; // application

@@ -1,5 +1,6 @@
 #pragma once
 #include <base/types.h>
+#include <platform/input.h>
 
 // Interface for camera objects
 namespace scene {
@@ -9,8 +10,8 @@ public:
     // Common public methods
     void SetWorldPosition(t::Vec3 position);
     const t::Vec3& GetWorldPosition() const;
-    // TODO: change this update function to something usefull!
-    virtual void Update() = 0;
+    // Update state of a camera
+    virtual void Update(const platform::Input& input) = 0;
 protected:
     // Private variables common for all camera types
     t::Vec3 world_position_;

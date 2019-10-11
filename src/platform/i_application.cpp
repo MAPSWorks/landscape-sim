@@ -24,7 +24,7 @@ IApplication::~IApplication() {
 void IApplication::Run() {
     while (!glfwWindowShouldClose(window_)) {
         glfwPollEvents();
-        Update();
+        Update(input_);
         RenderFrame();
     }
     OnExit();

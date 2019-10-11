@@ -13,7 +13,7 @@ OrthographicCamera::OrthographicCamera(const OrthographicCamera::Parameters& par
         z_near_, ", zfar - ", z_far_, ", xmag - ", x_mag_, ", ymag - ", y_mag_);
 }
 
-void OrthographicCamera::Update() {
+void OrthographicCamera::Update(const platform::Input& input) {
 
 }
 

@@ -11,7 +11,7 @@ public:
     // Parameters from main() function arguments
     WorldToGPU(t::U32 argc, char* argv[]);
 private:
-    virtual void Update() override;
+    virtual void Update(const platform::Input& input) override;
     virtual void RenderFrame() override;
     virtual void Resize(const t::Size32& win_size) override;
     virtual void OnExit() const override;

@@ -1,5 +1,6 @@
 #pragma once
 #include <renderer/renderer.h>
+#include <platform/input.h>
 #include "scene.h"
 #include "view.h"
 
@@ -9,7 +10,8 @@ namespace scene {
 class SceneManager {
 public:
     SceneManager(renderer::Renderer &renderer, const Scene& scene);
-    void Update() const;
+    // input - current state of user input (keyboard, mouse)
+    void Update(const platform::Input& input) const;
     void RenderFrame() const;
 private:
     // Renderer will not be changed in runtime therefore grab the reference

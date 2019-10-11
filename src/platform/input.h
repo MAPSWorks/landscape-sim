@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <base/types.h>
 
-
 // Stores current state of the mouse-keyboard input
 namespace platform {
 class Input {

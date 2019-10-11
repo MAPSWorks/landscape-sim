@@ -16,7 +16,7 @@ public:
         t::F32 yfov;
     };
     PerspectiveCamera(const Parameters& params);
-    void Update() override;
+    void Update(const platform::Input& input) override;
 private:
     /*
     // If some of these are shared acroos various camera types, bring them to base class 

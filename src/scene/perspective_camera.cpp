@@ -12,7 +12,7 @@ PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params
         z_near_, ", zfar - ", z_far_, ", yfov - ", y_field_of_view_);
 }
 
-void PerspectiveCamera::Update() {
+void PerspectiveCamera::Update(const platform::Input& input) {
     
 }
 }; // scene
