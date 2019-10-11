@@ -4,13 +4,14 @@
 
 namespace renderer {
 Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
+    kFramesInFlight(setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
     context_(setting_loader, window),
     window_(context_),
     memory_allocator_(context_.device),
     frame_manager_(context_.device.Get(),
         context_.device.GetQueue().GetFamilyIndices().graphics.value(),
-        setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
-    shader_resources_(context_.device.Get(), GetMemoryAllocator(), setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
+        kFramesInFlight),
+    shader_resources_(context_.device.Get(), GetMemoryAllocator(), kFramesInFlight),
     pipeline_manager_(context_.device.Get()) {
     base::Log::Info("Renderer: renderer initialized");
 }
@@ -61,7 +62,7 @@ const vlk::CommandBuffer& Renderer::GetCurrentCommandBuffer() {
     return frame_manager_.GetCurrentFrameResource().command_buffer;
 }
 
-t::U32 Renderer::FrameBegin() {
+FrameId Renderer::FrameBegin() {
     // Get currently processed frame 
     // (processed on CPU, not GPU. On GPU some other frame is processed right now)
     FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
@@ -71,8 +72,7 @@ t::U32 Renderer::FrameBegin() {
     // Since we recreate framebuffer for every frame destroy previously used now
     current_frame.frame_buffer.Destroy();
     // Store swapchain image index that is next to be presented and use it in subsequent calls
-    const auto [image_index, image_result] =
-        window_.GetSwapchainObject().AcquireNextImageIndex(current_frame.image_acquired_semaphore.Get());
+    const auto image_index = window_.GetSwapchainObject().AcquireNextImageIndex(current_frame.image_acquired_semaphore.Get());
     current_frame.image_index = image_index;
     // Create framebuffer for this frame
     current_frame.frame_buffer.Create(window_.GetRenderPass(), 

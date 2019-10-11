@@ -1,6 +1,7 @@
 #pragma once
 #include <deque>
 #include <base/types.h>
+#include "types.h"
 #include "vlk/command_pool.h"
 #include "frame_resource.h"
 
@@ -18,7 +19,7 @@ public:
     // Return currently processed frame resource
     FrameResource& GetCurrentFrameResource();
     // Index of the rame-in-flight currently processed
-    t::U32 GetCurrentFrameIndex() const;
+    FrameId GetCurrentFrameIndex() const;
 private:
     std::deque<FrameResource> GetFrameResources(const VkDevice& device) const;
     // Number of total frames that are to be processed in paralel
@@ -30,6 +31,6 @@ private:
     std::deque<FrameResource> frame_resources_;
     // Index of currently processed frame resource.
     // It goes from 0 to number of frame resources
-    t::U32 frame_index_ = 0;
+    FrameId frame_index_ = 0;
 };
 }; // renderer

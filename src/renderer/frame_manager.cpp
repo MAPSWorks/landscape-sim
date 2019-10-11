@@ -28,7 +28,7 @@ FrameResource& FrameManager::GetCurrentFrameResource() {
     return frame_resources_.at(frame_index_);
 }
 
-t::U32 FrameManager::GetCurrentFrameIndex() const {
+FrameId FrameManager::GetCurrentFrameIndex() const {
     return frame_index_;
 }
 

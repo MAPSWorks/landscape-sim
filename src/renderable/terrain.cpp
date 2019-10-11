@@ -32,7 +32,7 @@ void Terrain::InitDescriptorSets() {
 }
 
 // Add command to given command buffer that is already in recording state
-void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const {
+void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameId frame_id) const {
     command_buffer.BindGraphicsPipeline(renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).Get());
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.BindIndexBuffer32(index_buffer_.Get());
@@ -41,7 +41,7 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
-void Terrain::UpdateUniformBuffer(t::U32 frame_id) const {
+void Terrain::UpdateUniformBuffer(renderer::FrameId frame_id) const {
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();

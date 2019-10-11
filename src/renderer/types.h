@@ -5,6 +5,8 @@
 
 // Renderer common types
 namespace renderer {
+// Represents frame-in-flight index
+using FrameId = t::U32;
 // Structures
 // Vertex attribute structures
 // Attribute location in vertex shader (should match layout(location = n) in)

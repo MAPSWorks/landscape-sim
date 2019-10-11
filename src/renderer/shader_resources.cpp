@@ -4,11 +4,10 @@
 namespace renderer {
 ShaderResources::ShaderResources(const VkDevice& device, const vlk::MemoryAllocator& allocator, 
     t::U32 frames_in_flight) :
-    kFramesInFlight(frames_in_flight),
     device_(device),
     allocator_(allocator),
     descriptor_set_layout_cache_(device),
-    per_frame_shader_resources_(kFramesInFlight) {
+    per_frame_shader_resources_(frames_in_flight) {
     base::Log::Info("Renderer: shader resource initialized, frame duplicate count - ", 
         per_frame_shader_resources_.size());
 }
@@ -26,7 +25,7 @@ ShaderResources::UniformBufferId ShaderResources::AddUniformBuffer(std::string_v
     return per_frame_shader_resources_.at(0).uniform_buffers.size() - 1;
 }
 
-const vlk::UniformBuffer& ShaderResources::GetkUniformBuffer(ShaderResources::UniformBufferId index, t::U32 frame_in_flight_id) const {
+const vlk::UniformBuffer& ShaderResources::GetkUniformBuffer(ShaderResources::UniformBufferId index, FrameId frame_in_flight_id) const {
    return *per_frame_shader_resources_.at(frame_in_flight_id).uniform_buffers.at(index);
 }
 
@@ -39,7 +38,7 @@ ShaderResources::DescrSetId ShaderResources::AddDescriptorSet(const VkDescriptor
     return per_frame_shader_resources_.at(0).descriptor_sets.size() - 1;
 }
 
-const vlk::DescriptorSet& ShaderResources::GetDescriptorSet(ShaderResources::DescrSetId index, t::U32 frame_in_flight_id) const {
+const vlk::DescriptorSet& ShaderResources::GetDescriptorSet(ShaderResources::DescrSetId index, FrameId frame_in_flight_id) const {
     return *per_frame_shader_resources_.at(frame_in_flight_id).descriptor_sets.at(index);
 }
 

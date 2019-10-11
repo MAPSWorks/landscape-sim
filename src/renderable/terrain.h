@@ -20,8 +20,8 @@ class Terrain : public IRenderable {
 public:
     Terrain(renderer::Renderer& renderer);
     virtual void InitDescriptorSets() override;
-    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const override;
-    virtual void UpdateUniformBuffer(t::U32 frame_id) const override;
+    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameId frame_id) const override;
+    virtual void UpdateUniformBuffer(renderer::FrameId frame_id) const override;
 private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define

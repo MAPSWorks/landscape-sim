@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <base/types.h>
+#include "types.h"
 #include "vlk/types.h"
 #include "vlk/device.h"
 #include "descriptor_set_layout_cache.h"
@@ -42,7 +43,7 @@ public:
     // Get a uniform buffer.
     // Index - represents index into all paralel containers and is initially returned from AddUniformBuffer()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::UniformBuffer& GetkUniformBuffer(UniformBufferId index, t::U32 frame_in_flight_id) const;
+    const vlk::UniformBuffer& GetkUniformBuffer(UniformBufferId index, FrameId frame_in_flight_id) const;
     // Add descriptor set to per-frame data.
     // Descriptor sets are allocated from respective per-frame pool.
     // Copies of set for each frame-i-flight are made
@@ -54,7 +55,7 @@ public:
     // Get a descriptor set
     // Index - represents index into all paralel containers and is initially returned from AddDescriptorSet()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::DescriptorSet& GetDescriptorSet(DescrSetId index, t::U32 frame_in_flight_id) const;
+    const vlk::DescriptorSet& GetDescriptorSet(DescrSetId index, FrameId frame_in_flight_id) const;
     // Set descriptor pool from cached descriptor set layouts.
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
     // and before any descriptor set is created.
@@ -79,10 +80,6 @@ private:
     };
     // Set descriptor pool
     void SetDescriptorPool();
-    // Number of paralel copies of shader resources
-    // This count is used for resources that are updated during rendering a frame
-    // and since frames can be processed in paralel we need a copy for each frame-in-flight.
-    const t::U32 kFramesInFlight;
     // Store reference to device to be used for object creation later
     const VkDevice& device_;
     // Reference to memeory allocator to allocate buffers
