@@ -18,6 +18,7 @@ public:
     };
     OrthographicCamera(const Parameters& params);
     void Update(const platform::Input& input) override;
+    virtual t::Mat4 GetViewMatrix() const override;
 private:
     // Camera matrix parameters
     t::F32 z_near_;

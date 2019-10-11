@@ -40,7 +40,7 @@ void SceneManager::RenderFrame() const {
 
     auto current_frame_id = renderer_.FrameBegin();
     // Update uniform buffers
-    view_.UpdateUniformBuffer(current_frame_id);
+    view_.UpdateUniformBuffer(current_frame_id, *scene_.GetContents().camera);
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->UpdateUniformBuffer(current_frame_id);
     };

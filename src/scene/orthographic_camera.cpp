@@ -17,4 +17,9 @@ void OrthographicCamera::Update(const platform::Input& input) {
 
 }
 
+t::Mat4 OrthographicCamera::GetViewMatrix() const
+{
+    return t::Mat4();
+}
+
 };

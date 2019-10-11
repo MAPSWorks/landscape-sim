@@ -12,6 +12,7 @@ public:
     const t::Vec3& GetWorldPosition() const;
     // Update state of a camera
     virtual void Update(const platform::Input& input) = 0;
+    virtual t::Mat4 GetViewMatrix() const = 0;
 protected:
     // Private variables common for all camera types
     t::Vec3 world_position_;

@@ -4,6 +4,7 @@
 #include <renderer/vlk/pipeline_layout.h>
 #include <renderer/renderer.h>
 #include <renderer/shader_resources.h>
+#include "i_camera.h"
 
 // Represents/abstract a view of the scene.
 // View is concept at a highest level of a rendering hot loop.
@@ -18,7 +19,7 @@ public:
     View(renderer::Renderer& renderer);
     // After descriptor pool has been created, we can allocate descriptor sets
     void InitDescriptorSet();
-    void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const;
+    void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const;
     // Bind per-view descritor set to command buffer with dummy layout
     void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const;
 private:

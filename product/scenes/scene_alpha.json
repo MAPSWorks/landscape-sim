@@ -1,19 +1,19 @@
 {
-  "asset": {
-    "version": "1.0"
-  },
-
-  "camera": {
-    "type": "perspective",
-    "perspective": {
-      "yfov": 0.7,
-      "zfar": 100,
-      "znear": 0.01
+    "asset": {
+      "version": "1.0"
     },
-    "translation": [ 0.5, 0.5, 3.0 ]
-  },
-
-  "terrain": {
-
+  
+    "camera": {
+      "type": "perspective",
+      "perspective": {
+        "yfov": 0.7,
+        "zfar": 100,
+        "znear": 0.01
+      },
+      "translation": [ 0.0, 0.0, 3.0 ]
+    },
+  
+    "terrain": {
+  
+    }
   }
-}
