@@ -4,6 +4,7 @@
 #include <base/matrix.h>
 #include <renderer/types.h>
 #include <renderer/renderer.h>
+#include <renderer/shader_resources.h>
 #include <renderer/vlk/vertex_buffer.h>
 #include <renderer/vlk/index_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
@@ -48,10 +49,10 @@ private:
     const renderer::PipelineId pipeline_id_;
     // Index that represents uniform buffer created from shader resource module
     // Id because there are as many as frames-in-flight
-    const t::U64 uniform_buffer_id_;
+    const renderer::ShaderResources::UniformBufferId uniform_buffer_id_;
     // Index that represents descriptor set created from shader resource module
     // Id because there are as many as frames-in-flight
     // This is not const because we can assign this value only after constructor initializer list.
-    t::U64 descriptor_set_id_;
+    renderer::ShaderResources::DescrSetId descriptor_set_id_;
 };
 }; // renderable

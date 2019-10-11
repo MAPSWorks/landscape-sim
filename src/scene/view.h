@@ -3,6 +3,7 @@
 #include <renderer/vlk/descriptor_set_layout.h>
 #include <renderer/vlk/pipeline_layout.h>
 #include <renderer/renderer.h>
+#include <renderer/shader_resources.h>
 
 // Represents/abstract a view of the scene.
 // View is concept at a highest level of a rendering hot loop.
@@ -29,12 +30,12 @@ private:
     // Per-view descriptor set layout
     const renderer::vlk::DescriptorSetLayout& descr_set_layout_;
     // Uniform buffer data are stored in a buffer pointed to by this id
-    const t::U64 uniform_buffer_id_;
+    const renderer::ShaderResources::UniformBufferId uniform_buffer_id_;
     // Descriptor set should be bound together with pipeline layout, therefore
     // if we want to bind per-view shader resource before-hand, we need a dummy pipeline layout.
     // Per-view shader data in actual objects will be exactly like in this dummy layout plus their own.
     const renderer::vlk::PipelineLayout pipeline_layout_dummy_;
     // The per-view descriptor set is pointed to by this id
-    t::U64 descr_set_id_;
+    renderer::ShaderResources::DescrSetId descr_set_id_;
 };
 }; // scene

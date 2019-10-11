@@ -18,7 +18,7 @@ DescriptorSetLayoutCache& ShaderResources::GetDescriptorSetLayoutCache() {
 }
 
 // Buffer is created for all paralel frame-in-flight resources
-t::U64 ShaderResources::AddUniformBuffer(std::string_view name, vlk::BufferSize buffer_size) {
+ShaderResources::UniformBufferId ShaderResources::AddUniformBuffer(std::string_view name, vlk::BufferSize buffer_size) {
     for (auto& resource : per_frame_shader_resources_) {
         resource.uniform_buffers.push_back(std::make_unique<const vlk::UniformBuffer>(name, allocator_, buffer_size));
     };
@@ -26,12 +26,12 @@ t::U64 ShaderResources::AddUniformBuffer(std::string_view name, vlk::BufferSize 
     return per_frame_shader_resources_.at(0).uniform_buffers.size() - 1;
 }
 
-const vlk::UniformBuffer& ShaderResources::GetkUniformBuffer(t::U64 index, t::U32 frame_in_flight_id) const {
+const vlk::UniformBuffer& ShaderResources::GetkUniformBuffer(ShaderResources::UniformBufferId index, t::U32 frame_in_flight_id) const {
    return *per_frame_shader_resources_.at(frame_in_flight_id).uniform_buffers.at(index);
 }
 
 // Descriptor set is created for all paralel frame-in-flight resources
-t::U64 ShaderResources::AddDescriptorSet(const VkDescriptorSetLayout& layout) {
+ShaderResources::DescrSetId ShaderResources::AddDescriptorSet(const VkDescriptorSetLayout& layout) {
     for (auto& resource : per_frame_shader_resources_) {
         resource.descriptor_sets.push_back(std::make_unique<const vlk::DescriptorSet>(device_, resource.descriptor_pool->Get(), layout));
     };
@@ -39,7 +39,7 @@ t::U64 ShaderResources::AddDescriptorSet(const VkDescriptorSetLayout& layout) {
     return per_frame_shader_resources_.at(0).descriptor_sets.size() - 1;
 }
 
-const vlk::DescriptorSet& ShaderResources::GetDescriptorSet(t::U64 index, t::U32 frame_in_flight_id) const {
+const vlk::DescriptorSet& ShaderResources::GetDescriptorSet(ShaderResources::DescrSetId index, t::U32 frame_in_flight_id) const {
     return *per_frame_shader_resources_.at(frame_in_flight_id).descriptor_sets.at(index);
 }
 
@@ -48,7 +48,7 @@ void ShaderResources::Finalize() {
 }
 
 // Update descriptor set for all frame-in-flight copies
-void ShaderResources::UpdateDescriptorSetWithUniformBuffer(t::U64 descriptor_set_id, t::U64 uniform_buffer_id, t::U64 buffer_size) const {
+void ShaderResources::UpdateDescriptorSetWithUniformBuffer(ShaderResources::DescrSetId descriptor_set_id, ShaderResources::UniformBufferId uniform_buffer_id, t::U64 buffer_size) const {
     // Bind actual uniform buffer to descriptor set
     for (t::U32 i = 0; i < per_frame_shader_resources_.size(); ++i) {
         GetDescriptorSet(descriptor_set_id, i).UpdateUniformBuffer(GetkUniformBuffer(uniform_buffer_id, i).Get(), buffer_size);

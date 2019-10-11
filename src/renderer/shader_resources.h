@@ -25,6 +25,9 @@
 namespace renderer {
 class ShaderResources {
 public:
+    // Index of it's place into collection
+    using UniformBufferId = t::U64;
+    using DescrSetId = t::U64;
     // frames_in_flight - how many frames-in-flight is used and how many duplicates
     //                    of shader resources to create
     ShaderResources(const VkDevice& device, const vlk::MemoryAllocator& allocator, t::U32 frames_in_flight);
@@ -35,11 +38,11 @@ public:
     // Note taht we cant return reference from buffer because there are 
     // multiple of them.. This index should be guaranteed not to change over
     // course of the programm.
-    t::U64 AddUniformBuffer(std::string_view name, vlk::BufferSize buffer_size);
+    UniformBufferId AddUniformBuffer(std::string_view name, vlk::BufferSize buffer_size);
     // Get a uniform buffer.
     // Index - represents index into all paralel containers and is initially returned from AddUniformBuffer()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::UniformBuffer& GetkUniformBuffer(t::U64 index, t::U32 frame_in_flight_id) const;
+    const vlk::UniformBuffer& GetkUniformBuffer(UniformBufferId index, t::U32 frame_in_flight_id) const;
     // Add descriptor set to per-frame data.
     // Descriptor sets are allocated from respective per-frame pool.
     // Copies of set for each frame-i-flight are made
@@ -47,18 +50,18 @@ public:
     // Note taht we cant return reference to set because there are 
     // multiple of them.. This index should be guaranteed not to change over
     // course of the programm.
-    t::U64 AddDescriptorSet(const VkDescriptorSetLayout& layout);
+    DescrSetId AddDescriptorSet(const VkDescriptorSetLayout& layout);
     // Get a descriptor set
     // Index - represents index into all paralel containers and is initially returned from AddDescriptorSet()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::DescriptorSet& GetDescriptorSet(t::U64 index, t::U32 frame_in_flight_id) const;
+    const vlk::DescriptorSet& GetDescriptorSet(DescrSetId index, t::U32 frame_in_flight_id) const;
     // Set descriptor pool from cached descriptor set layouts.
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
     // and before any descriptor set is created.
     void Finalize();
     // Bind uniform buffer to descriptor set
     // If buffer_zize is passed 0, the whole buffer size is bound to descriptor set
-    void UpdateDescriptorSetWithUniformBuffer(t::U64 descriptor_set_id, t::U64 uniform_buffer_id, t::U64 buffer_size=0) const;
+    void UpdateDescriptorSetWithUniformBuffer(DescrSetId descriptor_set_id, UniformBufferId uniform_buffer_id, t::U64 buffer_size=0) const;
 private:
     // Data that is used per frame and therefore needs a copy for each 
     // frame-in-flight.
