@@ -40,7 +40,8 @@ Vulkan 1.0+ compatable graphics card and drivers should be installed on a machin
 To use *World2GPU* application, launch executable file and provide command line arguments to specify
 file name of a scene to be rendered *(option -s)*.
 Scene description file should be present in *'/scenes'* folder.
-Application settings are stored in *'ini/settings.json'* file.
+Application settings are stored in *'ini/settings.json'* file.  
+To move around the scene use *W*, *S*, *A*, *D*, *R* and *F* keys on the keyboard.
 #### Usage example
 To start rendering the scene described in 'scenes/scene_alpha.json' file write:
 > WorldToGPU.exe -s scene_alpha.json
@@ -92,6 +93,7 @@ To describe perspective camera use:
 	"translation": [ 0.5, 0.5, 3.0 ]
 }
 ```  
+Camera, by default, is pointed to negative Z direction.
 ##### Orthographic
 To describe orthographic camera use:  
 - *'type'* property defines the type of the camera.
