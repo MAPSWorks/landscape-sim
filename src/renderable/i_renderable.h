@@ -17,7 +17,7 @@ public:
     virtual void InitDescriptorSets() = 0;
     // Write command to given command buffer that is already in recording state
     // frame_id - id of a current frame-in-flight
-    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const = 0;
+    virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const = 0;
     // frame_id - id of a current frame-in-flight
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const = 0;
 };
