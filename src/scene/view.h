@@ -1,6 +1,5 @@
 #pragma once
 #include <base/types.h>
-#include <renderer/types.h>
 #include <renderer/vlk/descriptor_set_layout.h>
 #include <renderer/vlk/pipeline_layout.h>
 #include <renderer/renderer.h>
@@ -19,9 +18,9 @@ public:
     View(renderer::Renderer& renderer);
     // After descriptor pool has been created, we can allocate descriptor sets
     void InitDescriptorSet();
-    void UpdateUniformBuffer(renderer::FrameId frame_id) const;
+    void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const;
     // Bind per-view descritor set to command buffer with dummy layout
-    void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameId frame_id) const;
+    void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const;
 private:
     const renderer::vlk::DescriptorSetLayout& AddDescrSetLayout() const;
     // Add buffer to shader resources and return it id

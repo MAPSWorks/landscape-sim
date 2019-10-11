@@ -1,8 +1,8 @@
 #pragma once
 #include <base/types.h>
-#include <renderer/types.h>
 #include <renderer/vlk/command_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
+#include <renderer/frame_manager.h>
 
 // Renderables base class
 namespace renderable {
@@ -19,6 +19,6 @@ public:
     // frame_id - id of a current frame-in-flight
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, t::U32 frame_id) const = 0;
     // frame_id - id of a current frame-in-flight
-    virtual void UpdateUniformBuffer(renderer::FrameId frame_id) const = 0;
+    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const = 0;
 };
 }; // renderable

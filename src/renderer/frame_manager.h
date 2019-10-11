@@ -1,7 +1,6 @@
 #pragma once
 #include <deque>
 #include <base/types.h>
-#include "types.h"
 #include "vlk/command_pool.h"
 #include "frame_resource.h"
 
@@ -9,6 +8,7 @@
 namespace renderer {
 class FrameManager {
 public:
+    using FrameId = t::U32;
     FrameManager(const VkDevice& device, t::U32 family_index, t::U32 frames_in_flight);
     // Sets the frame resources in their default state 
     // as if rendering for the first time

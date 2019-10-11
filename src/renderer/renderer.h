@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <base/types.h>
 #include <base/json_loader.h>
-#include "types.h"
 #include "context.h"
 #include "window.h"
 #include "shader_resources.h"
@@ -34,7 +33,7 @@ public:
     const vlk::CommandBuffer& GetCurrentCommandBuffer();
     // Frame is rendered between these calls
     // Returns index of the current frame-in-flight
-    FrameId FrameBegin();
+    FrameManager::FrameId FrameBegin();
     void FrameEnd();
     // Access memory allocator renderable for buffer creation
     const vlk::MemoryAllocator& GetMemoryAllocator() const;

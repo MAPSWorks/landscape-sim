@@ -2,7 +2,6 @@
 #include <vector>
 #include <memory>
 #include <base/types.h>
-#include "types.h"
 #include "vlk/types.h"
 #include "vlk/device.h"
 #include "descriptor_set_layout_cache.h"
@@ -10,6 +9,7 @@
 #include "vlk/uniform_buffer.h"
 #include "vlk/descriptor_pool.h"
 #include "vlk/descriptor_set.h"
+#include "frame_manager.h"
 
 // Store buffers and resource descriptors to be used as shader resources
 // Has copies per in-flight frame.
@@ -43,7 +43,7 @@ public:
     // Get a uniform buffer.
     // Index - represents index into all paralel containers and is initially returned from AddUniformBuffer()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::UniformBuffer& GetkUniformBuffer(UniformBufferId index, FrameId frame_in_flight_id) const;
+    const vlk::UniformBuffer& GetkUniformBuffer(UniformBufferId index, FrameManager::FrameId frame_in_flight_id) const;
     // Add descriptor set to per-frame data.
     // Descriptor sets are allocated from respective per-frame pool.
     // Copies of set for each frame-i-flight are made
@@ -55,7 +55,7 @@ public:
     // Get a descriptor set
     // Index - represents index into all paralel containers and is initially returned from AddDescriptorSet()
     // frame_in_flight_id - which buffer to get for current frame.
-    const vlk::DescriptorSet& GetDescriptorSet(DescrSetId index, FrameId frame_in_flight_id) const;
+    const vlk::DescriptorSet& GetDescriptorSet(DescrSetId index, FrameManager::FrameId frame_in_flight_id) const;
     // Set descriptor pool from cached descriptor set layouts.
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
     // and before any descriptor set is created.

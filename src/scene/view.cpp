@@ -20,7 +20,7 @@ void View::InitDescriptorSet() {
     renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descr_set_id_, uniform_buffer_id_);
 }
 
-void View::UpdateUniformBuffer(renderer::FrameId frame_id) const {
+void View::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
     UniformData ubo{};
     ubo.view_from_world = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.projection_from_view = glm::perspective(glm::radians(45.0f), 800 / 600.f, 0.1f, 10.0f);
@@ -31,7 +31,7 @@ void View::UpdateUniformBuffer(renderer::FrameId frame_id) const {
 // Per-view shader resources are bound once per view, so this resource is not necessery
 // to bind per-object basis. 
 // This function should be called at the top of a rendering loop.
-void View::BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameId frame_id) const {
+void View::BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const {
     command_buffer.BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descr_set_id_, frame_id).Get(),
         pipeline_layout_dummy_.Get(), DescruptorSetSlotId::kPerView);
 }

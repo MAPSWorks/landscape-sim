@@ -28,7 +28,7 @@ FrameResource& FrameManager::GetCurrentFrameResource() {
     return frame_resources_.at(frame_index_);
 }
 
-FrameId FrameManager::GetCurrentFrameIndex() const {
+FrameManager::FrameId FrameManager::GetCurrentFrameIndex() const {
     return frame_index_;
 }
 

@@ -62,7 +62,7 @@ const vlk::CommandBuffer& Renderer::GetCurrentCommandBuffer() {
     return frame_manager_.GetCurrentFrameResource().command_buffer;
 }
 
-FrameId Renderer::FrameBegin() {
+FrameManager::FrameId Renderer::FrameBegin() {
     // Get currently processed frame 
     // (processed on CPU, not GPU. On GPU some other frame is processed right now)
     FrameResource& current_frame = frame_manager_.GetCurrentFrameResource();
