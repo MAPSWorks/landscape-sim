@@ -46,12 +46,12 @@ std::unique_ptr<ICamera> SceneParser::GetCamera() const {
 }
 
 // Add renderable objects
-Scene::RenderableVector SceneParser::GetRenderables(renderer::Renderer& renderer) const {
+Scene::RenderableVector SceneParser::GetRenderables(renderer::Renderer& renderer, const View& view) const {
     Scene::RenderableVector renderables;
     // Terrain, if is defined
     if (data_catche_.find("terrain") != data_catche_.end()) {
         const auto& scene_data_terrain = data_catche_.at("terrain");
-        renderables.push_back(std::make_unique<renderable::Terrain>(renderer));
+        renderables.push_back(std::make_unique<renderable::Terrain>(renderer, view));
     }
     return renderables;
 }

@@ -5,7 +5,7 @@ namespace scene {
 SceneManager::SceneManager(renderer::Renderer& renderer, std::string_view scene_file_name) :
     renderer_(renderer),
     view_(renderer_),
-    scene_(scene_file_name, renderer_) {
+    scene_(scene_file_name, renderer_, view_) {
     // Fully initialize shader resources gathered from all renderable objects
     // Should be called before any descriptor set is created
     renderer_.GetShaderResources().Finalize();

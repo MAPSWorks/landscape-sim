@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "i_renderable.h"
 #include <base/matrix.h>
 #include <renderer/types.h>
 #include <renderer/renderer.h>
@@ -9,6 +8,8 @@
 #include <renderer/vlk/index_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
+#include <scene/view.h>
+#include "i_renderable.h"
 
 // Terrain representation as a renderable object
 namespace renderable {
@@ -18,7 +19,7 @@ struct UniformBufferObject {
 
 class Terrain : public IRenderable {
 public:
-    Terrain(renderer::Renderer& renderer);
+    Terrain(renderer::Renderer& renderer, const scene::View& view);
     virtual void InitDescriptorSets() override;
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;

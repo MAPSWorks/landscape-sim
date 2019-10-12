@@ -24,6 +24,7 @@ public:
     void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const;
     // Bind per-view descritor set to command buffer with dummy layout
     void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const;
+    const renderer::vlk::DescriptorSetLayout& GetDescriptorSetLayout() const;
 private:
     const renderer::vlk::DescriptorSetLayout& AddDescrSetLayout() const;
     // Add buffer to shader resources and return it id

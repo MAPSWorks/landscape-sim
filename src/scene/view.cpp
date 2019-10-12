@@ -34,6 +34,10 @@ void View::BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer,
         pipeline_layout_dummy_.Get(), DescruptorSetSlotId::kPerView);
 }
 
+const renderer::vlk::DescriptorSetLayout& View::GetDescriptorSetLayout() const {
+    return descr_set_layout_;
+}
+
 const renderer::vlk::DescriptorSetLayout& View::AddDescrSetLayout() const {
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
     renderer::vlk::DescriptorSetLayout::Binding uniform_binding;

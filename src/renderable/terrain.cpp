@@ -5,7 +5,7 @@
 #include <base/log.h>
 
 namespace renderable {
-Terrain::Terrain(renderer::Renderer& renderer) :
+Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     height_grid_(GenerateHeightGrid(5)),
     renderer_(renderer),
     vertices_(GetVertices()),
@@ -14,7 +14,7 @@ Terrain::Terrain(renderer::Renderer& renderer) :
         (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
     index_buffer_("terrain indices", renderer_.GetMemoryAllocator(),
         (renderer::vlk::BufferSize)(indices_.size() * sizeof(indices_[0])), indices_.data()),
-    descriptor_set_layout_view_(renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
+    descriptor_set_layout_view_(view.GetDescriptorSetLayout()),
     descriptor_set_layout_(renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
