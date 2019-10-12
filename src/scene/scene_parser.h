@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <string_view>
 #include <memory>
 #include <base/json_loader.h>
 #include "scene.h"
@@ -14,7 +14,7 @@ class SceneParser {
 public:
     // Loads scene data from file into catche
     // file_name - File name of the scene
-    SceneParser(const std::string& file_name);
+    SceneParser(std::string_view file_name);
     // Return pointer to derived camera object
     std::unique_ptr<ICamera> GetCamera() const;
     // Returns list of renderable scene objects

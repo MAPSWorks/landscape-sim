@@ -1,7 +1,6 @@
 #pragma once
 #include <platform/i_application.h>
 #include <renderer/renderer.h>
-#include <scene/scene.h>
 #include <scene/scene_manager.h>
 
 // Collects and executes subsystems that make up a complete application
@@ -17,7 +16,6 @@ private:
     virtual void OnExit() const override;
     virtual void KeyPress(const platform::Input& input) override;
     renderer::Renderer renderer_;
-    scene::Scene scene_;
     scene::SceneManager scene_manager_;
 };
 }; // application

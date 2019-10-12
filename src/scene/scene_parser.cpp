@@ -6,7 +6,7 @@
 #include <renderable/terrain.h>
 
 namespace scene {
-SceneParser::SceneParser(const std::string& file_name) : 
+SceneParser::SceneParser(std::string_view file_name) :
     loader_(file_name),
     data_catche_(loader_.Get()) {
     base::Log::Info("Scene: scene parser initialized from file '",file_name,"'");

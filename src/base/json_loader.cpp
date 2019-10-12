@@ -4,8 +4,8 @@
 #include <base/log.h>
 
 namespace base {
-JSONLoader::JSONLoader(const std::string& file_name) : 
-    parsed_data_(Init(file_name)) {
+JSONLoader::JSONLoader(std::string_view file_name) : 
+    parsed_data_(Init(file_name.data())) {
     base::Log::Info("Base: parsing of '", file_name, "' complete");
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <string_view>
 #include <renderer/renderer.h>
 #include <platform/input.h>
 #include "scene.h"
@@ -9,16 +10,16 @@
 namespace scene {
 class SceneManager {
 public:
-    SceneManager(renderer::Renderer &renderer, const Scene& scene);
+    SceneManager(renderer::Renderer &renderer, std::string_view scene_file_name);
     // input - current state of user input (keyboard, mouse)
     void Update(const platform::Input& input) const;
     void RenderFrame() const;
 private:
     // Renderer will not be changed in runtime therefore grab the reference
     renderer::Renderer& renderer_;
-    // Reference to scene manager will manage
-    const Scene& scene_;
     // Per-view resources
     View view_;
+    // Scene to be managed
+    const Scene scene_;
 };
 }; // scene

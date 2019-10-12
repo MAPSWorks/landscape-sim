@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <string_view>
 #include <external/json/json.hpp>
 
 // Parses a given json file and lets to retrieve an elements by type
@@ -8,7 +8,7 @@ namespace base {
 class JSONLoader {
 public:
     using JsonType = nlohmann::json;
-    JSONLoader(const std::string& file_name);
+    JSONLoader(std::string_view file_name);
     // Data in structure is acessed by at() and get() methods
     // Example: at("field1").at("sub_field1").get<std::string>();
     const JsonType& Get() const;
