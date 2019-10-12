@@ -29,7 +29,7 @@ void DescriptorSet::UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_si
     descriptor_write.pBufferInfo = &buffer_info;
     vkUpdateDescriptorSets(device_, 1, &descriptor_write, 0, nullptr);
     
-    base::Log::Info("Renderer: descriptor set updated with buffer of size (", buffer_size, ")");
+    base::Log::Info("Renderer: descriptor set updated with buffer of size (", buffer_size, "). '0' means whole size");
 }
 
 VkDescriptorSet DescriptorSet::Allocate(const VkDescriptorPool& pool, const VkDescriptorSetLayout& layout) const {
