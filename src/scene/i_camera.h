@@ -13,6 +13,8 @@ public:
     // Update state of a camera
     virtual void Update(const platform::Input& input) = 0;
     virtual t::Mat4 GetViewMatrix() const = 0;
+    // aspect_ratio - aspect ratio of current viewinf screen
+    virtual t::Mat4 GetProjectionMatrix(t::F32 aspect_ratio) const = 0;
 protected:
     // Private variables common for all camera types
     t::Vec3 world_position_;

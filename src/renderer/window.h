@@ -16,6 +16,8 @@ public:
     // Get wrapper renderable
     const vlk::Swapchain& GetSwapchainObject() const;
     const VkRenderPass& GetRenderPass() const;
+    // Current aspect ratio of the window
+    t::F32 GetAspectRatio() const;
     // Delete and recreate swapchain and all objects depending on swapchine format
     void RecreateSwapchain();
 private:

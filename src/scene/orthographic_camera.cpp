@@ -22,4 +22,9 @@ t::Mat4 OrthographicCamera::GetViewMatrix() const
     return t::Mat4();
 }
 
+t::Mat4 OrthographicCamera::GetProjectionMatrix(t::F32 aspect_ratio) const
+{
+    return t::Mat4();
+}
+
 };

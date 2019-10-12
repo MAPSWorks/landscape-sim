@@ -1,6 +1,5 @@
 #include "view.h"
 #include <vector>
-#include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
 #include "types.h"
 
@@ -22,10 +21,8 @@ void View::InitDescriptorSet() {
 
 void View::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const {
     UniformData ubo{};
-    //ubo.view_from_world = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.view_from_world = camera.GetViewMatrix();
-    ubo.projection_from_view = glm::perspective(glm::radians(45.0f), 800 / 600.f, 0.1f, 10.0f);
-    ubo.projection_from_view[1][1] *= -1;
+    ubo.projection_from_view = camera.GetProjectionMatrix(renderer_.GetWindow().GetAspectRatio());
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 

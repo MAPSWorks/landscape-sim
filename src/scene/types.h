@@ -12,7 +12,7 @@ enum DescruptorSetSlotId {
 enum ViewDescriptorBidingId {
     kUniformBuffer = 0
 };
-
+// Constants
 // World up vector
 constexpr t::Vec3 kWorldUpVec = t::Vec3(0.0, 1.0, 0.0);
 };

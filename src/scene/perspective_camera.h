@@ -12,12 +12,13 @@ public:
         t::Vec3 world_translation;
         t::F32 znear;
         t::F32 zfar;
-        // Vertical field of view
+        // Vertical field of view (radians)
         t::F32 yfov;
     };
     PerspectiveCamera(const Parameters& params);
     void Update(const platform::Input& input) override;
     virtual t::Mat4 GetViewMatrix() const override;
+    virtual t::Mat4 GetProjectionMatrix(t::F32 aspect_ratio) const override;
 private:
     // Possible movement directions
     enum class Direction {
@@ -42,7 +43,7 @@ private:
     // Camera matrix parameters
     t::F32 z_near_;
     t::F32 z_far_;
-    // Vertical field of view, for perspective type only
+    // Vertical field of view (radians), for perspective type only
     t::F32 y_field_of_view_;
     // Eular Angles of camera orientation
     t::F32 yaw_;

@@ -41,10 +41,19 @@ t::Mat4 PerspectiveCamera::GetViewMatrix() const {
     return glm::lookAt(world_position_, world_position_ + front_, up_);
 }
 
+t::Mat4 PerspectiveCamera::GetProjectionMatrix(t::F32 aspect_ratio) const {
+    t::Mat4 projection;
+    projection =  glm::perspective(y_field_of_view_, aspect_ratio, z_near_, z_far_);
+    // For image not to appear upsde down compensade for flipped y clip coordinate
+    projection[1][1] *= -1;
+    return projection;
+}
+
 // Calculate front, right and up vectors from current Euler angles
 void PerspectiveCamera::UpdateVectors(t::F32 yaw, t::F32 pitch) {
     // Calculate the new Front vector
     t::Vec3 front;
+    // TODO: work with radians not degrees
     front.x = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
     front.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));

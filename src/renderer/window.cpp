@@ -20,6 +20,10 @@ const VkRenderPass& Window::GetRenderPass() const {
     return render_pass_->Get();
 }
 
+t::F32 Window::GetAspectRatio() const {
+    return swapchain_->GetExtent().width / static_cast<t::F32>(swapchain_->GetExtent().height);
+}
+
 // Force clean-up and create new objects dependant on window format
 // NOTE: not all objects depending on swapchain are in this class
 void Window::RecreateSwapchain() {

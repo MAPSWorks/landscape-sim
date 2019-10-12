@@ -19,6 +19,8 @@ public:
     View(renderer::Renderer& renderer);
     // After descriptor pool has been created, we can allocate descriptor sets
     void InitDescriptorSet();
+    // Update uniform buffer for given frame-in-flight.
+    // Camera represents current view.
     void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const;
     // Bind per-view descritor set to command buffer with dummy layout
     void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const;
