@@ -5,7 +5,8 @@ namespace scene {
 // Layout for shader resources
 // Set number of a given descriptor set in shader (set=n)
 enum DescruptorSetSlotId {
-    kPerView = 0
+    kPerView = 0,
+    kPerObject = 1
 };
 // Bindings per descriptor sets.
 // Per view shader resources, uniform buffer is having (binding=n)

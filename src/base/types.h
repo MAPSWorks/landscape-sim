@@ -29,6 +29,8 @@ using Vec2u16 = glm::tvec2<U16>;
 using Vec3u32 = glm::tvec3<U32>;
 using Mat3 = glm::tmat3x3<F32>;
 using Mat4 = glm::tmat4x4<F32>;
+// GLM type specialization
+constexpr Mat4 kMat4Identoty = Mat4(1.0f);
 // Type compile-time checks
 static_assert(sizeof(F32) == 4);
 static_assert(sizeof(F64) == 8);

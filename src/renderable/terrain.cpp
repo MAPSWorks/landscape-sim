@@ -1,8 +1,8 @@
 #include "terrain.h"
 #include <chrono>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
+#include <scene/types.h>
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
@@ -37,16 +37,20 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.BindVertexBuffer(vertex_buffer_.Get());
     command_buffer.BindIndexBuffer32(index_buffer_.Get());
     command_buffer.BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, frame_id).Get(),
-        renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout().Get(), 1);
+        renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout().Get(), scene::DescruptorSetSlotId::kPerObject);
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
+    /*
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo  {};
     ubo.world_from_local = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    */
+    UniformBufferObject ubo{};
+    ubo.world_from_local = t::kMat4Identoty;
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -64,8 +68,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Vertex input params
         {
-            renderer::VertexPos2dColor::GetBindingDescription(),
-            renderer::VertexPos2dColor::GetAttributeDescriptions(),
+            renderer::VertexPos3dColor::GetBindingDescription(),
+            renderer::VertexPos3dColor::GetAttributeDescriptions(),
         },
         // Fixed function state
         // Primitive assembly
@@ -106,12 +110,12 @@ base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
 }
 
 // Generate vertices from height grid
-std::vector<renderer::VertexPos2dColor> Terrain::GetVertices() const {
-    const std::vector<renderer::VertexPos2dColor> vertices = {
-            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+std::vector<renderer::VertexPos3dColor> Terrain::GetVertices() const {
+    const std::vector<renderer::VertexPos3dColor> vertices = {
+            {{-0.5f, 0.2f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, 0.0f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{0.5f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+            {{-0.5f, 0.0f ,0.5f}, {1.0f, 1.0f, 1.0f}}
         };
     return vertices;
 }
@@ -128,7 +132,7 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
     renderer::vlk::DescriptorSetLayout::Binding binding;
     // Binding index (location), corresponds to layout(binding = n)  in shader
-    binding.index = 0;
+    binding.index = scene::ViewDescriptorBidingId::kUniformBuffer;
     binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
     binding.stage = renderer::vlk::ShaderStage::kVertex;
     binding.count = 1;
