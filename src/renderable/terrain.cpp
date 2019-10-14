@@ -1,12 +1,13 @@
 #include "terrain.h"
 #include <chrono>
+#include <random>
 #include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
 #include <scene/types.h>
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
-    height_grid_(GenerateHeightGrid(5)),
+    height_grid_(GenerateHeightGrid(20)),
     renderer_(renderer),
     vertices_(GetVertices()),
     indices_(GetIndices()),
@@ -42,15 +43,17 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
 }
 
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
-    /*
+    
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo  {};
-    ubo.world_from_local = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    */
+    ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    
+    /*
     UniformBufferObject ubo{};
     ubo.world_from_local = t::kMat4Identoty;
+    */
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -79,7 +82,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Rasterization
         {
-            renderer::vlk::GraphicsPipeline::PolygonMode::kFill,
+            renderer::vlk::GraphicsPipeline::PolygonMode::kLine,
             renderer::vlk::GraphicsPipeline::CullMode::kNone
         },
         // Multisample
@@ -103,27 +106,54 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 
 // Generate height grid values for given area size and return
 base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<t::F32> dist(1.0f, 5.0f);
+
     base::Matrix<t::F32> height_grid(size, size);
-    height_grid(0, 0) = 1.0;
-    height_grid(size - 1, size - 1) = 2.0;
-    return height_grid;
+    for (t::U32 row = 0; row < height_grid.GetRows(); ++row) {
+        for (t::U32 col = 0; col < height_grid.GetCols(); ++col) {
+            height_grid(row, col) = dist(mt) + col / height_grid.GetCols();
+        }
+    }
+    return height_grid; 
 }
 
 // Generate vertices from height grid
 std::vector<renderer::VertexPos3dColor> Terrain::GetVertices() const {
-    const std::vector<renderer::VertexPos3dColor> vertices = {
-            {{-0.5f, 0.2f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, 0.0f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{0.5f, 0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-            {{-0.5f, 0.0f ,0.5f}, {1.0f, 1.0f, 1.0f}}
-        };
+    std::vector<renderer::VertexPos3dColor> vertices;
+    t::F32 tile_size = 4.0f;
+    t::F32 terrain_half_width = (height_grid_.GetCols() * tile_size) / 2.0f;
+    t::F32 terrain_half_height = (height_grid_.GetRows() * tile_size) / 2.0f;
+    for (t::U32 row = 0; row < height_grid_.GetRows(); ++row) {
+        for (t::U32 col = 0; col < height_grid_.GetCols(); ++col) {
+            renderer::VertexPos3dColor vertice;
+            vertice.position = { row * tile_size - terrain_half_width, height_grid_(row, col), col * tile_size - terrain_half_height };
+            vertice.color = { row / (t::F32)height_grid_.GetRows(), col / (t::F32)height_grid_.GetCols(),  0.2f };
+            vertices.push_back(vertice);
+        }
+    }
     return vertices;
 }
 
 std::vector<t::U32> Terrain::GetIndices() const {
-    const std::vector<t::U32> indices = {
-        0, 1, 2, 2, 3, 0
-    };
+    std::vector<t::U32> indices;
+    t::U32 indice = 0;
+    for (t::U32 row = 0; row < height_grid_.GetRows() - 1; ++row) {
+        for (t::U32 col = 0; col < height_grid_.GetCols() - 1; ++col) {
+            // triangle 1
+            indices.emplace_back(indice);
+            indices.emplace_back(indice + 1); 
+            indices.emplace_back(indice + (t::U32)height_grid_.GetCols());
+            // triangle 2
+            indices.emplace_back(indice + 1);
+            indices.emplace_back(indice + (t::U32)height_grid_.GetCols());
+            indices.emplace_back(indice + 1 + (t::U32)height_grid_.GetCols());
+            ++indice;
+        }
+        ++indice;
+    }
+
     return indices;
 }
 

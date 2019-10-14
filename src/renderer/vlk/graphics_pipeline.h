@@ -26,7 +26,8 @@ public:
         const PrimitiveTopology primitive_topology = PrimitiveTopology::kTriangleList;
     };
     enum class PolygonMode {
-        kFill = VK_POLYGON_MODE_FILL
+        kFill = VK_POLYGON_MODE_FILL,
+        kLine = VK_POLYGON_MODE_LINE
     };
     enum class CullMode {
         kNone = VK_CULL_MODE_NONE,

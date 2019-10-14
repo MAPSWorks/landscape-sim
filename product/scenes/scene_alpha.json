@@ -7,10 +7,10 @@
       "type": "perspective",
       "perspective": {
         "yfov": 0.7,
-        "zfar": 100,
+        "zfar": 1000,
         "znear": 0.01
       },
-      "translation": [ 0.0, 0.0, 3.0 ]
+      "translation": [ 0.0, 5.0, 0.0 ]
     },
   
     "terrain": {
