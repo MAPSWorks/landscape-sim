@@ -1,5 +1,6 @@
 # World to GPU - 3D real-time renderer leveraging the power of Vulkan API.
 <img src="screenshot.png" alt="Screenshot" width = "500"/>  
+
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
