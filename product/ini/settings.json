@@ -1,5 +1,5 @@
 {
-  "windowSize": [ 800, 600 ],
+  "windowSize": [ 1024, 768 ],
   "fullscreen": false,
   "renderer": {
     "appName": "World to GPU",

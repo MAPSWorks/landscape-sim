@@ -43,7 +43,6 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
 }
 
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
-    
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
