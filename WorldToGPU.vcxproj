@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\application\world_to_gpu.cpp" />
     <ClCompile Include="src\base\cmd_line_parser.cpp" />
+    <ClCompile Include="src\base\image.cpp" />
     <ClCompile Include="src\base\json_loader.cpp" />
     <ClCompile Include="src\base\util.cpp" />
     <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
@@ -72,6 +73,7 @@
   <ItemGroup>
     <ClInclude Include="src\application\world_to_gpu.h" />
     <ClInclude Include="src\base\cmd_line_parser.h" />
+    <ClInclude Include="src\base\image.h" />
     <ClInclude Include="src\base\json_loader.h" />
     <ClInclude Include="src\base\matrix.h" />
     <ClInclude Include="src\base\util.h" />
