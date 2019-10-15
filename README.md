@@ -149,6 +149,7 @@ The dependancies are:
 - [GLM](https://github.com/g-truc) optimized linear math library.
 - [JSON](https://github.com/nlohmann) library.
 - [AMD](https://github.com/amd) vulkan memory allocation library.  
+- [Stb](https://github.com/nothings/stb) image loader library.  
 
 All libraries are included in the project.
 ### Development
