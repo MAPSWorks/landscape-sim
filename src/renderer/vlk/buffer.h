@@ -4,7 +4,7 @@
 #include "memory_allocator.h"
 #include "vulkan_shared.h"
 
-// Abstraction of buffer renderable in general.
+// Abstraction of buffer in general.
 // Creates buffer and allocates memory.
 // Further used to inmplement vertex, index buffers, etc  
 namespace renderer::vlk {
@@ -37,7 +37,7 @@ private:
     // alocator_ member
     const MemoryAllocator& allocator_;
     // Object that represents memory assigned to this buffer.It can be queried 
-    // for parameters like Vulkan memory handleand offset.
+    // for parameters like Vulkan memory handle and offset.
     VmaAllocation allocation_;
     const VkBuffer buffer_ = VK_NULL_HANDLE;
     // Buffer size upon creation
