@@ -1,34 +1,34 @@
-#include "image.h"
+#include "image_file.h"
 #include <stdexcept>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include "log.h"
 
 namespace base {
-Image::Image(const std::string& file_name) :
+ImageFile::ImageFile(const std::string& file_name) :
     // Force 4 channels
     forced_channel_count_(4){
     LoadImage(file_name);
 }
 
-Image::~Image() {
+ImageFile::~ImageFile() {
     stbi_image_free(image_);
 }
 
-const t::UC* Image::GetImage() const {
+const t::UC* ImageFile::GetImage() const {
     return image_;
 }
 
-const t::Size32 Image::GetDimensions() const {
+const t::Size32 ImageFile::GetDimensions() const {
     return dimensions_;
 }
 
 // NOTE: for 8 bit channel no need to calculate by byte number 
-t::U32 Image::GetSize() const {
+t::U32 ImageFile::GetSize() const {
     return dimensions_.width * dimensions_.height * forced_channel_count_;
 }
 
-void Image::LoadImage(const std::string& file_name) {
+void ImageFile::LoadImage(const std::string& file_name) {
     int width, height, num_channels;
     // Force image to also have all 4 channels
     image_ = stbi_load(file_name.c_str(), &width, &height, &num_channels, STBI_rgb_alpha);

@@ -61,11 +61,11 @@ VkBuffer Buffer::Create(std::string name, BufferSize size, VkBufferUsageFlags us
     // Only to store informative name of allocation for debugging
     alloc_info.flags = VMA_ALLOCATION_CREATE_USER_DATA_COPY_STRING_BIT;
     alloc_info.pUserData = const_cast<char*>(name.c_str());
-    VkBuffer vertex_buffer;
+    VkBuffer buffer;
     // - VkBuffer is created.
     // - VkDeviceMemory block is allocated if needed.
     // - An unused region of the memory block is bound to this buffer.
-    ErrorCheck(vmaCreateBuffer(allocator_.Get(), &buffer_info, &alloc_info, &vertex_buffer, &allocation, nullptr));
-    return vertex_buffer;
+    ErrorCheck(vmaCreateBuffer(allocator_.Get(), &buffer_info, &alloc_info, &buffer, &allocation, nullptr));
+    return buffer;
 }
 }; // renderer::vlk

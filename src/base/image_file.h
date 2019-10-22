@@ -2,16 +2,16 @@
 #include <string>
 #include "types.h"
 
-// Load in CPU memeory and store 8-bit (per channel) image.
+// Load in CPU memeory and store 8-bit (per channel) image from given file.
 // Channels are forced rgba.
 namespace base {
-class Image {
+class ImageFile {
 public:
-    Image(const std::string& file_name);
-    ~Image();
+    ImageFile(const std::string& file_name);
+    ~ImageFile();
     // non-copyable
-    Image(Image const&) = delete;
-    Image operator=(Image const&) = delete;
+    ImageFile(ImageFile const&) = delete;
+    ImageFile operator=(ImageFile const&) = delete;
     // Get pointer to image data
     const t::UC* GetImage() const;
     const t::Size32 GetDimensions() const;
