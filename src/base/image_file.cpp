@@ -5,10 +5,10 @@
 #include "log.h"
 
 namespace base {
-ImageFile::ImageFile(const std::string& file_name) :
-    // Force 4 channels
+ImageFile::ImageFile(std::string_view file_name) :
+    // Force 4 channels (r,g,b,a)
     forced_channel_count_(4){
-    LoadImage(file_name);
+    LoadImage(file_name.data());
 }
 
 ImageFile::~ImageFile() {
@@ -19,7 +19,7 @@ const t::UC* ImageFile::GetImage() const {
     return image_;
 }
 
-const t::Size32 ImageFile::GetDimensions() const {
+const t::Size32& ImageFile::GetDimensions() const {
     return dimensions_;
 }
 

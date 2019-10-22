@@ -7,14 +7,14 @@
 namespace base {
 class ImageFile {
 public:
-    ImageFile(const std::string& file_name);
+    ImageFile(std::string_view file_name);
     ~ImageFile();
     // non-copyable
     ImageFile(ImageFile const&) = delete;
     ImageFile operator=(ImageFile const&) = delete;
     // Get pointer to image data
     const t::UC* GetImage() const;
-    const t::Size32 GetDimensions() const;
+    const t::Size32& GetDimensions() const;
     // Image size in bytes (calculated on the fly from dimension)
     t::U32 GetSize() const;
 private:

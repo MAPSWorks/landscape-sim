@@ -37,6 +37,7 @@
     <ClCompile Include="src\renderer\pipeline_manager.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\shader_resources.cpp" />
+    <ClCompile Include="src\renderer\texture2d.cpp" />
     <ClCompile Include="src\renderer\vlk\buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_buffer.cpp" />
     <ClCompile Include="src\renderer\vlk\command_pool.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="src\renderer\pipeline_manager.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\shader_resources.h" />
+    <ClInclude Include="src\renderer\texture2d.h" />
     <ClInclude Include="src\renderer\types.h" />
     <ClInclude Include="src\renderer\vlk\buffer.h" />
     <ClInclude Include="src\renderer\vlk\command_buffer.h" />
