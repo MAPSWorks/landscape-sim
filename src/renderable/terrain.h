@@ -4,8 +4,8 @@
 #include <renderer/types.h>
 #include <renderer/renderer.h>
 #include <renderer/shader_resources.h>
-#include <renderer/vlk/vertex_buffer.h>
-#include <renderer/vlk/index_buffer.h>
+#include <renderer/vertex_buffer.h>
+#include <renderer/index_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
 #include <scene/view.h>
@@ -40,8 +40,8 @@ private:
     renderer::Renderer& renderer_;
     const std::vector<renderer::VertexPos3dColor> vertices_;
     const std::vector<t::U32> indices_;
-    const renderer::vlk::VertexBuffer vertex_buffer_;
-    const renderer::vlk::IndexBuffer index_buffer_;
+    const renderer::VertexBuffer vertex_buffer_;
+    const renderer::IndexBuffer index_buffer_;
     // A reference to an object that describes resource binding to pipeline
     // Actual objects are stored in descriptor set layout cache for reuse
     const renderer::vlk::DescriptorSetLayout& descriptor_set_layout_view_;
