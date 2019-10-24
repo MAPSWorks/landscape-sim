@@ -1,4 +1,5 @@
 #pragma once
+#include <base/types.h>
 #include "vlk/vulkan_shared.h"
 #include "vlk/device.h"
 #include "vlk/command_pool.h"
@@ -13,6 +14,9 @@ public:
     OneTimeCommands(const vlk::Device& device);
     // Copies contents of one buffer to other
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer, vlk::BufferSize size) const;
+    // Record pipeline image memory barrier
+    void PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
+        VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const;
 private:
     // Reference to resource this renderable is created with
     const vlk::Device& device_;

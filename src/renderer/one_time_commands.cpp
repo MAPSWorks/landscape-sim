@@ -25,4 +25,21 @@ void OneTimeCommands::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst
     command_buffer.Free(device_.Get());
     base::Log::Info("Renderer: buffer copy performed. Size - ", size);
 }
+
+void OneTimeCommands::PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
+    VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const {
+    vlk::CommandBuffer command_buffer(command_pool_);
+    command_buffer.Begin(vlk::CommandBuffer::Usage::kOneTimeSubmit);
+    command_buffer.PipelineImageMemoryBarrier(src_stagemask, dst_stagemask, dependancy_flags, 
+        image_memory_barrier_count, image_memory_barrier);
+    command_buffer.End();
+    // Submit to graphics queue because graphics queue implicitly supports transfer
+    device_.GetQueue().Submit(device_.GetQueue().GetGraphics(), command_buffer.Get());
+    // Since we dont use fence
+    vlk::ErrorCheck(vkQueueWaitIdle(device_.GetQueue().GetGraphics()));
+    // Freeing is not in command buffers destructor because it is not mandatory.
+    // When pool is destroyed so are command buffers.
+    command_buffer.Free(device_.Get());
+    base::Log::Info("Renderer: image memory barrier recording performed");
+}
 }; //renderer

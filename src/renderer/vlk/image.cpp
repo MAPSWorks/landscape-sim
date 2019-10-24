@@ -35,9 +35,8 @@ void Image::AllocationDebugPrint() const {
     }
 }
 
-// Perform layout transitions using an image memory barrier
-void Image::TransitionLayout(VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) const {
-    VkImageMemoryBarrier barrier {};
+VkImageMemoryBarrier Image::GetMemoryBarrier(VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) const {
+    VkImageMemoryBarrier barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.oldLayout = old_layout;
     barrier.newLayout = new_layout;
@@ -51,19 +50,8 @@ void Image::TransitionLayout(VkFormat format, VkImageLayout old_layout, VkImageL
     barrier.subresourceRange.layerCount = 1;
     barrier.srcAccessMask = 0; // TODO
     barrier.dstAccessMask = 0; // TODO
-    /*
-    command_buffer.PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
-        VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier * image_memory_barrier)
-    */
-    /*
-    vkCmdPipelineBarrier(
-        commandBuffer,
-        0 /, 0,
-        0,
-        0, nullptr,
-        0, nullptr,
-        1, &barrier
-    );*/
+
+    return barrier;
 }
 
 VkImage Image::Create(std::string name, VkImageType type, VkExtent3D extent, VkFormat format, VkImageTiling tiling,
