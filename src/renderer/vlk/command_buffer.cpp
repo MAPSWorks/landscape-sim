@@ -90,4 +90,11 @@ void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_
     t::U32 descriptor_set_count = 1;
     vkCmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, first_set_at_index, descriptor_set_count, &descriptor_set, 0, nullptr);
 }
+
+// Only iamge memory barier structure is filled in this pipeline barrier command.
+void CommandBuffer::PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask, 
+    VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const {
+    vkCmdPipelineBarrier(command_buffer_, src_stagemask, dst_stagemask, dependancy_flags,
+        0, nullptr, 0, nullptr, image_memory_barrier_count, image_memory_barrier);
+}
 };

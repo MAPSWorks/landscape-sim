@@ -35,6 +35,37 @@ void Image::AllocationDebugPrint() const {
     }
 }
 
+// Perform layout transitions using an image memory barrier
+void Image::TransitionLayout(VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) const {
+    VkImageMemoryBarrier barrier {};
+    barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    barrier.oldLayout = old_layout;
+    barrier.newLayout = new_layout;
+    barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    barrier.image = image_;
+    barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    barrier.subresourceRange.baseMipLevel = 0;
+    barrier.subresourceRange.levelCount = 1;
+    barrier.subresourceRange.baseArrayLayer = 0;
+    barrier.subresourceRange.layerCount = 1;
+    barrier.srcAccessMask = 0; // TODO
+    barrier.dstAccessMask = 0; // TODO
+    /*
+    command_buffer.PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
+        VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier * image_memory_barrier)
+    */
+    /*
+    vkCmdPipelineBarrier(
+        commandBuffer,
+        0 /, 0,
+        0,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier
+    );*/
+}
+
 VkImage Image::Create(std::string name, VkImageType type, VkExtent3D extent, VkFormat format, VkImageTiling tiling,
     VkImageUsageFlags usage, VmaMemoryUsage memory_usage, VmaAllocation& allocation) {
     VkImageCreateInfo image_info{};

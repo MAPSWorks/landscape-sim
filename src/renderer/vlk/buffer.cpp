@@ -25,10 +25,10 @@ const BufferSize Buffer::GetSize() const {
     return size_;
 }
 
-void Buffer::MapAndFill(BufferSize buffer_size, const void* vertex_data) const {
+void Buffer::MapAndFill(BufferSize buffer_size, const void* buffer_data) const {
     void* data;
     ErrorCheck(vmaMapMemory(allocator_.Get(), allocation_, &data));
-    memcpy(data, vertex_data, (size_t)buffer_size);
+    memcpy(data, buffer_data,static_cast<size_t>(buffer_size));
     vmaUnmapMemory(allocator_.Get(), allocation_);
 } 
 

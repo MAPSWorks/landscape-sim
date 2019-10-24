@@ -38,7 +38,11 @@ public:
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
     // Bind given descriptor sets to graphics binding point based on given pipeline layout
     // first_set_at_index - is the set number of the first descriptor set to be bound.
-    void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout, t::U32 first_set_at_index = 0) const;
+    void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout, 
+        t::U32 first_set_at_index = 0) const;
+    // Record pipeline barier.for image memory barrier
+    void PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask, VkDependencyFlags dependancy_flags,
+        t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const;
 private:
     // Reference to resource this renderable is created with
     const CommandPool& command_pool_;

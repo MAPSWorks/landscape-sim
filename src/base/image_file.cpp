@@ -36,7 +36,7 @@ void ImageFile::LoadImage(const std::string& file_name) {
         throw std::runtime_error("Base: failed to load image '" + file_name + "'");
     }
     dimensions_.width = static_cast<t::U32>(width);
-    dimensions_.width = static_cast<t::U32>(height);
+    dimensions_.height = static_cast<t::U32>(height);
     Log::Info("Base: image (8bit) loaded '", file_name, "', channel num. (", num_channels, "), size (", dimensions_.width, "x",
         dimensions_.height, "). Forced to channel count (", forced_channel_count_, ")");
 }

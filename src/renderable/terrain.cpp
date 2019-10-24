@@ -19,7 +19,9 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     descriptor_set_layout_(renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
-    uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject)))
+    uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
+
+    texture_("test_texture", "textures/texture.jpg", renderer_.GetMemoryAllocator())
 {
     base::Log::Info("Renderable: terrain created");
 }

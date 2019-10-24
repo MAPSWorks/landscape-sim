@@ -23,7 +23,7 @@ public:
     const VkBuffer& Get() const;
     const BufferSize GetSize() const;
     // Works for mappable memory type
-    void MapAndFill(BufferSize buffer_size, const void* vertex_data) const;
+    void MapAndFill(BufferSize buffer_size, const void* buffer_data) const;
     // Retrieve information about current allocation
     void AllocationDebugPrint() const;
 private:

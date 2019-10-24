@@ -11,6 +11,8 @@
 #include <scene/view.h>
 #include "i_renderable.h"
 
+#include <renderer/texture2d.h>
+
 // Terrain representation as a renderable object
 namespace renderable {
 struct UniformBufferObject {
@@ -55,5 +57,7 @@ private:
     // Id because there are as many as frames-in-flight
     // This is not const because we can assign this value only after constructor initializer list.
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
+    // Test
+    const renderer::Texture2D texture_;
 };
 }; // renderable
