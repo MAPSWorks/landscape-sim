@@ -8,6 +8,7 @@
 #include "pipeline_manager.h"
 #include "frame_resource.h"
 #include "frame_manager.h"
+#include "one_time_commands.h"
 #include "vlk/memory_allocator.h"
 
 
@@ -38,6 +39,7 @@ public:
     // Access memory allocator renderable for buffer creation
     const vlk::MemoryAllocator& GetMemoryAllocator() const;
     const FrameManager& GetFrameManager() const;
+    const OneTimeCommands& GetOneTimeCommands() const;
 private:
     // Number of total frames that are to be processed in paralel
     const t::U32 kFramesInFlight;
@@ -49,6 +51,8 @@ private:
     vlk::MemoryAllocator memory_allocator_;
     // Store per frame data and switch when needed
     FrameManager frame_manager_;
+    // Helper that automates commands that require once-submit command buffers
+    OneTimeCommands one_time_commands_;
     // Manages shader resources - stores descriptors and buffers for each frame-in-flight.
     ShaderResources shader_resources_;
     // Caches pipelines and manages their recreation process.

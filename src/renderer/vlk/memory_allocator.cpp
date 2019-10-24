@@ -1,13 +1,13 @@
 #include "memory_allocator.h"
 #include <base/log.h>
-#include "command_buffer.h"
+//#include "command_buffer.h"
 
 namespace renderer::vlk {
 MemoryAllocator::MemoryAllocator(const Device& device):
     device_(device),
-    allocator_(Create(device_)),
+    allocator_(Create(device_)){
     // if graphics is supported, transfer also implicitly is supported
-    transfer_command_pool_(device_.Get(), device_.GetQueue().GetFamilyIndices().graphics.value(), false, true) {
+   // transfer_command_pool_(device_.Get(), device_.GetQueue().GetFamilyIndices().graphics.value(), false, true) {
     base::Log::Info("Renderer: GPU memory allocator created");
 }
 
@@ -42,7 +42,7 @@ VmaAllocator MemoryAllocator::Create(const Device& device) const {
     ErrorCheck(vmaCreateAllocator(&allocator_info, &allocator));
     return allocator;
 }
-
+/*
 // Source buffer must be host visible and transfer source, destination buffer must be transfer destination
 void MemoryAllocator::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer, BufferSize size) const {
     CommandBuffer command_buffer(transfer_command_pool_);
@@ -56,5 +56,5 @@ void MemoryAllocator::CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst
     // Freeing is not ind command buffers destructor because it is not mandatory
     command_buffer.Free(device_.Get());
     base::Log::Info("Renderer: buffer copy performed. Size - ", size);
-}
+}*/
 }; // renderer::vlk

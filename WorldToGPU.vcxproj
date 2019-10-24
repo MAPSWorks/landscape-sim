@@ -34,6 +34,7 @@
     <ClCompile Include="src\renderer\descriptor_set_layout_cache.cpp" />
     <ClCompile Include="src\renderer\frame_manager.cpp" />
     <ClCompile Include="src\renderer\frame_resource.cpp" />
+    <ClCompile Include="src\renderer\one_time_commands.cpp" />
     <ClCompile Include="src\renderer\pipeline_manager.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\shader_resources.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="src\renderer\descriptor_set_layout_cache.h" />
     <ClInclude Include="src\renderer\frame_manager.h" />
     <ClInclude Include="src\renderer\frame_resource.h" />
+    <ClInclude Include="src\renderer\one_time_commands.h" />
     <ClInclude Include="src\renderer\pipeline_manager.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\shader_resources.h" />

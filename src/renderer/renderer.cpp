@@ -11,6 +11,7 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     frame_manager_(context_.device.Get(),
         context_.device.GetQueue().GetFamilyIndices().graphics.value(),
         kFramesInFlight),
+    one_time_commands_(context_.device),
     shader_resources_(context_.device.Get(), GetMemoryAllocator(), kFramesInFlight),
     pipeline_manager_(context_.device.Get()) {
     base::Log::Info("Renderer: renderer initialized");
@@ -100,5 +101,9 @@ const vlk::MemoryAllocator& Renderer::GetMemoryAllocator() const {
 
 const FrameManager& Renderer::GetFrameManager() const {
     return frame_manager_;
+}
+
+const OneTimeCommands& Renderer::GetOneTimeCommands() const {
+    return one_time_commands_;
 }
 }; // renderer
