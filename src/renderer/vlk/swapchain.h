@@ -16,7 +16,7 @@ public:
     const VkSwapchainKHR& Get() const;
     const VkExtent2D& GetExtent() const;
     const VkSurfaceFormatKHR& GetSurfaceFormat() const;
-    const std::vector<VkImageView>& GetImageViews() const;
+    const std::vector<ImageView>& GetImageViews() const;
     // Return Next image index from swapchain that is available
     t::U32 AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const;
 private:
@@ -26,13 +26,13 @@ private:
     VkPresentModeKHR SelectPresentMode(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
     VkExtent2D RetrieveExtent(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface, GLFWwindow* window) const;
     // Select number of images in the swapchain
-    uint32_t SelectImageCount(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
+    t::U32 SelectImageCount(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
     // Select transformation of images in swapchain
     VkSurfaceTransformFlagBitsKHR SelectTransform(const VkPhysicalDevice& gpu, const VkSurfaceKHR& surface) const;
     // Retrieve list of images from swapchain
     std::vector<VkImage> GetImages() const;
-    std::vector<VkImageView> CreateImageViews(const std::vector<VkImage> &images) const;
-    std::vector<ImageView> CreateImageViews1(const std::vector<VkImage>& images) const;
+    // Create image views for given images
+    std::vector<ImageView> CreateImageViews(const std::vector<VkImage>& images) const;
     // To store reference to resource this renderable was created with
     const VkDevice& device_;
     // Parameters below is not constant because they can probably change
@@ -47,8 +47,8 @@ private:
     // List of images acquired from swapchain
     // Number of images should be rwtrieved from this array if needed
     const std::vector<VkImage> images_;
-    const std::vector<VkImageView> image_views_;
-    const std::vector<ImageView> image_views_1;
+    // Image views for swapchain images
+    const std::vector<ImageView> image_views_;
 
 };
 }; // renderer vlk

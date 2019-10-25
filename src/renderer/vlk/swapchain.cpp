@@ -8,17 +8,13 @@ Swapchain::Swapchain(const Device& device, const VkSurfaceKHR& surface, GLFWwind
     device_(device.Get()),
     swapchain_(Create(device.GetGPU(),device.GetQueue().GetFamilyIndices(), surface, window)),
     images_(GetImages()),
-    image_views_(CreateImageViews(images_)),
-    image_views_1(CreateImageViews1(images_))
+    image_views_(CreateImageViews(images_))
 {
     base::Log::Info("Renderer: swapchain created");
 } 
 
 Swapchain::~Swapchain() {
     base::Log::Info("Renderer: swapchain destroying...");
-    for (auto image_view : image_views_) {
-        vkDestroyImageView(device_, image_view, nullptr);
-    }
     vkDestroySwapchainKHR(device_, swapchain_, nullptr);
 }
 
@@ -34,7 +30,7 @@ const VkSurfaceFormatKHR& Swapchain::GetSurfaceFormat() const {
     return surface_format_;
 }
 
-const std::vector<VkImageView>& Swapchain::GetImageViews() const {
+const std::vector<ImageView>& Swapchain::GetImageViews() const {
     return image_views_;
 }
 
@@ -196,32 +192,9 @@ std::vector<VkImage> Swapchain::GetImages() const {
 }
 
 // Images can be accessed through image view
-std::vector<VkImageView> Swapchain::CreateImageViews(const std::vector<VkImage>& images) const {
-    std::vector<VkImageView> image_views(images_.size());
-    uint32_t i = 0;
-    for (const auto& image : images_) {
-        VkImageViewCreateInfo create_info {};
-        create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        create_info.image = image;
-        create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        create_info.format = surface_format_.format;
-        // Color values coming out from shader is mapped on-to-one
-        create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-        create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-        create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-        create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-        create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        create_info.subresourceRange.baseMipLevel = 0;
-        create_info.subresourceRange.levelCount = 1;
-        create_info.subresourceRange.baseArrayLayer = 0;
-        create_info.subresourceRange.layerCount = 1;
-        ErrorCheck(vkCreateImageView(device_, &create_info, nullptr, &image_views[i++]));
-    }
-    return image_views;
-}
-
-std::vector<ImageView> Swapchain::CreateImageViews1(const std::vector<VkImage>& images) const {
+std::vector<ImageView> Swapchain::CreateImageViews(const std::vector<VkImage>& images) const {
     std::vector<ImageView> image_views;
+    // Number of image views and images should mach (also their order)!
     for (const auto& image : images_) {
         image_views.emplace_back(device_, image, surface_format_.format);
     }
