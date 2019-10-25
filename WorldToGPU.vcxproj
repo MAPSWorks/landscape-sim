@@ -58,6 +58,7 @@
     <ClCompile Include="src\renderer\vlk\memory_allocator.cpp" />
     <ClCompile Include="src\renderer\vlk\pipeline_layout.cpp" />
     <ClCompile Include="src\renderer\vlk\render_pass.cpp" />
+    <ClCompile Include="src\renderer\vlk\sampler.cpp" />
     <ClCompile Include="src\renderer\vlk\semaphore.cpp" />
     <ClCompile Include="src\renderer\vlk\shader_module.cpp" />
     <ClCompile Include="src\renderer\vlk\surface.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="src\renderer\vlk\memory_allocator.h" />
     <ClInclude Include="src\renderer\vlk\pipeline_layout.h" />
     <ClInclude Include="src\renderer\vlk\render_pass.h" />
+    <ClInclude Include="src\renderer\vlk\sampler.h" />
     <ClInclude Include="src\renderer\vlk\semaphore.h" />
     <ClInclude Include="src\renderer\vlk\shader_module.h" />
     <ClInclude Include="src\renderer\vlk\surface.h" />
