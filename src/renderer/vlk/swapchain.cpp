@@ -8,7 +8,9 @@ Swapchain::Swapchain(const Device& device, const VkSurfaceKHR& surface, GLFWwind
     device_(device.Get()),
     swapchain_(Create(device.GetGPU(),device.GetQueue().GetFamilyIndices(), surface, window)),
     images_(GetImages()),
-    image_views_(CreateImageViews(images_)) {
+    image_views_(CreateImageViews(images_)),
+    image_views_1(CreateImageViews1(images_))
+{
     base::Log::Info("Renderer: swapchain created");
 } 
 
@@ -214,6 +216,14 @@ std::vector<VkImageView> Swapchain::CreateImageViews(const std::vector<VkImage>&
         create_info.subresourceRange.baseArrayLayer = 0;
         create_info.subresourceRange.layerCount = 1;
         ErrorCheck(vkCreateImageView(device_, &create_info, nullptr, &image_views[i++]));
+    }
+    return image_views;
+}
+
+std::vector<ImageView> Swapchain::CreateImageViews1(const std::vector<VkImage>& images) const {
+    std::vector<ImageView> image_views;
+    for (const auto& image : images_) {
+        image_views.emplace_back(device_, image, surface_format_.format);
     }
     return image_views;
 }

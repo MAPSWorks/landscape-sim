@@ -9,8 +9,27 @@ ImageView::ImageView(const VkDevice& device, const VkImage& image, VkFormat form
 }
 
 ImageView::~ImageView() {
-    base::Log::Info("Renderer: image view destroying...");
-    vkDestroyImageView(device_, image_view_, nullptr);
+    Destroy();
+}
+
+ImageView::ImageView(ImageView&& other) noexcept : 
+    device_(other.device_),
+    image_view_(VK_NULL_HANDLE) {
+    // Call move-asignment operator
+    *this = std::move(other);
+}
+
+ImageView& ImageView::operator=(ImageView&& other) noexcept {
+    // Check self-move
+    if (this != &other) {
+        // Free this resource if initialized
+        Destroy();
+        // Change handle ownership
+        this->image_view_ = other.image_view_;
+        // Remove handle from about-to-deleted object so it doesnt destroy resource
+        other.image_view_ = VK_NULL_HANDLE;
+    }
+    return *this;
 }
 
 const VkImageView& ImageView::Get() const {
@@ -36,6 +55,17 @@ VkImageView ImageView::Create(const VkImage& image, VkFormat format) const {
     VkImageView image_view;
     ErrorCheck(vkCreateImageView(device_, &create_info, nullptr, &image_view));
     return image_view;
+}
+
+// Properly destroy resource
+void ImageView::Destroy() {
+    // Handle must be in valid state
+    if (image_view_ != VK_NULL_HANDLE) {
+        base::Log::Info("Renderer: image view destroying...");
+        vkDestroyImageView(device_, image_view_, nullptr);
+        // Make sure handle is not valid anymore
+        image_view_ = VK_NULL_HANDLE;
+    }
 }
 
 };  // renderer vlk

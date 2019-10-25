@@ -4,6 +4,7 @@
 #include <base/types.h>
 #include "vulkan_shared.h"
 #include "device.h"
+#include "image_view.h"
 
 namespace renderer::vlk {
 class Swapchain {
@@ -31,6 +32,7 @@ private:
     // Retrieve list of images from swapchain
     std::vector<VkImage> GetImages() const;
     std::vector<VkImageView> CreateImageViews(const std::vector<VkImage> &images) const;
+    std::vector<ImageView> CreateImageViews1(const std::vector<VkImage>& images) const;
     // To store reference to resource this renderable was created with
     const VkDevice& device_;
     // Parameters below is not constant because they can probably change
@@ -46,5 +48,7 @@ private:
     // Number of images should be rwtrieved from this array if needed
     const std::vector<VkImage> images_;
     const std::vector<VkImageView> image_views_;
+    const std::vector<ImageView> image_views_1;
+
 };
 }; // renderer vlk
