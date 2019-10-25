@@ -81,7 +81,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Rasterization
         {
-            renderer::vlk::GraphicsPipeline::PolygonMode::kLine,
+            renderer::vlk::GraphicsPipeline::PolygonMode::kFill,
             renderer::vlk::GraphicsPipeline::CullMode::kNone
         },
         // Multisample
