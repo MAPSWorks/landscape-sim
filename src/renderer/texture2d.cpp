@@ -24,6 +24,9 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     // Copy from staging buffer to image
     renderer.GetOneTimeCommands().CopyBufferToImage2D(staging_buffer.Get(), image_->Get(), texture_dims);
+    // Change layout for sampling in shader
+    TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 const VkImage& Texture2D::Get() const {
