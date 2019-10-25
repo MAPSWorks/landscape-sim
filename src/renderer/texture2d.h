@@ -2,6 +2,7 @@
 #include <string_view>
 #include <memory>
 #include "vlk/image.h"
+#include "vlk/image_view.h"
 #include "renderer.h"
 
 // Representation of image as 2D texture.
@@ -23,5 +24,7 @@ private:
     // Will hold image and it's memory.
     // Unique pointer for lazy-initialization.
     std::unique_ptr<const vlk::Image> image_;
+    // Texture image will be accessed through image view
+    std::unique_ptr <const vlk::ImageView> image_view_;
 };
 }; //renderer

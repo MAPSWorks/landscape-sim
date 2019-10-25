@@ -27,6 +27,11 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     // Change layout for sampling in shader
     TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+    // Create image view for texture
+    image_view_ = std::make_unique<const vlk::ImageView>(renderer.GetContext().device.Get(), image_->Get(), 
+        VK_FORMAT_R8G8B8A8_UNORM);
+
 }
 
 const VkImage& Texture2D::Get() const {
