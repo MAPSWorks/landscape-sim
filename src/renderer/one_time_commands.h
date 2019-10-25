@@ -17,6 +17,9 @@ public:
     // Record pipeline image memory barrier
     void PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
         VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const;
+    // Copy buffer to image of given dimensions
+    // Image layout must be VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+    void CopyBufferToImage2D(const VkBuffer& buffer, const VkImage& image, const t::Size32& dimensions) const;
 private:
     // Reference to resource this renderable is created with
     const vlk::Device& device_;

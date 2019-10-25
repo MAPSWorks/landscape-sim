@@ -22,6 +22,8 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     // Change layout for recording
     TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    // Copy from staging buffer to image
+    renderer.GetOneTimeCommands().CopyBufferToImage2D(staging_buffer.Get(), image_->Get(), texture_dims);
 }
 
 const VkImage& Texture2D::Get() const {

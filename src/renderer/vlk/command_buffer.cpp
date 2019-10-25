@@ -97,4 +97,18 @@ void CommandBuffer::PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemas
     vkCmdPipelineBarrier(command_buffer_, src_stagemask, dst_stagemask, dependancy_flags,
         0, nullptr, 0, nullptr, image_memory_barrier_count, image_memory_barrier);
 }
+
+void CommandBuffer::CopyBufferToImage2D(const VkBuffer& buffer, const VkImage& image, const t::Size32& dimensions, VkImageLayout layout) const {
+    VkBufferImageCopy buf_img_copy {};
+    buf_img_copy.bufferOffset = 0;
+    buf_img_copy.bufferRowLength = 0;
+    buf_img_copy.bufferImageHeight = 0;
+    buf_img_copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    buf_img_copy.imageSubresource.mipLevel = 0;
+    buf_img_copy.imageSubresource.baseArrayLayer = 0;
+    buf_img_copy.imageSubresource.layerCount = 1;
+    buf_img_copy.imageOffset = { 0, 0, 0 };
+    buf_img_copy.imageExtent = { dimensions.width, dimensions.height, 1 };
+    vkCmdCopyBufferToImage(command_buffer_, buffer, image, layout, 1, &buf_img_copy);
+}
 };

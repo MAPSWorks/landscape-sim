@@ -34,6 +34,7 @@ public:
     void Draw(t::U32 vertex_count, t::U32 instance_count, t::U32 first_vertex, t::U32 first_instance) const;
     void DrawIndexed(t::U32 index_count, t::U32 instance_count, t::U32 first_index,
         t::U32 vertex_offset, t::U32 first_instance) const;
+    // Copy buffer from source do destination
     void CopyBuffer(const VkBuffer& src_buffer, const VkBuffer& dst_buffer,
         VkDeviceSize size, VkDeviceSize src_offset = 0, VkDeviceSize dst_offset = 0) const;
     // Bind given descriptor sets to graphics binding point based on given pipeline layout
@@ -43,6 +44,9 @@ public:
     // Record pipeline barier.for image memory barrier
     void PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask, VkDependencyFlags dependancy_flags,
         t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const;
+    // Copy buffer to image of 2 dimensions
+    // layout - destination layout this image is supposed to be in
+    void CopyBufferToImage2D(const VkBuffer& buffer, const VkImage& image, const t::Size32& dimensions, VkImageLayout layout) const;
 private:
     // Reference to resource this renderable is created with
     const CommandPool& command_pool_;
