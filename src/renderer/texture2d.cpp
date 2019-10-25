@@ -35,7 +35,33 @@ const VkImage& Texture2D::Get() const {
 
 void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, VkFormat format, VkImageLayout old_layout,
     VkImageLayout new_layout) const {
-    const auto barrier = image_->GetMemoryBarrier(format, old_layout, new_layout);
-    one_time_commands.PipelineImageMemoryBarrier(0,0,0,1, &barrier);
+    auto barrier = image_->GetMemoryBarrier(format, old_layout, new_layout);
+    // MOdifie barrier and set pipeline stages before and after barrier
+    VkPipelineStageFlags source_stage;
+    VkPipelineStageFlags dest_stage;
+    // When transfer is from 'undefined' to 'transfer'
+    if (old_layout == VK_IMAGE_LAYOUT_UNDEFINED && new_layout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+        // Don't wait on anything
+        barrier.srcAccessMask = 0;
+        // At transfer
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        // Earliest stage
+        source_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        // Occurs in transfer pseudo pipeline stage
+        dest_stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    }
+    // When transfer is from 'transfer' to 'read in shader'
+    else if (old_layout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && new_layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+        // Tansfer has to be done
+        barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        // Will be read in shader
+        barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        source_stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        dest_stage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    }
+    else {
+        throw std::runtime_error("Renderer: unsupported layout transition");
+    }
+    one_time_commands.PipelineImageMemoryBarrier(source_stage, dest_stage,0,1, &barrier);
 }
 }; //renderer

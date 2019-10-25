@@ -48,9 +48,9 @@ VkImageMemoryBarrier Image::GetMemoryBarrier(VkFormat format, VkImageLayout old_
     barrier.subresourceRange.levelCount = 1;
     barrier.subresourceRange.baseArrayLayer = 0;
     barrier.subresourceRange.layerCount = 1;
-    barrier.srcAccessMask = 0; // TODO
-    barrier.dstAccessMask = 0; // TODO
-
+    // NOTE: access masks modified elsewhere right before usage, because they depend on usage
+    barrier.srcAccessMask = 0; 
+    barrier.dstAccessMask = 0;
     return barrier;
 }
 
