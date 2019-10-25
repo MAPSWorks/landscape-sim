@@ -9,9 +9,10 @@
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/vlk/descriptor_set_layout.h>
 #include <scene/view.h>
+#include <renderer/texture2d.h>
+#include <renderer/vlk/sampler.h>
 #include "i_renderable.h"
 
-#include <renderer/texture2d.h>
 
 // Terrain representation as a renderable object
 namespace renderable {
@@ -59,5 +60,6 @@ private:
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
     // Test
     const renderer::Texture2D texture_;
+    const renderer::vlk::Sampler sampler_;
 };
 }; // renderable
