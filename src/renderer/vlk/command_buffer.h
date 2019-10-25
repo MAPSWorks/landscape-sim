@@ -41,9 +41,11 @@ public:
     // first_set_at_index - is the set number of the first descriptor set to be bound.
     void BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_set, const VkPipelineLayout& layout, 
         t::U32 first_set_at_index = 0) const;
-    // Record pipeline barier.for image memory barrier
-    void PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask, VkDependencyFlags dependancy_flags,
-        t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const;
+    // Record pipeline barrier
+    void PipelineBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
+        VkDependencyFlags dependancy_flags, t::U32 memory_barrier_count, const VkMemoryBarrier* memory_barriers,
+        t::U32 buffer_memory_barrier_count, const VkBufferMemoryBarrier* buffer_memory_barriers,
+        t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barriers) const;
     // Copy buffer to image of 2 dimensions
     // layout - destination layout this image is supposed to be in
     void CopyBufferToImage2D(const VkBuffer& buffer, const VkImage& image, const t::Size32& dimensions, VkImageLayout layout) const;

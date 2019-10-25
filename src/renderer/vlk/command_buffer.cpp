@@ -91,11 +91,13 @@ void CommandBuffer::BindGraphicsDescriptorSet(const VkDescriptorSet& descriptor_
     vkCmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, first_set_at_index, descriptor_set_count, &descriptor_set, 0, nullptr);
 }
 
-// Only iamge memory barier structure is filled in this pipeline barrier command.
-void CommandBuffer::PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask, 
-    VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const {
+void CommandBuffer::PipelineBarrier(VkPipelineStageFlags src_stagemask, VkPipelineStageFlags dst_stagemask,
+    VkDependencyFlags dependancy_flags, t::U32 memory_barrier_count, const VkMemoryBarrier* memory_barriers, 
+    t::U32 buffer_memory_barrier_count, const VkBufferMemoryBarrier* buffer_memory_barriers,
+    t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barriers) const {
     vkCmdPipelineBarrier(command_buffer_, src_stagemask, dst_stagemask, dependancy_flags,
-        0, nullptr, 0, nullptr, image_memory_barrier_count, image_memory_barrier);
+        memory_barrier_count, memory_barriers, buffer_memory_barrier_count, buffer_memory_barriers,
+        image_memory_barrier_count, image_memory_barriers);
 }
 
 void CommandBuffer::CopyBufferToImage2D(const VkBuffer& buffer, const VkImage& image, const t::Size32& dimensions, VkImageLayout layout) const {

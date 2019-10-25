@@ -30,7 +30,7 @@ void OneTimeCommands::PipelineImageMemoryBarrier(VkPipelineStageFlags src_stagem
     VkDependencyFlags dependancy_flags, t::U32 image_memory_barrier_count, const VkImageMemoryBarrier* image_memory_barrier) const {
     vlk::CommandBuffer command_buffer(command_pool_);
     command_buffer.Begin(vlk::CommandBuffer::Usage::kOneTimeSubmit);
-    command_buffer.PipelineImageMemoryBarrier(src_stagemask, dst_stagemask, dependancy_flags, 
+    command_buffer.PipelineBarrier(src_stagemask, dst_stagemask, dependancy_flags, 0, nullptr, 0, nullptr,
         image_memory_barrier_count, image_memory_barrier);
     command_buffer.End();
     // Submit to graphics queue because graphics queue implicitly supports transfer
