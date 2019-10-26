@@ -42,7 +42,7 @@ const renderer::vlk::DescriptorSetLayout& View::AddDescrSetLayout() const {
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
     renderer::vlk::DescriptorSetLayout::Binding uniform_binding;
     // Binding index (location), corresponds to layout(binding = n)  in shader
-    uniform_binding.index = ViewDescriptorBidingId::kUniformBuffer;
+    uniform_binding.index = DescriptorBidingId::kUniformBuffer;
     uniform_binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
     uniform_binding.stage = renderer::vlk::ShaderStage::kVertex;
     uniform_binding.count = 1;

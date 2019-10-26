@@ -159,13 +159,27 @@ std::vector<t::U32> Terrain::GetIndices() const {
 // escribe bindings withing a descriptor set layout
 std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorSetBindings() const {
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
-    renderer::vlk::DescriptorSetLayout::Binding binding;
-    // Binding index (location), corresponds to layout(binding = n)  in shader
-    binding.index = scene::ViewDescriptorBidingId::kUniformBuffer;
-    binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
-    binding.stage = renderer::vlk::ShaderStage::kVertex;
-    binding.count = 1;
-    bindings.push_back(binding);
+    // Uniform buffer
+    {
+        renderer::vlk::DescriptorSetLayout::Binding binding;
+        // Binding index (location), corresponds to layout(binding = n)  in shader
+        binding.index = scene::DescriptorBidingId::kUniformBuffer;
+        binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
+        binding.stage = renderer::vlk::ShaderStage::kVertex;
+        binding.count = 1;
+        bindings.push_back(binding);
+    }
+    // Combined image sampler
+    {
+        renderer::vlk::DescriptorSetLayout::Binding binding;
+        // Binding index (location), corresponds to layout(binding = n)  in shader
+        binding.index = scene::DescriptorBidingId::kCombinedImageSampler;
+        binding.type = renderer::vlk::DescriptorType::kCombinedImageSampler;
+        binding.stage = renderer::vlk::ShaderStage::kFragment;
+        binding.count = 1;
+        bindings.push_back(binding);
+    }
+
     return bindings;
 }
 }; // renderable

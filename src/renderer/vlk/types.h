@@ -23,7 +23,9 @@ inline ShaderStage operator |(ShaderStage lhs, ShaderStage rhs) {
             static_cast<VkShaderStageFlagBits>(rhs)
             );
 }
+
 enum class DescriptorType {
-    kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+    kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+    kCombinedImageSampler = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 };
 };

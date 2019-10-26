@@ -8,10 +8,11 @@ enum DescruptorSetSlotId {
     kPerView = 0,
     kPerObject = 1
 };
-// Bindings per descriptor sets.
-// Per view shader resources, uniform buffer is having (binding=n)
-enum ViewDescriptorBidingId {
-    kUniformBuffer = 0
+// Bindings per descriptor set.
+// To set index of a binding in a descriptor set (binding=n)
+enum DescriptorBidingId {
+    kUniformBuffer = 0,
+    kCombinedImageSampler = 1
 };
 // Constants
 // World up vector
