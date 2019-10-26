@@ -219,7 +219,7 @@ size changes (pipelines depend on screen size).
 ##### Shader resource management (descriptors)
 Shader resources are managed through shader resource module; renderable modules only store id's or references to those 
 managed resource objects.  
-Shader module stores descriptor set layout cache that is used to cache common layouts and reuse 
+Shader resource module stores descriptor set layout cache that is used to cache common layouts and reuse 
 them. Note that caching *destroys* total layout description set count, that is later used to initialize descriptor 
 set pool, so it is counted again per cache object creation as a statistics.  
 Per frame-in-flight data for this module is:
