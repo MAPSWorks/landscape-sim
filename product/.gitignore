@@ -1,2 +1,3 @@
-# Ignore Debug binary
+# Ignore binaries
 *_Debug.exe
+*_Release.exe

@@ -83,6 +83,8 @@
     <ClInclude Include="src\base\matrix.h" />
     <ClInclude Include="src\base\util.h" />
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
+    <ClInclude Include="src\external\glfw\glfw3.h" />
+    <ClInclude Include="src\external\glfw\glfw3native.h" />
     <ClInclude Include="src\external\json\json.hpp" />
     <ClInclude Include="src\external\stb\stb_image.h" />
     <ClInclude Include="src\platform\input.h" />
