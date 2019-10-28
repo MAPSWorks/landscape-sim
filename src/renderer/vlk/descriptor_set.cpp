@@ -54,7 +54,7 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
             descriptor_write.descriptorCount = resource.count;
             descriptor_write.pBufferInfo = &buffer_info;
             base::Log::Info("Renderer: descriptor set to be updated with uniform buffer resource of size -", 
-                resource.buffer_range, " ('0' menas whole size)");
+                resource.buffer_range, " ('0' means whole size)");
         } else
         // For combined image sampler
         if (resource.type == DescriptorType::kCombinedImageSampler) {
