@@ -28,8 +28,34 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
 void Terrain::InitDescriptorSets() {
     // Add descriptor sets (inside sets for all frame-in-flights are created)
     descriptor_set_id_ = renderer_.GetShaderResources().AddDescriptorSet(descriptor_set_layout_.Get());
+    // Bind resources to descriptor set
+    std::vector<renderer::ShaderResources::DescrSetUpdateInfo> resources_to_bind;
+    const auto bindings = GetDescriptorSetBindings();
+    // NOTE: order of bindings and resource descriptions here should match!!!!!
+    for (const auto& binding : bindings) {
+        renderer::ShaderResources::DescrSetUpdateInfo resource;
+        resource.type = binding.type;
+        resource.count = binding.count;
+        // Uniform buffer
+        if (resource.type == renderer::vlk::DescriptorType::kUniformBuffer) {
+            resource.buffer_id = uniform_buffer_id_;
+            resource.buffer_offset = 0;
+            // Whole buffer
+            resource.buffer_range = 0;
+        } else
+        // Image sampler
+        if (resource.type == renderer::vlk::DescriptorType::kCombinedImageSampler) {
+            resource.image_view = texture_.GetImageView();
+            resource.image_sampler = sampler_.Get();
+        }
+        else {
+            throw std::runtime_error("Renderable: unhandled resource type");
+        }
+        resources_to_bind.push_back(resource);
+    }
+    renderer_.GetShaderResources().UpdateDescriptorSet(descriptor_set_id_, resources_to_bind);
     // Bind uniform buffer to descriptor set
-    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_);
+   // renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_);
 }
 
 // Add command to given command buffer that is already in recording state

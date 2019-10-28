@@ -39,7 +39,8 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
         VkWriteDescriptorSet descriptor_write {};
         descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptor_write.dstSet = descriptor_set_;
-        // TODO: maybe this index should be location in shader?
+        // TODO: maybe this index is (location=n) in shader?
+        // Index in bindings array
         descriptor_write.dstBinding = static_cast<t::U32>(i);
         // For uniform buffers
         if (resource.type == DescriptorType::kUniformBuffer) {
@@ -52,7 +53,8 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
             descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             descriptor_write.descriptorCount = resource.count;
             descriptor_write.pBufferInfo = &buffer_info;
-            base::Log::Info("Renderer: descriptor set to be updated with uniform buffer resource of size -", buffer_info.range);
+            base::Log::Info("Renderer: descriptor set to be updated with uniform buffer resource of size -", 
+                resource.buffer_range, " ('0' menas whole size)");
         } else
         // For combined image sampler
         if (resource.type == DescriptorType::kCombinedImageSampler) {
@@ -66,6 +68,7 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
             descriptor_write.pImageInfo = &image_info;
             base::Log::Info("Renderer: descriptor set to be updated with comb. image sampler resource");
         }
+        // TODO: add other resource types here
         else {
             throw std::runtime_error("Renderer: unrecognized descriptor type tried to update descriptor set");
         }

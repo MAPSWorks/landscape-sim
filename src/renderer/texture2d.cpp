@@ -38,6 +38,10 @@ const VkImage& Texture2D::Get() const {
     return image_->Get();
 }
 
+const VkImageView& Texture2D::GetImageView() const {
+    return image_view_->Get();
+}
+
 void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, VkFormat format, VkImageLayout old_layout,
     VkImageLayout new_layout) const {
     auto barrier = image_->GetMemoryBarrier(format, old_layout, new_layout);

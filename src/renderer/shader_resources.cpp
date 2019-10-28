@@ -54,6 +54,43 @@ void ShaderResources::UpdateDescriptorSetWithUniformBuffer(ShaderResources::Desc
     }
 }
 
+// Resources that are per-frame-in-flight are updated that many times
+void ShaderResources::UpdateDescriptorSet(DescrSetId descriptor_set_id, const std::vector<DescrSetUpdateInfo>& resources) const {
+    // Transform  DescrSetUpdateInfo to DescriptorSet::ResourcesToUpdate structure
+    // For each descriptor set
+    for (t::U32 i = 0; i < per_frame_shader_resources_.size(); ++i) {
+        std::vector<vlk::DescriptorSet::ResourcesToUpdate> resources_to_update;
+        for (const auto& resource : resources) {
+            // Uniform buffer
+            // Differs per frame-in-flight
+            if (resource.type == vlk::DescriptorType::kUniformBuffer) {
+                vlk::DescriptorSet::ResourcesToUpdate res{};
+                res.type = resource.type;
+                res.count = resource.count;
+                res.buffer = GetkUniformBuffer(resource.buffer_id, i).Get();
+                res.buffer_offset = resource.buffer_offset;
+                res.buffer_range = resource.buffer_range;
+                resources_to_update.push_back(res);
+            } else
+            // Image sampler
+            // No per-frame-in flight variant for this resource
+            if (resource.type == vlk::DescriptorType::kCombinedImageSampler) {
+                vlk::DescriptorSet::ResourcesToUpdate res{};
+                res.type = resource.type;
+                res.count = resource.count;
+                res.image_sampler = resource.image_sampler;
+                res.image_view = resource.image_view;
+                resources_to_update.push_back(res);
+            }
+            // TODO: add other resource types here
+            else {
+                throw std::runtime_error("Renderer: unrecognized resource type when transforming resource descriptions");
+            }
+        }
+        GetDescriptorSet(descriptor_set_id, i).Update(resources_to_update);
+    }
+}
+
 // Initialize descriptor pool for each frame in flight
 void ShaderResources::SetDescriptorPool() {
     // Retrieve needed information from cache statistic after all descriptor layout have been created

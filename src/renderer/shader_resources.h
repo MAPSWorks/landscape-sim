@@ -29,6 +29,24 @@ public:
     // Index of it's place into collection
     using UniformBufferId = t::U64;
     using DescrSetId = t::U64;
+    // Resource data that is passed to update (bind) to descriptor set
+    struct DescrSetUpdateInfo {
+        // Type of a descriptor within this set to update
+        vlk::DescriptorType type;
+        // How many descriptor of this type to update
+        t::U32 count;
+        // Uniform buffer
+        // Id that is then translated to actual buffer handle and passed
+        // to descriptor set update method (we have buffer for each frame in flight)
+        UniformBufferId buffer_id;
+        // Offset for this buffer
+        vlk::BufferSize buffer_offset;
+        // Range to update (0 means whole)
+        vlk::BufferSize buffer_range = 0;
+        // For image samplers only
+        VkImageView image_view;
+        VkSampler image_sampler;
+    };
     // frames_in_flight - how many frames-in-flight is used and how many duplicates
     //                    of shader resources to create
     ShaderResources(const VkDevice& device, const vlk::MemoryAllocator& allocator, t::U32 frames_in_flight);
@@ -63,6 +81,8 @@ public:
     // Bind uniform buffer to descriptor set
     // If buffer_zize is passed 0, the whole buffer size is bound to descriptor set
     void UpdateDescriptorSetWithUniformBuffer(DescrSetId descriptor_set_id, UniformBufferId uniform_buffer_id, t::U64 buffer_size=0) const;
+    // Bind actual resources to descriptors
+    void UpdateDescriptorSet(DescrSetId descriptor_set_id, const std::vector<DescrSetUpdateInfo>& resources) const;
 private:
     // Data that is used per frame and therefore needs a copy for each 
     // frame-in-flight.

@@ -17,6 +17,7 @@ public:
     //            and one time command helper to execute commands.
     Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer);
     const VkImage& Get() const;
+    const VkImageView& GetImageView() const;
 private:
     // Change image layout in memory
     void TransitionImageLayout(const OneTimeCommands& one_time_commands, VkFormat format, VkImageLayout old_layout,
