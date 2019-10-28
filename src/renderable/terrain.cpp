@@ -54,8 +54,6 @@ void Terrain::InitDescriptorSets() {
         resources_to_bind.push_back(resource);
     }
     renderer_.GetShaderResources().UpdateDescriptorSet(descriptor_set_id_, resources_to_bind);
-    // Bind uniform buffer to descriptor set
-   // renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descriptor_set_id_, uniform_buffer_id_);
 }
 
 // Add command to given command buffer that is already in recording state

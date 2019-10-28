@@ -78,9 +78,6 @@ public:
     // NOTE: Ths function should be called after all object requiring shader resources are initialized!
     // and before any descriptor set is created.
     void Finalize();
-    // Bind uniform buffer to descriptor set
-    // If buffer_zize is passed 0, the whole buffer size is bound to descriptor set
-    void UpdateDescriptorSetWithUniformBuffer(DescrSetId descriptor_set_id, UniformBufferId uniform_buffer_id, t::U64 buffer_size=0) const;
     // Bind actual resources to descriptors
     void UpdateDescriptorSet(DescrSetId descriptor_set_id, const std::vector<DescrSetUpdateInfo>& resources) const;
 private:

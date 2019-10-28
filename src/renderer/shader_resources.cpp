@@ -46,14 +46,6 @@ void ShaderResources::Finalize() {
     SetDescriptorPool();
 }
 
-// Update descriptor set for all frame-in-flight copies
-void ShaderResources::UpdateDescriptorSetWithUniformBuffer(ShaderResources::DescrSetId descriptor_set_id, ShaderResources::UniformBufferId uniform_buffer_id, t::U64 buffer_size) const {
-    // Bind actual uniform buffer to descriptor set
-    for (t::U32 i = 0; i < per_frame_shader_resources_.size(); ++i) {
-        GetDescriptorSet(descriptor_set_id, i).UpdateUniformBuffer(GetkUniformBuffer(uniform_buffer_id, i).Get(), buffer_size);
-    }
-}
-
 // Resources that are per-frame-in-flight are updated that many times
 void ShaderResources::UpdateDescriptorSet(DescrSetId descriptor_set_id, const std::vector<DescrSetUpdateInfo>& resources) const {
     // Transform  DescrSetUpdateInfo to DescriptorSet::ResourcesToUpdate structure
