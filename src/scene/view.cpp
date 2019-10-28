@@ -15,8 +15,17 @@ View::View(renderer::Renderer& renderer) :
 void View::InitDescriptorSet() {
     // Add descriptor sets (inside sets for all frame-in-flights are created)
     descr_set_id_ = renderer_.GetShaderResources().AddDescriptorSet(descr_set_layout_.Get());
-    // Bind uniform buffer to descriptor set
-    renderer_.GetShaderResources().UpdateDescriptorSetWithUniformBuffer(descr_set_id_, uniform_buffer_id_);
+    // Bind resources to descriptor set
+    std::vector<renderer::ShaderResources::DescrSetUpdateInfo> resources_to_bind;
+    renderer::ShaderResources::DescrSetUpdateInfo resource;
+    resource.type = renderer::vlk::DescriptorType::kUniformBuffer;
+    resource.count = 1;
+    resource.buffer_id = uniform_buffer_id_;
+    resource.buffer_offset = 0;
+    // Whole buffer
+    resource.buffer_range = 0;
+    resources_to_bind.push_back(resource);
+    renderer_.GetShaderResources().UpdateDescriptorSet(descr_set_id_, resources_to_bind);
 }
 
 void View::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const {
