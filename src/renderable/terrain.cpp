@@ -94,8 +94,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Vertex input params
         {
-            renderer::VertexPos3dColor::GetBindingDescription(),
-            renderer::VertexPos3dColor::GetAttributeDescriptions(),
+            renderer::VertexPos3dColorTex::GetBindingDescription(),
+            renderer::VertexPos3dColorTex::GetAttributeDescriptions(),
         },
         // Fixed function state
         // Primitive assembly
@@ -143,16 +143,18 @@ base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
 }
 
 // Generate vertices from height grid
-std::vector<renderer::VertexPos3dColor> Terrain::GetVertices() const {
-    std::vector<renderer::VertexPos3dColor> vertices;
+std::vector<renderer::VertexPos3dColorTex> Terrain::GetVertices() const {
+    std::vector<renderer::VertexPos3dColorTex> vertices;
     t::F32 tile_size = 4.0f;
     t::F32 terrain_half_width = (height_grid_.GetCols() * tile_size) / 2.0f;
     t::F32 terrain_half_height = (height_grid_.GetRows() * tile_size) / 2.0f;
     for (t::U32 row = 0; row < height_grid_.GetRows(); ++row) {
         for (t::U32 col = 0; col < height_grid_.GetCols(); ++col) {
-            renderer::VertexPos3dColor vertice;
+            renderer::VertexPos3dColorTex vertice;
             vertice.position = { row * tile_size - terrain_half_width, height_grid_(row, col), col * tile_size - terrain_half_height };
-            vertice.color = { row / (t::F32)height_grid_.GetRows(), col / (t::F32)height_grid_.GetCols(),  0.2f };
+            //vertice.color = { row / (t::F32)height_grid_.GetRows(), col / (t::F32)height_grid_.GetCols(),  0.2f };
+            vertice.color = { 1.0f, 1.0f, 1.0f };
+            vertice.tex_coord = { row, col };
             vertices.push_back(vertice);
         }
     }

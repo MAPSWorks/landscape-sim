@@ -31,7 +31,7 @@ private:
     // Generate and return height grid populated with height values that define
     // terrain height.
     base::Matrix<t::F32> GenerateHeightGrid(t::U16 size) const;
-    std::vector<renderer::VertexPos3dColor> GetVertices() const;
+    std::vector<renderer::VertexPos3dColorTex> GetVertices() const;
     std::vector<t::U32> GetIndices() const;
     // Describe how are descriptor set layout bound to pipeline
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> GetDescriptorSetBindings() const;
@@ -39,7 +39,7 @@ private:
     const base::Matrix<t::F32> height_grid_;
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
-    const std::vector<renderer::VertexPos3dColor> vertices_;
+    const std::vector<renderer::VertexPos3dColorTex> vertices_;
     const std::vector<t::U32> indices_;
     const renderer::VertexBuffer vertex_buffer_;
     const renderer::IndexBuffer index_buffer_;

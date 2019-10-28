@@ -116,10 +116,10 @@ struct VertexPos3dColorTex {
         attribute_descr[1].format = VK_FORMAT_R32G32B32_SFLOAT;
         attribute_descr[1].offset = offsetof(VertexPos3dColorTex, color);
         // texture
-        attribute_descr[1].binding = binding;
-        attribute_descr[1].location = VertexShaderTexLocation;
-        attribute_descr[1].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descr[1].offset = offsetof(VertexPos3dColorTex, tex_coord);
+        attribute_descr[2].binding = binding;
+        attribute_descr[2].location = VertexShaderTexLocation;
+        attribute_descr[2].format = VK_FORMAT_R32G32_SFLOAT;
+        attribute_descr[2].offset = offsetof(VertexPos3dColorTex, tex_coord);
         return attribute_descr;
     }
 };
