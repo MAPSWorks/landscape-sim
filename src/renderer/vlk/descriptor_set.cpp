@@ -1,5 +1,6 @@
 #include "descriptor_set.h"
 #include <base/log.h>
+#include <deque>
 
 namespace renderer::vlk {
 DescriptorSet::DescriptorSet(const VkDevice& device, const VkDescriptorPool& pool,
@@ -34,6 +35,13 @@ void DescriptorSet::UpdateUniformBuffer(const VkBuffer& buffer, t::U64 buffer_si
 
 void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_update) const {
     std::vector<VkWriteDescriptorSet> descriptor_writes;
+    // Since descriptor_writes holds pointers to other structures
+    // we need to store also those structures until vulkan call is executed.
+    // Use deque instead of vector because new object insertion does not invalidate 
+    // pointers to elements (unlike vector).
+    std::deque<VkDescriptorBufferInfo> buffer_infos;
+    std::deque<VkDescriptorImageInfo> image_infos;
+    // Foreach resource to update
     for (size_t i = 0; i < resources_to_update.size(); ++i) {
         const auto& resource = resources_to_update.at(i);
         VkWriteDescriptorSet descriptor_write {};
@@ -49,10 +57,11 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
             buffer_info.offset = resource.buffer_offset;
             // Update with given buffer size, except when passed 0 - use whole size
             resource.buffer_range == 0 ? buffer_info.range = VK_WHOLE_SIZE : buffer_info.range = resource.buffer_range;
+            buffer_infos.push_back(buffer_info);
             descriptor_write.dstArrayElement = 0;
             descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             descriptor_write.descriptorCount = resource.count;
-            descriptor_write.pBufferInfo = &buffer_info;
+            descriptor_write.pBufferInfo = &buffer_infos.back();
             base::Log::Info("Renderer: descriptor set to be updated with uniform buffer resource of size -", 
                 resource.buffer_range, " ('0' means whole size)");
         } else
@@ -62,10 +71,11 @@ void DescriptorSet::Update(const std::vector<ResourcesToUpdate>& resources_to_up
             image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             image_info.imageView = resource.image_view;
             image_info.sampler = resource.image_sampler;
+            image_infos.push_back(image_info);
             descriptor_write.dstArrayElement = 0;
             descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             descriptor_write.descriptorCount = resource.count;
-            descriptor_write.pImageInfo = &image_info;
+            descriptor_write.pImageInfo = &image_infos.back();
             base::Log::Info("Renderer: descriptor set to be updated with comb. image sampler resource");
         }
         // TODO: add other resource types here
