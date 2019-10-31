@@ -3,6 +3,7 @@
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
+#include <base/image_file.h>
 #include <scene/types.h>
 
 namespace renderable {
@@ -129,6 +130,9 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 
 // Generate height grid values for given area size and return
 base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
+
+    const auto heightmap_image = base::ImageFile("textures/ps_height_1k.png");
+
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<t::F32> dist(1.0f, 5.0f);

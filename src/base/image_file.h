@@ -18,6 +18,8 @@ public:
     const t::UC* GetImage8() const;
     const t::US* GetImage16() const;
     const t::Size32& GetDimensions() const;
+    // Weather image is of 2 bytes per channel
+    const bool Is16bit() const;
     // Image size in bytes (calculated on the fly from dimension)
     t::U32 GetSize() const;
 private:
