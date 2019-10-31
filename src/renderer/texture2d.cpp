@@ -17,7 +17,7 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     // Create staging buffer and copy data from file
     const vlk::Buffer staging_buffer(static_cast<std::string>(name) + " staging", renderer.GetMemoryAllocator(), 
         texture_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
-    staging_buffer.MapAndFill(texture_size, texture_file.GetImage());
+    staging_buffer.MapAndFill(texture_size, texture_file.GetImage8());
     base::Log::Info("Renderer: texture staging buffer '", name, "' mapped and filled with data, size - ", texture_size);
     // Change layout for recording
     TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED,

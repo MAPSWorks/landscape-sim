@@ -11,6 +11,7 @@ using U64 = uint64_t;
 using I16 = int16_t;
 using I32 = int32_t;
 using UC = unsigned char;
+using US = unsigned short;
 // Store data that require width and height
 struct Size32 {
     Size32(U32 w = 0, U32 h = 0) : width(w), height(h) {};
