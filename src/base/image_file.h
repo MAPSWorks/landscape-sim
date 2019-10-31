@@ -9,7 +9,7 @@ class ImageFile {
 public:
     // file_name - name of the image file to load
     // channels - number of channels in image to force to (0 - means use original channel count)
-    ImageFile(std::string_view file_name, t::I16 channels = 4);
+    ImageFile(std::string_view file_name, t::I16 channels = 0);
     ~ImageFile();
     // non-copyable
     ImageFile(ImageFile const&) = delete;

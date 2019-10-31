@@ -7,7 +7,7 @@ namespace renderer {
 Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer)
 {
     // Load file
-    base::ImageFile texture_file(file_name);
+    base::ImageFile texture_file(file_name, 4);
     const auto texture_dims = texture_file.GetDimensions();
     const auto texture_size = texture_file.GetSize();
     // Create image object

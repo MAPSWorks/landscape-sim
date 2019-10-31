@@ -7,6 +7,7 @@
 namespace base {
 ImageFile::ImageFile(std::string_view file_name, t::I16 channels) :
     channel_count_(channels){
+    assert(channel_count_ >= 0 && channel_count_ <= 4);
     LoadImage(file_name.data());
 }
 
