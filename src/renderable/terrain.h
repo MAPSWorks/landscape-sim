@@ -27,16 +27,17 @@ public:
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
 private:
+    using HeightGrid = base::Matrix<t::F32>;
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
     // terrain height.
-    base::Matrix<t::F32> GenerateHeightGrid(t::U16 size) const;
+    HeightGrid GenerateHeightGrid(t::U16 size) const;
     std::vector<renderer::VertexPos3dColorTex> GetVertices() const;
     std::vector<t::U32> GetIndices() const;
     // Describe how are descriptor set layout bound to pipeline
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> GetDescriptorSetBindings() const;
     // Height grid representation as 2d matrix
-    const base::Matrix<t::F32> height_grid_;
+    const HeightGrid height_grid_;
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
     const std::vector<renderer::VertexPos3dColorTex> vertices_;

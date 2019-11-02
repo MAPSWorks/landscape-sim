@@ -1,10 +1,17 @@
 #include "terrain.h"
 #include <chrono>
-#include <random>
 #include <glm/gtc/matrix_transform.hpp>
 #include <base/log.h>
 #include <base/image_file.h>
 #include <scene/types.h>
+
+// gloabl scale of terrain
+constexpr t::F32 kScale = 0.0005f;
+constexpr std::string_view kHeightTexture = "textures/ps_height_1k.png";
+// Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
+constexpr t::F32 kHeightUnitSize = 0.1f;  // meters
+// Spacing in meters between pixels in heightmap
+constexpr t::F32 kHorizontalSpacing = 160.0f; // meters
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
@@ -19,7 +26,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
-    texture_("test_texture", "textures/texture.jpg", renderer_),
+    texture_("terrain_texture", "textures/ps_texture_1k.png", renderer_),
     sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");
@@ -70,7 +77,7 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+    float time = 0;//std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo  {};
     ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     
@@ -129,18 +136,15 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 }
 
 // Generate height grid values for given area size and return
-base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
-
-    const auto heightmap_image = base::ImageFile("textures/ps_height_1k.png");
-
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<t::F32> dist(1.0f, 5.0f);
-
-    base::Matrix<t::F32> height_grid(size, size);
+Terrain::HeightGrid Terrain::GenerateHeightGrid(t::U16 size) const {
+    // Grayscale heightmap
+    t::U16 channel_count = 1; 
+    const base::ImageFile heightmap_image(kHeightTexture, channel_count);
+    const auto& dimensions = heightmap_image.GetDimensions();
+    HeightGrid height_grid(dimensions.width, dimensions.height);
     for (t::U32 row = 0; row < height_grid.GetRows(); ++row) {
         for (t::U32 col = 0; col < height_grid.GetCols(); ++col) {
-            height_grid(row, col) = dist(mt) + col / height_grid.GetCols();
+            height_grid(row, col) = heightmap_image.GetGray16At(col, row) * kHeightUnitSize * kScale;
         }
     }
     return height_grid; 
@@ -149,16 +153,15 @@ base::Matrix<t::F32> Terrain::GenerateHeightGrid(t::U16 size) const {
 // Generate vertices from height grid
 std::vector<renderer::VertexPos3dColorTex> Terrain::GetVertices() const {
     std::vector<renderer::VertexPos3dColorTex> vertices;
-    t::F32 tile_size = 4.0f;
+    t::F32 tile_size = kHorizontalSpacing * kScale;
     t::F32 terrain_half_width = (height_grid_.GetCols() * tile_size) / 2.0f;
     t::F32 terrain_half_height = (height_grid_.GetRows() * tile_size) / 2.0f;
     for (t::U32 row = 0; row < height_grid_.GetRows(); ++row) {
         for (t::U32 col = 0; col < height_grid_.GetCols(); ++col) {
             renderer::VertexPos3dColorTex vertice;
-            vertice.position = { row * tile_size - terrain_half_width, height_grid_(row, col), col * tile_size - terrain_half_height };
-            //vertice.color = { row / (t::F32)height_grid_.GetRows(), col / (t::F32)height_grid_.GetCols(),  0.2f };
+            vertice.position = { col * tile_size - terrain_half_width, height_grid_(row, col), row * tile_size - terrain_half_height };
             vertice.color = { 1.0f, 1.0f, 1.0f };
-            vertice.tex_coord = { row, col };
+            vertice.tex_coord = { col / (float)height_grid_.GetRows(), row / (float)height_grid_.GetCols() };
             vertices.push_back(vertice);
         }
     }

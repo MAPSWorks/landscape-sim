@@ -22,6 +22,8 @@ public:
     const bool Is16bit() const;
     // Image size in bytes (calculated on the fly from dimension)
     t::U32 GetSize() const;
+    // Get value of 1-channel 16-bit texture at given coordinate, starting from top-left
+    t::US GetGray16At(t::U32 x, t::U32 y) const;
 private:
     void LoadImage(const std::string& file_name);
     // Stores how many bytes per channel are used

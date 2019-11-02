@@ -40,6 +40,13 @@ t::U32 ImageFile::GetSize() const {
     return dimensions_.width * dimensions_.height * channel_count_ * bytes_per_channel_;
 }
 
+t::US ImageFile::GetGray16At(t::U32 x, t::U32 y) const {
+    if (x < 0 || x >= dimensions_.width || y < 0 || y >= dimensions_.height) {
+        throw std::runtime_error("Base: image access index out of bounds");
+    }
+    return *(image_16_ + (y * dimensions_.width + x));
+}
+
 void ImageFile::LoadImage(const std::string& file_name) {
     // num_channels is original number of channel in image
     // channel_count_ is forced channel count, unless it is 0, then originals will be used
