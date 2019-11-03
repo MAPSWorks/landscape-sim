@@ -5,16 +5,12 @@
 #include <base/image_file.h>
 #include <scene/types.h>
 
-// gloabl scale of terrain
-constexpr t::F32 kScale = 0.0005f;
-constexpr std::string_view kHeightTexture = "textures/ps_height_1k.png";
-// Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
-constexpr t::F32 kHeightUnitSize = 0.1f;  // meters
-// Spacing in meters between pixels in heightmap
-constexpr t::F32 kHorizontalSpacing = 160.0f; // meters
-
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
+    description_({ "textures/ps_height_1k.png",
+        0.0005f,
+        0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
+        160.0f }),// Spacing in meters between pixels in heightmap
     height_grid_(GenerateHeightGrid(20)),
     renderer_(renderer),
     vertices_(GetVertices()),
@@ -77,7 +73,7 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = 0;//std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo  {};
     ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     
@@ -139,12 +135,13 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 Terrain::HeightGrid Terrain::GenerateHeightGrid(t::U16 size) const {
     // Grayscale heightmap
     t::U16 channel_count = 1; 
-    const base::ImageFile heightmap_image(kHeightTexture, channel_count);
+    const base::ImageFile heightmap_image(description_.height_map, channel_count);
     const auto& dimensions = heightmap_image.GetDimensions();
     HeightGrid height_grid(dimensions.width, dimensions.height);
     for (t::U32 row = 0; row < height_grid.GetRows(); ++row) {
         for (t::U32 col = 0; col < height_grid.GetCols(); ++col) {
-            height_grid(row, col) = heightmap_image.GetGray16At(col, row) * kHeightUnitSize * kScale;
+            height_grid(row, col) = heightmap_image.GetGray16At(col, row) * 
+                description_.height_unit_size * description_.scale;
         }
     }
     return height_grid; 
@@ -153,7 +150,7 @@ Terrain::HeightGrid Terrain::GenerateHeightGrid(t::U16 size) const {
 // Generate vertices from height grid
 std::vector<renderer::VertexPos3dColorTex> Terrain::GetVertices() const {
     std::vector<renderer::VertexPos3dColorTex> vertices;
-    t::F32 tile_size = kHorizontalSpacing * kScale;
+    t::F32 tile_size = description_.horizontal_spacing * description_.scale;
     t::F32 terrain_half_width = (height_grid_.GetCols() * tile_size) / 2.0f;
     t::F32 terrain_half_height = (height_grid_.GetRows() * tile_size) / 2.0f;
     for (t::U32 row = 0; row < height_grid_.GetRows(); ++row) {

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string_view>
 #include <base/matrix.h>
 #include <renderer/types.h>
 #include <renderer/renderer.h>
@@ -22,6 +23,18 @@ struct UniformBufferObject {
 
 class Terrain : public IRenderable {
 public:
+    // Data that describes the terrain
+    struct Description {
+        // Texture that describes terrain height values at selected points
+        // Usually a 16-bit square grayscale texture
+        std::string_view height_map;
+        // Scale of the whole terrain compared to original
+        t::F32 scale;
+        // How much world units the single pixel intensity value represents
+        t::F32 height_unit_size;
+        // Spacing in world units between each pixel value
+        t::F32 horizontal_spacing;
+    };
     Terrain(renderer::Renderer& renderer, const scene::View& view);
     virtual void InitDescriptorSets() override;
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
@@ -36,6 +49,8 @@ private:
     std::vector<t::U32> GetIndices() const;
     // Describe how are descriptor set layout bound to pipeline
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> GetDescriptorSetBindings() const;
+    // Description of terrain
+    const Description description_;
     // Height grid representation as 2d matrix
     const HeightGrid height_grid_;
     // Reference to renderer this triangle is tied with
