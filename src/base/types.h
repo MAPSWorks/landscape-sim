@@ -36,4 +36,6 @@ constexpr Mat4 kMat4Identoty = Mat4(1.0f);
 // Type compile-time checks
 static_assert(sizeof(F32) == 4);
 static_assert(sizeof(F64) == 8);
+static_assert(sizeof(UC) == 1);
+static_assert(sizeof(US) == 2);
 }; // t
