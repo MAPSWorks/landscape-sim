@@ -1,4 +1,4 @@
-# World to GPU - 3D real-time renderer leveraging the power of Vulkan API.
+# World to GPU - Real-time rendering of outdoor scenes using Vulkan API.
 <img src="screenshot.png" alt="Screenshot" width = "500"/>  
 
 ## Table of contents
