@@ -44,7 +44,7 @@ t::US ImageFile::GetGray16At(t::U32 x, t::U32 y) const {
     if (x < 0 || x >= dimensions_.width || y < 0 || y >= dimensions_.height) {
         throw std::runtime_error("Base: image access index out of bounds");
     }
-    return *(image_16_ + (y * dimensions_.width + x));
+    return *(image_16_ + (y * (t::U64)dimensions_.width + x));
 }
 
 void ImageFile::LoadImage(const std::string& file_name) {
