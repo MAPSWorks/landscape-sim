@@ -45,10 +45,10 @@ private:
     const t::U32 kFramesInFlight;
     // Constant throughout the life of the renderer
     const Context context_;
-    // Changed upon window resize (dependant on window siize)
-    Window window_;
     // Keeps track and manages buffer memory allocations
     vlk::MemoryAllocator memory_allocator_;
+    // Changed upon window resize (dependant on window siize)
+    Window window_;
     // Store per frame data and switch when needed
     FrameManager frame_manager_;
     // Helper that automates commands that require once-submit command buffers
