@@ -6,7 +6,8 @@ namespace renderer::vlk {
 class ImageView {
 public:
     // Create image view for given image with given format
-    ImageView(const VkDevice& device, const VkImage& image, VkFormat format);
+    // Specify also aspect flag (color (default), depth ...)
+    ImageView(const VkDevice& device, const VkImage& image, VkFormat format, VkImageAspectFlags aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT);
     ~ImageView();
     ImageView(ImageView const&) = delete;
     ImageView operator=(ImageView const&) = delete;
@@ -16,7 +17,7 @@ public:
     ImageView& operator=(ImageView&& other) noexcept;
     const VkImageView& Get() const;
 private:
-    VkImageView Create(const VkImage& image, VkFormat format) const;
+    VkImageView Create(const VkImage& image, VkFormat format, VkImageAspectFlags aspect_flags) const;
     void Destroy();
     // Reference to resource this resource is created with
     const VkDevice& device_;
