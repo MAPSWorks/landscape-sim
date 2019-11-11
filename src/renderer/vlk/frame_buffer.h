@@ -16,7 +16,7 @@ public:
     const VkFramebuffer& Get() const;
     // Create frame buffer for a given combination of inputs
     void Create(const VkRenderPass& render_pass, const VkImageView& swapchain_iamge_view,
-        const VkExtent2D& swapchain_extent);
+        const VkExtent2D& swapchain_extent, const VkImageView& depth_iamge_view);
     // Can be called explicitly
     void Destroy();
 private:

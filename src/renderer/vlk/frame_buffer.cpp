@@ -1,4 +1,6 @@
 #include "frame_buffer.h"
+#include <vector>
+#include <base/types.h>
 #include <base/log.h>
 
 
@@ -18,14 +20,14 @@ const VkFramebuffer& FrameBuffer::Get() const {
 }
 
 void FrameBuffer::Create(const VkRenderPass& render_pass, const VkImageView& swapchain_iamge_view, 
-    const VkExtent2D& swapchain_extent) {
-    VkImageView attachments[] = { swapchain_iamge_view };
+    const VkExtent2D& swapchain_extent, const VkImageView& depth_iamge_view) {
+    const std::vector<VkImageView> attachments = { swapchain_iamge_view , depth_iamge_view };
     VkFramebufferCreateInfo framebuffer_create_info{};
     framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     // Render pass this framebuffer is compatable with
     framebuffer_create_info.renderPass = render_pass;
-    framebuffer_create_info.attachmentCount = 1;
-    framebuffer_create_info.pAttachments = attachments;
+    framebuffer_create_info.attachmentCount = static_cast<t::U32>(attachments.size());
+    framebuffer_create_info.pAttachments = attachments.data();
     framebuffer_create_info.width = swapchain_extent.width;
     framebuffer_create_info.height = swapchain_extent.height;
     framebuffer_create_info.layers = 1;
