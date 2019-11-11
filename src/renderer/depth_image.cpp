@@ -8,7 +8,7 @@ DepthImage::DepthImage(const VkDevice& device, const vlk::MemoryAllocator& alloc
     image_("depth image", allocator, VK_IMAGE_TYPE_2D,
         VkExtent3D{ extent.width, extent.height ,1 }, format_, VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VMA_MEMORY_USAGE_GPU_ONLY),
-    image_view_(device, image_.Get(), format_)
+    image_view_(device, image_.Get(), format_, VK_IMAGE_ASPECT_DEPTH_BIT)
 {
 }
 

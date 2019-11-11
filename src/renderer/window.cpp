@@ -32,6 +32,7 @@ void Window::RecreateSwapchain() {
     // Clean up objects dependant on swapchain
     // Order is important!
     render_pass_.reset();
+    depth_image_.reset();
     // NOTE: when recreating swapchan always should be deleted last
     swapchain_.reset();
     // Recreate
@@ -41,7 +42,8 @@ void Window::RecreateSwapchain() {
 // Create swachain renderable and objects dependant on swapchain format
 void Window::CreateSwapchain() {
     swapchain_ = std::make_unique<vlk::Swapchain>(context_.device, context_.surface.Get(), context_.window_glfw);
+    depth_image_ = std::make_unique<DepthImage>(context_.device.Get(), ,swapchain_->GetExtent());
     render_pass_ = std::make_unique<vlk::RenderPass>(context_.device.Get(),
-        GetSwapchainObject().GetSurfaceFormat().format);
+        swapchain_->GetSurfaceFormat().format);
 }
 }; // renderer

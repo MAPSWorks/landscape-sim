@@ -4,8 +4,9 @@
 #include "context.h"
 #include "vlk/swapchain.h"
 #include "vlk/render_pass.h"
+#include "depth_image.h"
 
-// Holds and manages objects that are dependant on swapchain.
+// Holds and manages objects that are dependant on swapchain or it' s properties.
 // Sensitive to window resize.
 // Objects in this class are recreatable during the lifetime of the renderer.
 namespace renderer {
@@ -26,6 +27,7 @@ private:
     // Reference to the context this class is used with
     const Context& context_;
     std::unique_ptr<vlk::Swapchain> swapchain_;
+    std::unique_ptr<DepthImage> depth_image_;;
     std::unique_ptr<vlk::RenderPass> render_pass_;
 };
 }; // renderer
