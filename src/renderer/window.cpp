@@ -44,6 +44,6 @@ void Window::CreateSwapchain(const vlk::MemoryAllocator& allocator) {
     swapchain_ = std::make_unique<vlk::Swapchain>(context_.device, context_.surface.Get(), context_.window_glfw);
     depth_image_ = std::make_unique<DepthImage>(context_.device.Get(), allocator, swapchain_->GetExtent());
     render_pass_ = std::make_unique<vlk::RenderPass>(context_.device.Get(),
-        swapchain_->GetSurfaceFormat().format);
+        swapchain_->GetSurfaceFormat().format, depth_image_->GetFormat());
 }
 }; // renderer

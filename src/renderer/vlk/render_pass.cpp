@@ -1,10 +1,12 @@
 #include "render_pass.h"
+#include <vector>
+#include <base/types.h>
 #include <base/log.h>
 
 namespace renderer::vlk {
-RenderPass::RenderPass(const VkDevice& device, const VkFormat& swapchain_format) : 
+RenderPass::RenderPass(const VkDevice& device, const VkFormat& swapchain_format, const VkFormat& depth_format) :
     device_(device),
-    render_pass_(Create(swapchain_format)) {
+    render_pass_(Create(swapchain_format, depth_format)) {
     base::Log::Info("Renderer: render pass created");
 }
 
@@ -18,14 +20,14 @@ const VkRenderPass& RenderPass::Get() const {
 }
 
 // How many color and depth buffers there will be, how many samples to use for each of
-// themand how their contents should be handled throughout the rendering operations
-VkRenderPass RenderPass::Create(const VkFormat& swapchain_format) const {
+// them and how their contents should be handled throughout the rendering operations
+VkRenderPass RenderPass::Create(const VkFormat& swapchain_format, const VkFormat& depth_format) const {
     // Attachment is Vulkan’s name for what you might otherwise know as a render target -
     // an Image to be used as output from rendering.You don’t point to specific Images here – 
     // you just describe their formats. (Understanding Vulkan objects)
     // Actual images to render to are defined in framebuffers to which this renderpass is compatable
     // Single color buffer attachmnt
-    VkAttachmentDescription color_attachment{};
+    VkAttachmentDescription color_attachment {};
     // The format of the color attachment should match the format of the swap chain images
     // because we are rendering to it
     color_attachment.format = swapchain_format;
@@ -41,11 +43,24 @@ VkRenderPass RenderPass::Create(const VkFormat& swapchain_format) const {
     color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     // Images to be presented in the swap chain
     color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    // Depth attachment
+    VkAttachmentDescription depth_attachment {};
+    depth_attachment.format = depth_format;
+    depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    depth_attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     // Attachment reference
     VkAttachmentReference color_attachment_ref {};
     // Specifies which attachment to reference by its index in the attachment descriptions array
     color_attachment_ref.attachment = 0;
     color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    VkAttachmentReference depth_attachment_ref {};
+    depth_attachment_ref.attachment = 1;
+    depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     // Subpasses
     VkSubpassDescription subpass{};
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -53,6 +68,7 @@ VkRenderPass RenderPass::Create(const VkFormat& swapchain_format) const {
     // The index of the attachment in this array is directly referenced from the 
     // fragment shader with the layout(location = 0) out vec4 outColor directive!
     subpass.pColorAttachments = &color_attachment_ref;
+    subpass.pDepthStencilAttachment = &depth_attachment_ref;
     // Subpass dependancies
     // Specify memory and execution dependencies between subpasses
     VkSubpassDependency dependency = {};
@@ -63,10 +79,11 @@ VkRenderPass RenderPass::Create(const VkFormat& swapchain_format) const {
     dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
     // Pass
+    std::vector<VkAttachmentDescription> attachments = { color_attachment, depth_attachment };
     VkRenderPassCreateInfo render_pass_create_info {};
     render_pass_create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    render_pass_create_info.attachmentCount = 1;
-    render_pass_create_info.pAttachments = &color_attachment;
+    render_pass_create_info.attachmentCount = static_cast<t::U32>(attachments.size());;
+    render_pass_create_info.pAttachments = attachments.data();
     render_pass_create_info.subpassCount = 1;
     render_pass_create_info.pSubpasses = &subpass;
     render_pass_create_info.dependencyCount = 1;
