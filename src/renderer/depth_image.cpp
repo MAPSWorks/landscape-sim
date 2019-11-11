@@ -4,7 +4,7 @@
 namespace renderer {
 DepthImage::DepthImage(const VkDevice& device, const vlk::MemoryAllocator& allocator, const VkExtent2D& extent) :
     // VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT
-    format_(VK_FORMAT_D32_SFLOAT_S8_UINT),
+    format_(VK_FORMAT_D32_SFLOAT),
     image_("depth image", allocator, VK_IMAGE_TYPE_2D,
         VkExtent3D{ extent.width, extent.height ,1 }, format_, VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VMA_MEMORY_USAGE_GPU_ONLY),
