@@ -31,6 +31,7 @@
     <ClCompile Include="src\renderable\terrain.cpp" />
     <ClCompile Include="src\platform\i_application.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
+    <ClCompile Include="src\renderer\depth_image.cpp" />
     <ClCompile Include="src\renderer\descriptor_set_layout_cache.cpp" />
     <ClCompile Include="src\renderer\frame_manager.cpp" />
     <ClCompile Include="src\renderer\frame_resource.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="src\renderable\types.h" />
     <ClInclude Include="src\platform\i_application.h" />
     <ClInclude Include="src\renderer\context.h" />
+    <ClInclude Include="src\renderer\depth_image.h" />
     <ClInclude Include="src\renderer\descriptor_set_layout_cache.h" />
     <ClInclude Include="src\renderer\frame_manager.h" />
     <ClInclude Include="src\renderer\frame_resource.h" />
