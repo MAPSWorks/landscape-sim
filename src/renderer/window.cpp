@@ -20,6 +20,10 @@ const VkRenderPass& Window::GetRenderPass() const {
     return render_pass_->Get();
 }
 
+const DepthImage& Window::GetDepthImage() const {
+    return *depth_image_;
+}
+
 t::F32 Window::GetAspectRatio() const {
     return swapchain_->GetExtent().width / static_cast<t::F32>(swapchain_->GetExtent().height);
 }
