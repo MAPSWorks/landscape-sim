@@ -2,9 +2,9 @@
 #include <base/log.h>
 
 namespace renderer {
-Window::Window(const Context& context) : 
+Window::Window(const Context& context, const vlk::MemoryAllocator& allocator) :
     context_(context) {
-    CreateSwapchain();
+    CreateSwapchain(allocator);
     base::Log::Info("Renderer: windowed objects created");
 }
 
@@ -26,7 +26,7 @@ t::F32 Window::GetAspectRatio() const {
 
 // Force clean-up and create new objects dependant on window format
 // NOTE: not all objects depending on swapchain are in this class
-void Window::RecreateSwapchain() {
+void Window::RecreateSwapchain(const vlk::MemoryAllocator& allocator) {
     // Wait till all work on GPU is finished
     vkDeviceWaitIdle(context_.device.Get());
     // Clean up objects dependant on swapchain
@@ -36,13 +36,13 @@ void Window::RecreateSwapchain() {
     // NOTE: when recreating swapchan always should be deleted last
     swapchain_.reset();
     // Recreate
-    CreateSwapchain();
+    CreateSwapchain(allocator);
 }
 
 // Create swachain renderable and objects dependant on swapchain format
-void Window::CreateSwapchain() {
+void Window::CreateSwapchain(const vlk::MemoryAllocator& allocator) {
     swapchain_ = std::make_unique<vlk::Swapchain>(context_.device, context_.surface.Get(), context_.window_glfw);
-    depth_image_ = std::make_unique<DepthImage>(context_.device.Get(), ,swapchain_->GetExtent());
+    depth_image_ = std::make_unique<DepthImage>(context_.device.Get(), allocator, swapchain_->GetExtent());
     render_pass_ = std::make_unique<vlk::RenderPass>(context_.device.Get(),
         swapchain_->GetSurfaceFormat().format);
 }

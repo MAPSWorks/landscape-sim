@@ -7,7 +7,7 @@ Renderer::Renderer(const base::JSONLoader& setting_loader, GLFWwindow* window) :
     kFramesInFlight(setting_loader.Get().at("renderer").at("framesInFlight").get<t::U32>()),
     context_(setting_loader, window),
     memory_allocator_(context_.device),
-    window_(context_),
+    window_(context_, memory_allocator_),
     frame_manager_(context_.device.Get(),
         context_.device.GetQueue().GetFamilyIndices().graphics.value(),
         kFramesInFlight),
@@ -42,7 +42,7 @@ void Renderer::Resize() {
     // and do the swapchain recreation in render function
     // because what if swapchain aquired image dissynchronizes with
     // sync_manager internal counter upon resizing?
-    window_.RecreateSwapchain();
+    window_.RecreateSwapchain(memory_allocator_);
     pipeline_manager_.RecreatePipelines(window_.GetRenderPass(), window_.GetSwapchainObject().GetExtent());
 }
 
