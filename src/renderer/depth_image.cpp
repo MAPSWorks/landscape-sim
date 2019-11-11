@@ -16,4 +16,8 @@ const VkFormat& DepthImage::GetFormat() const {
     return format_;
 }
 
+const VkImageView& DepthImage::GetView() const {
+    return image_view_.Get();
+}
+
 }; // renderer

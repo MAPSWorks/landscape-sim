@@ -10,6 +10,7 @@ class DepthImage {
 public:
     DepthImage(const VkDevice& device, const vlk::MemoryAllocator& allocator, const VkExtent2D& extent);
     const VkFormat& GetFormat() const;
+    const VkImageView& GetView() const;
 private:
     // Depth image format
     const VkFormat format_;
