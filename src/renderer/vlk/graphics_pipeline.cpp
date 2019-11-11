@@ -124,7 +124,15 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     base::Log::Info("Renderer: pipeline '", name_, "' multisample enabled - ",
         ToString(create_params.multisample.sample_shading_enable));
     // Depth stencil
-    // ....
+    VkPipelineDepthStencilStateCreateInfo depth_stencil_create_info {};
+    depth_stencil_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    // If render pass contains depth attachment, this should be enabled
+    depth_stencil_create_info.depthTestEnable = VK_TRUE;
+    depth_stencil_create_info.depthWriteEnable = VK_TRUE;
+    depth_stencil_create_info.depthCompareOp = VK_COMPARE_OP_LESS;
+    depth_stencil_create_info.depthBoundsTestEnable = VK_FALSE;
+    depth_stencil_create_info.stencilTestEnable = VK_FALSE;
+    base::Log::Info("Renderer: pipeline '", name_, "' depth test enabled, stencil state disabled");
     // Color blending
     VkPipelineColorBlendAttachmentState color_blend_attachment {};
     color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | 
@@ -160,7 +168,7 @@ VkPipeline GraphicsPipeline::Create(const VkRenderPass& render_pass, const VkExt
     create_info.pRasterizationState = &raster_state_create_info;
     create_info.pMultisampleState = &multisample_create_info;
     // TODO: complete later
-    create_info.pDepthStencilState = nullptr; 
+    create_info.pDepthStencilState = &depth_stencil_create_info;
     create_info.pColorBlendState = &color_blend_create_info;
     // TODO: some state can be modified without recreating pipeline check : VkPipelineDynamicStateCreateInfo
     create_info.pDynamicState = nullptr; // Optional
