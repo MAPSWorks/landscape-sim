@@ -78,7 +78,7 @@ FrameManager::FrameId Renderer::FrameBegin() {
     // Create framebuffer for this frame
     current_frame.frame_buffer.Create(window_.GetRenderPass(), 
         window_.GetSwapchainObject().GetImageViews().at(current_frame.image_index).Get(), 
-        window_.GetSwapchainObject().GetExtent());
+        window_.GetSwapchainObject().GetExtent(), window_.GetDepthImage().GetView());
     return frame_manager_.GetCurrentFrameIndex();
 }
 
