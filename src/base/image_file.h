@@ -15,8 +15,10 @@ public:
     ImageFile(ImageFile const&) = delete;
     ImageFile operator=(ImageFile const&) = delete;
     // Get pointer to image data by bits
-    const t::UC* GetImage8() const;
-    const t::US* GetImage16() const;
+    //const t::UC* GetImage8() const;
+    //const t::US* GetImage16() const;
+    // Return image data pointer depending on internal knowledge of bits-per-channel
+    const void* GetImage() const;
     const t::Size32& GetDimensions() const;
     // Weather image is of 2 bytes per channel
     const bool Is16bit() const;

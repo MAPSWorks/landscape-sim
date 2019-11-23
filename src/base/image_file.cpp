@@ -19,12 +19,23 @@ ImageFile::~ImageFile() {
     }
 }
 
+/*/
 const t::UC* ImageFile::GetImage8() const {
     return image_8_;
 }
 
 const t::US* ImageFile::GetImage16() const {
     return image_16_;
+}
+*/
+
+const void* ImageFile::GetImage() const {
+    if (Is16bit()) {
+        return image_16_;
+    }
+    else {
+        return image_8_;
+    }
 }
 
 const t::Size32& ImageFile::GetDimensions() const {
