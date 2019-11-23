@@ -11,7 +11,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         0.0005f,
         0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
         160.0f }),// Spacing in meters between pixels in heightmap
-    height_grid_(GenerateHeightGrid(20)),
+    height_grid_(GenerateHeightGrid()),
     renderer_(renderer),
     vertices_(GetVertices()),
     indices_(GetIndices()),
@@ -22,7 +22,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
-    texture_("terrain_texture", "textures/ps_texture_1k.png", renderer_),
+    texture_("terrain_texture", "textures/ps_height_1k.png", renderer_),
     sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");
@@ -75,12 +75,8 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo  {};
-    ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    
-    /*
-    UniformBufferObject ubo{};
+    //ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     ubo.world_from_local = t::kMat4Identoty;
-    */
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -132,7 +128,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 }
 
 // Generate height grid values for given area size and return
-Terrain::HeightGrid Terrain::GenerateHeightGrid(t::U16 size) const {
+Terrain::HeightGrid Terrain::GenerateHeightGrid() const {
     // Grayscale heightmap
     t::U16 channel_count = 1; 
     const base::ImageFile heightmap_image(description_.height_map, channel_count);

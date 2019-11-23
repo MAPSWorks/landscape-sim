@@ -44,7 +44,7 @@ private:
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
     // terrain height.
-    HeightGrid GenerateHeightGrid(t::U16 size) const;
+    HeightGrid GenerateHeightGrid() const;
     std::vector<renderer::VertexPos3dColorTex> GetVertices() const;
     std::vector<t::U32> GetIndices() const;
     // Describe how are descriptor set layout bound to pipeline

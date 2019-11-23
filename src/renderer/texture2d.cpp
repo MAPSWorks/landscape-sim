@@ -4,34 +4,50 @@
 #include "vlk/buffer.h"
 
 namespace renderer {
-Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer)
-{
+Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer) {
     // Load file
-    base::ImageFile texture_file(file_name, 4);
+    const t::U16 channel_count = 4;
+    base::ImageFile texture_file(file_name, channel_count);
+    const t::U16 bits_per_channel = texture_file.Is16bit() ? 16 : 8;
     const auto texture_dims = texture_file.GetDimensions();
     const auto texture_size = texture_file.GetSize();
+    // Image format
+    VkFormat format;
+    if (channel_count == 4 && bits_per_channel == 16) {
+        format = VK_FORMAT_R16G16B16A16_UNORM;
+    }
+    else if (channel_count == 4 && bits_per_channel == 8) {
+        format = VK_FORMAT_R8G8B8A8_UNORM;
+    }
+    else {
+        throw std::runtime_error("Renderer: unsupported texture format");
+    }
     // Create image object
     image_ = std::make_unique<const vlk::Image>(name, renderer.GetMemoryAllocator(), VK_IMAGE_TYPE_2D, 
-        VkExtent3D{ texture_dims.width , texture_dims.height, 1 }, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
+        VkExtent3D{ texture_dims.width , texture_dims.height, 1 }, format, VK_IMAGE_TILING_OPTIMAL,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
     // Create staging buffer and copy data from file
     const vlk::Buffer staging_buffer(static_cast<std::string>(name) + " staging", renderer.GetMemoryAllocator(), 
         texture_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
-    staging_buffer.MapAndFill(texture_size, texture_file.GetImage8());
+    // Fill buffer with texture data depending on bit size
+    if (bits_per_channel == 16) {
+        staging_buffer.MapAndFill(texture_size, texture_file.GetImage16());
+    }
+    else if (bits_per_channel == 8) {
+        staging_buffer.MapAndFill(texture_size, texture_file.GetImage8());
+    }
     base::Log::Info("Renderer: texture staging buffer '", name, "' mapped and filled with data, size - ", texture_size);
     // Change layout for recording
-    TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED,
+    TransitionImageLayout(renderer.GetOneTimeCommands(), format, VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     // Copy from staging buffer to image
     renderer.GetOneTimeCommands().CopyBufferToImage2D(staging_buffer.Get(), image_->Get(), texture_dims);
     // Change layout for sampling in shader
-    TransitionImageLayout(renderer.GetOneTimeCommands(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+    TransitionImageLayout(renderer.GetOneTimeCommands(), format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     // Create image view for texture
-    image_view_ = std::make_unique<const vlk::ImageView>(renderer.GetContext().device.Get(), image_->Get(), 
-        VK_FORMAT_R8G8B8A8_UNORM);
-
+    image_view_ = std::make_unique<const vlk::ImageView>(renderer.GetContext().device.Get(), image_->Get(), format);
 }
 
 const VkImage& Texture2D::Get() const {
@@ -71,6 +87,6 @@ void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, 
     else {
         throw std::runtime_error("Renderer: unsupported layout transition");
     }
-    one_time_commands.PipelineImageMemoryBarrier(source_stage, dest_stage,0,1, &barrier);
+    one_time_commands.PipelineImageMemoryBarrier(source_stage, dest_stage, 0, 1, &barrier);
 }
 }; //renderer
