@@ -29,6 +29,9 @@ using Vec3 = glm::tvec3<F32>;
 using Vec4 = glm::tvec4<F32>;
 using Vec2u16 = glm::tvec2<U16>;
 using Vec3u32 = glm::tvec3<U32>;
+using Vec2i16 = glm::tvec2<I16>;
+using Vec2i32 = glm::tvec2<I32>;
+using Vec3i32 = glm::tvec3<I32>;
 using Mat3 = glm::tmat3x3<F32>;
 using Mat4 = glm::tmat4x4<F32>;
 // GLM type specialization
