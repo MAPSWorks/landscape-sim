@@ -74,9 +74,11 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo {};
-    //ubo.world_from_local = t::kMat4Identoty;
+    ubo.world_from_local = t::kMat4Identoty;
+    /*
     ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.scale, 3.0, 
         description_.scale));
+    */
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -131,16 +133,18 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 // Vertices are defined in x-y plane as if it is x-z plane,
 // because since we don't need to store height data here we can send 2d data
 // to GPU and vertex shader will interpret and assign third dimension.
-// Size of the whole mesh is 1.0 to be able to sample from texture in vertex shader to get height.
+// Coordinates of terrain posts should be integer because they are used as tex coordinates
+// in vertex shader to fetch texture data. Posts should start at 0 and go to 
+// heightmap texture size - 1
 std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
     std::vector<MeshVertexType> vertices;
     //t::F32 tile_size = description_.horizontal_spacing * description_.scale;
     t::U32 row_count = 1025;
     t::U32 col_count = 1025;
-    for (t::U32 row = 0; row < row_count; ++row) {
-        for (t::U32 col = 0; col < col_count; ++col) {
+    for (t::U32 row = 0; row < row_count - 1; ++row) {
+        for (t::U32 col = 0; col < col_count - 1; ++col) {
             MeshVertexType vertice;
-            vertice.position = { col / (col_count - 1.0), row / (row_count - 1.0) };
+            vertice.position = { col , row };
             vertices.push_back(vertice);
         }
     }
@@ -149,8 +153,8 @@ std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
 
 std::vector<t::U32> Terrain::GetIndices() const {
     std::vector<t::U32> indices;
-    t::U32 row_count = 1025;
-    t::U32 col_count = 1025;
+    t::U32 row_count = 1025 - 1;
+    t::U32 col_count = 1025 - 1;
     t::U32 indice = 0;
     for (t::U32 row = 0; row < row_count - 1; ++row) {
         for (t::U32 col = 0; col < col_count - 1; ++col) {

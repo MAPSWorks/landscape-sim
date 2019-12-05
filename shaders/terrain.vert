@@ -15,15 +15,17 @@ layout(set = 1, binding = 0) uniform UniformBufferObject {
 layout(set = 1, binding = 1) uniform sampler2D u_height_map;
 
 // in
-layout(location = 0) in vec2 a_local_position;
+layout(location = 0) in ivec2 a_local_position;
 // out
 layout(location = 0) out vec3 o_color;
 // TODO make out as structure
 //layout(location = 1) out vec2 o_tex_coord;
 
 void main() {
-	float height = texture(u_height_map, vec2(a_local_position.x, a_local_position.y)).r;
-	vec4 local_position = vec4(a_local_position.x, height, a_local_position.y, 1.0);
+	float height = texelFetch(u_height_map, a_local_position, 0).r;
+	//float height = texture(u_height_map, vec2(a_local_position.x / 1025.0, a_local_position.y / 1025.0)).r;
+	
+	vec4 local_position = vec4(a_local_position.x, height*5, a_local_position.y, 1.0);
 	gl_Position = u_v.projection_from_view * u_v.view_from_world * u.world_from_local * local_position;
     o_color = vec3(1.0, 1.0, 1.0);
 	//o_tex_coord = a_tex_coord;

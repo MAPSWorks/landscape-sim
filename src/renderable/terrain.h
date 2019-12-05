@@ -41,7 +41,7 @@ public:
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
 private:
     // Vertex structure used for terrain mesh
-    using MeshVertexType = renderer::VertexPos2;
+    using MeshVertexType = renderer::VertexPos2i;
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
     std::vector<MeshVertexType> GetVertices() const;
@@ -73,6 +73,7 @@ private:
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
     // Height map read in vertex shader
     const renderer::Texture2D height_map_;;
+    // NOTE: possible that sampler is required but ignored with textureFetch in shader
     const renderer::vlk::Sampler sampler_;
 };
 }; // renderable
