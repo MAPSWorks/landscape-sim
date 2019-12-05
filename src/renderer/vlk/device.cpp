@@ -73,8 +73,10 @@ VkDevice Device::CreateLogicalDevice(const VkPhysicalDevice& gpu) const {
     const auto queue_create_infos = queue_.GetCreateInfos();
     // Device features to enable
     VkPhysicalDeviceFeatures device_features {};
+    device_features.fillModeNonSolid = VK_TRUE;
     // Enable anisotropic filtering
     device_features.samplerAnisotropy = VK_TRUE;
+
     VkDeviceCreateInfo device_create_info {};
     device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     device_create_info.pQueueCreateInfos = queue_create_infos.data();

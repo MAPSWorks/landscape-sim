@@ -28,7 +28,7 @@ public:
         // Texture that describes terrain height values at selected points
         // Usually a 16-bit square grayscale texture
         std::string_view height_map;
-        // Scale of the whole terrain compared to original
+        // Size in units of the while terrain
         t::F32 scale;
         // How much world units the single pixel intensity value represents
         t::F32 height_unit_size;
@@ -40,22 +40,19 @@ public:
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
 private:
-    using HeightGrid = base::Matrix<t::F32>;
+    // Vertex structure used for terrain mesh
+    using MeshVertexType = renderer::VertexPos2d;
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
-    // terrain height.
-    HeightGrid GenerateHeightGrid() const;
-    std::vector<renderer::VertexPos3dColorTex> GetVertices() const;
+    std::vector<MeshVertexType> GetVertices() const;
     std::vector<t::U32> GetIndices() const;
     // Describe how are descriptor set layout bound to pipeline
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> GetDescriptorSetBindings() const;
     // Description of terrain
     const Description description_;
-    // Height grid representation as 2d matrix
-    const HeightGrid height_grid_;
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
-    const std::vector<renderer::VertexPos3dColorTex> vertices_;
+    const std::vector<MeshVertexType> vertices_;
     const std::vector<t::U32> indices_;
     const renderer::VertexBuffer vertex_buffer_;
     const renderer::IndexBuffer index_buffer_;
@@ -74,8 +71,8 @@ private:
     // Id because there are as many as frames-in-flight
     // This is not const because we can assign this value only after constructor initializer list.
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
-    // Test
-    const renderer::Texture2D texture_;
+    // Height map read in vertex shader
+    const renderer::Texture2D height_map_;;
     const renderer::vlk::Sampler sampler_;
 };
 }; // renderable

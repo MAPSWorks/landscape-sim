@@ -8,10 +8,9 @@
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     description_({ "textures/ps_height_1k.png",
-        0.0005f,
+        100.0f,
         0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
         160.0f }),// Spacing in meters between pixels in heightmap
-    height_grid_(GenerateHeightGrid()),
     renderer_(renderer),
     vertices_(GetVertices()),
     indices_(GetIndices()),
@@ -22,7 +21,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
-    texture_("terrain_texture", "textures/ps_height_1k.png", renderer_),
+    height_map_("terrain_height_texture", description_.height_map, renderer_),
     sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");
@@ -49,7 +48,7 @@ void Terrain::InitDescriptorSets() {
         } else
         // Image sampler
         if (resource.type == renderer::vlk::DescriptorType::kCombinedImageSampler) {
-            resource.image_view = texture_.GetImageView();
+            resource.image_view = height_map_.GetImageView();
             resource.image_sampler = sampler_.Get();
         }
         else {
@@ -74,9 +73,10 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
     static auto startTime = std::chrono::high_resolution_clock::now();
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-    UniformBufferObject ubo  {};
-    //ubo.world_from_local = glm::rotate(t::kMat4Identoty, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    ubo.world_from_local = t::kMat4Identoty;
+    UniformBufferObject ubo {};
+    //ubo.world_from_local = t::kMat4Identoty;
+    ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.scale, 3.0, 
+        description_.scale));
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -94,8 +94,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Vertex input params
         {
-            renderer::VertexPos3dColorTex::GetBindingDescription(),
-            renderer::VertexPos3dColorTex::GetAttributeDescriptions(),
+            MeshVertexType::GetBindingDescription(),
+            MeshVertexType::GetAttributeDescriptions(),
         },
         // Fixed function state
         // Primitive assembly
@@ -105,7 +105,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Rasterization
         {
-            renderer::vlk::GraphicsPipeline::PolygonMode::kFill,
+            renderer::vlk::GraphicsPipeline::PolygonMode::kLine,
             renderer::vlk::GraphicsPipeline::CullMode::kNone
         },
         // Multisample
@@ -127,34 +127,20 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
     return description;
 }
 
-// Generate height grid values for given area size and return
-Terrain::HeightGrid Terrain::GenerateHeightGrid() const {
-    // Grayscale heightmap
-    t::U16 channel_count = 1; 
-    const base::ImageFile heightmap_image(description_.height_map, channel_count);
-    const auto& dimensions = heightmap_image.GetDimensions();
-    HeightGrid height_grid(dimensions.width, dimensions.height);
-    for (t::U32 row = 0; row < height_grid.GetRows(); ++row) {
-        for (t::U32 col = 0; col < height_grid.GetCols(); ++col) {
-            height_grid(row, col) = heightmap_image.GetGray16At(col, row) * 
-                description_.height_unit_size * description_.scale;
-        }
-    }
-    return height_grid; 
-}
-
 // Generate vertices from height grid
-std::vector<renderer::VertexPos3dColorTex> Terrain::GetVertices() const {
-    std::vector<renderer::VertexPos3dColorTex> vertices;
-    t::F32 tile_size = description_.horizontal_spacing * description_.scale;
-    t::F32 terrain_half_width = (height_grid_.GetCols() * tile_size) / 2.0f;
-    t::F32 terrain_half_height = (height_grid_.GetRows() * tile_size) / 2.0f;
-    for (t::U32 row = 0; row < height_grid_.GetRows(); ++row) {
-        for (t::U32 col = 0; col < height_grid_.GetCols(); ++col) {
-            renderer::VertexPos3dColorTex vertice;
-            vertice.position = { col * tile_size - terrain_half_width, height_grid_(row, col), row * tile_size - terrain_half_height };
-            vertice.color = { 1.0f, 1.0f, 1.0f };
-            vertice.tex_coord = { col / (float)height_grid_.GetRows(), row / (float)height_grid_.GetCols() };
+// Vertices are defined in x-y plane as if it is x-z plane,
+// because since we don't need to store height data here we can send 2d data
+// to GPU and vertex shader will interpret and assign third dimension.
+// Size of the whole mesh is 1.0 to be able to sample from texture in vertex shader to get height.
+std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
+    std::vector<MeshVertexType> vertices;
+    //t::F32 tile_size = description_.horizontal_spacing * description_.scale;
+    t::U32 row_count = 1025;
+    t::U32 col_count = 1025;
+    for (t::U32 row = 0; row < row_count; ++row) {
+        for (t::U32 col = 0; col < col_count; ++col) {
+            MeshVertexType vertice;
+            vertice.position = { col / (col_count - 1.0), row / (row_count - 1.0) };
             vertices.push_back(vertice);
         }
     }
@@ -163,17 +149,19 @@ std::vector<renderer::VertexPos3dColorTex> Terrain::GetVertices() const {
 
 std::vector<t::U32> Terrain::GetIndices() const {
     std::vector<t::U32> indices;
+    t::U32 row_count = 1025;
+    t::U32 col_count = 1025;
     t::U32 indice = 0;
-    for (t::U32 row = 0; row < height_grid_.GetRows() - 1; ++row) {
-        for (t::U32 col = 0; col < height_grid_.GetCols() - 1; ++col) {
+    for (t::U32 row = 0; row < row_count - 1; ++row) {
+        for (t::U32 col = 0; col < col_count - 1; ++col) {
             // triangle 1
             indices.emplace_back(indice);
             indices.emplace_back(indice + 1); 
-            indices.emplace_back(indice + (t::U32)height_grid_.GetCols());
+            indices.emplace_back(indice + col_count);
             // triangle 2
             indices.emplace_back(indice + 1);
-            indices.emplace_back(indice + (t::U32)height_grid_.GetCols());
-            indices.emplace_back(indice + 1 + (t::U32)height_grid_.GetCols());
+            indices.emplace_back(indice + col_count);
+            indices.emplace_back(indice + 1 + col_count);
             ++indice;
         }
         ++indice;
@@ -201,7 +189,7 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
         // Binding index (location), corresponds to layout(binding = n)  in shader
         binding.index = scene::DescriptorBidingId::kCombinedImageSampler;
         binding.type = renderer::vlk::DescriptorType::kCombinedImageSampler;
-        binding.stage = renderer::vlk::ShaderStage::kFragment;
+        binding.stage = renderer::vlk::ShaderStage::kVertex;
         binding.count = 1;
         bindings.push_back(binding);
     }

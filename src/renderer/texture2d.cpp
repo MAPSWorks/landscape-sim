@@ -76,7 +76,9 @@ void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, 
         // Will be read in shader
         barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
         source_stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        dest_stage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        // OPTI: this image is accessible in all pipeline stages.
+        // It could be more optimal only the stages this texture is going to be used in
+        dest_stage = VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
     }
     else {
         throw std::runtime_error("Renderer: unsupported layout transition");
