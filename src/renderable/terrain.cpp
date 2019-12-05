@@ -22,7 +22,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
     height_map_("terrain_height_texture", description_.height_map, renderer_),
-    sampler_(renderer_.GetContext().device.Get())
+    sampler_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap)
 {
     base::Log::Info("Renderable: terrain created");
 }
