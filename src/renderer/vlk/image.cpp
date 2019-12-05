@@ -35,7 +35,7 @@ void Image::AllocationDebugPrint() const {
     }
 }
 
-VkImageMemoryBarrier Image::GetMemoryBarrier(VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) const {
+VkImageMemoryBarrier Image::GetMemoryBarrier(VkImageLayout old_layout, VkImageLayout new_layout) const {
     VkImageMemoryBarrier barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.oldLayout = old_layout;

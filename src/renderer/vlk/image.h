@@ -19,7 +19,7 @@ public:
     // Retrieve information about current allocation
     void AllocationDebugPrint() const;
     // Return image memory barrier description for layout transition
-    VkImageMemoryBarrier GetMemoryBarrier(VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) const;
+    VkImageMemoryBarrier GetMemoryBarrier(VkImageLayout old_layout, VkImageLayout new_layout) const;
 private:
     // Allocation is created in this f-tion and returned through reference
     VkImage Create(std::string name, VkImageType type, VkExtent3D extent, VkFormat format, VkImageTiling tiling,

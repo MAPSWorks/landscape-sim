@@ -14,7 +14,8 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     // Image format
     VkFormat format;
     if (channel_count == 4 && bits_per_channel == 16) {
-        format = VK_FORMAT_R16G16B16A16_UNORM;
+        //format = VK_FORMAT_R16G16B16A16_UNORM;
+        format = VK_FORMAT_R16G16B16A16_UINT;
     }
     else if (channel_count == 4 && bits_per_channel == 8) {
         format = VK_FORMAT_R8G8B8A8_UNORM;
@@ -32,12 +33,12 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     staging_buffer.MapAndFill(texture_size, texture_file.GetImage());
     base::Log::Info("Renderer: texture staging buffer '", name, "' mapped and filled with data, size - ", texture_size);
     // Change layout for recording
-    TransitionImageLayout(renderer.GetOneTimeCommands(), format, VK_IMAGE_LAYOUT_UNDEFINED,
+    TransitionImageLayout(renderer.GetOneTimeCommands(), VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     // Copy from staging buffer to image
     renderer.GetOneTimeCommands().CopyBufferToImage2D(staging_buffer.Get(), image_->Get(), texture_dims);
     // Change layout for sampling in shader
-    TransitionImageLayout(renderer.GetOneTimeCommands(), format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+    TransitionImageLayout(renderer.GetOneTimeCommands(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     // Create image view for texture
@@ -52,9 +53,9 @@ const VkImageView& Texture2D::GetImageView() const {
     return image_view_->Get();
 }
 
-void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, VkFormat format, VkImageLayout old_layout,
+void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, VkImageLayout old_layout,
     VkImageLayout new_layout) const {
-    auto barrier = image_->GetMemoryBarrier(format, old_layout, new_layout);
+    auto barrier = image_->GetMemoryBarrier(old_layout, new_layout);
     // MOdifie barrier and set pipeline stages before and after barrier
     VkPipelineStageFlags source_stage;
     VkPipelineStageFlags dest_stage;

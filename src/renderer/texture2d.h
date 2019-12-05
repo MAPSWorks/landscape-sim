@@ -20,7 +20,7 @@ public:
     const VkImageView& GetImageView() const;
 private:
     // Change image layout in memory
-    void TransitionImageLayout(const OneTimeCommands& one_time_commands, VkFormat format, VkImageLayout old_layout,
+    void TransitionImageLayout(const OneTimeCommands& one_time_commands, VkImageLayout old_layout,
         VkImageLayout new_layout) const;
     // Will hold image and it's memory.
     // Unique pointer for lazy-initialization.
