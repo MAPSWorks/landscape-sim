@@ -41,7 +41,7 @@ public:
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
 private:
     // Vertex structure used for terrain mesh
-    using MeshVertexType = renderer::VertexPos2d;
+    using MeshVertexType = renderer::VertexPos2;
     renderer::vlk::GraphicsPipeline::CreateParams GetPipelineDescription();
     // Generate and return height grid populated with height values that define
     std::vector<MeshVertexType> GetVertices() const;

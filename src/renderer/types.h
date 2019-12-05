@@ -12,7 +12,7 @@ constexpr t::U32 VertexShaderPositionLocation = 0;
 constexpr t::U32 VertexShaderColorLocation = 1;
 constexpr t::U32 VertexShaderTexLocation = 2;
 // Describe vertex attributes for 2d position
-struct VertexPos2d {
+struct VertexPos2 {
     t::Vec2 position;
     // Vertex binding defines a collection of data taken from a vertex buffer bound to a 
     // selected index
@@ -23,7 +23,7 @@ struct VertexPos2d {
         const t::U32 binding = 0;
         binding_descr[0].binding = binding;
         // Jump from vertex to vertex
-        binding_descr[0].stride = sizeof(VertexPos2d);
+        binding_descr[0].stride = sizeof(VertexPos2);
         // Fetched per vertex
         binding_descr[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return binding_descr;
@@ -37,13 +37,13 @@ struct VertexPos2d {
         // location= in the Vertex shader
         attribute_descr[0].location = VertexShaderPositionLocation;
         attribute_descr[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descr[0].offset = offsetof(VertexPos2d, position);
+        attribute_descr[0].offset = offsetof(VertexPos2, position);
         return attribute_descr;
     }
 };
 // Describe vertex attributes for 2d position in integer coordinates
-struct VertexPos2di {
-    t::Vec2 position;
+struct VertexPos2i {
+    t::Vec2i32 position;
     // Vertex binding defines a collection of data taken from a vertex buffer bound to a 
     // selected index
     // This binding is used as a numbered source of data for vertex attributes.
@@ -53,7 +53,7 @@ struct VertexPos2di {
         const t::U32 binding = 0;
         binding_descr[0].binding = binding;
         // Jump from vertex to vertex
-        binding_descr[0].stride = sizeof(VertexPos2d);
+        binding_descr[0].stride = sizeof(VertexPos2i);
         // Fetched per vertex
         binding_descr[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return binding_descr;
@@ -66,13 +66,13 @@ struct VertexPos2di {
         attribute_descr[0].binding = binding;
         // location= in the Vertex shader
         attribute_descr[0].location = VertexShaderPositionLocation;
-        attribute_descr[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descr[0].offset = offsetof(VertexPos2d, position);
+        attribute_descr[0].format = VK_FORMAT_R32G32_SINT;
+        attribute_descr[0].offset = offsetof(VertexPos2i, position);
         return attribute_descr;
     }
 };
 // Describe vertex attributes for 2d position and color
-struct VertexPos2dColor {
+struct VertexPos2Color {
     t::Vec2 position;
     t::Vec3 color;
     // Vertex binding defines a collection of data taken from a vertex buffer bound to a 
@@ -84,7 +84,7 @@ struct VertexPos2dColor {
         const t::U32 binding = 0;
         binding_descr[0].binding = binding;
         // Jump from vertex to vertex
-        binding_descr[0].stride = sizeof(VertexPos2dColor);
+        binding_descr[0].stride = sizeof(VertexPos2Color);
         // Fetched per vertex
         binding_descr[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return binding_descr;
@@ -98,16 +98,16 @@ struct VertexPos2dColor {
         // location= in the Vertex shader
         attribute_descr[0].location = VertexShaderPositionLocation;
         attribute_descr[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descr[0].offset = offsetof(VertexPos2dColor, position);
+        attribute_descr[0].offset = offsetof(VertexPos2Color, position);
         attribute_descr[1].binding = binding;
         attribute_descr[1].location = VertexShaderColorLocation;
         attribute_descr[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descr[1].offset = offsetof(VertexPos2dColor, color);
+        attribute_descr[1].offset = offsetof(VertexPos2Color, color);
         return attribute_descr;
     }
 };
 // Describe vertex attributes for 3d position and color
-struct VertexPos3dColor {
+struct VertexPos3Color {
     t::Vec3 position;
     t::Vec3 color;
     // Vertex binding defines a collection of data taken from a vertex buffer bound to a 
@@ -119,7 +119,7 @@ struct VertexPos3dColor {
         const t::U32 binding = 0;
         binding_descr[0].binding = binding;
         // Jump from vertex to vertex
-        binding_descr[0].stride = sizeof(VertexPos3dColor);
+        binding_descr[0].stride = sizeof(VertexPos3Color);
         // Fetched per vertex
         binding_descr[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return binding_descr;
@@ -133,16 +133,16 @@ struct VertexPos3dColor {
         // location= in the Vertex shader
         attribute_descr[0].location = VertexShaderPositionLocation;
         attribute_descr[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descr[0].offset = offsetof(VertexPos3dColor, position);
+        attribute_descr[0].offset = offsetof(VertexPos3Color, position);
         attribute_descr[1].binding = binding;
         attribute_descr[1].location = VertexShaderColorLocation;
         attribute_descr[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descr[1].offset = offsetof(VertexPos3dColor, color);
+        attribute_descr[1].offset = offsetof(VertexPos3Color, color);
         return attribute_descr;
     }
 };
 // Describe vertex attributes for 3d position and color and texture
-struct VertexPos3dColorTex {
+struct VertexPos3ColorTex {
     t::Vec3 position;
     t::Vec3 color;
     t::Vec2 tex_coord;
@@ -155,7 +155,7 @@ struct VertexPos3dColorTex {
         const t::U32 binding = 0;
         binding_descr[0].binding = binding;
         // Jump from vertex to vertex
-        binding_descr[0].stride = sizeof(VertexPos3dColorTex);
+        binding_descr[0].stride = sizeof(VertexPos3ColorTex);
         // Fetched per vertex
         binding_descr[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return binding_descr;
@@ -169,17 +169,17 @@ struct VertexPos3dColorTex {
         attribute_descr[0].binding = binding;
         attribute_descr[0].location = VertexShaderPositionLocation;
         attribute_descr[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descr[0].offset = offsetof(VertexPos3dColorTex, position);
+        attribute_descr[0].offset = offsetof(VertexPos3ColorTex, position);
         // color
         attribute_descr[1].binding = binding;
         attribute_descr[1].location = VertexShaderColorLocation;
         attribute_descr[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descr[1].offset = offsetof(VertexPos3dColorTex, color);
+        attribute_descr[1].offset = offsetof(VertexPos3ColorTex, color);
         // texture
         attribute_descr[2].binding = binding;
         attribute_descr[2].location = VertexShaderTexLocation;
         attribute_descr[2].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descr[2].offset = offsetof(VertexPos3dColorTex, tex_coord);
+        attribute_descr[2].offset = offsetof(VertexPos3ColorTex, tex_coord);
         return attribute_descr;
     }
 };
