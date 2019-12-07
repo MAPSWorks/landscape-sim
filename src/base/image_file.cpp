@@ -46,8 +46,8 @@ bool ImageFile::Is16bit() const {
     return (bytes_per_channel_ == 2);
 }
 
-const t::I16 ImageFile::GetBytesPerChannel() const {
-    return bytes_per_channel_;
+const t::I16 ImageFile::GetBitsPerChannel() const {
+    return bytes_per_channel_ * 8;
 }
 
 const t::I16 ImageFile::GetChannelCount() const {
@@ -92,7 +92,7 @@ void ImageFile::LoadImage(const std::string& file_name) {
     }
     dimensions_.width = static_cast<t::U32>(width);
     dimensions_.height = static_cast<t::U32>(height);
-    Log::Info("Base: image (",(bytes_per_channel_*8),"bit) loaded '", file_name, "', size (", dimensions_.width, "x",
+    Log::Info("Base: image (",GetBitsPerChannel(),"bit) loaded '", file_name, "', size (", dimensions_.width, "x",
         dimensions_.height, "), channel count: original (", num_channels, "), forced (", channel_count_, "), size (",GetSize()," bytes)");
 }
 

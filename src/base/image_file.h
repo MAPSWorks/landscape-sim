@@ -22,8 +22,8 @@ public:
     const t::Size32& GetDimensions() const;
     // Weather image is of 2 bytes per channel
     bool Is16bit() const;
-    // Get number of bytes per channel
-    const t::I16 GetBytesPerChannel() const;
+    // Get number of bits per channel
+    const t::I16 GetBitsPerChannel() const;
     const t::I16 GetChannelCount() const;
     // Image size in bytes (calculated on the fly from dimension)
     t::U32 GetSize() const;

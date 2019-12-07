@@ -8,7 +8,7 @@ Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Re
     t::U16 forced_channel_count, DataFormat data_format) {
     // Load file
     base::ImageFile texture_file(file_name, forced_channel_count);
-    const t::U16 bits_per_channel = texture_file.Is16bit() ? 16 : 8;
+    const t::U16 bits_per_channel = texture_file.GetBitsPerChannel();
     const auto texture_dims = texture_file.GetDimensions();
     const auto texture_size = texture_file.GetSize();
     const t::U16 channel_count = texture_file.GetChannelCount();
