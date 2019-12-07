@@ -42,8 +42,16 @@ const t::Size32& ImageFile::GetDimensions() const {
     return dimensions_;
 }
 
-const bool ImageFile::Is16bit() const {
+bool ImageFile::Is16bit() const {
     return (bytes_per_channel_ == 2);
+}
+
+const t::I16 ImageFile::GetBytesPerChannel() const {
+    return bytes_per_channel_;
+}
+
+const t::I16 ImageFile::GetChannelCount() const {
+    return channel_count_;
 }
 
 // NOTE: for 8 bit channel no need to calculate by byte number 

@@ -21,7 +21,10 @@ public:
     const void* GetImage() const;
     const t::Size32& GetDimensions() const;
     // Weather image is of 2 bytes per channel
-    const bool Is16bit() const;
+    bool Is16bit() const;
+    // Get number of bytes per channel
+    const t::I16 GetBytesPerChannel() const;
+    const t::I16 GetChannelCount() const;
     // Image size in bytes (calculated on the fly from dimension)
     t::U32 GetSize() const;
     // Get value of 1-channel 16-bit texture at given coordinate, starting from top-left
