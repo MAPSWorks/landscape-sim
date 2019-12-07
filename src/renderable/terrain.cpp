@@ -21,7 +21,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
-    height_map_("terrain_height_texture", description_.height_map, renderer_),
+    height_map_("terrain_height_texture", description_.height_map, renderer_, 0, renderer::Texture2D::DataFormat::kUInt),
     sampler_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap)
 {
     base::Log::Info("Renderable: terrain created");
