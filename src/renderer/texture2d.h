@@ -1,6 +1,7 @@
 #pragma once
 #include <string_view>
 #include <memory>
+#include <base/image_file.h>
 #include "vlk/image.h"
 #include "vlk/image_view.h"
 #include "renderer.h"
@@ -36,6 +37,8 @@ private:
     // Change image layout in memory
     void TransitionImageLayout(const OneTimeCommands& one_time_commands, VkImageLayout old_layout,
         VkImageLayout new_layout) const;
+    // Copy data from image loaded from disk to image we store in memory
+    void CopyData(std::string_view name, const Renderer& renderer, const base::ImageFile& texture_file) const;
     // Will hold image and it's memory.
     // Unique pointer for lazy-initialization.
     std::unique_ptr<const vlk::Image> image_;
