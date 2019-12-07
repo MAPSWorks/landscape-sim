@@ -4,25 +4,16 @@
 #include "vlk/buffer.h"
 
 namespace renderer {
-Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer) {
+Texture2D::Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer,
+    t::U16 forced_channel_count, DataFormat data_format) {
     // Load file
-    const t::U16 channel_count = 4;
-    base::ImageFile texture_file(file_name, channel_count);
+    base::ImageFile texture_file(file_name, forced_channel_count);
     const t::U16 bits_per_channel = texture_file.Is16bit() ? 16 : 8;
     const auto texture_dims = texture_file.GetDimensions();
     const auto texture_size = texture_file.GetSize();
+    const t::U16 channel_count = texture_file.GetChannelCount();
     // Image format
-    VkFormat format;
-    if (channel_count == 4 && bits_per_channel == 16) {
-        //format = VK_FORMAT_R16G16B16A16_UNORM;
-        format = VK_FORMAT_R16G16B16A16_UINT;
-    }
-    else if (channel_count == 4 && bits_per_channel == 8) {
-        format = VK_FORMAT_R8G8B8A8_UNORM;
-    }
-    else {
-        throw std::runtime_error("Renderer: unsupported texture format");
-    }
+    const VkFormat format = SelectFormat(channel_count, bits_per_channel, data_format);
     // Create image object
     image_ = std::make_unique<const vlk::Image>(name, renderer.GetMemoryAllocator(), VK_IMAGE_TYPE_2D, 
         VkExtent3D{ texture_dims.width , texture_dims.height, 1 }, format, VK_IMAGE_TILING_OPTIMAL,
@@ -51,6 +42,61 @@ const VkImage& Texture2D::Get() const {
 
 const VkImageView& Texture2D::GetImageView() const {
     return image_view_->Get();
+}
+
+VkFormat Texture2D::SelectFormat(t::U16 channel_count, t::U16 bits_per_channel, DataFormat data_format) const {
+    VkFormat format = VK_FORMAT_UNDEFINED;
+    if (bits_per_channel == 16) {
+        switch (data_format)
+        {
+            case renderer::Texture2D::DataFormat::lUNorm:
+                if (channel_count == 1) {
+                    format = VK_FORMAT_R16_UNORM;
+                }
+                else if (channel_count == 4) {
+                    format = VK_FORMAT_R16G16B16A16_UNORM;
+                }
+                break;
+            case renderer::Texture2D::DataFormat::kUInt:
+                if (channel_count == 1) {
+                    format = VK_FORMAT_R16_UINT;
+                }
+                else if (channel_count == 4) {
+                    format = VK_FORMAT_R16G16B16A16_UINT;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    else if (bits_per_channel == 8) {
+        switch (data_format)
+        {
+            case renderer::Texture2D::DataFormat::lUNorm:
+                if (channel_count == 1) {
+                    format = VK_FORMAT_R8_UNORM;
+                }
+                else if (channel_count == 4) {
+                    format = VK_FORMAT_R8G8B8A8_UNORM;
+                }
+                break;
+            case renderer::Texture2D::DataFormat::kUInt:
+                if (channel_count == 1) {
+                    format = VK_FORMAT_R8_UINT;
+                }
+                else if (channel_count == 4) {
+                    format = VK_FORMAT_R8G8B8A8_UINT;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    if (format == VK_FORMAT_UNDEFINED) {
+        throw std::runtime_error("Renderer: unsupported texture format");
+    }
+    return format;
 }
 
 void Texture2D::TransitionImageLayout(const OneTimeCommands& one_time_commands, VkImageLayout old_layout,
