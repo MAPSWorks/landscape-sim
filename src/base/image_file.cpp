@@ -85,7 +85,7 @@ void ImageFile::LoadImage(const std::string& file_name) {
     dimensions_.width = static_cast<t::U32>(width);
     dimensions_.height = static_cast<t::U32>(height);
     Log::Info("Base: image (",(bytes_per_channel_*8),"bit) loaded '", file_name, "', size (", dimensions_.width, "x",
-        dimensions_.height, "), channel count: original (", channel_count_, "), forced (", num_channels, ")");
+        dimensions_.height, "), channel count: original (", num_channels, "), forced (", channel_count_, "), size (",GetSize()," bytes)");
 }
 
 }; // base
