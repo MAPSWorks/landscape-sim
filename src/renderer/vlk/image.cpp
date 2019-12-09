@@ -5,8 +5,9 @@ namespace renderer::vlk {
 Image::Image(std::string_view name, const MemoryAllocator& allocator, VkImageType type, VkExtent3D extent,
     VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VmaMemoryUsage memory_usage) :
     name_(name),
+    extent_(extent),
     allocator_(allocator),
-    image_(Create(name_, type, extent, format, tiling, usage, memory_usage, allocation_)) {
+    image_(Create(name_, type, format, tiling, usage, memory_usage, allocation_)) {
     base::Log::Info("Renderer: image '", name_, "' created");
     AllocationDebugPrint();
 }
@@ -18,6 +19,10 @@ Image::~Image() {
 
 const VkImage& Image::Get() const {
     return image_;
+}
+
+const VkExtent3D& Image::GetExtent() const {
+    return extent_;
 }
 
 // NOTE: When info is retrieved, allocation is automatically 'touched'
@@ -54,12 +59,12 @@ VkImageMemoryBarrier Image::GetMemoryBarrier(VkImageLayout old_layout, VkImageLa
     return barrier;
 }
 
-VkImage Image::Create(std::string name, VkImageType type, VkExtent3D extent, VkFormat format, VkImageTiling tiling,
+VkImage Image::Create(std::string name, VkImageType type, VkFormat format, VkImageTiling tiling,
     VkImageUsageFlags usage, VmaMemoryUsage memory_usage, VmaAllocation& allocation) {
     VkImageCreateInfo image_info{};
     image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     image_info.imageType = type;
-    image_info.extent = extent;
+    image_info.extent = extent_;
     image_info.mipLevels = 1;
     image_info.arrayLayers = 1;
     image_info.format = format;

@@ -10,22 +10,26 @@
 namespace renderer::vlk {
 class Image {
 public:
+
     Image(std::string_view name, const MemoryAllocator& allocator, VkImageType type, VkExtent3D extent,
         VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VmaMemoryUsage memory_usage);
     ~Image();
     Image(Image const&) = delete;
     Image operator=(Image const&) = delete;
     const VkImage& Get() const;
+    const VkExtent3D& GetExtent() const;
     // Retrieve information about current allocation
     void AllocationDebugPrint() const;
     // Return image memory barrier description for layout transition
     VkImageMemoryBarrier GetMemoryBarrier(VkImageLayout old_layout, VkImageLayout new_layout) const;
 private:
     // Allocation is created in this f-tion and returned through reference
-    VkImage Create(std::string name, VkImageType type, VkExtent3D extent, VkFormat format, VkImageTiling tiling,
+    VkImage Create(std::string name, VkImageType type, VkFormat format, VkImageTiling tiling,
         VkImageUsageFlags usage, VmaMemoryUsage memory_usage, VmaAllocation& allocation);
     // Informative name of an image, mainly for debugging purposes
     const std::string name_;
+    // Store extent of and image (domensions)
+    const VkExtent3D extent_;
     // Reference to resource this renderable is created with.
     // This global renderable manages all allocations, each separate allocation is stored in
     // allocator_ member
