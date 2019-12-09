@@ -11,6 +11,8 @@ public:
         // The most common usage as a texture (default value)
         kDefault,
         // Used as a source for height data in shader
+        // NOTE: If texelFetch() is used in shader the sampler won't be used
+        // so it can be anything (a dummy)
         kHeightmap
     };
     Sampler(const VkDevice& device, UsageMode usage_mode = UsageMode::kDefault);

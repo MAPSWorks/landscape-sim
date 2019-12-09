@@ -12,6 +12,7 @@ layout(set = 1, binding = 0) uniform UniformBufferObject {
 	mat4 world_from_local;
 } u;
 // Texture sampler
+// Texture data is unsigned integer, but in case of texelFetch() sampler is not used 
 layout(set = 1, binding = 1) uniform usampler2D u_height_map;
 
 // in
