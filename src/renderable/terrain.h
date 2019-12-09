@@ -28,8 +28,9 @@ public:
         // Texture that describes terrain height values at selected points
         // Usually a 16-bit square grayscale texture
         std::string_view height_map;
-        // Size in units of the while terrain
-        t::F32 scale;
+        // Scale of the current terrain compared to terrain drawn
+        // when only scale factors below are used - 1.0 stays as original.
+        //t::F32 scale;
         // How much world units the single pixel intensity value represents
         t::F32 height_unit_size;
         // Spacing in world units between each pixel value

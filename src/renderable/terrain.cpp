@@ -8,7 +8,6 @@
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     description_({ "textures/ps_height_1k.png",
-        100.0f,
         0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
         160.0f }),// Spacing in meters between pixels in heightmap
     renderer_(renderer),
@@ -74,11 +73,11 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
     UniformBufferObject ubo {};
-    ubo.world_from_local = t::kMat4Identoty;
-    /*
-    ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.scale, 3.0, 
-        description_.scale));
-    */
+    //ubo.world_from_local = t::kMat4Identoty;
+    
+    ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.horizontal_spacing, 
+        description_.height_unit_size,
+        description_.horizontal_spacing) / scene::kMetersPerUnit);
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
