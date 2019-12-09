@@ -28,7 +28,10 @@ public:
     // data_format - data format of the texture. Afects returned value from sampling texture in shaders.
     Texture2D(std::string_view name, std::string_view file_name, const Renderer& renderer, 
         t::U16 forced_channel_count = 0, DataFormat data_format = DataFormat::lUNorm);
+    // Get image vulkan ibject
     const VkImage& Get() const;
+    // Get image wrapper object
+    const vlk::Image& GetImage() const;
     const VkImageView& GetImageView() const;
 private:
     // Select appropriate texture format for storing in memory based on given parameter

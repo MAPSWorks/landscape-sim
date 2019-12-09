@@ -23,6 +23,10 @@ const VkImage& Texture2D::Get() const {
     return image_->Get();
 }
 
+const vlk::Image& Texture2D::GetImage() const {
+    return *image_;
+}
+
 const VkImageView& Texture2D::GetImageView() const {
     return image_view_->Get();
 }

@@ -12,6 +12,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
         160.0f }),// Spacing in meters between pixels in heightmap
     renderer_(renderer),
+    height_map_("terrain_height_texture", description_.height_map, renderer_, 0, renderer::Texture2D::DataFormat::kUInt),
     vertices_(GetVertices()),
     indices_(GetIndices()),
     vertex_buffer_("terrain vertices", renderer_, (renderer::vlk::BufferSize)(vertices_.size() * sizeof(vertices_[0])), vertices_.data()),
@@ -21,7 +22,6 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
-    height_map_("terrain_height_texture", description_.height_map, renderer_, 0, renderer::Texture2D::DataFormat::kUInt),
     sampler_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap)
 {
     base::Log::Info("Renderable: terrain created");
@@ -139,8 +139,8 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
     std::vector<MeshVertexType> vertices;
     //t::F32 tile_size = description_.horizontal_spacing * description_.scale;
-    t::U32 row_count = 1025;
-    t::U32 col_count = 1025;
+    t::U32 row_count = height_map_.GetImage().GetExtent().height;
+    t::U32 col_count = height_map_.GetImage().GetExtent().width;;
     for (t::U32 row = 0; row < row_count - 1; ++row) {
         for (t::U32 col = 0; col < col_count - 1; ++col) {
             MeshVertexType vertice;
@@ -153,8 +153,8 @@ std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
 
 std::vector<t::U32> Terrain::GetIndices() const {
     std::vector<t::U32> indices;
-    t::U32 row_count = 1025 - 1;
-    t::U32 col_count = 1025 - 1;
+    t::U32 row_count = height_map_.GetImage().GetExtent().height - 1;
+    t::U32 col_count = height_map_.GetImage().GetExtent().width - 1;
     t::U32 indice = 0;
     for (t::U32 row = 0; row < row_count - 1; ++row) {
         for (t::U32 col = 0; col < col_count - 1; ++col) {

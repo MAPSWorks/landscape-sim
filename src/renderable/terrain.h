@@ -52,6 +52,9 @@ private:
     const Description description_;
     // Reference to renderer this triangle is tied with
     renderer::Renderer& renderer_;
+    // Height map read in vertex shader
+    // Note should load before vertices since we need to know dimensions for heightmap
+    const renderer::Texture2D height_map_;;
     const std::vector<MeshVertexType> vertices_;
     const std::vector<t::U32> indices_;
     const renderer::VertexBuffer vertex_buffer_;
@@ -71,8 +74,6 @@ private:
     // Id because there are as many as frames-in-flight
     // This is not const because we can assign this value only after constructor initializer list.
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
-    // Height map read in vertex shader
-    const renderer::Texture2D height_map_;;
     // NOTE: possible that sampler is required but ignored with textureFetch in shader
     const renderer::vlk::Sampler sampler_;
 };
