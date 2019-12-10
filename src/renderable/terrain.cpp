@@ -78,6 +78,7 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
     ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.horizontal_spacing, 
         description_.height_unit_size,
         description_.horizontal_spacing) / scene::kMetersPerUnit);
+    
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -89,9 +90,9 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         "terrain",
         // Programmable stage
         {
-            // Shader stages
-            {"shaders/terrain_vert.spv", renderer::vlk::ShaderStage::kVertex },
-            {"shaders/terrain_frag.spv", renderer::vlk::ShaderStage::kFragment },
+        // Shader stages
+        {"shaders/terrain_vert.spv", renderer::vlk::ShaderStage::kVertex },
+        {"shaders/terrain_frag.spv", renderer::vlk::ShaderStage::kFragment },
         },
         // Vertex input params
         {
@@ -106,7 +107,7 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
         },
         // Rasterization
         {
-            renderer::vlk::GraphicsPipeline::PolygonMode::kLine,
+            renderer::vlk::GraphicsPipeline::PolygonMode::kFill,
             renderer::vlk::GraphicsPipeline::CullMode::kNone
         },
         // Multisample
@@ -137,7 +138,6 @@ renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() 
 // heightmap texture size - 1
 std::vector<Terrain::MeshVertexType> Terrain::GetVertices() const {
     std::vector<MeshVertexType> vertices;
-    //t::F32 tile_size = description_.horizontal_spacing * description_.scale;
     t::U32 row_count = height_map_.GetImage().GetExtent().height;
     t::U32 col_count = height_map_.GetImage().GetExtent().width;;
     for (t::U32 row = 0; row < row_count - 1; ++row) {
