@@ -27,12 +27,13 @@ void WorldToGPU::OnExit() const {
 }
 
 void WorldToGPU::KeyPress(const platform::Input& input) {
-    
+    // To be used ...
 }
-void WorldToGPU::MouseMove(const platform::Input& input)
-{
+void WorldToGPU::MouseMove(const platform::Input& input) {
+    scene_manager_.MouseMove(input);
 }
-void WorldToGPU::MouseButtonPress(const platform::Input& input)
-{
+
+void WorldToGPU::MouseButtonPress(const platform::Input& input) {
+    // To be used ...
 }
 }; // application

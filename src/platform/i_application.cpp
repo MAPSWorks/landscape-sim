@@ -66,11 +66,11 @@ void IApplication::MouseButtonCallback(GLFWwindow* window, int button, int actio
     IApplication* this_obj = static_cast<IApplication*>(glfwGetWindowUserPointer(window));
     // Enable/disable mouse cursor
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
-        this_obj->input_.GetMouseData().cursor_disabled = !this_obj->input_.GetMouseData().cursor_disabled;
+        this_obj->input_.SetMouseCursorStatus(!this_obj->input_.GetMouseData().cursor_disabled);
         glfwSetInputMode(this_obj->window_, GLFW_CURSOR, (this_obj->input_.GetMouseData().cursor_disabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL));
         // Make sure camera dont jump when returning to camera controle mode
         if (this_obj->input_.GetMouseData().cursor_disabled) {
-            this_obj->input_.GetMouseData().first_move = true;
+            this_obj->input_.SetMouseFirstMove(true);
         }
     }
 

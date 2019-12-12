@@ -58,4 +58,8 @@ void SceneManager::RenderFrame() const {
     renderer_.FrameEnd();
 }
 
+void SceneManager::MouseMove(const platform::Input& input) const {
+
+}
+
 }; // scene

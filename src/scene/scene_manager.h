@@ -14,6 +14,7 @@ public:
     // input - current state of user input (keyboard, mouse)
     void Update(const platform::Input& input) const;
     void RenderFrame() const;
+    void MouseMove(const platform::Input& input) const;
 private:
     // Renderer will not be changed in runtime therefore grab the reference
     renderer::Renderer& renderer_;

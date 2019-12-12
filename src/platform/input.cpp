@@ -26,7 +26,7 @@ void Input::UpdateMouse(t::F32 xpos, t::F32 ypos) {
         // When mouse is touched for the first time make sure it does not jump
         if (mouse_data_.first_move) {
             mouse_data_.last_position = t::Vec2(xpos, ypos);
-            mouse_data_.first_move = false;
+            SetMouseFirstMove(false);
         }
         // How much data has have moved
         mouse_data_.offset.x = xpos - mouse_data_.last_position.x;
@@ -49,12 +49,20 @@ const Input::KeyData& Input::GetKeyData() const {
     return key_data_;
 }
 
-Input::MouseData& Input::GetMouseData() {
+const Input::MouseData& Input::GetMouseData() const{
     return mouse_data_;
 }
 
 const Input::MouseButtonData& Input::GetMouseButtonData() const {
     return mouse_button_data_;
+}
+
+void Input::SetMouseCursorStatus(bool disabled) {
+    mouse_data_.cursor_disabled = disabled;
+}
+
+void Input::SetMouseFirstMove(bool first_move) {
+    mouse_data_.first_move = first_move;
 }
 
 void Input::PrintKeyData() const {

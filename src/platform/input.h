@@ -73,8 +73,10 @@ public:
     void UpdateMouse(t::F32 xpos, t::F32 ypos);
     void UpdateMouseButton(MouseButton button, Action action, t::I32 mods);
     const KeyData& GetKeyData() const;
-    MouseData& GetMouseData();
+    const MouseData& GetMouseData() const;
     const MouseButtonData& GetMouseButtonData() const;
+    void SetMouseCursorStatus(bool disabled);
+    void SetMouseFirstMove(bool first_move);
     // Print current key state 
     void PrintKeyData() const;
 private:
