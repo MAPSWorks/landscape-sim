@@ -45,6 +45,8 @@ void main() {
 	// Calculate normal that is not scaled and normalized
 	o_normal = ComputeNormal(map_coords, local_position);
 	// Should also be scale just like mesh itself
+	// OPTI: pass expensive normal matrix through uniform or calculate normals already
+	//		 in world space 
 	o_normal = mat3(transpose(inverse(u.world_from_local))) * o_normal;
 	o_normal = normalize(o_normal);
 	o_color = vec3(1.0, 1.0, 1.0);
