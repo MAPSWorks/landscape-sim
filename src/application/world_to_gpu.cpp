@@ -29,4 +29,10 @@ void WorldToGPU::OnExit() const {
 void WorldToGPU::KeyPress(const platform::Input& input) {
     
 }
+void WorldToGPU::MouseMove(const platform::Input& input)
+{
+}
+void WorldToGPU::MouseButtonPress(const platform::Input& input)
+{
+}
 }; // application

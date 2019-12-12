@@ -15,6 +15,8 @@ private:
     virtual void Resize(const t::Size32& win_size) override;
     virtual void OnExit() const override;
     virtual void KeyPress(const platform::Input& input) override;
+    virtual void MouseMove(const platform::Input& input) override;
+    virtual void MouseButtonPress(const platform::Input& input) override;
     renderer::Renderer renderer_;
     scene::SceneManager scene_manager_;
 };

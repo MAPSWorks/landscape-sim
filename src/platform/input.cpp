@@ -19,8 +19,42 @@ void Input::UpdateKeyData(Key key, Action action) {
     }
 }
 
+void Input::UpdateMouse(t::F32 xpos, t::F32 ypos) {
+    mouse_data_.position = t::Vec2(xpos, ypos);
+    // When mouse input is calculated for free-look
+    if (mouse_data_.cursor_disabled) {
+        // When mouse is touched for the first time make sure it does not jump
+        if (mouse_data_.first_move) {
+            mouse_data_.last_position = t::Vec2(xpos, ypos);
+            mouse_data_.first_move = false;
+        }
+        // How much data has have moved
+        mouse_data_.offset.x = xpos - mouse_data_.last_position.x;
+        // Reversed since y-coordinates range from bottom to top
+        mouse_data_.offset.y = mouse_data_.last_position.y - ypos;
+        mouse_data_.last_position.x = xpos;
+        mouse_data_.last_position.y = ypos;
+        // Scale
+        mouse_data_.offset *= mouse_data_.sensitivity;
+    }
+}
+
+void Input::UpdateMouseButton(MouseButton button, Action action, t::I32 mods) {
+    mouse_button_data_.button = button;
+    mouse_button_data_.action = action;
+    mouse_button_data_.mods = mods;
+}
+
 const Input::KeyData& Input::GetKeyData() const {
     return key_data_;
+}
+
+Input::MouseData& Input::GetMouseData() {
+    return mouse_data_;
+}
+
+const Input::MouseButtonData& Input::GetMouseButtonData() const {
+    return mouse_button_data_;
 }
 
 void Input::PrintKeyData() const {
