@@ -43,7 +43,7 @@ To use *World2GPU* application, launch executable file and provide command line 
 file name of a scene to be rendered *(option -s)*.
 Scene description file should be present in *'/scenes'* folder.
 Application settings are stored in *'ini/settings.json'* file.  
-To move around the scene use *W*, *S*, *A*, *D*, *R* and *F* keys on the keyboard.
+To move around the scene use *W*, *S*, *A*, *D*, *R* and *F* keys on the keyboard; mouse - to look around.
 #### Usage example
 To start rendering the scene described in 'scenes/scene_alpha.json' file write:
 > WorldToGPU.exe -s scene_alpha.json
