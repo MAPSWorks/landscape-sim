@@ -41,21 +41,25 @@ void PerspectiveCamera::Move(const platform::Input& input, t::F32 dt) {
 }
 
 void PerspectiveCamera::Rotate(const platform::Input& input, bool constrain_pitch) {
-    auto offset = input.GetMouseData().offset * mouse_sensitivity_;
-    // Make sure yaw_ stays between 0 and 360
-    yaw_ = glm::mod(yaw_ + offset.x, 360.0f);
-    pitch_ += offset.y;
-    // Make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrain_pitch) {
-        constexpr t::F32 kConstraint = 89.0;
-        if (pitch_ > kConstraint) {
-            pitch_ = kConstraint;
-        } else
-        if (pitch_ < -kConstraint) {
-            pitch_ = -kConstraint;
+    bool free_look_enabled = input.GetMouseData().cursor_disabled;
+    if (free_look_enabled) {
+        auto offset = input.GetMouseData().offset * mouse_sensitivity_;
+        // Make sure yaw_ stays between 0 and 360
+        yaw_ = glm::mod(yaw_ + offset.x, 360.0f);
+        pitch_ += offset.y;
+        // Make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (constrain_pitch) {
+            constexpr t::F32 kConstraint = 89.0;
+            if (pitch_ > kConstraint) {
+                pitch_ = kConstraint;
+            }
+            else
+                if (pitch_ < -kConstraint) {
+                    pitch_ = -kConstraint;
+                }
         }
+        UpdateVectors(yaw_, pitch_);
     }
-    UpdateVectors(yaw_, pitch_);
 }
 
 t::Mat4 PerspectiveCamera::GetViewMatrix() const {

@@ -60,9 +60,7 @@ void SceneManager::RenderFrame() const {
 }
 
 void SceneManager::MouseMove(const platform::Input& input) const {
-    if (input.GetMouseData().cursor_disabled) {
-        scene_.GetContents().camera->Rotate(input);
-    }
+    scene_.GetContents().camera->Rotate(input);
 }
 
 }; // scene
