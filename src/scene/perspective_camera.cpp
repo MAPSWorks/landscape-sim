@@ -24,21 +24,20 @@ PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params
         z_near_, ", zfar - ", z_far_, ", yfov - ", y_field_of_view_);
 }
 
-void PerspectiveCamera::Update(const platform::Input& input) {
-    t::F32  dt = 0.01f;
+void PerspectiveCamera::Move(const platform::Input& input, t::F32 dt) {
     // Camera controls using active keys (keys neing currently held)
     if (input.GetKeyData().active.count(platform::Input::Key::kW))
-        Move(Direction::kForward, dt);
+        UpdatePosition(Direction::kForward, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kS))
-        Move(Direction::kBackward, dt);
+        UpdatePosition(Direction::kBackward, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kA))
-        Move(Direction::kLeft, dt);
+        UpdatePosition(Direction::kLeft, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kD))
-        Move(Direction::kRight, dt);
+        UpdatePosition(Direction::kRight, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kR))
-        Move(Direction::kUp, dt);
+        UpdatePosition(Direction::kUp, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kF))
-        Move(Direction::kDown, dt);
+        UpdatePosition(Direction::kDown, dt);
 }
 
 void PerspectiveCamera::Rotate(const platform::Input& input, bool constrain_pitch) {
@@ -85,7 +84,7 @@ void PerspectiveCamera::UpdateVectors(t::F32 yaw, t::F32 pitch) {
     up_ = glm::normalize(glm::cross(right_, front_));
 }
 
-void PerspectiveCamera::Move(Direction direction, t::F32 dt) {
+void PerspectiveCamera::UpdatePosition(Direction direction, t::F32 dt) {
     // Since this is animation, mediate it by elapsed time
     t::F32 velocity = movement_speed_ * dt;
     switch (direction) {

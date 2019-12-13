@@ -22,7 +22,8 @@ SceneManager::SceneManager(renderer::Renderer& renderer, std::string_view scene_
 // Update the state of the world
 // NOTE: updating frequency is not the same as frame rendering frequency
 void SceneManager::Update(const platform::Input& input) const {
-    scene_.GetContents().camera->Update(input);
+    t::F32 dt = 0.01f;
+    scene_.GetContents().camera->Move(input, dt);
 }
 
 // Render the current state of the world

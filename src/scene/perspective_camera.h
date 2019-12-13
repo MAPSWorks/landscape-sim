@@ -16,7 +16,7 @@ public:
         t::F32 yfov;
     };
     PerspectiveCamera(const Parameters& params);
-    void Update(const platform::Input& input) override;
+    void Move(const platform::Input& input, t::F32 dt) override;
     // Camera free-look
     // constrain_pitch - whether free look is constrained
     void Rotate(const platform::Input& input, bool constrain_pitch = true) override;
@@ -36,7 +36,7 @@ private:
     void UpdateVectors(t::F32 yaw, t::F32 pitch);
     // Move in given direction.
     // Mediated by delta time.
-    void Move(Direction direction, t::F32 dt);
+    void UpdatePosition(Direction direction, t::F32 dt);
 
     // Vector of view direction
     t::Vec3 front_;
