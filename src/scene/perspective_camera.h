@@ -17,6 +17,9 @@ public:
     };
     PerspectiveCamera(const Parameters& params);
     void Update(const platform::Input& input) override;
+    // Camera free-look
+    // constrain_pitch - whether free look is constrained
+    void Rotate(const platform::Input& input, bool constrain_pitch = true) override;
     virtual t::Mat4 GetViewMatrix() const override;
     virtual t::Mat4 GetProjectionMatrix(t::F32 aspect_ratio) const override;
 private:
@@ -34,6 +37,7 @@ private:
     // Move in given direction.
     // Mediated by delta time.
     void Move(Direction direction, t::F32 dt);
+
     // Vector of view direction
     t::Vec3 front_;
     // Vector upside up
@@ -50,5 +54,6 @@ private:
     t::F32 pitch_;
     // Camera options
     t::F32 movement_speed_;
+    t::F32 mouse_sensitivity_;
 };
 }; // scene

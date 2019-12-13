@@ -18,6 +18,7 @@ public:
     };
     OrthographicCamera(const Parameters& params);
     void Update(const platform::Input& input) override;
+    void Rotate(const platform::Input& input, bool constrain_pitch = true) override;
     virtual t::Mat4 GetViewMatrix() const override;
     virtual t::Mat4 GetProjectionMatrix(t::F32 aspect_ratio) const override;
 private:

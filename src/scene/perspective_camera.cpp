@@ -17,7 +17,8 @@ PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params
     yaw_(0),
     pitch_(0),
     // 1.4 m/s human walking speed
-    movement_speed_(5.0f) {
+    movement_speed_(5.0f),
+    mouse_sensitivity_(0.25f) {
     UpdateVectors(yaw_, pitch_);
     base::Log::Info("Scene: perspective camera initialized : position - " , glm::to_string(world_position_), ", znear - ",
         z_near_, ", zfar - ", z_far_, ", yfov - ", y_field_of_view_);
@@ -38,6 +39,24 @@ void PerspectiveCamera::Update(const platform::Input& input) {
         Move(Direction::kUp, dt);
     if (input.GetKeyData().active.count(platform::Input::Key::kF))
         Move(Direction::kDown, dt);
+}
+
+void PerspectiveCamera::Rotate(const platform::Input& input, bool constrain_pitch) {
+    auto offset = input.GetMouseData().offset * mouse_sensitivity_;
+    // Make sure yaw_ stays between 0 and 360
+    yaw_ = glm::mod(yaw_ + offset.x, 360.0f);
+    pitch_ += offset.y;
+    // Make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (constrain_pitch) {
+        constexpr t::F32 kConstraint = 89.0;
+        if (pitch_ > kConstraint) {
+            pitch_ = kConstraint;
+        } else
+        if (pitch_ < -kConstraint) {
+            pitch_ = -kConstraint;
+        }
+    }
+    UpdateVectors(yaw_, pitch_);
 }
 
 t::Mat4 PerspectiveCamera::GetViewMatrix() const {
@@ -90,4 +109,5 @@ void PerspectiveCamera::Move(Direction direction, t::F32 dt) {
         break;
     }
 }
+
 }; // scene

@@ -17,6 +17,10 @@ void OrthographicCamera::Update(const platform::Input& input) {
 
 }
 
+void OrthographicCamera::Rotate(const platform::Input& input, bool constrain_pitch)
+{
+}
+
 t::Mat4 OrthographicCamera::GetViewMatrix() const
 {
     return t::Mat4();
