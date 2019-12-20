@@ -16,11 +16,11 @@ IApplication::IApplication(t::U32 argc, char* argv[]) :
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
     int width, height;
     glfwGetFramebufferSize(window_, &width, &height);
-    base::Log::Info("Platform initialized. Window size: (",width, " ", height,")");
+    base::Log::Info("Platform: initialized. Window size: (",width, " ", height,")");
 }
 
 IApplication::~IApplication() {
-    base::Log::Info("Platform shutting down...");
+    base::Log::Info("Platform: shutting down...");
     Shutdown();
 }
 
@@ -95,6 +95,14 @@ void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     glfwSetMouseButtonCallback(window_, MouseButtonCallback);
     // Parameters
     glfwSetInputMode(window_, GLFW_CURSOR, (input_.GetMouseData().cursor_disabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL));
+    // GUI
+    bool use_gui = cmd_line_parser_.OptionExists("-g");
+    if (use_gui) {
+        base::Log::Info("Platform: GUI on");
+    }
+    else {
+        base::Log::Info("Platform: GUI off");
+    }
 }
 
 void IApplication::Shutdown() {

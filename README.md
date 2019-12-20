@@ -40,8 +40,8 @@ The application is tested with Visual Studio 2019, however, any C++17 compiler s
 ### Usage
 Vulkan 1.0+ compatable graphics card and drivers should be installed on a machine.  
 To use *World2GPU* application, launch executable file and provide command line arguments to specify
-file name of a scene to be rendered *(option -s)*.
-Scene description file should be present in *'/scenes'* folder.
+file name of a scene to be rendered *(option -s)* and whether to use GUI *(option -g)*.  
+Scene description file should be present in *'/scenes'* folder.  
 Application settings are stored in *'ini/settings.json'* file.  
 To move around the scene use *W*, *S*, *A*, *D*, *R* and *F* keys on the keyboard; mouse - to look around.
 #### Usage example
@@ -150,6 +150,7 @@ The dependancies are:
 - [JSON](https://github.com/nlohmann) library.
 - [AMD](https://github.com/amd) vulkan memory allocation library.  
 - [Stb](https://github.com/nothings/stb) image loader library.  
+- [IMGUI](https://github.com/ocornut/imgui) user interface library.  
 
 All libraries are included in the project.
 ### Development
