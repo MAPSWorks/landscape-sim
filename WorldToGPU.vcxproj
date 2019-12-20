@@ -29,6 +29,8 @@
     <ClCompile Include="src\external\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\external\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\external\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\gui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\gui\imgui_impl_vulkan.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\platform\input.cpp" />
     <ClCompile Include="src\renderable\i_renderable.cpp" />
@@ -98,6 +100,8 @@
     <ClInclude Include="src\external\imgui\imstb_truetype.h" />
     <ClInclude Include="src\external\json\json.hpp" />
     <ClInclude Include="src\external\stb\stb_image.h" />
+    <ClInclude Include="src\gui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\gui\imgui_impl_vulkan.h" />
     <ClInclude Include="src\platform\input.h" />
     <ClInclude Include="src\renderable\i_renderable.h" />
     <ClInclude Include="src\renderable\terrain.h" />
