@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <base/types.h>
 #include <base/cmd_line_parser.h>

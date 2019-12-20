@@ -25,6 +25,10 @@
     <ClCompile Include="src\base\json_loader.cpp" />
     <ClCompile Include="src\base\util.cpp" />
     <ClCompile Include="src\external\allocator\vk_mem_alloc.cpp" />
+    <ClCompile Include="src\external\imgui\imgui.cpp" />
+    <ClCompile Include="src\external\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\external\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\platform\input.cpp" />
     <ClCompile Include="src\renderable\i_renderable.cpp" />
@@ -86,6 +90,12 @@
     <ClInclude Include="src\external\allocator\vk_mem_alloc.h" />
     <ClInclude Include="src\external\glfw\glfw3.h" />
     <ClInclude Include="src\external\glfw\glfw3native.h" />
+    <ClInclude Include="src\external\imgui\imconfig.h" />
+    <ClInclude Include="src\external\imgui\imgui.h" />
+    <ClInclude Include="src\external\imgui\imgui_internal.h" />
+    <ClInclude Include="src\external\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\external\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\external\imgui\imstb_truetype.h" />
     <ClInclude Include="src\external\json\json.hpp" />
     <ClInclude Include="src\external\stb\stb_image.h" />
     <ClInclude Include="src\platform\input.h" />
