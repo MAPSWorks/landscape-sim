@@ -1,6 +1,9 @@
 #include "i_application.h"
 #include <base/log.h>
 #include <base/util.h>
+#include <imgui/imgui.h>
+#include <gui/imgui_impl_glfw.h>
+#include <gui/imgui_impl_vulkan.h>
 
 namespace platform {
 IApplication::IApplication(t::U32 argc, char* argv[]) :
