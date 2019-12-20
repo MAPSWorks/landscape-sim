@@ -31,7 +31,6 @@ VkSampler Sampler::Create(UsageMode usage_mode) const {
     create_info.compareEnable = VK_FALSE;
     create_info.compareOp = VK_COMPARE_OP_ALWAYS;
     create_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-    
     // Switch creation parameters dependant on usage mode
     switch (usage_mode) {
     // Most common usage of a sampler - simple texture
@@ -39,11 +38,13 @@ VkSampler Sampler::Create(UsageMode usage_mode) const {
         create_info.anisotropyEnable = VK_TRUE;
         create_info.maxAnisotropy = 16;
         create_info.unnormalizedCoordinates = VK_FALSE;
+        
         break;
     // Sampler used for height data reading in shader
+    // NOTE: This migh be dummy so configuration inside is not important
     case UsageMode::kHeightmap:
         create_info.anisotropyEnable = VK_FALSE;
-        create_info.unnormalizedCoordinates = VK_TRUE;
+        create_info.unnormalizedCoordinates = VK_FALSE;
         break;
     default:
         throw std::runtime_error("Renderer: sampler usage mode unknown");
