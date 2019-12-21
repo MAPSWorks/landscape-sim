@@ -1,16 +1,14 @@
 #include "i_application.h"
 #include <base/log.h>
 #include <base/util.h>
-#include <imgui/imgui.h>
-#include <gui/imgui_impl_glfw.h>
-#include <gui/imgui_impl_vulkan.h>
 
 namespace platform {
 IApplication::IApplication(t::U32 argc, char* argv[]) :
     setting_file_("ini/settings.json"),
     scene_folder_("scenes/"),
     cmd_line_parser_(argc, argv),
-    settings_loader_(setting_file_) {
+    settings_loader_(setting_file_),
+    gui_(cmd_line_parser_.OptionExists("-g")) {
     Init(t::Size32(settings_loader_.Get().at("windowSize").at(0).get<t::U32>(),
         settings_loader_.Get().at("windowSize").at(1).get<t::U32>()),
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
@@ -96,13 +94,9 @@ void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     // Parameters
     glfwSetInputMode(window_, GLFW_CURSOR, (input_.GetMouseData().cursor_disabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL));
     // GUI
-    bool use_gui = cmd_line_parser_.OptionExists("-g");
-    if (use_gui) {
-        base::Log::Info("Platform: GUI on");
-    }
-    else {
-        base::Log::Info("Platform: GUI off");
-    }
+    gui_.InitPlatform(window_, true);
+    // NOTE: renderer of GUI is called in actual application because more objects are needed than
+    //       available here.
 }
 
 void IApplication::Shutdown() {

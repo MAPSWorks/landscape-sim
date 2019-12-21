@@ -5,6 +5,7 @@
 #include <base/types.h>
 #include <base/cmd_line_parser.h>
 #include <base/json_loader.h>
+#include <gui/gui.h>
 #include "input.h"
 
 // Base class for application
@@ -48,6 +49,8 @@ private:
     void Shutdown();
     // Key and mouse input state tracker
     Input input_;
+    // User interface
+    const gui::GUI gui_;
 };
 
 }; // platform
