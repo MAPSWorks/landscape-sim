@@ -3,10 +3,6 @@
 #include "imgui_impl_glfw.h"
 
 namespace gui {
-    // TODO: check if ErrorCheck function actually need return a value, if not remove it and use this
-    void ErrCheck(VkResult result) {
-        renderer::vlk::ErrorCheck(result);
-    }
 GUI::GUI(bool enabled, GLFWwindow* window, bool install_callbacks, renderer::Renderer& renderer) :
     renderer_(renderer),
     enabled_(enabled) {
@@ -75,7 +71,7 @@ void GUI::InitRenderer() {
     init_info.MinImageCount = min_image_count_; 
     // How many images swapchain actually created
     init_info.ImageCount = static_cast<t::U32>(renderer_.GetWindow().GetSwapchainObject().GetImageViews().size());
-    init_info.CheckVkResultFn = ErrCheck;
+    init_info.CheckVkResultFn = renderer::vlk::ErrorCheck;
     // Render pass 
     VkRenderPass render_pass = renderer_.GetWindow().GetRenderPass();
     ImGui_ImplVulkan_Init(&init_info, render_pass);
