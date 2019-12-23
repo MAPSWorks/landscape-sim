@@ -6,7 +6,7 @@
 // Vulkan helper functions
 namespace renderer::vlk {
 // Throws if return code equals error code
-VkResult ErrorCheck(VkResult result);
+void ErrorCheck(VkResult result);
 // For debugging, textual values of parameter flags
 std::string ToString(VkShaderStageFlagBits value);
 std::string ToString(VkPrimitiveTopology value);

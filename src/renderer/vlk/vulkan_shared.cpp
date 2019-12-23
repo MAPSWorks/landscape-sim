@@ -1,7 +1,7 @@
 #include "vulkan_shared.h"
 
 namespace renderer::vlk {
-VkResult ErrorCheck(VkResult result) {
+void ErrorCheck(VkResult result) {
     std::string error_str;
     switch (result) {
     case VK_ERROR_OUT_OF_HOST_MEMORY:
@@ -82,7 +82,6 @@ VkResult ErrorCheck(VkResult result) {
     if (result != VK_SUCCESS) {
         throw std::runtime_error("Vulkan: " + error_str);
     }
-    return result;
 }
 
 std::string ToString(VkShaderStageFlagBits value) {
