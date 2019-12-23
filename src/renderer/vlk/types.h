@@ -26,6 +26,15 @@ inline ShaderStage operator |(ShaderStage lhs, ShaderStage rhs) {
 
 enum class DescriptorType {
     kUniformBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-    kCombinedImageSampler = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+    kSampler = VK_DESCRIPTOR_TYPE_SAMPLER,
+    kCombinedImageSampler = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+    kSampledImage = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+    kStorageImage = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+    kUniformTexelBuffer = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,
+    kStorageTexelBuffer = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,
+    kStorageBuffer = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+    kUniformBufferDynamic = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+    kStorageBufferDynamic = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,
+    kInputAttachment = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT
 };
 };

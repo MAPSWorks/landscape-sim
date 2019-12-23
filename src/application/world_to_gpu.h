@@ -2,6 +2,7 @@
 #include <platform/i_application.h>
 #include <renderer/renderer.h>
 #include <scene/scene_manager.h>
+#include <gui/gui.h>
 
 // Collects and executes subsystems that make up a complete application
 namespace application {
@@ -19,5 +20,6 @@ private:
     virtual void MouseButtonPress(const platform::Input& input) override;
     renderer::Renderer renderer_;
     scene::SceneManager scene_manager_;
+    gui::GUI gui_;
 };
 }; // application

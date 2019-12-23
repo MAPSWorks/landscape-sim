@@ -1,24 +1,36 @@
 #pragma once
+#include <memory>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <renderer/renderer.h>
 #include <imgui/imgui.h>
 #include "imgui_impl_vulkan.h"
 
 // Imgui library implementation wrapper.
-// Class does NOT implement RAII, gui is initialized in steps.
-// First initialize platform, then renderer.
 namespace gui {
 class GUI {
 public:
-    GUI(bool enabled);
+    // enabled - whether GUI is initialized and rendered
+    // window - window the gui will be attached to
+    // install_callbacks - whether to allow gui to set their own window callbacks
+    // renderer - a renderer this gui is rendered with
+    GUI(bool enabled, GLFWwindow* window, bool install_callbacks, renderer::Renderer& renderer);
+    ~GUI();
+    // non-copyable
+    GUI(GUI const&) = delete;
+    GUI operator=(GUI const&) = delete;
+    void Render() const;
+private:
     // Initialize GLFW platform
     void InitPlatform(GLFWwindow* window, bool install_callbacks) const;
     // Init renderer binding
-    // renderer_info - list of objects needed to initialize renderer
-    // render_pass - a render pass to render a gui
-    void InitRenderer(ImGui_ImplVulkan_InitInfo& init_info, VkRenderPass render_pass) const;
-private:
+    void InitRenderer();
+    // Renderer will not be changed in runtime therefore grab the reference
+    renderer::Renderer& renderer_;
     const bool enabled_;
+    std::unique_ptr<const renderer::vlk::DescriptorPool> descriptor_pool_;
+    // TODO: This number should come from swapchain SelectImageCount() function
+    const t::U16 min_image_count_ = 2;
 };
 
 }; // gui

@@ -7,8 +7,7 @@ IApplication::IApplication(t::U32 argc, char* argv[]) :
     setting_file_("ini/settings.json"),
     scene_folder_("scenes/"),
     cmd_line_parser_(argc, argv),
-    settings_loader_(setting_file_),
-    gui_(cmd_line_parser_.OptionExists("-g")) {
+    settings_loader_(setting_file_) {
     Init(t::Size32(settings_loader_.Get().at("windowSize").at(0).get<t::U32>(),
         settings_loader_.Get().at("windowSize").at(1).get<t::U32>()),
         settings_loader_.Get().at("renderer").at("appName").get<std::string>());
@@ -93,10 +92,6 @@ void IApplication::Init(const t::Size32& win_size, std::string_view title) {
     glfwSetMouseButtonCallback(window_, MouseButtonCallback);
     // Parameters
     glfwSetInputMode(window_, GLFW_CURSOR, (input_.GetMouseData().cursor_disabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL));
-    // GUI
-    gui_.InitPlatform(window_, true);
-    // NOTE: renderer of GUI is called in actual application because more objects are needed than
-    //       available here.
 }
 
 void IApplication::Shutdown() {

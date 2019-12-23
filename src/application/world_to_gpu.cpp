@@ -1,11 +1,14 @@
 #include "world_to_gpu.h"
 #include <base/log.h>
 
+// cmd_line_parser_.OptionExists("-g")
+
 namespace application {
 WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     platform::IApplication(argc, argv),
     renderer_(settings_loader_, window_),
-    scene_manager_(renderer_, GetSceneFileName()) {
+    scene_manager_(renderer_, GetSceneFileName()),
+    gui_(cmd_line_parser_.OptionExists("-g"), window_, true, renderer_) {
     base::Log::Info("'World to GPU' initialized");
 }
 
