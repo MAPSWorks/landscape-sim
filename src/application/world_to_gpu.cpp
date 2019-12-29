@@ -17,7 +17,7 @@ void WorldToGPU::Update(const platform::Input& input) {
 }
 
 void WorldToGPU::RenderFrame() {
-    scene_manager_.RenderFrame();
+    scene_manager_.RenderFrame(gui_);
 }
 
 void WorldToGPU::Resize(const t::Size32& win_size) {

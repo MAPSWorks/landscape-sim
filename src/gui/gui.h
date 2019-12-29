@@ -19,7 +19,7 @@ public:
     // non-copyable
     GUI(GUI const&) = delete;
     GUI operator=(GUI const&) = delete;
-    void Render() const;
+    void Render(VkCommandBuffer cmd_buffer) const;
 private:
     // Initialize GLFW platform
     void InitPlatform(GLFWwindow* window, bool install_callbacks) const;

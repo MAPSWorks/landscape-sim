@@ -27,7 +27,7 @@ void SceneManager::Update(const platform::Input& input) const {
 }
 
 // Render the current state of the world
-void SceneManager::RenderFrame() const {
+void SceneManager::RenderFrame(const gui::GUI& gui) const {
     // Target hot loop
     // 0. Bind view/scene resources - camera, environment, (set=0)
     // Foreach shader:
@@ -48,14 +48,16 @@ void SceneManager::RenderFrame() const {
 
     // Command buffer recording
     renderer_.BeginRecordCurrentCommandBuffer();
+    /*
     // Bind per-view resources that later will be used by object for rendering
     view_.BindDescriptorSet(renderer_.GetCurrentCommandBuffer(), current_frame_id);
     // Add to command buffer object-by-object
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer(), current_frame_id);
     }
+    */
+    gui.Render(renderer_.GetCurrentCommandBuffer().Get());
     renderer_.EndRecordCurrentCommandBuffer();
-
     renderer_.FrameEnd();
 }
 
