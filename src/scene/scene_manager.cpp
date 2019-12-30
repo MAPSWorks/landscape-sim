@@ -58,6 +58,7 @@ void SceneManager::RenderFrame(const gui::GUI& gui) const {
     gui.BeginFrame();
     // Specify GUI for each renderable
     if (gui.IsEnabled()) {
+        scene_.GetContents().environment.UpdateGUI();
         for (const auto& renderable : scene_.GetContents().renderables) {
             renderable->UpdateGUI();
         }

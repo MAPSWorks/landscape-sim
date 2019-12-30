@@ -75,6 +75,7 @@
     <ClCompile Include="src\renderer\vlk\validation.cpp" />
     <ClCompile Include="src\renderer\vlk\vulkan_shared.cpp" />
     <ClCompile Include="src\renderer\window.cpp" />
+    <ClCompile Include="src\scene\environment.cpp" />
     <ClCompile Include="src\scene\i_camera.cpp" />
     <ClCompile Include="src\scene\orthographic_camera.cpp" />
     <ClCompile Include="src\scene\perspective_camera.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="src\base\log.h" />
     <ClInclude Include="src\base\types.h" />
     <ClInclude Include="src\renderer\window.h" />
+    <ClInclude Include="src\scene\environment.h" />
     <ClInclude Include="src\scene\i_camera.h" />
     <ClInclude Include="src\scene\orthographic_camera.h" />
     <ClInclude Include="src\scene\perspective_camera.h" />

@@ -84,11 +84,11 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
 }
 
 void Terrain::UpdateGUI() const {
-    static float f = 0.0f;
-    static int counter = 0;
+    //static float f = 0.0f;
+    //static int counter = 0;
 
-    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
+    ImGui::Begin("Terrain");
+    /*
     ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 
 
@@ -103,6 +103,7 @@ void Terrain::UpdateGUI() const {
     ImGui::InputFloat("input float ", &float_val);
     ImGui::Text("float = %f", float_val);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    */
     ImGui::End();
 }
 

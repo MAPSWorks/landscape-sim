@@ -4,9 +4,9 @@
 #include <vector>
 #include <renderer/renderer.h>
 #include <renderable/i_renderable.h>
+#include "environment.h"
 #include "i_camera.h"
 #include "view.h"
-
 // Scene content storage and manipulation
 namespace scene {
 class Scene {
@@ -14,6 +14,7 @@ public:
     using RenderableVector = std::vector<std::unique_ptr<renderable::IRenderable>>;
     // POD structure of a contents that describe single scene
     struct Contents {
+        Environment environment;
         // Scene vantage pont
         std::unique_ptr<ICamera> camera;
         // Visible scene objects
