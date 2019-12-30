@@ -194,6 +194,10 @@ This module is concerned with organization of the scene and delegation of the ta
 and how to *act*. It is the highest level submodule in the engine.  
 Scene submodule itself merely generates and stores the scene description.  
 Camera definitions are also contained in the *scene* module.
+##### GUI
+GUI mddule implements renderer of a GUI and it's integration into existing appliction. GUI can be completely disabled
+with command line option.  
+Actual user interface specification is left for the each individual engine entity and GUI module gathers and renders it.
 #### Renderer design decisions
 Given Vulkan API low-level design philosophy, the most complex part of this engine is the renderer. The complexity can be
 managed by implementing higher-level abstractions and such abstractions inevitably lead to countless renderer design decisions along the way. Some
@@ -233,4 +237,4 @@ Data is initialized during initialization phase and is not modified during appli
 <img src="drawing.png" alt="Design scheme" width = "500"/>  
 
 ## Author
-Designed and developed by [Ivars Rb.](https://github.com/ivarsrb)
+Designed and developed by [Ivars Rusbergs.](https://github.com/ivarsrb)
