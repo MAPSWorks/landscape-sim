@@ -19,7 +19,14 @@ public:
     // non-copyable
     GUI(GUI const&) = delete;
     GUI operator=(GUI const&) = delete;
-    void Render(VkCommandBuffer cmd_buffer) const;
+    bool IsEnabled() const;
+    // GUI is allowed to be specified only after this call
+    void BeginFrame() const;
+    // GUI core final prepare for actual rendering commands.
+    // GUI cannot be specified after this call.
+    void PrepareForRendering() const;
+    // Adds commands for gui rendering to given command bueffer
+    void AppendCommandBuffer(VkCommandBuffer cmd_buffer) const;
 private:
     // Initialize GLFW platform
     void InitPlatform(GLFWwindow* window, bool install_callbacks) const;

@@ -54,8 +54,16 @@ void SceneManager::RenderFrame(const gui::GUI& gui) const {
     for (const auto& renderable : scene_.GetContents().renderables) {
         renderable->AppendCommandBuffer(renderer_.GetCurrentCommandBuffer(), current_frame_id);
     }
-
-    gui.Render(renderer_.GetCurrentCommandBuffer().Get());
+    // GUI
+    gui.BeginFrame();
+    // Specify GUI for each renderable
+    if (gui.IsEnabled()) {
+        for (const auto& renderable : scene_.GetContents().renderables) {
+            renderable->UpdateGUI();
+        }
+    }
+    gui.PrepareForRendering();
+    gui.AppendCommandBuffer(renderer_.GetCurrentCommandBuffer().Get());
     
     renderer_.EndRecordCurrentCommandBuffer();
     renderer_.FrameEnd();
