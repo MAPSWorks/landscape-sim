@@ -45,16 +45,20 @@ t::U32 Swapchain::AcquireNextImageIndex(const VkSemaphore& image_available_semap
     return image_index;
 }
 
+t::U32 Swapchain::GetDesiredMinImageCount() const {
+    return min_image_count_;
+}
+
 VkSwapchainKHR Swapchain::Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 
     const VkSurfaceKHR& surface, GLFWwindow* window) {
     surface_format_ = SelectSurfaceFormat(gpu, surface);
     const VkPresentModeKHR present_mode = SelectPresentMode(gpu, surface);
     extent_ = RetrieveExtent(gpu, surface, window);
-    uint32_t image_count = SelectImageCount(gpu, surface);
+    min_image_count_ = SelectImageCount(gpu, surface);
     VkSwapchainCreateInfoKHR create_info {};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface = surface;
-    create_info.minImageCount = image_count;
+    create_info.minImageCount = min_image_count_;
     create_info.imageFormat = surface_format_.format;
     create_info.imageColorSpace = surface_format_.colorSpace;
     create_info.imageExtent = extent_;

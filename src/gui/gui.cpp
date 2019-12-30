@@ -1,6 +1,8 @@
 #include "gui.h"
 #include <base/log.h>
+#include <imgui/imgui.h>
 #include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
 
 namespace gui {
 GUI::GUI(bool enabled, GLFWwindow* window, bool install_callbacks, renderer::Renderer& renderer) :
@@ -10,6 +12,7 @@ GUI::GUI(bool enabled, GLFWwindow* window, bool install_callbacks, renderer::Ren
         base::Log::Info("GUI: on");
         InitPlatform(window, install_callbacks);
         InitRenderer();
+        UploadFonts();
         base::Log::Info("GUI: GUI initialized");
     }
     else {
@@ -19,7 +22,6 @@ GUI::GUI(bool enabled, GLFWwindow* window, bool install_callbacks, renderer::Ren
 
 GUI::~GUI() {
     if (enabled_) {
-        // TODO: check if need gpu wait idle function here or is it done elsewehere
         base::Log::Info("GUI: GUI destroying destroying...");
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -27,7 +29,7 @@ GUI::~GUI() {
     }
 }
 
-
+// GLFW here should not interfere with application GLFW calls
 void GUI::InitPlatform(GLFWwindow* window, bool install_callbacks) const {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -49,6 +51,7 @@ void GUI::InitRenderer() {
     init_info.Queue = renderer_.GetContext().device.GetQueue().GetGraphics();
     init_info.PipelineCache = VK_NULL_HANDLE;
     // Descriptor pool
+    // Number is 'just to have enaugh'
     const t::U32 descriptor_count = 1000;
     const std::vector<renderer::vlk::DescriptorPool::PoolSize> pool_sizes =
     {
@@ -64,59 +67,39 @@ void GUI::InitRenderer() {
         { renderer::vlk::DescriptorType::kStorageBufferDynamic, descriptor_count },
         { renderer::vlk::DescriptorType::kInputAttachment, descriptor_count }
     };
+    // Number is 'just to have enaugh'
     const t::U32 set_count = 1000;
     descriptor_pool_ = std::make_unique<const renderer::vlk::DescriptorPool>(renderer_.GetContext().device.Get(),
         pool_sizes, set_count * static_cast<t::U32>(pool_sizes.size()));
     init_info.DescriptorPool = descriptor_pool_->Get(); 
     init_info.Allocator = nullptr;
     // How many swapchain images we requested
-    init_info.MinImageCount = min_image_count_; 
+    init_info.MinImageCount = renderer_.GetWindow().GetSwapchainObject().GetDesiredMinImageCount();
     // How many images swapchain actually created
     init_info.ImageCount = static_cast<t::U32>(renderer_.GetWindow().GetSwapchainObject().GetImageViews().size());
     init_info.CheckVkResultFn = renderer::vlk::ErrorCheck;
-    // Render pass 
+    // NOTE: This render pass is sued to create pipeline, so this gui should be rendered in the same pass.
     VkRenderPass render_pass = renderer_.GetWindow().GetRenderPass();
+    // Initialize vulkan objects
     ImGui_ImplVulkan_Init(&init_info, render_pass);
-
-    // Upload Fonts
-    {
-        /*
-        VkResult err;
-        // Use any command queue
-        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-        VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
-
-        err = vkResetCommandPool(renderer.GetContext().device.Get(), command_pool, 0);
-        ErrCheck(err);
-        VkCommandBufferBeginInfo begin_info = {};
-        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        err = vkBeginCommandBuffer(command_buffer, &begin_info);
-        ErrCheck(err);
-        */
-        const renderer::vlk::CommandPool command_pool(renderer_.GetContext().device.Get(), renderer_.GetContext().device.GetQueue().GetFamilyIndices().graphics.value(),
-            false, true) ;
-        renderer::vlk::CommandBuffer command_buffer(command_pool);
-        command_buffer.Begin(renderer::vlk::CommandBuffer::Usage::kOneTimeSubmit);
-        ImGui_ImplVulkan_CreateFontsTexture(command_buffer.Get());
-        command_buffer.End();
-        // Submit to graphics queue because graphics queue implicitly supports transfer
-        renderer_.GetContext().device.GetQueue().Submit(renderer_.GetContext().device.GetQueue().GetGraphics(), command_buffer.Get());
-        /*
-        VkSubmitInfo end_info = {};
-        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        end_info.commandBufferCount = 1;
-        end_info.pCommandBuffers = &command_buffer;
-        err = vkEndCommandBuffer(command_buffer);
-        ErrCheck(err);
-        err = vkQueueSubmit(renderer.GetContext().device.GetQueue().GetGraphics(), 1, &end_info, VK_NULL_HANDLE);
-        ErrCheck(err);
-        */
-        renderer::vlk::ErrorCheck(vkDeviceWaitIdle(renderer_.GetContext().device.Get()));
-        ImGui_ImplVulkan_DestroyFontUploadObjects();
-    }
 }
 
+// Create command buffer for single use to execute on graphics queue.
+// Wait till it executes Vulkan GUI backend commands and free all objects.
+void GUI::UploadFonts() const {
+    const renderer::vlk::CommandPool command_pool(renderer_.GetContext().device.Get(), renderer_.GetContext().device.GetQueue().GetFamilyIndices().graphics.value(),
+        false, true);
+    renderer::vlk::CommandBuffer command_buffer(command_pool);
+    command_buffer.Begin(renderer::vlk::CommandBuffer::Usage::kOneTimeSubmit);
+    ImGui_ImplVulkan_CreateFontsTexture(command_buffer.Get());
+    command_buffer.End();
+    // Submit to graphics queue because graphics queue implicitly supports transfer
+    renderer_.GetContext().device.GetQueue().Submit(renderer_.GetContext().device.GetQueue().GetGraphics(), command_buffer.Get());
+    // Wait for upload then destroy
+    renderer_.WaitForGPUIdle();
+    ImGui_ImplVulkan_DestroyFontUploadObjects();
+    // NOTE: command buffer is detroyed together with command pool.
+}
 
 bool GUI::IsEnabled() const {
     return enabled_;

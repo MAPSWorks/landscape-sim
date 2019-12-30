@@ -34,7 +34,7 @@ PipelineManager& Renderer::GetPipelineManager() {
 }
 
 void Renderer::WaitForGPUIdle() const {
-    vkDeviceWaitIdle(context_.device.Get());
+    vlk::ErrorCheck(vkDeviceWaitIdle(context_.device.Get()));
 }
 
 void Renderer::Resize() {

@@ -19,6 +19,9 @@ public:
     const std::vector<ImageView>& GetImageViews() const;
     // Return Next image index from swapchain that is available
     t::U32 AcquireNextImageIndex(const VkSemaphore& image_available_semaphore) const;
+    // Return number of desired images in swapchain (used for GUI setup)
+    // This function differs from SelectImageCount() in that it returns already acquired number.
+    t::U32 GetDesiredMinImageCount() const;
 private:
     VkSwapchainKHR Create(const VkPhysicalDevice& gpu, const DeviceQueue::FamilyIndices& qf_indices, 
         const VkSurfaceKHR& surface,  GLFWwindow* window);
@@ -49,6 +52,8 @@ private:
     const std::vector<VkImage> images_;
     // Image views for swapchain images
     const std::vector<ImageView> image_views_;
+    // Store minimum desired image count in swapchain (used in GUI setup)
+    t::U32 min_image_count_;
 
 };
 }; // renderer vlk
