@@ -1,8 +1,6 @@
 #include "world_to_gpu.h"
 #include <base/log.h>
 
-// cmd_line_parser_.OptionExists("-g")
-
 namespace application {
 WorldToGPU::WorldToGPU(t::U32 argc, char* argv[]) :
     platform::IApplication(argc, argv),

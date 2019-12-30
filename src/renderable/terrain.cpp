@@ -1,6 +1,7 @@
 #include "terrain.h"
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui/imgui.h>
 #include <base/log.h>
 #include <base/image_file.h>
 #include <scene/types.h>
@@ -80,6 +81,11 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) cons
         description_.horizontal_spacing) / scene::kMetersPerUnit);
     
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
+}
+
+void Terrain::UpdateGUI() const {
+    //ImGui::Begin("Hello, world!");
+    //ImGui::End();
 }
 
 renderer::vlk::GraphicsPipeline::CreateParams Terrain::GetPipelineDescription() {

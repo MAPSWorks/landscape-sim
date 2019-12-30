@@ -20,5 +20,7 @@ public:
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const = 0;
     // frame_id - id of a current frame-in-flight
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const = 0;
+    // Prepare gui for rendering
+    virtual void UpdateGUI() const = 0;
 };
 }; // renderable
