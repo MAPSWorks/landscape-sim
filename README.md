@@ -26,7 +26,7 @@
 		* [Renderable](#renderable)
 		* [Scene](#scene)
 		* [GUI](#gui)
-		* [Renderer design decisions](#renderer-design-decisions)
+	* [Renderer design decisions](#renderer-design-decisions)
 	* [Module interaction scheme](#module-interaction-scheme)
 * [Author](#author)
 ## General info
