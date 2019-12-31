@@ -165,10 +165,6 @@
   <ItemGroup>
     <None Include="product\ini\settings.json" />
     <None Include="product\scenes\scene_alpha.json" />
-    <None Include="shaders\shader.frag" />
-    <None Include="shaders\shader.vert" />
-    <None Include="shaders\shader_vb.frag" />
-    <None Include="shaders\shader_vb.vert" />
     <None Include="shaders\terrain.frag" />
     <None Include="shaders\terrain.vert" />
   </ItemGroup>
