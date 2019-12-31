@@ -43,7 +43,7 @@ void SceneManager::RenderFrame(const gui::GUI& gui) const {
     // Update uniform buffers
     view_.UpdateUniformBuffer(current_frame_id, *scene_.GetContents().camera);
     for (const auto& renderable : scene_.GetContents().renderables) {
-        renderable->UpdateUniformBuffer(current_frame_id);
+        renderable->UpdateUniformBuffer(current_frame_id, scene_.GetContents().environment);
     };
 
     // Command buffer recording

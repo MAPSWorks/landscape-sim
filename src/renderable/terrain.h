@@ -12,6 +12,7 @@
 #include <scene/view.h>
 #include <renderer/texture2d.h>
 #include <renderer/vlk/sampler.h>
+#include <scene/environment.h>
 #include "i_renderable.h"
 
 
@@ -19,6 +20,7 @@
 namespace renderable {
 struct UniformBufferObject {
     t::Mat4 world_from_local;
+    t::Vec3 sunlight_direction;
 };
 
 class Terrain : public IRenderable {
@@ -39,7 +41,7 @@ public:
     Terrain(renderer::Renderer& renderer, const scene::View& view);
     virtual void InitDescriptorSets() override;
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
-    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
+    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const override;
     virtual void UpdateGUI() const override;
 private:
     // Vertex structure used for terrain mesh

@@ -1,5 +1,4 @@
 #include "terrain.h"
-#include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui/imgui.h>
 #include <base/log.h>
@@ -69,17 +68,14 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 }
 
-void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
-    static auto startTime = std::chrono::high_resolution_clock::now();
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const {
     UniformBufferObject ubo {};
     //ubo.world_from_local = t::kMat4Identoty;
-    
     ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.horizontal_spacing, 
         description_.height_unit_size,
         description_.horizontal_spacing) / scene::kMetersPerUnit);
-    
+    ubo.sunlight_direction = environmen.GetSunlightDirection();
+
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
@@ -198,7 +194,7 @@ std::vector<t::U32> Terrain::GetIndices() const {
     return indices;
 }
 
-// escribe bindings withing a descriptor set layout
+// Describe bindings within a descriptor set layout
 std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorSetBindings() const {
     std::vector<renderer::vlk::DescriptorSetLayout::Binding> bindings;
     // Uniform buffer
@@ -207,7 +203,8 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
         // Binding index (location), corresponds to layout(binding = n)  in shader
         binding.index = scene::DescriptorBidingId::kUniformBuffer;
         binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
-        binding.stage = renderer::vlk::ShaderStage::kVertex;
+        // TODO: check why resources are available even when shader stages is set different
+        binding.stage = renderer::vlk::ShaderStage::kVertex | renderer::vlk::ShaderStage::kFragment;
         binding.count = 1;
         bindings.push_back(binding);
     }

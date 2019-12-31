@@ -3,6 +3,7 @@
 #include <renderer/vlk/command_buffer.h>
 #include <renderer/vlk/uniform_buffer.h>
 #include <renderer/frame_manager.h>
+#include <scene/environment.h>
 
 // Renderables base class
 namespace renderable {
@@ -19,7 +20,8 @@ public:
     // frame_id - id of a current frame-in-flight
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const = 0;
     // frame_id - id of a current frame-in-flight
-    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const = 0;
+    // environmen - description of environemnt this renderable is rendered in
+    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const = 0;
     // Prepare gui for rendering
     virtual void UpdateGUI() const = 0;
 };
