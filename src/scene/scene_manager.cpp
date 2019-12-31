@@ -1,4 +1,5 @@
 #include "scene_manager.h"
+#include <imgui/imgui.h>
 #include <base/log.h>
 
 namespace scene {
@@ -58,6 +59,7 @@ void SceneManager::RenderFrame(const gui::GUI& gui) {
     gui.BeginFrame();
     // Specify GUI for each renderable
     if (gui.IsEnabled()) {
+        UpdateApplicationGUI();
         scene_.GetContents().environment.UpdateGUI();
         for (const auto& renderable : scene_.GetContents().renderables) {
             renderable->UpdateGUI();
@@ -72,6 +74,12 @@ void SceneManager::RenderFrame(const gui::GUI& gui) {
 
 void SceneManager::MouseMove(const platform::Input& input) {
     scene_.GetContents().camera->Rotate(input);
+}
+
+void SceneManager::UpdateApplicationGUI() const {
+    ImGui::Begin("Application");
+    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::End();
 }
 
 }; // scene

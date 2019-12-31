@@ -16,6 +16,9 @@ public:
     void Update(const platform::Input& input);
     void RenderFrame(const gui::GUI& gui);
     void MouseMove(const platform::Input& input);
+    // GUI that relates to whole application
+    // TODO: should probably be somewhere esle
+    void UpdateApplicationGUI() const;
 private:
     // Renderer will not be changed in runtime therefore grab the reference
     renderer::Renderer& renderer_;
