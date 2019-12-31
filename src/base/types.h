@@ -36,6 +36,10 @@ using Mat3 = glm::tmat3x3<F32>;
 using Mat4 = glm::tmat4x4<F32>;
 // GLM type specialization
 constexpr Mat4 kMat4Identoty = Mat4(1.0f);
+// Constants
+constexpr t::F64 kPi = 3.14159265359;
+constexpr t::F64 k2Pi = 2 * kPi;
+constexpr t::F64 kPi2 = kPi / 2;
 // Type compile-time checks
 static_assert(sizeof(F32) == 4);
 static_assert(sizeof(F64) == 8);
