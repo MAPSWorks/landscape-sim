@@ -21,7 +21,7 @@ public:
         RenderableVector renderables;
     };
     Scene(std::string_view file_name, renderer::Renderer& renderer, const View& view);
-    const Contents& GetContents() const;
+    Contents& GetContents();
     // Generate scene objects and structure from given scene file, return the contents
     Contents GenerateContents(std::string_view file_name, renderer::Renderer& renderer, const View& view) const;
 private:

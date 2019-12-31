@@ -42,7 +42,7 @@ public:
     virtual void InitDescriptorSets() override;
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const override;
-    virtual void UpdateGUI() const override;
+    virtual void UpdateGUI() override;
 private:
     // Vertex structure used for terrain mesh
     using MeshVertexType = renderer::VertexPos2i;

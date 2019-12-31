@@ -8,7 +8,7 @@ Scene::Scene(std::string_view file_name, renderer::Renderer& renderer, const Vie
     base::Log::Info("Scene: scene initialized");
 }
 
-const Scene::Contents& Scene::GetContents() const {
+Scene::Contents& Scene::GetContents() {
     return contents_;
 }
 

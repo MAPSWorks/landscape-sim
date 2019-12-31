@@ -21,13 +21,13 @@ SceneManager::SceneManager(renderer::Renderer& renderer, std::string_view scene_
 
 // Update the state of the world
 // NOTE: updating frequency is not the same as frame rendering frequency
-void SceneManager::Update(const platform::Input& input) const {
+void SceneManager::Update(const platform::Input& input) {
     t::F32 dt = 0.01f;
     scene_.GetContents().camera->Move(input, dt);
 }
 
 // Render the current state of the world
-void SceneManager::RenderFrame(const gui::GUI& gui) const {
+void SceneManager::RenderFrame(const gui::GUI& gui) {
     // Target hot loop
     // 0. Bind view/scene resources - camera, environment, (set=0)
     // Foreach shader:
@@ -70,7 +70,7 @@ void SceneManager::RenderFrame(const gui::GUI& gui) const {
     renderer_.FrameEnd();
 }
 
-void SceneManager::MouseMove(const platform::Input& input) const {
+void SceneManager::MouseMove(const platform::Input& input) {
     scene_.GetContents().camera->Rotate(input);
 }
 

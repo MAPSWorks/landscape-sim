@@ -79,7 +79,7 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, cons
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
-void Terrain::UpdateGUI() const {
+void Terrain::UpdateGUI() {
     //static float f = 0.0f;
     //static int counter = 0;
 

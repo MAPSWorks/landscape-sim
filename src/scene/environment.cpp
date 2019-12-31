@@ -11,7 +11,7 @@ const t::Vec3& Environment::GetSunlightDirection() const {
     return sunlight_direction_;
 }
 
-void Environment::UpdateGUI()  const {
+void Environment::UpdateGUI() {
     ImGui::Begin("Environment");
     ImGui::Text("Sunlight direction: (%0.2f, %0.2f, %0.2f)", sunlight_direction_.x, sunlight_direction_.y, sunlight_direction_.z);
     static t::F32 vertical_angle = 0;

@@ -23,6 +23,6 @@ public:
     // environmen - description of environemnt this renderable is rendered in
     virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const = 0;
     // Prepare gui for rendering
-    virtual void UpdateGUI() const = 0;
+    virtual void UpdateGUI() = 0;
 };
 }; // renderable
