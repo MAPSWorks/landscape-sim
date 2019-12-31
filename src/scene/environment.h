@@ -8,9 +8,9 @@ public:
     Environment();
     const t::Vec3& GetSunlightDirection() const;
     // Prepare user interface to modify environment values.
-    void UpdateGUI() const;
+    void UpdateGUI() const ;
 private:
     // Direction vector from sunlight to origin
-    t::Vec3 sunlight_direction_;
+    mutable t::Vec3 sunlight_direction_;
 };
 }; //  scene
