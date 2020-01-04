@@ -29,6 +29,8 @@ class Environment {
 public:
     Environment();
     const t::Vec3& GetSunlightDirection() const;
+    // Update environemnt state
+    void Update(t::F32 dt);
     // Prepare user interface to modify environment values.
     void UpdateGUI();
 private:

@@ -25,6 +25,7 @@ SceneManager::SceneManager(renderer::Renderer& renderer, std::string_view scene_
 void SceneManager::Update(const platform::Input& input) {
     t::F32 dt = 0.01f;
     scene_.GetContents().camera->Move(input, dt);
+    scene_.GetContents().environment.Update(dt);
 }
 
 // Render the current state of the world
