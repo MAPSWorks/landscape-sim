@@ -5,8 +5,8 @@ namespace scene {
 Environment::Environment()  {
 }
 
-const t::Vec3& Environment::GetSunlightDirection() const {
-    return sun_.direction;
+const Sun& Environment::GetSun() const {
+    return sun_;
 }
 
 void Environment::Update(t::F32 dt) {

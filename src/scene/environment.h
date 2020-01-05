@@ -14,8 +14,8 @@ struct Sun {
     }
     // By default oriented along -Z axis
     const t::Vec3 kDefaultDirection = t::Vec3(0.0, 0.0, -1.0);
-    // Sunlight color TODO
-    t::Vec3 color;
+    // Sunlight color
+    t::Vec3 color = t::Vec3(1.0, 1.0, 1.0);
     // Direction vector from sunlight to origin
     t::Vec3 direction = kDefaultDirection;
     // Euler rotation angles of a direction
@@ -28,7 +28,7 @@ struct Sun {
 class Environment {
 public:
     Environment();
-    const t::Vec3& GetSunlightDirection() const;
+    const Sun& GetSun() const;
     // Update environemnt state
     void Update(t::F32 dt);
     // Prepare user interface to modify environment values.

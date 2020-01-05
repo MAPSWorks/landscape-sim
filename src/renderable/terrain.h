@@ -21,6 +21,8 @@ namespace renderable {
 struct UniformBufferObject {
     t::Mat4 world_from_local;
     t::Vec3 sunlight_direction;
+    // allignas -  variable is aligned on 16 byte boundaries
+    alignas(16) t::Vec3 sunlight_color;
 };
 
 class Terrain : public IRenderable {

@@ -11,6 +11,7 @@ layout(set = 0, binding = 0) uniform UniformBufferView {
 layout(set = 1, binding = 0) uniform UniformBufferObject {
 	mat4 world_from_local;
 	vec3 sunlight_direction; // not used here TODO: think about it
+	vec3 sunlight_color; // not used here TODO: think about it
 } u;
 // Texture sampler
 // Texture data is unsigned integer, but in case of texelFetch() sampler is not used 

@@ -74,8 +74,8 @@ void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, cons
     ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.horizontal_spacing, 
         description_.height_unit_size,
         description_.horizontal_spacing) / scene::kMetersPerUnit);
-    ubo.sunlight_direction = environmen.GetSunlightDirection();
-
+    ubo.sunlight_direction = environmen.GetSun().direction;
+    ubo.sunlight_color = environmen.GetSun().color;
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
