@@ -18,11 +18,12 @@ layout(location = 0) out vec4 out_color;
 // C_shaded = F_unlit(n, v) + clamp(dot(l,n)) * C_light * C_surface
 vec3 LambertianShading(in vec3 surface_color, in vec3 surface_normal,
 						in vec3 light_color, in vec3 vector_to_light) {
+	// OPTI: instead of max try clamp(n, 0, 1), it should be very fast
 	return max(dot(surface_normal, vector_to_light), 0.0) * light_color * surface_color;
 }
 
 void main() {
-	const vec3 reverse_light_direction = u.sunlight_direction * -1.0; 
+	const vec3 reverse_light_direction = -u.sunlight_direction; 
 	// Renormalize normal because this normal is interpolated normal from vertex shader
 	// and interpolated normal is not guaranteed to be of a unit length.
 	const vec3 normal = normalize(i_normal);

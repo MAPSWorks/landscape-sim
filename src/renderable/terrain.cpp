@@ -56,7 +56,7 @@ void Terrain::InitDescriptorSets() {
         resources_to_bind.push_back(resource);
     }
     renderer_.GetShaderResources().UpdateDescriptorSet(descriptor_set_id_, resources_to_bind);
-}
+} 
 
 // Add command to given command buffer that is already in recording state
 void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const {
@@ -66,7 +66,7 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.BindGraphicsDescriptorSet(renderer_.GetShaderResources().GetDescriptorSet(descriptor_set_id_, frame_id).Get(),
         renderer_.GetPipelineManager().GetGraphicsPipeline(pipeline_id_).GetLayout().Get(), scene::DescruptorSetSlotId::kPerObject);
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
-}
+} 
 
 void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const {
     UniformBufferObject ubo {};
