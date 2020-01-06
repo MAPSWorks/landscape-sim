@@ -23,6 +23,9 @@ vec3 LambertianShading(in vec3 surface_color, in vec3 surface_normal,
 
 void main() {
 	const vec3 reverse_light_direction = u.sunlight_direction * -1.0; 
-	const vec3 shaded_color = LambertianShading(i_color, i_normal, u.sunlight_color, reverse_light_direction);
+	// Renormalize normal because this normal is interpolated normal from vertex shader
+	// and interpolated normal is not guaranteed to be of a unit length.
+	const vec3 normal = normalize(i_normal);
+	const vec3 shaded_color = LambertianShading(i_color, normal, u.sunlight_color, reverse_light_direction);
 	out_color = vec4(shaded_color, 1.0);
 }
