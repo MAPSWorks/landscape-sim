@@ -12,21 +12,16 @@
 #include <scene/view.h>
 #include <renderer/texture2d.h>
 #include <renderer/vlk/sampler.h>
-#include <scene/environment.h>
 #include "i_renderable.h"
-
 
 // Terrain representation as a renderable object
 namespace renderable {
-struct UniformBufferObject {
-    t::Mat4 world_from_local;
-    t::Vec3 sunlight_direction;
-    // allignas -  variable is aligned on 16 byte boundaries
-    alignas(16) t::Vec3 sunlight_color;
-};
-
 class Terrain : public IRenderable {
 public:
+    // Per-object uniform data
+    struct UniformData {
+        t::Mat4 world_from_local;
+    };
     // Data that describes the terrain
     struct Description {
         // Texture that describes terrain height values at selected points
@@ -43,7 +38,7 @@ public:
     Terrain(renderer::Renderer& renderer, const scene::View& view);
     virtual void InitDescriptorSets() override;
     virtual void AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const override;
-    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const override;
+    virtual void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const override;
     virtual void UpdateGUI() override;
 private:
     // Vertex structure used for terrain mesh

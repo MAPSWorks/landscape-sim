@@ -4,6 +4,7 @@
 #include <renderer/vlk/pipeline_layout.h>
 #include <renderer/renderer.h>
 #include <renderer/shader_resources.h>
+#include "environment.h"
 #include "i_camera.h"
 
 // Represents/abstract a view of the scene.
@@ -15,13 +16,16 @@ public:
     struct UniformData {
         t::Mat4 view_from_world;
         t::Mat4 projection_from_view;
+        t::Vec3 sunlight_direction;
+        // allignas -  variable is aligned on 16 byte boundaries
+        alignas(16) t::Vec3 sunlight_color;
     };
     View(renderer::Renderer& renderer);
     // After descriptor pool has been created, we can allocate descriptor sets
     void InitDescriptorSet();
     // Update uniform buffer for given frame-in-flight.
     // Camera represents current view.
-    void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const;
+    void UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera, const Environment& environmen) const;
     // Bind per-view descritor set to command buffer with dummy layout
     void BindDescriptorSet(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const;
     const renderer::vlk::DescriptorSetLayout& GetDescriptorSetLayout() const;

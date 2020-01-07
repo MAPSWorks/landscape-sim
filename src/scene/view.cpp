@@ -28,10 +28,12 @@ void View::InitDescriptorSet() {
     renderer_.GetShaderResources().UpdateDescriptorSet(descr_set_id_, resources_to_bind);
 }
 
-void View::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera) const {
+void View::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const ICamera& camera, const Environment& environmen) const {
     UniformData ubo{};
     ubo.view_from_world = camera.GetViewMatrix();
     ubo.projection_from_view = camera.GetProjectionMatrix(renderer_.GetWindow().GetAspectRatio());
+    ubo.sunlight_direction = environmen.GetSun().direction;
+    ubo.sunlight_color = environmen.GetSun().color;
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 

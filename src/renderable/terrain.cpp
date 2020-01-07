@@ -20,7 +20,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     descriptor_set_layout_(renderer_.GetShaderResources().GetDescriptorSetLayoutCache().AddDescriptorSetLayout(GetDescriptorSetBindings())),
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
-    uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformBufferObject))),
+    uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformData))),
     sampler_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap)
 {
     base::Log::Info("Renderable: terrain created");
@@ -68,14 +68,12 @@ void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_bu
     command_buffer.DrawIndexed(static_cast<t::U32>(indices_.size()), 1, 0, 0, 0);
 } 
 
-void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id, const scene::Environment& environmen) const {
-    UniformBufferObject ubo {};
+void Terrain::UpdateUniformBuffer(renderer::FrameManager::FrameId frame_id) const {
+    UniformData ubo {};
     //ubo.world_from_local = t::kMat4Identoty;
     ubo.world_from_local = glm::scale(t::kMat4Identoty, t::Vec3(description_.horizontal_spacing, 
         description_.height_unit_size,
         description_.horizontal_spacing) / scene::kMetersPerUnit);
-    ubo.sunlight_direction = environmen.GetSun().direction;
-    ubo.sunlight_color = environmen.GetSun().color;
     renderer_.GetShaderResources().GetkUniformBuffer(uniform_buffer_id_, frame_id).Update(&ubo);
 }
 
