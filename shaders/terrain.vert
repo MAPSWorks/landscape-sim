@@ -4,8 +4,6 @@
 layout(set = 0, binding = 0) uniform UniformBufferView {
     mat4 view_from_world;
 	mat4 projection_from_view;
-	vec3 sunlight_direction; // not used here TODO: think about it
-	vec3 sunlight_color; // not used here TODO: think about it
 } u_v;
 
 // Per-object set

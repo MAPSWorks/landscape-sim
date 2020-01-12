@@ -201,8 +201,7 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
         // Binding index (location), corresponds to layout(binding = n)  in shader
         binding.index = scene::DescriptorBidingId::kUniformBuffer;
         binding.type = renderer::vlk::DescriptorType::kUniformBuffer;
-        // TODO: check why resources are available even when shader stages is set different
-        binding.stage = renderer::vlk::ShaderStage::kVertex | renderer::vlk::ShaderStage::kFragment;
+        binding.stage = renderer::vlk::ShaderStage::kVertex;
         binding.count = 1;
         bindings.push_back(binding);
     }

@@ -13,9 +13,11 @@
 namespace scene {
 class View {
 public:
-    struct UniformData {
+    struct UniformDataView {
         t::Mat4 view_from_world;
         t::Mat4 projection_from_view;
+    };
+    struct UniformDataEnvironment {
         t::Vec3 sunlight_direction;
         // allignas -  variable is aligned on 16 byte boundaries
         alignas(16) t::Vec3 sunlight_color;
@@ -32,13 +34,15 @@ public:
 private:
     const renderer::vlk::DescriptorSetLayout& AddDescrSetLayout() const;
     // Add buffer to shader resources and return it id
-    t::U64 AddUniformBufferId() const;
+    t::U64 AddUniformBufferViewId() const;
+    t::U64 AddUniformBufferViewEnvironment() const;
     // Reference to renderer object
     renderer::Renderer& renderer_;
     // Per-view descriptor set layout
     const renderer::vlk::DescriptorSetLayout& descr_set_layout_;
     // Uniform buffer data are stored in a buffer pointed to by this id
-    const renderer::ShaderResources::UniformBufferId uniform_buffer_id_;
+    const renderer::ShaderResources::UniformBufferId uniform_buffer_view_id_;
+    const renderer::ShaderResources::UniformBufferId uniform_buffer_environment_id_;
     // Descriptor set should be bound together with pipeline layout, therefore
     // if we want to bind per-view shader resource before-hand, we need a dummy pipeline layout.
     // Per-view shader data in actual objects will be exactly like in this dummy layout plus their own.
