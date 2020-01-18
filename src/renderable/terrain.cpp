@@ -7,9 +7,13 @@
 
 namespace renderable {
 Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
+    /*
     description_({ "textures/ps_height_1k.png",
-        0.1f, // Each 16-bit pixel unit (0 to 65535) corresponds to 0.1 meter
-        160.0f }),// Spacing in meters between pixels in heightmap
+        0.1f,
+        160.0f }),*/
+    description_({ "textures/height_64.png",
+    0.02f,
+    160.0f }), 
     renderer_(renderer),
     height_map_("terrain_height_texture", description_.height_map, renderer_, 0, renderer::Texture2D::DataFormat::kUInt),
     vertices_(GetVertices()),
