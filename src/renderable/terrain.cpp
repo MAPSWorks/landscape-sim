@@ -11,7 +11,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     description_({ "textures/ps_height_1k.png",
         0.1f,
         160.0f }),*/
-    description_({ "textures/height_64.png",
+    description_({ "textures/height_flat_64.png",
     0.02f,
     160.0f }), 
     renderer_(renderer),
