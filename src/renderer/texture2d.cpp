@@ -64,6 +64,9 @@ VkFormat Texture2D::SelectFormat(t::U16 channel_count, t::U16 bits_per_channel, 
                 if (channel_count == 1) {
                     format = VK_FORMAT_R8_UNORM;
                 }
+                else if (channel_count == 3) {
+                    format = VK_FORMAT_R8G8B8_UNORM;
+                }
                 else if (channel_count == 4) {
                     format = VK_FORMAT_R8G8B8A8_UNORM;
                 }
