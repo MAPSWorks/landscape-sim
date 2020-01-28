@@ -18,8 +18,7 @@ layout(set = 1, binding = 1) uniform usampler2D u_height_map;
 // in
 layout(location = 0) in ivec2 a_local_position;
 // out
-layout(location = 0) out vec3 o_color;
-layout(location = 1) out vec3 o_normal;
+layout(location = 0) out vec3 o_normal;
 // TODO make out as structure
 
 // Unnormalized normal that is calculated as cross product 
@@ -49,6 +48,5 @@ void main() {
 	//		 in world space (in function ComputeNormal() multiply positions with world mat)
 	o_normal = mat3(transpose(inverse(u.world_from_local))) * o_normal;
 	o_normal = normalize(o_normal);
-	o_color = vec3(1.0, 1.0, 1.0);
 	gl_Position = u_v.projection_from_view * u_v.view_from_world * u.world_from_local * vec4(local_position, 1.0);
 }
