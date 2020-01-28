@@ -25,7 +25,9 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
     pipeline_id_(renderer_.GetPipelineManager().AddGraphicsPipeline(GetPipelineDescription(),
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformData))),
-    sampler_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap)
+    sampler_dummy_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap),
+    base_texture_("terrain_base_texture", "textures/texture.jpg", renderer_),
+    base_sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");
 }
@@ -52,7 +54,7 @@ void Terrain::InitDescriptorSets() {
         // Image sampler
         if (resource.type == renderer::vlk::DescriptorType::kCombinedImageSampler) {
             resource.image_view = height_map_.GetImageView();
-            resource.image_sampler = sampler_.Get();
+            resource.image_sampler = sampler_dummy_.Get();
         }
         else {
             throw std::runtime_error("Renderable: unhandled resource type");

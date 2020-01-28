@@ -76,6 +76,9 @@ private:
     // This is not const because we can assign this value only after constructor initializer list.
     renderer::ShaderResources::DescrSetId descriptor_set_id_;
     // NOTE: possible that sampler is required but ignored with textureFetch in shader
-    const renderer::vlk::Sampler sampler_;
+    const renderer::vlk::Sampler sampler_dummy_;
+    // Texturing
+    const renderer::Texture2D base_texture_;
+    const renderer::vlk::Sampler base_sampler_;
 };
 }; // renderable
