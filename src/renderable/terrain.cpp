@@ -39,28 +39,36 @@ void Terrain::InitDescriptorSets() {
     // Bind resources to descriptor set
     std::vector<renderer::ShaderResources::DescrSetUpdateInfo> resources_to_bind;
     const auto bindings = GetDescriptorSetBindings();
-    // NOTE: order of bindings and resource descriptions here should match!!!!!
-    for (const auto& binding : bindings) {
+    {
         renderer::ShaderResources::DescrSetUpdateInfo resource;
+        const auto& binding = bindings.at(0);
         resource.type = binding.type;
         resource.count = binding.count;
-        // Uniform buffer
-        if (resource.type == renderer::vlk::DescriptorType::kUniformBuffer) {
-            resource.buffer_id = uniform_buffer_id_;
-            resource.buffer_offset = 0;
-            // Whole buffer
-            resource.buffer_range = 0;
-        } else
-        // Image sampler
-        if (resource.type == renderer::vlk::DescriptorType::kCombinedImageSampler) {
-            resource.image_view = height_map_.GetImageView();
-            resource.image_sampler = sampler_dummy_.Get();
-        }
-        else {
-            throw std::runtime_error("Renderable: unhandled resource type");
-        }
+        resource.buffer_id = uniform_buffer_id_;
+        resource.buffer_offset = 0;
+        // Whole buffer
+        resource.buffer_range = 0;
         resources_to_bind.push_back(resource);
     }
+    {
+        renderer::ShaderResources::DescrSetUpdateInfo resource;
+        const auto& binding = bindings.at(1);
+        resource.type = binding.type;
+        resource.count = binding.count;
+        resource.image_view = height_map_.GetImageView();
+        resource.image_sampler = sampler_dummy_.Get();
+        resources_to_bind.push_back(resource);
+    }
+    {
+        renderer::ShaderResources::DescrSetUpdateInfo resource;
+        const auto& binding = bindings.at(2);
+        resource.type = binding.type;
+        resource.count = binding.count;
+        resource.image_view = base_texture_.GetImageView();
+        resource.image_sampler = base_sampler_.Get();
+        resources_to_bind.push_back(resource);
+    }
+
     renderer_.GetShaderResources().UpdateDescriptorSet(descriptor_set_id_, resources_to_bind);
 } 
 
@@ -211,13 +219,23 @@ std::vector<renderer::vlk::DescriptorSetLayout::Binding> Terrain::GetDescriptorS
         binding.count = 1;
         bindings.push_back(binding);
     }
-    // Combined image sampler
+    // Combined image sampler (height map)
     {
         renderer::vlk::DescriptorSetLayout::Binding binding;
         // Binding index (location), corresponds to layout(binding = n)  in shader
         binding.index = 1;
         binding.type = renderer::vlk::DescriptorType::kCombinedImageSampler;
         binding.stage = renderer::vlk::ShaderStage::kVertex;
+        binding.count = 1;
+        bindings.push_back(binding);
+    }
+    // Combined image sampler (base texture)
+    {
+        renderer::vlk::DescriptorSetLayout::Binding binding;
+        // Binding index (location), corresponds to layout(binding = n)  in shader
+        binding.index = 2;
+        binding.type = renderer::vlk::DescriptorType::kCombinedImageSampler;
+        binding.stage = renderer::vlk::ShaderStage::kFragment;
         binding.count = 1;
         bindings.push_back(binding);
     }
