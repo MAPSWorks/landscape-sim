@@ -26,7 +26,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformData))),
     sampler_dummy_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap),
-    base_texture_("terrain_base_texture", "textures/texture.jpg", renderer_),
+    base_texture_("terrain_base_texture", "textures/texture.jpg", renderer_, 4),
     base_sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");

@@ -32,6 +32,8 @@ const VkImageView& Texture2D::GetImageView() const {
 }
 
 // NOTE: add formats as needed
+// NOTE: in case of 3 channel textures, many GPUS dont
+//       support 3 channels so make them 4 channels upon loading
 VkFormat Texture2D::SelectFormat(t::U16 channel_count, t::U16 bits_per_channel, DataFormat data_format) const {
     VkFormat format = VK_FORMAT_UNDEFINED;
     if (bits_per_channel == 16) {
@@ -64,9 +66,7 @@ VkFormat Texture2D::SelectFormat(t::U16 channel_count, t::U16 bits_per_channel, 
                 if (channel_count == 1) {
                     format = VK_FORMAT_R8_UNORM;
                 }
-                // NOTE: in case of 3 channel textures, treat them as 4 channel, because many GPUS dont
-                //       support 3 channels
-                else if (channel_count == 4 || channel_count == 3) {
+                else if (channel_count == 4) {
                     format = VK_FORMAT_R8G8B8A8_UNORM;
                 }
                 break;
