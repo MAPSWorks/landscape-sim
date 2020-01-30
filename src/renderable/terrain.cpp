@@ -13,7 +13,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         160.0f }),*/
     description_({ "textures/height_flat_64.png",
     0.02f,
-    160.0f }), 
+    1.0f }), 
     renderer_(renderer),
     height_map_("terrain_height_texture", description_.height_map, renderer_, 0, renderer::Texture2D::DataFormat::kUInt),
     vertices_(GetVertices()),
@@ -26,7 +26,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformData))),
     sampler_dummy_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap),
-    base_texture_("terrain_base_texture", "textures/texture.jpg", renderer_, 4),
+    base_texture_("terrain_base_texture", "textures/grass.png", renderer_, 4),
     base_sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");

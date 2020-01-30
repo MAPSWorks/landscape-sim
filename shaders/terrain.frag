@@ -1,4 +1,8 @@
 #version 450
+
+// Debug macros
+#define LIGHTING_OFF
+
 // Per-ciew uniform buffer
 layout(set = 0, binding = 1) uniform UniformBufferEnvironemnt {
 	// Directional light
@@ -8,7 +12,8 @@ layout(set = 0, binding = 1) uniform UniformBufferEnvironemnt {
 // Base texture sampler
 layout(set = 1, binding = 2) uniform sampler2D u_base_texture;
 // In
-layout(location = 0) in vec3 i_normal;
+layout(location = 0) in vec2 i_tex_coords;
+layout(location = 1) in vec3 i_normal;
 // Out
 layout(location = 0) out vec4 out_color;
 
@@ -26,7 +31,11 @@ void main() {
 	// Renormalize normal because this normal is interpolated normal from vertex shader
 	// and interpolated normal is not guaranteed to be of a unit length.
 	const vec3 normal = normalize(i_normal);
-	const vec3 tex_color = texture(u_base_texture, vec2(0.5, 0.5)).rgb;
+	const vec3 tex_color = texture(u_base_texture, i_tex_coords).rgb;
+#ifdef LIGHTING_OFF
+	const vec3 shaded_color = tex_color;
+#else 
 	const vec3 shaded_color = LambertianShading(tex_color, normal, u_e.sunlight_color, reverse_light_direction);
+#endif
 	out_color = vec4(shaded_color, 1.0);
 }

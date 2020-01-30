@@ -17,7 +17,7 @@ PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera::Parameters& params
     yaw_(0),
     pitch_(0),
     // 1.4 m/s human walking speed
-    movement_speed_(5.0f),
+    movement_speed_(1.0f),
     mouse_sensitivity_(0.25f) {
     UpdateVectors(yaw_, pitch_);
     base::Log::Info("Scene: perspective camera initialized : position - " , glm::to_string(world_position_), ", znear - ",
