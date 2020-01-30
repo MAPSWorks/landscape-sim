@@ -26,7 +26,7 @@ void main() {
 	// Renormalize normal because this normal is interpolated normal from vertex shader
 	// and interpolated normal is not guaranteed to be of a unit length.
 	const vec3 normal = normalize(i_normal);
-	const vec3 color = texture(u_base_texture, vec2(0.5, 0.5)).rgb;
-	const vec3 shaded_color = LambertianShading(color, normal, u_e.sunlight_color, reverse_light_direction);
+	const vec3 tex_color = texture(u_base_texture, vec2(0.5, 0.5)).rgb;
+	const vec3 shaded_color = LambertianShading(tex_color, normal, u_e.sunlight_color, reverse_light_direction);
 	out_color = vec4(shaded_color, 1.0);
 }
