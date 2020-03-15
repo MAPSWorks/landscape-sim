@@ -1,7 +1,6 @@
 #version 450
-
 // Debug macros
-#define LIGHTING_OFF
+//#define LIGHTING_OFF
 
 // Per-ciew uniform buffer
 layout(set = 0, binding = 1) uniform UniformBufferEnvironemnt {
@@ -16,6 +15,11 @@ layout(location = 0) in vec2 i_tex_coords;
 layout(location = 1) in vec3 i_normal;
 // Out
 layout(location = 0) out vec4 out_color;
+
+// Pseudo random generaor
+float Rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
 
 // Calculates and return simple lighting given normalized vectors and colors.
 // NOTE: Unlit parts are not shaded in this model.

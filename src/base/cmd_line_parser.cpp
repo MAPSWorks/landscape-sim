@@ -12,7 +12,7 @@ std::string CmdLineParser::GetOption(std::string_view option) const {
     TokenVector::const_iterator itr;
     itr = std::find(tokens_.begin(), tokens_.end(), option);
     // If option token exists and that tokken that follows after option also exists
-    if (itr != this->tokens_.end() && ++itr != this->tokens_.end()) {
+    if (itr != tokens_.end() && ++itr != tokens_.end()) {
         // Return the one that follows an option 
         return *itr;
     }
