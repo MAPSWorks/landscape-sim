@@ -7,8 +7,8 @@ int main(int argc, char* argv[]) {
         application::WorldToGPU app(argc, argv);
         app.Run();
     }
-    catch (const std::exception &e) {
-        base::Log::Error("Exception: ", e.what());
+    catch (const std::exception &except) {
+        base::Log::Error("Exception: ", except.what());
         return 1;
     }
     catch (...) {
