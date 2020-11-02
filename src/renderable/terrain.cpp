@@ -26,7 +26,7 @@ Terrain::Terrain(renderer::Renderer& renderer, const scene::View& view) :
         renderer_.GetWindow().GetRenderPass(), renderer_.GetWindow().GetSwapchainObject().GetExtent())),
     uniform_buffer_id_(renderer_.GetShaderResources().AddUniformBuffer("uniform buffer", sizeof(UniformData))),
     sampler_dummy_(renderer_.GetContext().device.Get(), renderer::vlk::Sampler::UsageMode::kHeightmap),
-    base_texture_("terrain_base_texture", "textures/grass.png", renderer_, 4),
+    base_texture_("terrain_base_texture", "textures/grass_photo.png", renderer_, 4),
     base_sampler_(renderer_.GetContext().device.Get())
 {
     base::Log::Info("Renderable: terrain created");
@@ -70,7 +70,7 @@ void Terrain::InitDescriptorSets() {
     }
 
     renderer_.GetShaderResources().UpdateDescriptorSet(descriptor_set_id_, resources_to_bind);
-} 
+}
 
 // Add command to given command buffer that is already in recording state
 void Terrain::AppendCommandBuffer(const renderer::vlk::CommandBuffer& command_buffer, renderer::FrameManager::FrameId frame_id) const {
