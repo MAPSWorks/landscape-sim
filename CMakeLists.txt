@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
+
 project(landscape-sim
         VERSION 0.1
         LANGUAGES CXX)
 
-add_subdirectory(apps)
+add_subdirectory(src/apps)

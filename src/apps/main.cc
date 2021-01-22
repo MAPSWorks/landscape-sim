@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "Hellow world/n";
-    return 0;
+  std::cout << "Hellow world/n";
+  return 0;
 }

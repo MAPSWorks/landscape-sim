@@ -2,7 +2,7 @@
 
 ## Building and running
 Build:
-cmake -G "Unix Makefiles" -S src -B build
+cmake -G "Unix Makefiles" -S . -B build
 cmake --build build --config Debug --target terrain
 
 Run:
