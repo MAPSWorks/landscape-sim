@@ -5,4 +5,7 @@ project(landscape-sim
         DESCRIPTION "Landscape simulation engine with applications"
         LANGUAGES CXX)
 
+find_package(SDL2 REQUIRED)
+find_package(Vulkan REQUIRED)
+
 add_subdirectory(apps)
