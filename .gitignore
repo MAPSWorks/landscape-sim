@@ -48,7 +48,10 @@ cmake-build-*/
 
 # Workspace files (are user-specific)
 ## Sublime
+*.sublime-project
 *.sublime-workspace
+## For clangd integration
+compile_commands.json
 ## Sublime-github package stores a github token in this file
 ## https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
