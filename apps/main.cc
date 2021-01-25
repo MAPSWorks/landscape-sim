@@ -19,8 +19,7 @@
 #include <iostream>
 #include <vector>
 
-int main() 
-{
+int main() {
   // Create an SDL window that supports Vulkan rendering.
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "Could not initialize SDL." << std::endl;

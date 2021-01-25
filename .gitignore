@@ -45,6 +45,8 @@ build/
 cmake/
 # CMake
 cmake-build-*/
+# clangd
+.clangd/
 
 # Workspace files (are user-specific)
 ## Sublime
