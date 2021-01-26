@@ -15,7 +15,7 @@
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_vulkan.h>
 
-Application::Application(int argc, char *argv[]) {
+Application::Application(int argc, char *argv[]) : name_("Alpha") {
   (void)argc;
   (void)argv;
 
@@ -23,7 +23,7 @@ Application::Application(int argc, char *argv[]) {
     throw std::runtime_error("Could not initialize SDL.");
   }
   window_ =
-      SDL_CreateWindow("Vulkan Window", SDL_WINDOWPOS_CENTERED,
+      SDL_CreateWindow(name_.c_str(), SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_VULKAN);
   if (window_ == NULL) {
     throw std::runtime_error("Could not create SDL window.");
@@ -54,7 +54,7 @@ Application::Application(int argc, char *argv[]) {
   VkApplicationInfo appInfo = {};
   appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   appInfo.pNext = NULL;
-  appInfo.pApplicationName = "Alpha application";
+  appInfo.pApplicationName = name_.c_str();
   appInfo.applicationVersion = 1;
   appInfo.pEngineName = "LSIM";
   appInfo.engineVersion = 1;
@@ -115,6 +115,8 @@ void Application::Run() {
         break;
       }
     }
+
+    // ... render
 
     SDL_Delay(10);
   }
