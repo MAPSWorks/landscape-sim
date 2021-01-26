@@ -10,7 +10,8 @@
 // Tell SDL not to mess with main()
 #define SDL_MAIN_HANDLED
 
-//#include <glm/glm.hpp>
+#define GLM_FORCE_MESSAGES
+#include <glm/glm.hpp>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_vulkan.h>
