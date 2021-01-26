@@ -1,6 +1,7 @@
-set(TARGET_NAME terrain)
+set(TARGET_NAME alpha-app)
 
-add_executable(${TARGET_NAME} main.cc)
+add_executable(${TARGET_NAME} main.cc
+                              alpha.cc)
 
 target_include_directories(${TARGET_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(${TARGET_NAME} PUBLIC ${GLM_INCLUDE_DIRS})

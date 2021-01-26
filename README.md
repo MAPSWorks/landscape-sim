@@ -7,7 +7,7 @@ Use *--recursive* flag when cloning the repository. This will fetch required sub
 ## Building
 Build:
 cmake -G "Unix Makefiles" -S . -B build
-cmake --build build --config Debug --target terrain
+cmake --build build --config Debug --target <target_name>
 
 ## Project structure
 - apps - applications using lsim engine
