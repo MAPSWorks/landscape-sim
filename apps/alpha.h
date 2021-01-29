@@ -1,6 +1,15 @@
 #ifndef LSIM_APPS_ALPHA_H_
 #define LSIM_APPS_ALPHA_H_
 
+#include <lsim/platform/i_application.h>
+
+class Alpha : public lsim::platform::IApplication {
+public:
+  Alpha(int argc, char *argv[]);
+};
+
+
+/*
 #include <string>
 
 // Tell SDL not to mess with main()
@@ -22,5 +31,5 @@ private:
   VkSurfaceKHR surface_;
   const std::string name_;
 };
-
+*/
 #endif

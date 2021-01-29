@@ -2,6 +2,7 @@
 // Created by Ivars Rusbergs in 2021
 //
 // Abstraction of a Vulkan application instance object
+// Instance stores all aplication-wide Vulkan state
 #ifndef LSIM_RENDERER_VLK_INSTANCE_H_
 #define LSIM_RENDERER_VLK_INSTANCE_H_
 #include "vulkan_shared.h"

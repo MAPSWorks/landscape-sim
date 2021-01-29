@@ -1,5 +1,13 @@
 #include "alpha.h"
 
+Alpha::Alpha(int argc, char *argv[]) : lsim::platform::IApplication(argc, argv) {
+
+
+
+}
+
+
+/*
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -121,3 +129,4 @@ void Application::Run() {
     SDL_Delay(10);
   }
 }
+*/
