@@ -5,6 +5,7 @@
 #define LSIM_PLATFORM_IAPPLICATION_H_
 
 #include <string>
+#include <vector>
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
@@ -27,8 +28,12 @@ protected:
   const std::string name_ = "not set";
   // OS window handle, used to retreive data like size etc
   SDL_Window *window_;
-private:
+  // Extensions retrieved from OS and used for instance creation
+  const std::vector<const char *> instance_extensions_;
 
+private:
+  SDL_Window *CreatWindow() const;
+  std::vector<const char *> RetrieveExtensions() const;
 };
 } // namespace lsim::platform
 
