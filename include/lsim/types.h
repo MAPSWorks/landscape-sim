@@ -1,3 +1,7 @@
+//
+// Created by Ivars Rusbergs in 2021
+//
+// Collection of commonly used types for library and applications
 #ifndef LSIM_TYPES_H_
 #define LSIM_TYPES_H_
 
@@ -25,6 +29,6 @@ static_assert(sizeof(F32) == 4);
 static_assert(sizeof(F64) == 8);
 static_assert(sizeof(UC) == 1);
 static_assert(sizeof(US) == 2);
-}
+} // namespace lsim
 
 #endif
