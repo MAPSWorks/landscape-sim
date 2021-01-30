@@ -8,7 +8,7 @@
 
 #include <vulkan/vulkan.h>
 
-namespace renderer::vlk {
+namespace lsim::renderer::vlk {
 void ErrorCheck(VkResult result) {
   std::string error_str = "Unhandled error";
   switch (result) {

@@ -7,7 +7,7 @@
 
 #include <lsim/renderer/vlk//instance.h>
 
-namespace renderer {
+namespace lsim::renderer {
 class Renderer {
 public:
   Renderer(const std::vector<const char *> &extensions);

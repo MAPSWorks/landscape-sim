@@ -9,7 +9,7 @@
 
 #include <vulkan/vulkan.h>
 
-namespace renderer::vlk {
+namespace lsim::renderer::vlk {
 class Instance {
 public:
   Instance(const std::vector<const char *> &extensions);

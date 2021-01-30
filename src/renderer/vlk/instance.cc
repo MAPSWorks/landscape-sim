@@ -8,7 +8,7 @@
 
 #include "vulkan_shared.h"
 
-namespace renderer::vlk {
+namespace lsim::renderer::vlk {
 Instance::Instance(const std::vector<const char *> &extensions)
     : instance_(Create(extensions)) {}
 

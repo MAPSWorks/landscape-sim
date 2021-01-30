@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.h>
 
-namespace renderer::vlk {
+namespace lsim::renderer::vlk {
 // Checks given result and throws exception if it is an error
 void ErrorCheck(VkResult result);
 
