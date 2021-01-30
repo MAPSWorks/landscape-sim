@@ -21,7 +21,8 @@
 
 namespace lsim::platform {
 IApplication::IApplication(int argc, char *argv[])
-    : window_(CreatWindow()), instance_extensions_(RetrieveExtensions()) {
+    : window_(CreatWindow()), instance_extensions_(RetrieveExtensions()),
+      renderer_(instance_extensions_) {
   (void)argc;
   (void)argv;
 

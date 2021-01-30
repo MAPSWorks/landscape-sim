@@ -6,8 +6,7 @@
 #include <vector>
 
 namespace lsim::renderer {
-Renderer::Renderer(const std::vector<const char *> &extensions) : instance_(extensions){
+Renderer::Renderer(const std::vector<const char *> &extensions)
+    : instance_(extensions) {}
 
-}
-
-}
+} // namespace lsim::renderer

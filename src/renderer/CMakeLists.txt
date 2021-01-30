@@ -10,4 +10,6 @@ target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
 target_compile_options(${LIB_NAME} PUBLIC -Wall -Wextra -pedantic -Werror -g  -D _DEBUG)
 
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+target_link_libraries(${LIB_NAME} PUBLIC vulkan)
                         

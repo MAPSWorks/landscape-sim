@@ -32,7 +32,7 @@ protected:
   // Extensions retrieved from OS and used for instance creation
   const std::vector<const char *> instance_extensions_;
   // Engine renderer instance
-  //renderer::Renderer renderer_;
+  renderer::Renderer renderer_;
 
 private:
   SDL_Window *CreatWindow() const;
