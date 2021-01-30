@@ -9,12 +9,13 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Instance::Instance(const std::vector<const char *> &extensions)
-    : instance_(Create(extensions)) {}
+Instance::Instance(ExtVector extensions)
+    : extensions_(AppendExtensions(extensions)),
+      instance_(Create(extensions_)) {}
 
-Instance::~Instance() {}
+Instance::~Instance() { vkDestroyInstance(instance_, nullptr); }
 
-VkInstance Instance::Create(const std::vector<const char *> &extensions) const {
+VkInstance Instance::Create(const ExtVector &extensions) const {
 
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -32,8 +33,6 @@ VkInstance Instance::Create(const std::vector<const char *> &extensions) const {
   create_info.ppEnabledExtensionNames = extensions.data();
 
   /*
-    instInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-    instInfo.ppEnabledExtensionNames = extensions.data();
     instInfo.enabledLayerCount = static_cast<uint32_t>(layers.size());
     instInfo.ppEnabledLayerNames = layers.data();
   */
@@ -43,4 +42,9 @@ VkInstance Instance::Create(const std::vector<const char *> &extensions) const {
   return instance;
 }
 
-} // namespace renderer::vlk
+Instance::ExtVector
+Instance::AppendExtensions(ExtVector extensions) const {
+  return extensions;
+}
+
+} // namespace lsim::renderer::vlk

@@ -12,15 +12,23 @@
 namespace lsim::renderer::vlk {
 class Instance {
 public:
-  Instance(const std::vector<const char *> &extensions);
+  // Alias for extention vector data ttype
+  using ExtVector = std::vector<const char *>;
+  // extensions is a vector of required extensions provided by OS.
+  Instance(ExtVector extensions);
   ~Instance();
   Instance(Instance const &) = delete;
   Instance operator=(Instance const &) = delete;
-  const VkInstance& Get() const;
+  const VkInstance &Get() const;
+
 private:
-  VkInstance Create(const std::vector<const char *> &extensions) const;
+  // Recieves array of required extensions and appends other.
+  // Returns updated extension vector.
+  ExtVector AppendExtensions(ExtVector extensions) const;
+  VkInstance Create(const ExtVector &extensions) const;
+  ExtVector extensions_;
   const VkInstance instance_ = VK_NULL_HANDLE;
 };
-} // namespace renderer::vlk
+} // namespace lsim::renderer::vlk
 
 #endif
