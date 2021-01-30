@@ -4,6 +4,7 @@
 #include "lsim/renderer/vlk/instance.h"
 
 #include <stdexcept>
+#include <vector>
 
 #include "vulkan_shared.h"
 

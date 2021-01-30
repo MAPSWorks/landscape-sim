@@ -1,3 +1,6 @@
+//
+// Created by Ivars Rusbergs in 2021
+//
 #ifndef LSIM_APPS_ALPHA_H_
 #define LSIM_APPS_ALPHA_H_
 

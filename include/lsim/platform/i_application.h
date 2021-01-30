@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 #include <lsim/renderer/renderer.h>

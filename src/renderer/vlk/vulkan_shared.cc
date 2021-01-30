@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <string>
 
+#include <vulkan/vulkan.h>
+
 namespace renderer::vlk {
 void ErrorCheck(VkResult result) {
   std::string error_str = "Unhandled error";

@@ -1,7 +1,11 @@
-#include "alpha.h"
-
+//
+// Created by Ivars Rusbergs in 2021
+//
+// Alpha application entry point
 #include <exception>
 #include <iostream>
+
+#include "alpha.h"
 
 int main(int argc, char *argv[]) {
   try {

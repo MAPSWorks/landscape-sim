@@ -1,4 +1,9 @@
+//
+// Created by Ivars Rusbergs in 2021
+//
 #include "alpha.h"
+
+#include <lsim/platform/i_application.h>
 
 Alpha::Alpha(int argc, char *argv[]) : lsim::platform::IApplication(argc, argv) {
 
