@@ -12,7 +12,7 @@
 namespace lsim::renderer::vlk {
 class Instance {
 public:
-  // Alias for extention vector data ttype
+  // Alias for extension vector data ttype
   using ExtVector = std::vector<const char *>;
   // extensions is a vector of required extensions provided by OS.
   Instance(ExtVector extensions);
