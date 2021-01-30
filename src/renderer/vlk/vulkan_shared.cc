@@ -129,4 +129,4 @@ void ErrorCheck(VkResult result) {
     throw std::runtime_error("Vulkan: " + error_str);
   }
 }
-}; // namespace renderer::vlk
+} // namespace renderer::vlk

@@ -1,9 +1,11 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-#include "instance.h"
+#include "lsim/renderer/vlk/instance.h"
 
 #include <stdexcept>
+
+#include "vulkan_shared.h"
 
 namespace renderer::vlk {
 Instance::Instance(const std::vector<const char *> &extensions)
@@ -25,7 +27,6 @@ VkInstance Instance::Create(const std::vector<const char *> &extensions) const {
   VkInstanceCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
-
   create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
   create_info.ppEnabledExtensionNames = extensions.data();
 
@@ -41,4 +42,4 @@ VkInstance Instance::Create(const std::vector<const char *> &extensions) const {
   return instance;
 }
 
-}; // namespace renderer::vlk
+} // namespace renderer::vlk

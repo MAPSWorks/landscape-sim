@@ -11,6 +11,6 @@ namespace renderer::vlk {
 // Checks given result and throws exception if it is an error
 void ErrorCheck(VkResult result);
 
-}; // namespace renderer::vlk
+} // namespace renderer::vlk
 
 #endif

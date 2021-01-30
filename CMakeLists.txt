@@ -12,5 +12,6 @@ find_package(Vulkan REQUIRED)
 set(glm_DIR extern/glm/cmake/glm)
 find_package(glm REQUIRED)
 
+add_subdirectory(src/renderer)
 add_subdirectory(src/platform)
 add_subdirectory(apps)
