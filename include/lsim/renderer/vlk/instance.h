@@ -9,6 +9,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include "validation.h"
+
 namespace lsim::renderer::vlk {
 class Instance {
 public:
@@ -26,6 +28,8 @@ private:
   // Returns updated extension vector.
   ExtVector AppendExtensions(ExtVector extensions) const;
   VkInstance Create(const ExtVector &extensions) const;
+  // Validation layers and debug callbacks
+  Validation validation_;
   ExtVector extensions_;
   const VkInstance instance_ = VK_NULL_HANDLE;
 };

@@ -1,7 +1,7 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Commonly used Vulkan headers, types and helper functions
+// Commonly used Vulkan types and helper functions
 #ifndef LSIM_RENDERER_VLK_VULKAN_SHARED_H_
 #define LSIM_RENDERER_VLK_VULKAN_SHARED_H_
 

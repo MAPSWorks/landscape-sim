@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include <vulkan/vulkan.h>
+
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -29,21 +31,25 @@ VkInstance Instance::Create(const ExtVector &extensions) const {
   VkInstanceCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
+  // Extensions
   create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
   create_info.ppEnabledExtensionNames = extensions.data();
-
-  /*
-    instInfo.enabledLayerCount = static_cast<uint32_t>(layers.size());
-    instInfo.ppEnabledLayerNames = layers.data();
-  */
+  // Validation layers
+  if (validation_.Enabled()) {
+    create_info.enabledLayerCount =
+        static_cast<uint32_t>(validation_.GetLayers().size());
+    create_info.ppEnabledLayerNames = validation_.GetLayers().data();
+  } else {
+    create_info.enabledLayerCount = 0;
+  }
 
   VkInstance instance;
   ErrorCheck(vkCreateInstance(&create_info, nullptr, &instance));
   return instance;
 }
 
-Instance::ExtVector
-Instance::AppendExtensions(ExtVector extensions) const {
+Instance::ExtVector Instance::AppendExtensions(ExtVector extensions) const {
+  validation_.AppendExtentions(extensions);
   return extensions;
 }
 

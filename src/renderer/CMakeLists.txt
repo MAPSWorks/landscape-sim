@@ -4,6 +4,7 @@ set(LIB_NAME lsim-renderer)
 
 add_library(${LIB_NAME} vlk/instance.cc
                         vlk/vulkan_shared.cc
+                        vlk/validation.cc
                         renderer.cc)
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
