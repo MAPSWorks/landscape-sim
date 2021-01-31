@@ -22,7 +22,9 @@ public:
   Instance(Instance const &) = delete;
   Instance operator=(Instance const &) = delete;
   const VkInstance &Get() const;
-
+  // Returns if validation layers are enabled.
+  // To not expose the whole validation object.
+  bool ValidationEnabled() const;
 private:
   // Recieves array of required extensions and appends other.
   // Returns updated extension vector.

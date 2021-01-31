@@ -1,7 +1,6 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Validation layers, debug messanger and callback
 #ifndef LSIM_RENDERER_VLK_VALIDATION_H_
 #define LSIM_RENDERER_VLK_VALIDATION_H_
 #include <vector>
@@ -9,6 +8,8 @@
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {
+// Validation layers setup and support check.
+// Layer validation should be called before instance creation.
 class Validation {
 public:
   Validation();
@@ -19,8 +20,7 @@ public:
   const std::vector<const char *> &GetLayers() const;
 
 private:
-  
-// Check if required layers are available
+  // Check if required layers are available
   bool IsLayersSupported() const;
   // Enable validation layers depending on if this is a debug build
 #ifdef _DEBUG

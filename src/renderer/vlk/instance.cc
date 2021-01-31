@@ -50,4 +50,8 @@ Instance::ExtVector Instance::AppendExtensions(ExtVector extensions) const {
   return extensions;
 }
 
+bool Instance::ValidationEnabled() const {
+  return validation_.Enabled();
+}
+
 } // namespace lsim::renderer::vlk

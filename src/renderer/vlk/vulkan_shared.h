@@ -10,7 +10,15 @@
 namespace lsim::renderer::vlk {
 // Checks given result and throws exception if it is an error
 void ErrorCheck(VkResult result);
+// Load vulkan extention functions
+VkResult CreateDebugUtilsMessengerEXT(
+    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
+    const VkAllocationCallbacks *pAllocator,
+    VkDebugUtilsMessengerEXT *pDebugMessenger);
+void DestroyDebugUtilsMessengerEXT(VkInstance instance,
+                                   VkDebugUtilsMessengerEXT debugMessenger,
+                                   const VkAllocationCallbacks *pAllocator);
 
-} // namespace renderer::vlk
+} // namespace lsim::renderer::vlk
 
 #endif

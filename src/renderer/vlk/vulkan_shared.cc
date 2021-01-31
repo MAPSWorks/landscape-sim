@@ -111,7 +111,7 @@ void ErrorCheck(VkResult result) {
                 "screen access.This may occur due to implementation - "
                 "dependent reasons, outside of the application’s control";
     break;
-  case VK_ERROR_UNKNOWN: 
+  case VK_ERROR_UNKNOWN:
     error_str = "An unknown error has occurred; either the application has "
                 "provided invalid input, or an implementation failure has "
                 "occurred.";
@@ -131,4 +131,27 @@ void ErrorCheck(VkResult result) {
     throw std::runtime_error("Vulkan: " + error_str);
   }
 }
-} // namespace renderer::vlk
+
+VkResult CreateDebugUtilsMessengerEXT(
+    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
+    const VkAllocationCallbacks *pAllocator,
+    VkDebugUtilsMessengerEXT *pDebugMessenger) {
+  auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+      instance, "vkCreateDebugUtilsMessengerEXT");
+  if (func != nullptr) {
+    return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+  } else {
+    return VK_ERROR_EXTENSION_NOT_PRESENT;
+  }
+}
+
+void DestroyDebugUtilsMessengerEXT(VkInstance instance,
+                                   VkDebugUtilsMessengerEXT debugMessenger,
+                                   const VkAllocationCallbacks *pAllocator) {
+  auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+      instance, "vkDestroyDebugUtilsMessengerEXT");
+  if (func != nullptr) {
+    func(instance, debugMessenger, pAllocator);
+  }
+}
+} // namespace lsim::renderer::vlk
