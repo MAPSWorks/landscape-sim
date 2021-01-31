@@ -10,16 +10,18 @@
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {
-Validation::Validation()
-    : // Prior to Vulkan SDK for 1.1.106.0 layers:
-      // VK_LAYER_LUNARG_standard_validation Starting from Vulkan SDK
-      // for 1.1.106.0 : VK_LAYER_KHRONOS_validation
-      layers_({"VK_LAYER_KHRONOS_validations"}) {
-
+Validation::Validation() {
   if (enabled_) {
+    // Prior to Vulkan SDK for 1.1.106.0 layers:
+    // VK_LAYER_LUNARG_standard_validation Starting from Vulkan SDK
+    // for 1.1.106.0 : VK_LAYER_KHRONOS_validation
+    layers_.push_back("VK_LAYER_KHRONOS_validation");
     // base::Log::Info("Renderer: validation enabled");
+    if (!IsLayersSupported()) {
+      throw std::runtime_error(
+          "Renderer: requested validation layers are not available!");
+    }
   }
-  CheckSupport();
 }
 
 void Validation::AppendExtentions(std::vector<const char *> &extensions) const {
@@ -35,13 +37,6 @@ const std::vector<const char *> &Validation::GetLayers() const {
   return layers_;
 }
 
-void Validation::CheckSupport() const {
-  if (enabled_ && !IsLayersSupported()) {
-    throw std::runtime_error("Renderer: requested validation layers are not available!");
-  }
-}
-
-// Check if required layers are available
 bool Validation::IsLayersSupported() const {
   uint32_t layer_count;
   vkEnumerateInstanceLayerProperties(&layer_count, nullptr);

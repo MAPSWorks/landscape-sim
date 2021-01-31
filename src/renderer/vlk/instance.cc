@@ -8,6 +8,7 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/renderer/vlk/validation.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -35,13 +36,9 @@ VkInstance Instance::Create(const ExtVector &extensions) const {
   create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
   create_info.ppEnabledExtensionNames = extensions.data();
   // Validation layers
-  if (validation_.Enabled()) {
-    create_info.enabledLayerCount =
-        static_cast<uint32_t>(validation_.GetLayers().size());
-    create_info.ppEnabledLayerNames = validation_.GetLayers().data();
-  } else {
-    create_info.enabledLayerCount = 0;
-  }
+  create_info.enabledLayerCount =
+      static_cast<uint32_t>(validation_.GetLayers().size());
+  create_info.ppEnabledLayerNames = validation_.GetLayers().data();
 
   VkInstance instance;
   ErrorCheck(vkCreateInstance(&create_info, nullptr, &instance));

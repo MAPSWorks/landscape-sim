@@ -19,8 +19,8 @@ public:
   const std::vector<const char *> &GetLayers() const;
 
 private:
-  // Checks and throws exception if validation layers are not supported
-  void CheckSupport() const;
+  
+// Check if required layers are available
   bool IsLayersSupported() const;
   // Enable validation layers depending on if this is a debug build
 #ifdef _DEBUG
@@ -29,7 +29,7 @@ private:
   static constexpr bool enabled_ = false;
 #endif
   // Validation layers
-  const std::vector<const char *> layers_;
+  std::vector<const char *> layers_;
 };
 } // namespace lsim::renderer::vlk
 
