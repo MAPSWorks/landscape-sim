@@ -20,10 +20,12 @@
 #include <SDL2/SDL_vulkan.h>
 
 #include "lsim/base/log.h"
+#include "lsim/platform/types.h"
 
 namespace lsim::platform {
-IApplication::IApplication(int argc, char *argv[])
-    : window_(CreatWindow()), instance_extensions_(RetrieveExtensions()) {
+IApplication::IApplication(int argc, char *argv[], const Settings &settings)
+    : settings_(settings), window_(CreatWindow()),
+      instance_extensions_(RetrieveExtensions()) {
   (void)argc;
   (void)argv;
 
@@ -58,10 +60,9 @@ void IApplication::Run() {
     }
 
     // ... render
-
+    running = false;
     SDL_Delay(10);
   }
-
 }
 
 SDL_Window *IApplication::CreatWindow() const {
@@ -69,7 +70,7 @@ SDL_Window *IApplication::CreatWindow() const {
     throw std::runtime_error("platform: could not initialize SDL.");
   }
   SDL_Window *window =
-      SDL_CreateWindow(name_.c_str(), SDL_WINDOWPOS_CENTERED,
+      SDL_CreateWindow(settings_.name.c_str(), SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_VULKAN);
   if (window_ == NULL) {
     throw std::runtime_error("platform: could not create SDL window.");

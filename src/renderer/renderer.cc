@@ -6,10 +6,12 @@
 #include <vector>
 
 #include "lsim/base/log.h"
+#include "lsim/platform/types.h"
 
 namespace lsim::renderer {
-Renderer::Renderer(const std::vector<const char *> &extensions)
-    : instance_(extensions), debug_messenger_(instance_) {
+Renderer::Renderer(const std::vector<const char *> &extensions,
+                   const platform::Settings &settings)
+    : instance_(extensions, settings), debug_messenger_(instance_) {
   base::Log::Info("renderer", "initialized");
 }
 

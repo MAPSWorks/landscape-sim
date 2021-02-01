@@ -5,13 +5,15 @@
 // Stores renderer state and functions.
 #include <vector>
 
+#include "lsim/platform/types.h"
 #include "vlk/debug_messenger.h"
 #include "vlk/instance.h"
 
 namespace lsim::renderer {
 class Renderer {
 public:
-  Renderer(const std::vector<const char *> &extensions);
+  Renderer(const std::vector<const char *> &extensions,
+           const platform::Settings &settings);
 
 private:
   const vlk::Instance instance_;

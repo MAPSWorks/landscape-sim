@@ -9,13 +9,14 @@
 
 #include <SDL2/SDL.h>
 
+#include "types.h"
+
 namespace lsim::platform {
 // Abstract base class to be used as a parent class for apps.
 // Handles application specific tasks and stores it's state.
 class IApplication {
 public:
-  // Parameters similar to main() function
-  IApplication(int argc, char *argv[]);
+  IApplication(int argc, char *argv[], const Settings &settings);
   virtual ~IApplication();
   IApplication(IApplication const &) = delete;
   // Copy-assignment is not allowed doe to pure virtual functions
@@ -23,12 +24,13 @@ public:
   void Run();
 
 protected:
-  // Application name
-  const std::string name_ = "not set";
+  // Applications and subsystem settings
+  const Settings settings_;
   // OS window handle, used to retreive data like size etc
   SDL_Window *window_;
   // Extensions retrieved from OS and used for instance creation
   const std::vector<const char *> instance_extensions_;
+
 private:
   SDL_Window *CreatWindow() const;
   std::vector<const char *> RetrieveExtensions() const;

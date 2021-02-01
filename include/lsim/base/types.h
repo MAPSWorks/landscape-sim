@@ -13,6 +13,13 @@ using F32 = float;
 using F64 = double;
 using UC = unsigned char;
 using US = unsigned short;
+// Store data that require width and height
+template<typename T>
+struct Size {
+    Size(T w = 0, T h = 0) : width(w), height(h) {};
+    T width;
+    T height;
+};
 // GLM linear math types aliasing
 using Vec2 = glm::tvec2<F32>;
 using Vec3 = glm::tvec3<F32>;
