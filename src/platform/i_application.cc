@@ -36,7 +36,33 @@ IApplication::~IApplication() {
   SDL_Quit();
 }
 
-void IApplication::Run() {}
+void IApplication::Run() {
+  base::Log::Info("platform", "entering main loop");
+  // Poll for user input.
+  bool running = true;
+  while (running) {
+
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+
+      switch (event.type) {
+
+      case SDL_QUIT:
+        running = false;
+        break;
+
+      default:
+        // Do nothing.
+        break;
+      }
+    }
+
+    // ... render
+
+    SDL_Delay(10);
+  }
+
+}
 
 SDL_Window *IApplication::CreatWindow() const {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
