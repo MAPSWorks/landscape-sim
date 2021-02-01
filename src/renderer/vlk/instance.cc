@@ -18,6 +18,8 @@ Instance::Instance(ExtVector extensions)
 
 Instance::~Instance() { vkDestroyInstance(instance_, nullptr); }
 
+const VkInstance &Instance::Get() const { return instance_; }
+
 VkInstance Instance::Create(const ExtVector &extensions) const {
 
   VkApplicationInfo app_info{};
@@ -50,8 +52,6 @@ Instance::ExtVector Instance::AppendExtensions(ExtVector extensions) const {
   return extensions;
 }
 
-bool Instance::ValidationEnabled() const {
-  return validation_.Enabled();
-}
+bool Instance::ValidationEnabled() const { return validation_.Enabled(); }
 
 } // namespace lsim::renderer::vlk
