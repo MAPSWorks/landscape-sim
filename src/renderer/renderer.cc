@@ -5,8 +5,12 @@
 
 #include <vector>
 
+#include "lsim/base/log.h"
+
 namespace lsim::renderer {
 Renderer::Renderer(const std::vector<const char *> &extensions)
-    : instance_(extensions), debug_messenger_(instance_) {}
+    : instance_(extensions), debug_messenger_(instance_) {
+  base::Log::Info("renderer", "initialized");
+}
 
 } // namespace lsim::renderer

@@ -8,20 +8,25 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/base/log.h"
 #include "lsim/renderer/vlk/validation.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
 Instance::Instance(ExtVector extensions)
     : extensions_(AppendExtensions(extensions)),
-      instance_(Create(extensions_)) {}
+      instance_(Create(extensions_)) {
+  base::Log::Info("renderer", "instance", "created");
+}
 
-Instance::~Instance() { vkDestroyInstance(instance_, nullptr); }
+Instance::~Instance() {
+  base::Log::Info("renderer", "instance", "destroying..");
+  vkDestroyInstance(instance_, nullptr);
+}
 
 const VkInstance &Instance::Get() const { return instance_; }
 
 VkInstance Instance::Create(const ExtVector &extensions) const {
-
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   // TODO
@@ -42,6 +47,10 @@ VkInstance Instance::Create(const ExtVector &extensions) const {
       static_cast<uint32_t>(validation_.GetLayers().size());
   create_info.ppEnabledLayerNames = validation_.GetLayers().data();
 
+  base::Log::Info("renderer", "app name:", app_info.pApplicationName,
+                  " app version:", app_info.applicationVersion, " engine name:",
+                  app_info.pEngineName, " engine version:",
+                  app_info.engineVersion);
   VkInstance instance;
   ErrorCheck(vkCreateInstance(&create_info, nullptr, &instance));
   return instance;

@@ -9,7 +9,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <lsim/renderer/renderer.h>
+#include "lsim/renderer/renderer.h"
 
 namespace lsim::platform {
 // Abstract base class to be used as a parent class for apps.

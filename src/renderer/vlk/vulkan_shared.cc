@@ -128,7 +128,7 @@ void ErrorCheck(VkResult result) {
     break;
   }
   if (result != VK_SUCCESS) {
-    throw std::runtime_error("Vulkan: " + error_str);
+    throw std::runtime_error("vulkan: " + error_str);
   }
 }
 

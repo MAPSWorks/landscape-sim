@@ -9,9 +9,12 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/base/log.h"
+
 namespace lsim::renderer::vlk {
 Validation::Validation() {
   if (enabled_) {
+    base::Log::Info("renderer", "validation", "enabled");
     // Prior to Vulkan SDK for 1.1.106.0 layers:
     // VK_LAYER_LUNARG_standard_validation Starting from Vulkan SDK
     // for 1.1.106.0 : VK_LAYER_KHRONOS_validation
@@ -19,7 +22,7 @@ Validation::Validation() {
     // base::Log::Info("Renderer: validation enabled");
     if (!IsLayersSupported()) {
       throw std::runtime_error(
-          "Renderer: requested validation layers are not available!");
+          "renderer: requested validation layers are not available!");
     }
   }
 }

@@ -7,15 +7,19 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/base/log.h"
 #include "lsim/renderer/vlk/instance.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
 DebugMessenger::DebugMessenger(const Instance &instance)
-    : instance_(instance), debug_messanger_(Create()) {}
+    : instance_(instance), debug_messanger_(Create()) {
+      base::Log::Info("renderer", "debug messenger", "created");
+    }
 
 DebugMessenger::~DebugMessenger() {
   if (instance_.ValidationEnabled()) {
+    base::Log::Info("renderer", "debug messenger", "destroying..");
     DestroyDebugUtilsMessengerEXT(instance_.Get(), debug_messanger_, nullptr);
   }
 }
@@ -48,8 +52,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessenger::DebugCallback(
     VkDebugUtilsMessageTypeFlagsEXT /*message_type*/,
     const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
     void * /*user_data*/) {
-  // base::Log::Error("* Validation layer: ", callback_data->pMessage);
-  std::cout << "*** Validation layer: " << callback_data->pMessage << std::endl;
+  base::Log::Error("validation layer", callback_data->pMessage);
   return VK_FALSE;
 }
 
