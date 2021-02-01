@@ -8,6 +8,8 @@
 #include <iostream>
 
 namespace lsim::base {
+// Usage: 
+//   Log::Info("caller module", "description", "additional")
 class Log {
 public:
   // Stream where the log is written
@@ -25,12 +27,22 @@ public:
   // Logging
   template <typename... Args> inline static void Info(Args &&... args) {
     if (enabled && output == Type::kClog && detail == Severity::kInfo) {
-      (std::clog << ... << std::forward<Args>(args)) << '\n';
+      // Linux terminal coloring
+#if defined(__linux__)
+      std::clog << "\033[33mINFO: \033[0m";
+#endif
+      // A trailing space is added between each pair of arguments
+      ((std::clog << std::forward<Args>(args) << ' ') , ...) << "\n";
     }
   }
   template <typename... Args> inline static void Error(Args &&... args) {
     if (enabled && output == Type::kClog && detail <= Severity::kError) {
-      (std::cerr << ... << std::forward<Args>(args)) << '\n';
+      // Linux terminal coloring
+#if defined(__linux__)
+      std::clog << "\033[31mERROR: \033[0m";
+#endif
+      // A trailing space is added between each pair of arguments
+      ((std::cerr << std::forward<Args>(args) << ' ') , ...) << "\n";
     }
   }
 
