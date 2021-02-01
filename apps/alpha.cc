@@ -4,11 +4,10 @@
 #include "alpha.h"
 
 #include <lsim/platform/i_application.h>
+#include <lsim/base/log.h>
 
 Alpha::Alpha(int argc, char *argv[]) : lsim::platform::IApplication(argc, argv) {
-
-
-
+  lsim::base::Log::Info("Alpha application initialized");
 }
 
 
