@@ -13,4 +13,3 @@ target_include_directories(${LIB_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 #target_include_directories(${LIB_NAME} PUBLIC ${RENDERER_INCLUDE_DIR})
 
 target_link_libraries(${LIB_NAME} PUBLIC ${SDL2_LIBRARIES})
-target_link_libraries(${LIB_NAME} PUBLIC lsim-renderer)

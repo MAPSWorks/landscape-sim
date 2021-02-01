@@ -23,22 +23,17 @@
 
 namespace lsim::platform {
 IApplication::IApplication(int argc, char *argv[])
-    : window_(CreatWindow()), instance_extensions_(RetrieveExtensions()),
-      renderer_(instance_extensions_) {
+    : window_(CreatWindow()), instance_extensions_(RetrieveExtensions()) {
   (void)argc;
   (void)argv;
 
-  // Use validation layers if this is a debug build
-  std::vector<const char *> layers;
-#if defined(_DEBUG)
-  layers.push_back("VK_LAYER_KHRONOS_validation");
-#endif
   base::Log::Info("platform", "initialized");
 }
 
 IApplication::~IApplication() {
-base::Log::Info("platform", "shuttind down..");
-// TODO
+  base::Log::Info("platform", "shuttind down..");
+  SDL_DestroyWindow(window_);
+  SDL_Quit();
 }
 
 void IApplication::Run() {}

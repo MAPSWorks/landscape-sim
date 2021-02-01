@@ -3,13 +3,14 @@
 //
 #include "alpha.h"
 
-#include <lsim/platform/i_application.h>
 #include <lsim/base/log.h>
+#include <lsim/platform/i_application.h>
 
-Alpha::Alpha(int argc, char *argv[]) : lsim::platform::IApplication(argc, argv) {
-  lsim::base::Log::Info("alpha application" , "initialized");
+Alpha::Alpha(int argc, char *argv[])
+    : lsim::platform::IApplication(argc, argv),
+      renderer_(instance_extensions_) {
+  lsim::base::Log::Info("alpha application", "initialized");
 }
-
 
 /*
 #include <iostream>

@@ -5,10 +5,13 @@
 #define LSIM_APPS_ALPHA_H_
 
 #include <lsim/platform/i_application.h>
+#include <lsim/renderer/renderer.h>
 
 class Alpha : public lsim::platform::IApplication {
 public:
   Alpha(int argc, char *argv[]);
+private:
+  lsim::renderer::Renderer renderer_;
 };
 
 

@@ -13,3 +13,4 @@ target_compile_options(${TARGET_NAME} PUBLIC -Wall -Wextra -pedantic -Werror -g 
 # temporary, in reality make library and link it here
 # target_include_directories(${TARGET_NAME} PUBLIC ../include)
 target_link_libraries(${TARGET_NAME} PUBLIC lsim-platform)
+target_link_libraries(${TARGET_NAME} PUBLIC lsim-renderer)
