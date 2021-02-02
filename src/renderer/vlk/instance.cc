@@ -37,7 +37,7 @@ VkInstance Instance::Create(const ExtVector &extensions, std::string name,
   app_info.applicationVersion = version;
   app_info.pEngineName = "LSIM";
   app_info.engineVersion = VK_MAKE_VERSION(0, 0, 1);
-  app_info.apiVersion = VK_API_VERSION_1_0;
+  app_info.apiVersion = VK_API_VERSION_1_1;
 
   VkInstanceCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
