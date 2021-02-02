@@ -26,7 +26,7 @@ public:
 
   // Logging
   template <typename... Args> inline static void Info(Args &&... args) {
-    if (enabled && output == Type::kClog && detail == Severity::kInfo) {
+    if constexpr (enabled && output == Type::kClog && detail == Severity::kInfo) {
       // Linux terminal coloring
 #if defined(__linux__)
       std::clog << "\033[33mINFO: \033[0m";
@@ -38,7 +38,7 @@ public:
     }
   }
   template <typename... Args> inline static void Error(Args &&... args) {
-    if (enabled && output == Type::kClog && detail <= Severity::kError) {
+    if constexpr (enabled && output == Type::kClog && detail <= Severity::kError) {
       // Linux terminal coloring
 #if defined(__linux__)
       std::clog << "\033[31mERROR: \033[0m";
