@@ -8,7 +8,6 @@ project(landscape-sim
 # Libraries should be provided by the system
 find_package(SDL2 REQUIRED)
 find_package(Vulkan REQUIRED)
-# If glm_DIR is not set it will be taken from the system
 set(glm_DIR extern/glm/cmake/glm)
 find_package(glm REQUIRED)
 

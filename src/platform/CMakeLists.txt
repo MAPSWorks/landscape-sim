@@ -11,5 +11,8 @@ target_compile_options(${LIB_NAME} PUBLIC -Wall -Wextra -pedantic -Werror -g  -D
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_include_directories(${LIB_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 #target_include_directories(${LIB_NAME} PUBLIC ${RENDERER_INCLUDE_DIR})
-
+# TODO possible to remove this if base module is dependant on glm
+# or rethink if glm types should be together with common types, otherwise we need to include
+# glm everywhere where basic types are used
+target_include_directories(${LIB_NAME} PUBLIC ${GLM_INCLUDE_DIRS})
 target_link_libraries(${LIB_NAME} PUBLIC ${SDL2_LIBRARIES})
