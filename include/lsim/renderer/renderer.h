@@ -8,6 +8,7 @@
 #include "lsim/platform/types.h"
 #include "vlk/debug_messenger.h"
 #include "vlk/instance.h"
+#include "vlk/device.h"
 
 namespace lsim::renderer {
 class Renderer {
@@ -20,6 +21,7 @@ private:
   // Responsible for validation info feedback output.
   // Dependent on Instance being already initialized.
   const vlk::DebugMessenger debug_messenger_;
+  const vlk::Device device_;
 };
 
 } // namespace lsim::renderer

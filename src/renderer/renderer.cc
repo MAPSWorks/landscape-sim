@@ -11,7 +11,8 @@
 namespace lsim::renderer {
 Renderer::Renderer(const std::vector<const char *> &extensions,
                    const platform::Settings &settings)
-    : instance_(extensions, settings), debug_messenger_(instance_) {
+    : instance_(extensions, settings), debug_messenger_(instance_),
+      device_(instance_.Get()) {
   base::Log::Info("renderer", "initialized");
 }
 
