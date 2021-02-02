@@ -10,7 +10,7 @@
 
 namespace lsim::renderer::vlk {
 Device::Device(const VkInstance &instance)
-    : gpu_(AcquirePhysicalDevice(instance)) {
+    : gpu_(AcquirePhysicalDevice(instance)), queue_(gpu_) {
 
   base::Log::Info("renderer", "device", "created");
 }

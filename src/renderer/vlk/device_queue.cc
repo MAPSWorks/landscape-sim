@@ -7,10 +7,18 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/base/log.h"
+
 namespace lsim::renderer::vlk {
 
 DeviceQueue::DeviceQueue(const VkPhysicalDevice &gpu)
-    : family_indices_(SelectFamilies(gpu)) {}
+    : family_indices_(SelectFamilies(gpu)) {
+
+  base::Log::Info("renderer", "device queue family indices picked. Graphics -", 
+                                               family_indices_.graphics.value()
+                                               /*, 
+                                " present - ", family_indices_.present.value()*/);
+}
 
 DeviceQueue::FamilyIndices
 DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu) const {
