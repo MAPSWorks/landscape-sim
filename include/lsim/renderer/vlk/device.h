@@ -4,7 +4,6 @@
 // Physical and logical graphics device abstraction
 #ifndef LSIM_RENDERER_VLK_DEVICE_H_
 #define LSIM_RENDERER_VLK_DEVICE_H_
-
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {
@@ -14,6 +13,8 @@ class Device {
 public:
   Device(const VkInstance &instance);
   ~Device();
+  Device(Device const &) = delete;
+  Device operator=(Device const &) = delete;
   // Returns reference to Vulkan physical device object
   const VkPhysicalDevice &GetGPU() const;
 
