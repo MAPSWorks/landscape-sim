@@ -9,16 +9,13 @@
 #include "lsim/base/log.h"
 
 namespace lsim::renderer::vlk {
-Device::Device(const VkInstance& instance) : gpu_(AcquirePhysicalDevice(instance)) {
+Device::Device(const VkInstance &instance)
+    : gpu_(AcquirePhysicalDevice(instance)) {
 
-
-  base::Log::Info("renderer","device", "created");
+  base::Log::Info("renderer", "device", "created");
 }
 
-Device::~Device() {
-base::Log::Info("renderer","device", "destroying..");
-
-}
+Device::~Device() { base::Log::Info("renderer", "device", "destroying.."); }
 
 const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
 
@@ -47,7 +44,7 @@ void Device::PrintPhysicalDeviceProperties(const VkPhysicalDevice &gpu) const {
   VkPhysicalDeviceProperties p_device_properties;
   vkGetPhysicalDeviceProperties(gpu, &p_device_properties);
   base::Log::Info("renderer", "GPU picked -", p_device_properties.deviceName,
-                  ", Vulkan vers. -",
+                  ", Vulkan v. -",
                   VK_VERSION_MAJOR(p_device_properties.apiVersion), ".",
                   VK_VERSION_MINOR(p_device_properties.apiVersion), ".",
                   VK_VERSION_PATCH(p_device_properties.apiVersion));

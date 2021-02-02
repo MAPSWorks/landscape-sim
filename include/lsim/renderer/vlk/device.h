@@ -12,14 +12,14 @@ namespace lsim::renderer::vlk {
 // To get reference to logical device call Get()
 class Device {
 public:
-  Device(const VkInstance& instance);
+  Device(const VkInstance &instance);
   ~Device();
   // Returns reference to Vulkan physical device object
   const VkPhysicalDevice &GetGPU() const;
 
 private:
-  VkPhysicalDevice AcquirePhysicalDevice(const VkInstance& instance) const;
-  void PrintPhysicalDeviceProperties(const VkPhysicalDevice& gpu) const;
+  VkPhysicalDevice AcquirePhysicalDevice(const VkInstance &instance) const;
+  void PrintPhysicalDeviceProperties(const VkPhysicalDevice &gpu) const;
   // The selected device Vulkan is going to use, aka physical device
   const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
 };
