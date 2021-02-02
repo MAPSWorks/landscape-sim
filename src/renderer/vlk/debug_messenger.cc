@@ -14,8 +14,8 @@
 namespace lsim::renderer::vlk {
 DebugMessenger::DebugMessenger(const Instance &instance)
     : instance_(instance), debug_messanger_(Create()) {
-      base::Log::Info("renderer", "debug messenger", "created");
-    }
+  base::Log::Info("renderer", "debug messenger", "created");
+}
 
 DebugMessenger::~DebugMessenger() {
   if (instance_.ValidationEnabled()) {
@@ -48,11 +48,16 @@ VkDebugUtilsMessengerEXT DebugMessenger::Create() const {
 }
 
 VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessenger::DebugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT /*message_severity*/,
+    VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
     VkDebugUtilsMessageTypeFlagsEXT /*message_type*/,
     const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
     void * /*user_data*/) {
-  base::Log::Error("validation layer", callback_data->pMessage);
+  if (message_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+    base::Log::Error("validation layer", callback_data->pMessage);
+  } else {
+    //base::Log::Info("validation layer", callback_data->pMessage);
+  }
+
   return VK_FALSE;
 }
 
