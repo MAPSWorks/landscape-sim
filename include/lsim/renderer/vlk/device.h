@@ -25,7 +25,7 @@ private:
   void PrintPhysicalDeviceProperties(const VkPhysicalDevice &gpu) const;
   // The selected device Vulkan is going to use, aka physical device
   const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
-  // Device queue handles and selection
+  // Device queue handles and selection.
   // Since queues are logically tied to device, they belong here.
   DeviceQueue queue_;
 };
