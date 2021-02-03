@@ -12,7 +12,7 @@ lsim::platform::Settings user_settings{"Alpha app", 1,
 
 Alpha::Alpha(int argc, char *argv[])
     : lsim::platform::IApplication(argc, argv, user_settings),
-      renderer_(instance_extensions_, user_settings) {
+      renderer_(window_, user_settings) {
   lsim::base::Log::Info("alpha application", "initialized");
 }
 

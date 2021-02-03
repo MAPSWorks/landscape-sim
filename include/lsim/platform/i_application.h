@@ -28,12 +28,8 @@ protected:
   const Settings settings_;
   // OS window handle, used to retreive data like size etc
   SDL_Window *window_;
-  // Extensions retrieved from OS and used for instance creation
-  const std::vector<const char *> instance_extensions_;
-
 private:
   SDL_Window *CreatWindow() const;
-  std::vector<const char *> RetrieveExtensions() const;
 };
 } // namespace lsim::platform
 

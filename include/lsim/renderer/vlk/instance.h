@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 
+#include <SDL2/SDL.h>
 #include <vulkan/vulkan.h>
 
 #include "lsim/platform/types.h"
@@ -18,8 +19,7 @@ class Instance {
 public:
   // Alias for extension vector data ttype
   using ExtVector = std::vector<const char *>;
-  // extensions is a vector of required extensions provided by OS.
-  Instance(ExtVector extensions, const platform::Settings &settings);
+  Instance(SDL_Window* window, const platform::Settings &settings);
   ~Instance();
   Instance(Instance const &) = delete;
   Instance operator=(Instance const &) = delete;
@@ -29,9 +29,9 @@ public:
   bool ValidationEnabled() const;
 
 private:
-  // Recieves array of required extensions and appends other.
+  // Gets array of required extensions and appends other.
   // Returns updated extension vector.
-  ExtVector AppendExtensions(ExtVector extensions) const;
+  ExtVector GetExtensions(SDL_Window* window) const;
   VkInstance Create(const ExtVector &extensions, std::string name,
                     uint32_t version) const;
   // Validation layers and debug callbacks

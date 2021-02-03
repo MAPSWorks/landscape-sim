@@ -7,6 +7,16 @@
 #include <string>
 #include <vector>
 
+// Enable the WSI extensions
+#if defined(__ANDROID__)
+#define VK_USE_PLATFORM_ANDROID_KHR
+#elif defined(__linux__)
+#define VK_USE_PLATFORM_XLIB_KHR
+#elif defined(_WIN32)
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_vulkan.h>
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
@@ -15,8 +25,8 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Instance::Instance(ExtVector extensions, const platform::Settings &settings)
-    : extensions_(AppendExtensions(extensions)),
+Instance::Instance(SDL_Window* window, const platform::Settings &settings)
+    : extensions_(GetExtensions(window)),
       instance_(Create(extensions_, settings.name, settings.version)) {
   base::Log::Info("renderer", "instance", "created");
 }
@@ -59,7 +69,21 @@ VkInstance Instance::Create(const ExtVector &extensions, std::string name,
   return instance;
 }
 
-Instance::ExtVector Instance::AppendExtensions(ExtVector extensions) const {
+// This function is platform dependant
+Instance::ExtVector Instance::GetExtensions(SDL_Window* window) const {
+  // Get WSI extensions from SDL
+  unsigned extension_count;
+  if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count, NULL)) {
+    throw std::runtime_error("renderer: could not get the number of required "
+                             "instance extensions from SDL.");
+  }
+  std::vector<const char *> extensions(extension_count);
+  if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count,
+                                        extensions.data())) {
+    throw std::runtime_error("renderer: could not get the names of required "
+                             "instance extensions from SDL.");
+  }
+  // Add extentions from validation
   validation_.AppendExtentions(extensions);
   return extensions;
 }

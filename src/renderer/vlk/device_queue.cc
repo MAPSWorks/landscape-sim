@@ -21,6 +21,7 @@ DeviceQueue::DeviceQueue(const VkPhysicalDevice &gpu)
                                 " present - ", family_indices_.present.value()*/);
 }
 
+// static
 DeviceQueue::FamilyIndices
 DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu) {
   // Get all available queue families from given physical device
@@ -70,6 +71,10 @@ std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos() const {
     queue_create_infos.push_back(queue_create_info);
   }
   return queue_create_infos;
+}
+
+const DeviceQueue::FamilyIndices &DeviceQueue::GetFamilyIndices() const {
+  return family_indices_;
 }
 
 void DeviceQueue::SetGraphics(VkQueue queue) { graphics_queue_ = queue; }

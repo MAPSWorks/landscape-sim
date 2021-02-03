@@ -5,16 +5,17 @@
 // Stores renderer state and functions.
 #include <vector>
 
+#include <SDL2/SDL.h>
+
 #include "lsim/platform/types.h"
 #include "vlk/debug_messenger.h"
-#include "vlk/instance.h"
 #include "vlk/device.h"
+#include "vlk/instance.h"
 
 namespace lsim::renderer {
 class Renderer {
 public:
-  Renderer(const std::vector<const char *> &extensions,
-           const platform::Settings &settings);
+  Renderer(SDL_Window *window, const platform::Settings &settings);
 
 private:
   const vlk::Instance instance_;

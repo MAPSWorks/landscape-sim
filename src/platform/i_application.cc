@@ -6,26 +6,16 @@
 #include <stdexcept>
 #include <vector>
 
-// Enable the WSI extensions
-#if defined(__ANDROID__)
-#define VK_USE_PLATFORM_ANDROID_KHR
-#elif defined(__linux__)
-#define VK_USE_PLATFORM_XLIB_KHR
-#elif defined(_WIN32)
-#define VK_USE_PLATFORM_WIN32_KHR
-#endif
-#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_syswm.h>
-#include <SDL2/SDL_vulkan.h>
+//#include <SDL2/SDL_syswm.h>
+//#include <SDL2/SDL_vulkan.h>
 
 #include "lsim/base/log.h"
 #include "lsim/platform/types.h"
 
 namespace lsim::platform {
 IApplication::IApplication(int argc, char *argv[], const Settings &settings)
-    : settings_(settings), window_(CreatWindow()),
-      instance_extensions_(RetrieveExtensions()) {
+    : settings_(settings), window_(CreatWindow()) {
   (void)argc;
   (void)argv;
 
@@ -77,22 +67,6 @@ SDL_Window *IApplication::CreatWindow() const {
   }
 
   return window;
-}
-
-std::vector<const char *> IApplication::RetrieveExtensions() const {
-  // Get WSI extensions from SDL
-  unsigned extension_count;
-  if (!SDL_Vulkan_GetInstanceExtensions(window_, &extension_count, NULL)) {
-    throw std::runtime_error("platform: could not get the number of required "
-                             "instance extensions from SDL.");
-  }
-  std::vector<const char *> extensions(extension_count);
-  if (!SDL_Vulkan_GetInstanceExtensions(window_, &extension_count,
-                                        extensions.data())) {
-    throw std::runtime_error("platform: could not get the names of required "
-                             "instance extensions from SDL.");
-  }
-  return extensions;
 }
 
 } // namespace lsim::platform
