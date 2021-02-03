@@ -33,10 +33,10 @@ public:
     }*/
   };
   DeviceQueue(const VkPhysicalDevice &gpu);
+  // Finds suitable queue families and store their indices
+  static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu);
 
 private:
-  // Finds suitable queue families and store their indices
-  FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu) const;
   // Selected queue family indices
   const FamilyIndices family_indices_;
 };

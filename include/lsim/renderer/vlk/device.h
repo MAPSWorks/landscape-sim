@@ -1,10 +1,12 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Physical and logical graphics device abstraction together with device queue handles
+// Physical and logical graphics device abstraction together with device queue
+// handles
 #ifndef LSIM_RENDERER_VLK_DEVICE_H_
 #define LSIM_RENDERER_VLK_DEVICE_H_
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 #include "device_queue.h"
 
@@ -21,8 +23,10 @@ public:
   const VkPhysicalDevice &GetGPU() const;
 
 private:
-  VkPhysicalDevice AcquirePhysicalDevice(const VkInstance &instance) const;
-  void PrintPhysicalDeviceProperties(const VkPhysicalDevice &gpu) const;
+  VkPhysicalDevice AcquireGPU(const VkInstance &instance) const;
+  void PrintGPUProperties(const VkPhysicalDevice &gpu) const;
+  // Checks if gicen GPU is suitable for this engine
+  bool IsSuitableGPU(const VkPhysicalDevice &gpu) const;
   // The selected device Vulkan is going to use, aka physical device
   const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
   // Device queue handles and selection.

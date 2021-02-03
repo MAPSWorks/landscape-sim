@@ -7,10 +7,11 @@
 #include <vector>
 
 #include "lsim/base/log.h"
+#include "lsim/renderer/vlk/device_queue.h"
 
 namespace lsim::renderer::vlk {
 Device::Device(const VkInstance &instance)
-    : gpu_(AcquirePhysicalDevice(instance)), queue_(gpu_) {
+    : gpu_(AcquireGPU(instance)), queue_(gpu_) {
 
   base::Log::Info("renderer", "device", "created");
 }
@@ -20,8 +21,7 @@ Device::~Device() { base::Log::Info("renderer", "device", "destroying.."); }
 const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
 
 // Physical device is not created but acquired and need not be deleted
-VkPhysicalDevice
-Device::AcquirePhysicalDevice(const VkInstance &instance) const {
+VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance) const {
   // List of all physical devices available
   uint32_t device_count = 0;
   vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -29,17 +29,32 @@ Device::AcquirePhysicalDevice(const VkInstance &instance) const {
     throw std::runtime_error(
         "renderer: failed to find GPU with Vulkan support");
   }
+  // List of the GPU's available
   std::vector<VkPhysicalDevice> physical_devices(device_count);
   vkEnumeratePhysicalDevices(instance, &device_count, physical_devices.data());
 
-  // TODO: pick physical device from the list here
-  // For now pick first one in the list
-  VkPhysicalDevice physical_device = physical_devices.at(0);
-  PrintPhysicalDeviceProperties(physical_device);
+  // Choose device that satisfies engine requirements
+  VkPhysicalDevice physical_device = VK_NULL_HANDLE;
+  for (auto device : physical_devices) {
+    if (IsSuitableGPU(device)) {
+      physical_device = device;
+    }
+  }
+  if (physical_device == VK_NULL_HANDLE) {
+    throw std::runtime_error(
+        "renderer: failed to find rdevice with required features");
+  }
+
+  PrintGPUProperties(physical_device);
   return physical_device;
 }
 
-void Device::PrintPhysicalDeviceProperties(const VkPhysicalDevice &gpu) const {
+bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu) const {
+  const auto queue_family = DeviceQueue::SelectFamilies(gpu);
+  return queue_family.IsComplete();
+}
+
+void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
   // Log some properties
   VkPhysicalDeviceProperties p_device_properties;
   vkGetPhysicalDeviceProperties(gpu, &p_device_properties);
