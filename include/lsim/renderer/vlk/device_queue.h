@@ -11,6 +11,7 @@
 #ifndef LSIM_RENDERER_VLK_DEVICE_QUEUE_H_
 #define LSIM_RENDERER_VLK_DEVICE_QUEUE_H_
 #include <optional>
+#include <vector>
 
 #include <vulkan/vulkan.h>
 
@@ -35,7 +36,8 @@ public:
   DeviceQueue(const VkPhysicalDevice &gpu);
   // Finds suitable queue families and store their indices
   static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu);
-
+  // Gets structure necessery for logical device creation
+  std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;
 private:
   // Selected queue family indices
   const FamilyIndices family_indices_;
