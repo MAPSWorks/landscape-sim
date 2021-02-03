@@ -8,6 +8,7 @@ add_library(${LIB_NAME} vlk/instance.cc
                         vlk/debug_messenger.cc
                         vlk/device.cc
                         vlk/device_queue.cc
+                        vlk/surface.cc
                         renderer.cc)
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)

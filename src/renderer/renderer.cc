@@ -13,7 +13,7 @@
 namespace lsim::renderer {
 Renderer::Renderer(SDL_Window *window, const platform::Settings &settings)
     : instance_(window, settings), debug_messenger_(instance_),
-      device_(instance_.Get()) {
+      surface_(instance_.Get(), window), device_(instance_.Get()) {
   base::Log::Info("renderer", "initialized");
 }
 
