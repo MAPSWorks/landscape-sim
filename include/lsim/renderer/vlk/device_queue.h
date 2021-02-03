@@ -23,19 +23,19 @@ public:
   // Required device queue family types and their existance
   struct FamilyIndices {
     std::optional<QueueFamilyIndex> graphics;
-    // std::optional<QueueFamilyIndex> present;
+    std::optional<QueueFamilyIndex> present;
     bool IsComplete() const {
-      return graphics.has_value() /*&& present.has_value()*/;
+      return graphics.has_value() && present.has_value();
     }
-    // If grphics and present is the same queueu
-    /*
+    // If grphics and present is the same queue
     bool IsGraphicsPresentMatch() const {
       return graphics.value() == present.value();
-    }*/
+    }
   };
-  DeviceQueue(const VkPhysicalDevice &gpu);
+  DeviceQueue(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
   // Finds suitable queue families and store their indices
-  static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu);
+  static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu,
+                                      const VkSurfaceKHR &surface);
   const FamilyIndices &GetFamilyIndices() const;
   // Gets structure necessery for logical device creation
   std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;

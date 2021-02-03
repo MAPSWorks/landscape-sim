@@ -19,7 +19,7 @@ namespace lsim::renderer::vlk {
 // To get reference to logical device call Get().
 class Device {
 public:
-  Device(const VkInstance &instance);
+  Device(const VkInstance &instance, const VkSurfaceKHR &surface);
   ~Device();
   Device(Device const &) = delete;
   Device operator=(Device const &) = delete;
@@ -29,10 +29,12 @@ public:
   const VkDevice &Get() const;
 
 private:
-  VkPhysicalDevice AcquireGPU(const VkInstance &instance) const;
+  VkPhysicalDevice AcquireGPU(const VkInstance &instance,
+                              const VkSurfaceKHR &surface) const;
   void PrintGPUProperties(const VkPhysicalDevice &gpu) const;
   // Checks if gicen GPU is suitable for this engine
-  bool IsSuitableGPU(const VkPhysicalDevice &gpu) const;
+  bool IsSuitableGPU(const VkPhysicalDevice &gpu,
+                     const VkSurfaceKHR &surface) const;
   // Creates and return handle to logical device from the given gpu
   VkDevice CreateDevice(const VkPhysicalDevice &gpu) const;
   // Retrieve queue handle from logical device

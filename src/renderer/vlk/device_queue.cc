@@ -12,18 +12,19 @@
 
 namespace lsim::renderer::vlk {
 
-DeviceQueue::DeviceQueue(const VkPhysicalDevice &gpu)
-    : family_indices_(SelectFamilies(gpu)) {
+DeviceQueue::DeviceQueue(const VkPhysicalDevice &gpu,
+                         const VkSurfaceKHR &surface)
+    : family_indices_(SelectFamilies(gpu, surface)) {
 
-  base::Log::Info("renderer", "device queue family indices picked. Graphics -", 
-                                               family_indices_.graphics.value()
-                                               /*, 
-                                " present - ", family_indices_.present.value()*/);
+  base::Log::Info("renderer", "device queue family indices picked.",
+                  "Graphics -", family_indices_.graphics.value(), " present - ",
+                  family_indices_.present.value());
 }
 
 // static
 DeviceQueue::FamilyIndices
-DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu) {
+DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu,
+                            const VkSurfaceKHR &surface) {
   // Get all available queue families from given physical device
   uint32_t queue_family_count = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, nullptr);
@@ -38,12 +39,12 @@ DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu) {
     if (family.queueCount > 0 && family.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
       indices.graphics = i;
     }
-    /*
+
     VkBool32 present_support = false;
     vkGetPhysicalDeviceSurfaceSupportKHR(gpu, i, surface, &present_support);
     if (family.queueCount > 0 && present_support) {
       indices.present = i;
-    }*/
+    }
     if (indices.IsComplete()) {
       break;
     }

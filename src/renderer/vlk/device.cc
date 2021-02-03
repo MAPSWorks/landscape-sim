@@ -13,9 +13,10 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Device::Device(const VkInstance &instance)
+Device::Device(const VkInstance &instance, const VkSurfaceKHR &surface)
     : required_extentions_({VK_KHR_SWAPCHAIN_EXTENSION_NAME}),
-      gpu_(AcquireGPU(instance)), queue_(gpu_), device_(CreateDevice(gpu_)) {
+      gpu_(AcquireGPU(instance, surface)), queue_(gpu_, surface),
+      device_(CreateDevice(gpu_)) {
   // Retrieve queues from device and set their handles for DeviceQueue class
   queue_.SetGraphics(GetGraphicsQueue());
   base::Log::Info("renderer", "device", "created");
@@ -31,7 +32,8 @@ const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
 const VkDevice &Device::Get() const { return device_; }
 
 // Physical device is not created but acquired and need not be deleted
-VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance) const {
+VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
+                                    const VkSurfaceKHR &surface) const {
   // List of all physical devices available
   uint32_t device_count = 0;
   vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -46,7 +48,7 @@ VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance) const {
   // Choose device that satisfies engine requirements
   VkPhysicalDevice physical_device = VK_NULL_HANDLE;
   for (auto device : physical_devices) {
-    if (IsSuitableGPU(device)) {
+    if (IsSuitableGPU(device, surface)) {
       physical_device = device;
     }
   }
@@ -59,8 +61,9 @@ VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance) const {
   return physical_device;
 }
 
-bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu) const {
-  const auto queue_family = DeviceQueue::SelectFamilies(gpu);
+bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu,
+                           const VkSurfaceKHR &surface) const {
+  const auto queue_family = DeviceQueue::SelectFamilies(gpu, surface);
   return queue_family.IsComplete();
 }
 
