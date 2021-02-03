@@ -39,6 +39,7 @@ private:
   VkDevice CreateDevice(const VkPhysicalDevice &gpu) const;
   // Retrieve queue handle from logical device
   VkQueue GetGraphicsQueue() const;
+  VkQueue GetPresentQueue() const;
   // VkQueue GetPresentQueue() const;
   // Device extentions that the logical device has to support
   const std::vector<const char *> required_extentions_;

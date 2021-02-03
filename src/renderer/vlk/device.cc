@@ -19,6 +19,7 @@ Device::Device(const VkInstance &instance, const VkSurfaceKHR &surface)
       device_(CreateDevice(gpu_)) {
   // Retrieve queues from device and set their handles for DeviceQueue class
   queue_.SetGraphics(GetGraphicsQueue());
+  queue_.SetPresent(GetPresentQueue());
   base::Log::Info("renderer", "device", "created");
 }
 
@@ -29,6 +30,7 @@ Device::~Device() {
 }
 
 const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
+
 const VkDevice &Device::Get() const { return device_; }
 
 // Physical device is not created but acquired and need not be deleted
@@ -104,6 +106,13 @@ VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
 VkQueue Device::GetGraphicsQueue() const {
   VkQueue queue;
   vkGetDeviceQueue(device_, queue_.GetFamilyIndices().graphics.value(), 0,
+                   &queue);
+  return queue;
+}
+
+VkQueue Device::GetPresentQueue() const {
+  VkQueue queue;
+  vkGetDeviceQueue(device_, queue_.GetFamilyIndices().present.value(), 0,
                    &queue);
   return queue;
 }

@@ -40,7 +40,9 @@ public:
   // Gets structure necessery for logical device creation
   std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;
   void SetGraphics(VkQueue queue);
+  void SetPresent(VkQueue queue);
   const VkQueue &GetGraphics() const;
+  const VkQueue &GetPresent() const;
 
 private:
   // Selected queue family indices
@@ -48,7 +50,7 @@ private:
   // Queues are created together with logial device
   // Queues are cleaned up when the logical device is destroyed
   VkQueue graphics_queue_ = VK_NULL_HANDLE;
-  // VkQueue present_queue_ = VK_NULL_HANDLE;
+  VkQueue present_queue_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 #endif

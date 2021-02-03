@@ -57,8 +57,8 @@ DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu,
 std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos() const {
   // We dont know in advance whether queue family capabilities belong to one
   // family or multiple
-  const std::set<QueueFamilyIndex> unique_queue_families = { family_indices_.graphics.value() /*,
-                                                       family_indices_.present.value() */};
+  const std::set<QueueFamilyIndex> unique_queue_families = {
+      family_indices_.graphics.value(), family_indices_.present.value()};
   // Create multiple queues if necessery
   std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
   uint32_t number_of_queues = 1;
@@ -79,7 +79,7 @@ const DeviceQueue::FamilyIndices &DeviceQueue::GetFamilyIndices() const {
 }
 
 void DeviceQueue::SetGraphics(VkQueue queue) { graphics_queue_ = queue; }
-
+void DeviceQueue::SetPresent(VkQueue queue) { present_queue_ = queue; }
 const VkQueue &DeviceQueue::GetGraphics() const { return graphics_queue_; }
-
+const VkQueue &DeviceQueue::GetPresent() const { return present_queue_; }
 } // namespace lsim::renderer::vlk
