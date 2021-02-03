@@ -5,8 +5,8 @@
 // Instance stores all aplication-wide Vulkan state
 #ifndef LSIM_RENDERER_VLK_INSTANCE_H_
 #define LSIM_RENDERER_VLK_INSTANCE_H_
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <vulkan/vulkan.h>
@@ -19,7 +19,7 @@ class Instance {
 public:
   // Alias for extension vector data ttype
   using ExtVector = std::vector<const char *>;
-  Instance(SDL_Window* window, const platform::Settings &settings);
+  Instance(SDL_Window *window, const platform::Settings &settings);
   ~Instance();
   Instance(Instance const &) = delete;
   Instance operator=(Instance const &) = delete;
@@ -31,9 +31,8 @@ public:
 private:
   // Gets array of required extensions and appends other.
   // Returns updated extension vector.
-  ExtVector GetExtensions(SDL_Window* window) const;
-  VkInstance Create(const ExtVector &extensions, std::string name,
-                    uint32_t version) const;
+  ExtVector GetExtensions(SDL_Window *window) const;
+  VkInstance Create(std::string name, uint32_t version) const;
   // Validation layers and debug callbacks
   Validation validation_;
   ExtVector extensions_;

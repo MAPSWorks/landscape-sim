@@ -25,9 +25,9 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Instance::Instance(SDL_Window* window, const platform::Settings &settings)
+Instance::Instance(SDL_Window *window, const platform::Settings &settings)
     : extensions_(GetExtensions(window)),
-      instance_(Create(extensions_, settings.name, settings.version)) {
+      instance_(Create(settings.name, settings.version)) {
   base::Log::Info("renderer", "instance", "created");
 }
 
@@ -38,8 +38,7 @@ Instance::~Instance() {
 
 const VkInstance &Instance::Get() const { return instance_; }
 
-VkInstance Instance::Create(const ExtVector &extensions, std::string name,
-                            uint32_t version) const {
+VkInstance Instance::Create(std::string name, uint32_t version) const {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   // TODO
@@ -53,8 +52,8 @@ VkInstance Instance::Create(const ExtVector &extensions, std::string name,
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
   // Extensions
-  create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-  create_info.ppEnabledExtensionNames = extensions.data();
+  create_info.enabledExtensionCount = static_cast<uint32_t>(extensions_.size());
+  create_info.ppEnabledExtensionNames = extensions_.data();
   // Validation layers
   create_info.enabledLayerCount =
       static_cast<uint32_t>(validation_.GetLayers().size());
@@ -70,7 +69,7 @@ VkInstance Instance::Create(const ExtVector &extensions, std::string name,
 }
 
 // This function is platform dependant
-Instance::ExtVector Instance::GetExtensions(SDL_Window* window) const {
+Instance::ExtVector Instance::GetExtensions(SDL_Window *window) const {
   // Get WSI extensions from SDL
   unsigned extension_count;
   if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count, NULL)) {
