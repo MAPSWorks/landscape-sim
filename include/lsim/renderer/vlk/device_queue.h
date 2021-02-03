@@ -36,11 +36,19 @@ public:
   DeviceQueue(const VkPhysicalDevice &gpu);
   // Finds suitable queue families and store their indices
   static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu);
+  const FamilyIndices &GetFamilyIndices() const;
   // Gets structure necessery for logical device creation
   std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;
+  void SetGraphics(VkQueue queue);
+  const VkQueue &GetGraphics() const;
+
 private:
   // Selected queue family indices
   const FamilyIndices family_indices_;
+  // Queues are created together with logial device
+  // Queues are cleaned up when the logical device is destroyed
+  VkQueue graphics_queue_ = VK_NULL_HANDLE;
+  // VkQueue present_queue_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 #endif

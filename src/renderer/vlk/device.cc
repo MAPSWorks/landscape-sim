@@ -16,7 +16,8 @@ namespace lsim::renderer::vlk {
 Device::Device(const VkInstance &instance)
     : required_extentions_({VK_KHR_SWAPCHAIN_EXTENSION_NAME}),
       gpu_(AcquireGPU(instance)), queue_(gpu_), device_(CreateDevice(gpu_)) {
-
+  // Retrieve queues from device and set their handles for DeviceQueue class
+  queue_.SetGraphics(GetGraphicsQueue());
   base::Log::Info("renderer", "device", "created");
 }
 
@@ -95,6 +96,13 @@ VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
   VkDevice device;
   ErrorCheck(vkCreateDevice(gpu, &device_create_info, nullptr, &device));
   return device;
+}
+
+VkQueue Device::GetGraphicsQueue() const {
+  VkQueue queue;
+  vkGetDeviceQueue(device_, queue_.GetFamilyIndices().graphics.value(), 0,
+                   &queue);
+  return queue;
 }
 
 } // namespace lsim::renderer::vlk

@@ -35,8 +35,11 @@ private:
   bool IsSuitableGPU(const VkPhysicalDevice &gpu) const;
   // Creates and return handle to logical device from the given gpu
   VkDevice CreateDevice(const VkPhysicalDevice &gpu) const;
+  // Retrieve queue handle from logical device
+  VkQueue GetGraphicsQueue() const;
+  // VkQueue GetPresentQueue() const;
   // Device extentions that the logical device has to support
-  const std::vector<const char*> required_extentions_;
+  const std::vector<const char *> required_extentions_;
   // The selected device Vulkan is going to use, aka physical device
   const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
   // Device queue handles and selection.
