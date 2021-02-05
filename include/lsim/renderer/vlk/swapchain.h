@@ -52,6 +52,9 @@ private:
   uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) const;
   // Retrieve list of images from swapchain
   std::vector<VkImage> RetrieveImages() const;
+  // Create image views for given images
+  std::vector<ImageView>
+  CreateImageViews(const std::vector<VkImage> &images) const;
   // Reference to object this resource was created with
   const VkDevice &device_;
   // NOTE: should be initialized before vulkan swapchain object
