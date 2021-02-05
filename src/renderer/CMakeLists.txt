@@ -10,6 +10,7 @@ add_library(${LIB_NAME} vlk/instance.cc
                         vlk/device_queue.cc
                         vlk/surface.cc
                         vlk/swapchain.cc
+                        vlk/image_view.cc
                         renderer.cc)
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)

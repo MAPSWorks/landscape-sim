@@ -11,6 +11,7 @@
 #include <vulkan/vulkan.h>
 
 #include "device_queue.h"
+#include "image_view.h"
 
 namespace lsim::renderer::vlk {
 class Swapchain {
@@ -48,7 +49,7 @@ private:
   VkExtent2D RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
                             SDL_Window *window) const;
   // Select number of images in the swapchain
-  uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR& caps) const;
+  uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) const;
   // Retrieve list of images from swapchain
   std::vector<VkImage> RetrieveImages() const;
   // Reference to object this resource was created with
@@ -65,6 +66,8 @@ private:
   // List of image handles acquired from swapchain
   // Number of images should be rrtrieved from this array if needed
   const std::vector<VkImage> images_;
+  // Image views for swapchain images
+  const std::vector<ImageView> image_views_;
 };
 } // namespace lsim::renderer::vlk
 #endif
