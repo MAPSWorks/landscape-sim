@@ -32,10 +32,10 @@ public:
       return graphics.value() == present.value();
     }
   };
-  DeviceQueue(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
-  // Finds suitable queue families and store their indices
+    // Finds suitable queue families and store their indices
   static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu,
                                       const VkSurfaceKHR &surface);
+  DeviceQueue(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
   const FamilyIndices &GetFamilyIndices() const;
   // Gets structure necessery for logical device creation
   std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;

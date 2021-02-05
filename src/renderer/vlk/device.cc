@@ -10,6 +10,7 @@
 
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/device_queue.h"
+#include "lsim/renderer/vlk/swapchain.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -52,6 +53,7 @@ VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
   for (auto device : physical_devices) {
     if (IsSuitableGPU(device, surface)) {
       physical_device = device;
+      break;
     }
   }
   if (physical_device == VK_NULL_HANDLE) {
@@ -66,7 +68,8 @@ VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
 bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu,
                            const VkSurfaceKHR &surface) const {
   const auto queue_family = DeviceQueue::SelectFamilies(gpu, surface);
-  return queue_family.IsComplete();
+  const auto swapchain_support = Swapchain::QuerySupport(gpu, surface);
+  return queue_family.IsComplete() && swapchain_support.IsCapable();
 }
 
 void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
