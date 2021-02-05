@@ -51,9 +51,16 @@ Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
       extent_(RetrieveExtent(support_details_.capabilities, window)),
-      swapchain_(Create(surface, qf_indices)) {}
+      swapchain_(Create(surface, qf_indices)) {
 
-Swapchain::~Swapchain() {}
+        base::Log::Info("renderer", "swapchain", "created");
+      }
+
+Swapchain::~Swapchain() {
+base::Log::Info("renderer", "swapchain", "destroying..");
+vkDestroySwapchainKHR(device_, swapchain_, nullptr);
+
+}
 
 const VkSwapchainKHR &Swapchain::Get() const { return swapchain_; }
 
