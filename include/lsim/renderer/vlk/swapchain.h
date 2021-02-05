@@ -18,7 +18,7 @@ public:
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> present_modes;
     // If swapchain support is enaugh for the engine
-    bool IsCapable() const  {
+    bool IsCapable() const {
       return !formats.empty() && !present_modes.empty();
     }
   };
@@ -26,8 +26,19 @@ public:
   // surface
   static SupportDetails QuerySupport(const VkPhysicalDevice &gpu,
                                      const VkSurfaceKHR &surface);
+  Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
+            const VkSurfaceKHR &surface);
+  ~Swapchain();
 
 private:
+  VkSurfaceFormatKHR
+  SelectSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats) const;
+  // Reference to object this resource was created with
+  const VkDevice &device_;
+  const SupportDetails support_details_;
+  // NOTE: should be initialized before vulkan swapchain object
+  // Selected format of swapchain images
+  const VkSurfaceFormatKHR surface_format_;
 };
 } // namespace lsim::renderer::vlk
 #endif

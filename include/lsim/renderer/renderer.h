@@ -12,6 +12,7 @@
 #include "vlk/device.h"
 #include "vlk/instance.h"
 #include "vlk/surface.h"
+#include "vlk/swapchain.h"
 
 namespace lsim::renderer {
 class Renderer {
@@ -25,6 +26,7 @@ private:
   const vlk::DebugMessenger debug_messenger_;
   const vlk::Surface surface_;
   const vlk::Device device_;
+  const vlk::Swapchain swapchain_;
 };
 
 } // namespace lsim::renderer
