@@ -11,6 +11,7 @@
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
+#include "lsim/renderer/vlk/device_queue.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -43,13 +44,63 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
 }
 
 Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
-                     const VkSurfaceKHR &surface, SDL_Window *window)
+                     const VkSurfaceKHR &surface,
+                     const DeviceQueue::FamilyIndices &qf_indices,
+                     SDL_Window *window)
     : device_(device), support_details_(QuerySupport(gpu, surface)),
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
-      extent_(RetrieveExtent(support_details_.capabilities, window)) {}
+      extent_(RetrieveExtent(support_details_.capabilities, window)),
+      swapchain_(Create(surface, qf_indices)) {}
 
 Swapchain::~Swapchain() {}
+
+const VkSwapchainKHR &Swapchain::Get() const { return swapchain_; }
+
+VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
+                                 const DeviceQueue::FamilyIndices &qf_indices) {
+  const auto min_image_count = SelectImageCount();
+  VkSwapchainCreateInfoKHR create_info{};
+  create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+  create_info.surface = surface;
+  create_info.minImageCount = min_image_count;
+  create_info.imageFormat = surface_format_.format;
+  create_info.imageColorSpace = surface_format_.colorSpace;
+  create_info.imageExtent = extent_;
+  create_info.imageArrayLayers = 1;
+  // Other usages than 'color attachment' should be checked first because they
+  // are not guaranteed
+  create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+  // Handle swapchain iamges in case graphics and presentation queues differ
+  if (!qf_indices.IsGraphicsPresentMatch()) {
+    // Used by multiple queues that is why need to specify which
+    create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+    create_info.queueFamilyIndexCount = 2;
+    create_info.pQueueFamilyIndices =
+        std::vector<uint32_t>(
+            {qf_indices.graphics.value(), qf_indices.present.value()})
+            .data();
+  } else {
+    // Image is owned by only one queue at a time
+    create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    create_info.queueFamilyIndexCount = 0;     // Optional
+    create_info.pQueueFamilyIndices = nullptr; // Optional
+  }
+  // No need to use different transforms on images
+  create_info.preTransform = support_details_.capabilities.currentTransform;
+  // Ignore blending with other windows
+  create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+  create_info.presentMode = present_mode_;
+  // We dont care about colors of pixels that are obscured (ie. by antoher
+  // window)
+  create_info.clipped = VK_TRUE;
+  // When swapchain needs to be recreated (resizig window) this field should be
+  // set to old swachain
+  create_info.oldSwapchain = VK_NULL_HANDLE;
+  VkSwapchainKHR swapchain;
+  ErrorCheck(vkCreateSwapchainKHR(device_, &create_info, nullptr, &swapchain));
+  return swapchain;
+}
 
 VkSurfaceFormatKHR Swapchain::SelectSurfaceFormat(
     const std::vector<VkSurfaceFormatKHR> &formats) const {
@@ -116,6 +167,20 @@ VkExtent2D Swapchain::RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
     extent = actual_extent;
   }
   return extent;
+}
+
+// Swapchain is allowed to create more images than we specify
+uint32_t Swapchain::SelectImageCount() const {
+  const auto capabilities = support_details_.capabilities;
+  // It is recomended to request one image than the minimum for driver to work
+  // more optimal
+  uint32_t image_count = capabilities.minImageCount + 1;
+  // Make sure not to exceed maximum allowed image count (0 means no maximum)
+  if (capabilities.maxImageCount > 0 &&
+      image_count > capabilities.maxImageCount) {
+    image_count = capabilities.maxImageCount;
+  }
+  return image_count;
 }
 
 } // namespace lsim::renderer::vlk

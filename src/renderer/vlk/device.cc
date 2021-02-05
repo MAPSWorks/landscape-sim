@@ -34,6 +34,8 @@ const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
 
 const VkDevice &Device::Get() const { return device_; }
 
+const DeviceQueue &Device::GetQueue() const { return queue_; }
+
 // Physical device is not created but acquired and need not be deleted
 VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
                                     const VkSurfaceKHR &surface) const {

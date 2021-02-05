@@ -27,6 +27,8 @@ public:
   const VkPhysicalDevice &GetGPU() const;
   // Returns reference to Vulkan logical device object
   const VkDevice &Get() const;
+  // Get queue abstraction instead of vulkan queue object
+  const DeviceQueue &GetQueue() const;
 
 private:
   VkPhysicalDevice AcquireGPU(const VkInstance &instance,
