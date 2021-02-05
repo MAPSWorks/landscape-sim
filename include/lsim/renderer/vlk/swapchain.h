@@ -39,7 +39,8 @@ public:
 
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
-                        const DeviceQueue::FamilyIndices &qf_indices);
+                        const DeviceQueue::FamilyIndices &qf_indices,
+                        const VkSurfaceCapabilitiesKHR &caps);
   VkSurfaceFormatKHR
   SelectSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats) const;
   VkPresentModeKHR
@@ -47,8 +48,9 @@ private:
   VkExtent2D RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
                             SDL_Window *window) const;
   // Select number of images in the swapchain
-  // support_details_ should be initialized before usage
-  uint32_t SelectImageCount() const;
+  uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR& caps) const;
+  // Retrieve list of images from swapchain
+  std::vector<VkImage> RetrieveImages() const;
   // Reference to object this resource was created with
   const VkDevice &device_;
   // NOTE: should be initialized before vulkan swapchain object
@@ -60,6 +62,9 @@ private:
   // RetrieveExtent()
   const VkExtent2D extent_;
   const VkSwapchainKHR swapchain_ = VK_NULL_HANDLE;
+  // List of image handles acquired from swapchain
+  // Number of images should be rrtrieved from this array if needed
+  const std::vector<VkImage> images_;
 };
 } // namespace lsim::renderer::vlk
 #endif

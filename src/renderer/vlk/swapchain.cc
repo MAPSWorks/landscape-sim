@@ -51,22 +51,23 @@ Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
       extent_(RetrieveExtent(support_details_.capabilities, window)),
-      swapchain_(Create(surface, qf_indices)) {
+      swapchain_(Create(surface, qf_indices, support_details_.capabilities)),
+      images_(RetrieveImages()) {
 
-        base::Log::Info("renderer", "swapchain", "created");
-      }
+  base::Log::Info("renderer", "swapchain", "created");
+}
 
 Swapchain::~Swapchain() {
-base::Log::Info("renderer", "swapchain", "destroying..");
-vkDestroySwapchainKHR(device_, swapchain_, nullptr);
-
+  base::Log::Info("renderer", "swapchain", "destroying..");
+  vkDestroySwapchainKHR(device_, swapchain_, nullptr);
 }
 
 const VkSwapchainKHR &Swapchain::Get() const { return swapchain_; }
 
 VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
-                                 const DeviceQueue::FamilyIndices &qf_indices) {
-  const auto min_image_count = SelectImageCount();
+                                 const DeviceQueue::FamilyIndices &qf_indices,
+                                 const VkSurfaceCapabilitiesKHR &caps) {
+  const auto min_image_count = SelectImageCount(caps);
   VkSwapchainCreateInfoKHR create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
   create_info.surface = surface;
@@ -177,17 +178,28 @@ VkExtent2D Swapchain::RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
 }
 
 // Swapchain is allowed to create more images than we specify
-uint32_t Swapchain::SelectImageCount() const {
-  const auto capabilities = support_details_.capabilities;
+uint32_t
+Swapchain::SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) const {
   // It is recomended to request one image than the minimum for driver to work
   // more optimal
-  uint32_t image_count = capabilities.minImageCount + 1;
+  uint32_t image_count = caps.minImageCount + 1;
   // Make sure not to exceed maximum allowed image count (0 means no maximum)
-  if (capabilities.maxImageCount > 0 &&
-      image_count > capabilities.maxImageCount) {
-    image_count = capabilities.maxImageCount;
+  if (caps.maxImageCount > 0 && image_count > caps.maxImageCount) {
+    image_count = caps.maxImageCount;
   }
   return image_count;
+}
+
+// Images are created together with swapchain so we only retrieve them
+std::vector<VkImage> Swapchain::RetrieveImages() const {
+  // Get handles to swapchain images
+  // NOTE: swapchain is allowed to create more images than we specify
+  uint32_t image_count;
+  vkGetSwapchainImagesKHR(device_, swapchain_, &image_count, nullptr);
+  std::vector<VkImage> swapchain_images(image_count);
+  ErrorCheck(vkGetSwapchainImagesKHR(device_, swapchain_, &image_count,
+                                     swapchain_images.data()));
+  return swapchain_images;
 }
 
 } // namespace lsim::renderer::vlk
