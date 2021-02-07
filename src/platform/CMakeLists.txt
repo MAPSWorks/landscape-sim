@@ -3,7 +3,8 @@ set(LIB_NAME lsim-platform)
 # If headers are not listed to library they will not show in IDE
 #set(HEADER_LIST include/lsim/platform/i_application.h )
 
-add_library(${LIB_NAME} i_application.cc)
+add_library(${LIB_NAME} i_application.cc
+                        window.cc)
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
 if (MSVC)
@@ -20,3 +21,4 @@ target_include_directories(${LIB_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 # glm everywhere where basic types are used
 target_include_directories(${LIB_NAME} PUBLIC ${GLM_INCLUDE_DIRS})
 target_link_libraries(${LIB_NAME} PUBLIC ${SDL2_LIBRARIES})
+target_link_libraries(${LIB_NAME} PUBLIC lsim-renderer)

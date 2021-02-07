@@ -151,7 +151,6 @@ Swapchain::SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) const {
 
 VkExtent2D Swapchain::RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
                                      SDL_Window *window) const {
-
   VkExtent2D extent;
   // Most of the time extent matches surface resolution
   if (caps.currentExtent.width != std::numeric_limits<uint32_t>::max()) {

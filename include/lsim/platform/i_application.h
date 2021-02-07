@@ -1,15 +1,14 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
+// Applications using the engine are inherited from this class
 #ifndef LSIM_PLATFORM_IAPPLICATION_H_
 #define LSIM_PLATFORM_IAPPLICATION_H_
 
-#include <string>
-#include <vector>
-
-#include <SDL2/SDL.h>
+#include <lsim/renderer/renderer.h>
 
 #include "types.h"
+#include "window.h"
 
 namespace lsim::platform {
 // Abstract base class to be used as a parent class for apps.
@@ -26,10 +25,12 @@ public:
 protected:
   // Applications and subsystem settings
   const Settings settings_;
-  // OS window handle, used to retreive data like size etc
-  SDL_Window *window_;
+  // Platform specific window
+  Window window_;
+  // Framework with which rendering is performed
+  renderer::Renderer renderer_;
+
 private:
-  SDL_Window *CreatWindow() const;
 };
 } // namespace lsim::platform
 
