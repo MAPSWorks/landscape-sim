@@ -12,6 +12,7 @@ set(SOURCES vlk/instance.cc
             vlk/swapchain.cc
             vlk/image_view.cc
             vlk/shader_module.cc
+            vlk/pipeline_graphics.cc
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})

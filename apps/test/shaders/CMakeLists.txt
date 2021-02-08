@@ -1,4 +1,5 @@
 # Used to compile shader sources to spir-v binaries
+# glslc shader compiler is used in should be in PATH
 set(TARGET_NAME test-app-shaders)
 add_custom_target( ${TARGET_NAME} )
 

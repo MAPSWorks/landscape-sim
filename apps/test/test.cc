@@ -18,6 +18,9 @@ Test::Test(int argc, char *argv[])
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::Init() const {}
+void Test::Init() const {
+
+  
+}
 
 } // namespace apps::test
