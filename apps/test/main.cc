@@ -1,15 +1,14 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Alpha application entry point
 #include <exception>
 #include <iostream>
 
-#include "alpha.h"
+#include "test.h"
 
 int main(int argc, char *argv[]) {
   try {
-    Alpha app(argc, argv);
+    Test app(argc, argv);
     app.Run();
   } catch (const std::exception &except) {
     std::cout << "Exception: " << except.what() << std::endl;
