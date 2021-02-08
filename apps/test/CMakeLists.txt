@@ -11,3 +11,5 @@ else()
 endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC lsim-platform)
+
+add_subdirectory(shaders)

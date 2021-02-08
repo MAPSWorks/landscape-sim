@@ -28,11 +28,15 @@ Making SDL2 library findable on Windows might take extra steps:
 - copy SDL2.dll next to application executable file.  
 
 ## Cloning and Building
+To retrieve the project from github and compile:  
 > git clone https://github.com/ivarsrb/landscape-sim.git --recursive  
 > cmake -S . -B build  
-> cmake --build build --config Debug --target <target_name>  
+> cmake --build build --config Debug --target <target_name>   
 
-where <target_name>  is the name of an application.  
+to compile shaders for the given app target:
+> cmake --build build --target <target_name>-shaders   
+
+, where <target_name>  is the name of an application.  
 
 ## Project structure
 The lsim engine consists of multiple sublibriraries.
