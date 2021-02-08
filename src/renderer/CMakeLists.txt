@@ -11,6 +11,7 @@ add_library(${LIB_NAME} vlk/instance.cc
                         vlk/surface.cc
                         vlk/swapchain.cc
                         vlk/image_view.cc
+                        vlk/shader_module.cc
                         renderer.cc)
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
