@@ -2,17 +2,19 @@ set(LIB_NAME lsim-renderer)
 
 #set(RENDERER_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src CACHE INTERNAL "Renderer directory")
 
-add_library(${LIB_NAME} vlk/instance.cc
-                        vlk/vulkan_shared.cc
-                        vlk/validation.cc
-                        vlk/debug_messenger.cc
-                        vlk/device.cc
-                        vlk/device_queue.cc
-                        vlk/surface.cc
-                        vlk/swapchain.cc
-                        vlk/image_view.cc
-                        vlk/shader_module.cc
-                        renderer.cc)
+set(SOURCES vlk/instance.cc
+            vlk/vulkan_shared.cc
+            vlk/validation.cc
+            vlk/debug_messenger.cc
+            vlk/device.cc
+            vlk/device_queue.cc
+            vlk/surface.cc
+            vlk/swapchain.cc
+            vlk/image_view.cc
+            vlk/shader_module.cc
+            renderer.cc)
+
+add_library(${LIB_NAME} ${SOURCES})
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
 if (MSVC)

@@ -3,8 +3,11 @@ set(LIB_NAME lsim-platform)
 # If headers are not listed to library they will not show in IDE
 #set(HEADER_LIST include/lsim/platform/i_application.h )
 
-add_library(${LIB_NAME} i_application.cc
-                        window.cc)
+
+set(SOURCES i_application.cc
+            window.cc)
+
+add_library(${LIB_NAME} ${SOURCES})
 
 target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
 if (MSVC)

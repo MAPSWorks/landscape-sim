@@ -1,7 +1,9 @@
 set(TARGET_NAME test-app)
 
-add_executable(${TARGET_NAME} main.cc
-                              test.cc)
+set(SOURCES main.cc
+            test.cc)
+
+add_executable(${TARGET_NAME} ${SOURCES})
 
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_17)
 if (MSVC)
