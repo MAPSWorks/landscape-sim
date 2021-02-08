@@ -3,12 +3,23 @@
 //
 #ifndef LSIM_RENDERER_VLK_PIPELINE_GRAPHICS_H_
 #define LSIM_RENDERER_VLK_PIPELINE_GRAPHICS_H_
-
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {
+class PipelineGraphics {
+public:
+  PipelineGraphics(const VkDevice& device);
+  ~PipelineGraphics();
+  PipelineGraphics(PipelineGraphics const &) = delete;
+  PipelineGraphics operator=(PipelineGraphics const &) = delete;
+  const VkPipeline &Get() const;
 
-
-}
+private:
+  VkPipeline Create() const;
+  // Reference to resource this object is created with
+  const VkDevice &device_;
+  const VkPipeline pipeline_ = VK_NULL_HANDLE;
+};
+} // namespace lsim::renderer::vlk
 
 #endif

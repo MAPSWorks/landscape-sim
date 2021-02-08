@@ -3,9 +3,12 @@
 //
 #include "test.h"
 
+#include <vulkan/vulkan.h>
+
 #include <lsim/base/log.h>
 #include <lsim/platform/i_application.h>
 #include <lsim/platform/types.h>
+#include <lsim/renderer/vlk/shader_module.h>
 
 namespace apps::test {
 // TODO: should come from elsewhere
@@ -19,8 +22,14 @@ Test::Test(int argc, char *argv[])
 }
 
 void Test::Init() const {
+  lsim::renderer::vlk::ShaderModule vertex_shader(renderer.GetDevice(),
+                                                  "shaders/test.vert");
 
-  
+      // Graphics pipeline
+      VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+  vertShaderStageInfo.sType =
+      VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+  vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
 }
 
 } // namespace apps::test
