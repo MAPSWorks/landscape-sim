@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
   try {
-    Test app(argc, argv);
+    apps::test::Test app(argc, argv);
     app.Run();
   } catch (const std::exception &except) {
     std::cout << "Exception: " << except.what() << std::endl;
