@@ -13,6 +13,7 @@ PipelineGraphics::PipelineGraphics(const VkDevice &device)
 
 PipelineGraphics::~PipelineGraphics() {
   base::Log::Info("renderer", "pipeline", "destroying..");
+  
 }
 
 const VkPipeline &PipelineGraphics::Get() const { return pipeline_; }
