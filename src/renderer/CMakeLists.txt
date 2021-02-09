@@ -13,6 +13,7 @@ set(SOURCES vlk/instance.cc
             vlk/image_view.cc
             vlk/shader_module.cc
             vlk/pipeline_graphics.cc
+            vlk/pipeline_layout.cc           
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})
