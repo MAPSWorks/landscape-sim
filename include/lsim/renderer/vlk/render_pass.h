@@ -2,8 +2,8 @@
 // Created by Ivars Rusbergs in 2021
 //
 // Abstraction of a Vulkan render pass object.
-#ifndef LSIM_RENDERER_VLK_PIPELINE_LAYOUT_H_
-#define LSIM_RENDERER_VLK_PIPELINE_LAYOUT_H_
+#ifndef LSIM_RENDERER_VLK_RENDER_PASS_H_
+#define LSIM_RENDERER_VLK_RENDER_PASS_H_
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {

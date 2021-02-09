@@ -148,6 +148,10 @@ void Test::Init() {
   layout_create_info.pPushConstantRanges = nullptr; // Optional
   layout_ = std::make_unique<lsim::renderer::vlk::PipelineLayout>(
       renderer_.GetDeviceObject().Get(), layout_create_info);
+  // Render pass
+  render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
+      renderer_.GetDeviceObject().Get(), VkFormat{}, VkFormat{});
+
 }
 
 } // namespace apps::test
