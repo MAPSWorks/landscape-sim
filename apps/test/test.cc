@@ -17,11 +17,11 @@ lsim::platform::Settings user_settings{"Alpha app", 1,
 
 Test::Test(int argc, char *argv[])
     : lsim::platform::IApplication(argc, argv, user_settings) {
-  Init();
+  InitPipeline();
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::Init() {
+void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(
       renderer_.GetDeviceObject().Get(), "shaders/test.vert.spv");
@@ -45,7 +45,6 @@ void Test::Init() {
 
   VkPipelineShaderStageCreateInfo shader_stages[] = {vert_stage_create_info,
                                                      frag_stage_create_info};
-  (void)shader_stages;
 
   // vertex input
   VkPipelineVertexInputStateCreateInfo vertex_input_info{};
@@ -70,8 +69,10 @@ void Test::Init() {
   viewport.y = 0.0f;
 
   // should be swapchain extent
-  viewport.width = static_cast<float>(renderer_.GetSwapchinObject().GetExtent().width);
-  viewport.height = static_cast<float>(renderer_.GetSwapchinObject().GetExtent().height);
+  viewport.width =
+      static_cast<float>(renderer_.GetSwapchinObject().GetExtent().width);
+  viewport.height =
+      static_cast<float>(renderer_.GetSwapchinObject().GetExtent().height);
   viewport.minDepth = 0.0f;
   viewport.maxDepth = 1.0f;
   VkRect2D scissor{};
@@ -152,6 +153,25 @@ void Test::Init() {
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
       renderer_.GetDeviceObject().Get(),
       renderer_.GetSwapchinObject().GetSurfaceFormat().format, VkFormat{});
+
+  // Define pipeline itself
+  VkGraphicsPipelineCreateInfo pipeline_info{};
+  pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+  pipeline_info.stageCount = 2;
+  pipeline_info.pStages = shader_stages;
+  pipeline_info.pVertexInputState = &vertex_input_info;
+  pipeline_info.pInputAssemblyState = &input_assembly_info;
+  pipeline_info.pViewportState = &viewport_states_info;
+  pipeline_info.pRasterizationState = &raster_state_info;
+  pipeline_info.pMultisampleState = &multisample_info;
+  pipeline_info.pDepthStencilState = nullptr; // Optional
+  pipeline_info.pColorBlendState = &color_blend_info;
+  pipeline_info.pDynamicState = nullptr; // Optional
+  pipeline_info.layout = layout_->Get();
+  pipeline_info.renderPass = render_pass_->Get();
+  pipeline_info.subpass = 0;
+  pipeline_ = std::make_unique<lsim::renderer::vlk::PipelineGraphics>(
+      renderer_.GetDeviceObject().Get(), pipeline_info);
 }
 
 } // namespace apps::test
