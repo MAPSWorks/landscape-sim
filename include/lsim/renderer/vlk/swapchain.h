@@ -37,7 +37,8 @@ public:
   Swapchain(Swapchain const &) = delete;
   Swapchain operator=(Swapchain const &) = delete;
   const VkSwapchainKHR &Get() const;
-
+  const VkExtent2D& GetExtent() const;
+  const VkSurfaceFormatKHR& GetSurfaceFormat() const;
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const DeviceQueue::FamilyIndices &qf_indices,

@@ -52,8 +52,7 @@ Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
       present_mode_(SelectPresentMode(support_details_.present_modes)),
       extent_(RetrieveExtent(support_details_.capabilities, window)),
       swapchain_(Create(surface, qf_indices, support_details_.capabilities)),
-      images_(RetrieveImages()),
-      image_views_(CreateImageViews(images_)) {
+      images_(RetrieveImages()), image_views_(CreateImageViews(images_)) {
 
   base::Log::Info("renderer", "swapchain", "created");
 }
@@ -64,6 +63,12 @@ Swapchain::~Swapchain() {
 }
 
 const VkSwapchainKHR &Swapchain::Get() const { return swapchain_; }
+
+const VkExtent2D &Swapchain::GetExtent() const { return extent_; }
+
+const VkSurfaceFormatKHR &Swapchain::GetSurfaceFormat() const {
+  return surface_format_;
+}
 
 VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
                                  const DeviceQueue::FamilyIndices &qf_indices,
@@ -202,13 +207,14 @@ std::vector<VkImage> Swapchain::RetrieveImages() const {
   return swapchain_images;
 }
 
-std::vector<ImageView> Swapchain::CreateImageViews(const std::vector<VkImage>& images) const {
-    std::vector<ImageView> image_views;
-    // Number of image views and images should mach (also their order)!
-    for (const auto& image : images) {
-        image_views.emplace_back(device_, image, surface_format_.format);
-    }
-    return image_views;
+std::vector<ImageView>
+Swapchain::CreateImageViews(const std::vector<VkImage> &images) const {
+  std::vector<ImageView> image_views;
+  // Number of image views and images should mach (also their order)!
+  for (const auto &image : images) {
+    image_views.emplace_back(device_, image, surface_format_.format);
+  }
+  return image_views;
 }
 
 } // namespace lsim::renderer::vlk
