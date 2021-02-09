@@ -8,14 +8,15 @@
 namespace lsim::renderer::vlk {
 class PipelineGraphics {
 public:
-  PipelineGraphics(const VkDevice& device);
+  PipelineGraphics(const VkDevice &device,
+                   const VkGraphicsPipelineCreateInfo &create_info);
   ~PipelineGraphics();
   PipelineGraphics(PipelineGraphics const &) = delete;
   PipelineGraphics operator=(PipelineGraphics const &) = delete;
   const VkPipeline &Get() const;
 
 private:
-  VkPipeline Create() const;
+  VkPipeline Create(const VkGraphicsPipelineCreateInfo &create_info) const;
   // Reference to resource this object is created with
   const VkDevice &device_;
   const VkPipeline pipeline_ = VK_NULL_HANDLE;
