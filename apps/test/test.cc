@@ -70,15 +70,15 @@ void Test::Init() {
   viewport.y = 0.0f;
 
   // should be swapchain extent
-  viewport.width = static_cast<float>(1280);
-  viewport.height = static_cast<float>(720);
+  viewport.width = static_cast<float>(renderer_.GetSwapchinObject().GetExtent().width);
+  viewport.height = static_cast<float>(renderer_.GetSwapchinObject().GetExtent().height);
   viewport.minDepth = 0.0f;
   viewport.maxDepth = 1.0f;
   VkRect2D scissor{};
 
   // swapchain extent
   scissor.offset = {0, 0};
-  scissor.extent = {1280, 720};
+  scissor.extent = renderer_.GetSwapchinObject().GetExtent();
   VkPipelineViewportStateCreateInfo viewport_states_info{};
   viewport_states_info.sType =
       VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -150,8 +150,8 @@ void Test::Init() {
       renderer_.GetDeviceObject().Get(), layout_create_info);
   // Render pass
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
-      renderer_.GetDeviceObject().Get(), VkFormat{}, VkFormat{});
-
+      renderer_.GetDeviceObject().Get(),
+      renderer_.GetSwapchinObject().GetSurfaceFormat().format, VkFormat{});
 }
 
 } // namespace apps::test
