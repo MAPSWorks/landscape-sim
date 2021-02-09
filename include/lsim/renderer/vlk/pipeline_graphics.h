@@ -1,6 +1,7 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
+// Abstraction of a Vulkan graphics pipeline object.
 #ifndef LSIM_RENDERER_VLK_PIPELINE_GRAPHICS_H_
 #define LSIM_RENDERER_VLK_PIPELINE_GRAPHICS_H_
 #include <vulkan/vulkan.h>
