@@ -21,7 +21,7 @@ Test::Test(int argc, char *argv[])
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::Init() const {
+void Test::Init() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(
       renderer_.GetDeviceObject().Get(), "shaders/test.vert.spv");
@@ -139,6 +139,15 @@ void Test::Init() const {
   color_blend_info.blendConstants[1] = 0.0f; // Optional
   color_blend_info.blendConstants[2] = 0.0f; // Optional
   color_blend_info.blendConstants[3] = 0.0f; // Optional
+  // Pipeline layout
+  VkPipelineLayoutCreateInfo layout_create_info{};
+  layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+  layout_create_info.setLayoutCount = 0;            // Optional
+  layout_create_info.pSetLayouts = nullptr;         // Optional
+  layout_create_info.pushConstantRangeCount = 0;    // Optional
+  layout_create_info.pPushConstantRanges = nullptr; // Optional
+  layout_ = std::make_unique<lsim::renderer::vlk::PipelineLayout>(
+      renderer_.GetDeviceObject().Get(), layout_create_info);
 }
 
 } // namespace apps::test
