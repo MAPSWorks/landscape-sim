@@ -24,6 +24,7 @@ Framebuffer::Framebuffer(const VkDevice &device,
 
 Framebuffer::~Framebuffer() {
   base::Log::Info("renderer", "framebuffer", "destroying..");
+  vkDestroyFramebuffer(device_, framebuffer_, nullptr);
 }
 
 const VkFramebuffer &Framebuffer::Get() const { return framebuffer_; }
