@@ -14,7 +14,8 @@ set(SOURCES vlk/instance.cc
             vlk/shader_module.cc
             vlk/pipeline_graphics.cc
             vlk/pipeline_layout.cc  
-            vlk/render_pass.cc         
+            vlk/render_pass.cc    
+            vlk/framebuffer.cc      
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})
