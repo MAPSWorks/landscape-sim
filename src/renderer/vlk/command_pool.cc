@@ -9,9 +9,9 @@
 
 namespace lsim::renderer::vlk {
 CommandPool::CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
-                         bool is_resetable, bool is_transient)
+                         Flags flags)
     : device_(device),
-      command_pool_(Create(family_index, is_resetable, is_transient)) {
+      command_pool_(Create(family_index, flags)) {
   base::Log::Info("renderer", "command pool", "created");
 }
 
@@ -41,17 +41,17 @@ VkCommandBuffer CommandPool::AllocateCommandPrimaryBuffer() const {
 */
 
 VkCommandPool CommandPool::Create(QueueFamilyIndex family_index,
-                                  bool is_resetable, bool is_transient) const {
+                                  Flags flags) const {
   VkCommandPoolCreateInfo pool_create_info{};
   pool_create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
   pool_create_info.queueFamilyIndex = family_index;
   pool_create_info.flags = 0;
   // Command buffer can be re-recorded
-  if (is_resetable) {
+  if ((flags & Flags::kResetable) == Flags::kResetable) {
     pool_create_info.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
   }
   // for short-lived buffers
-  if (is_transient) {
+  if ((flags & Flags::kTransient) == Flags::kTransient) {
     pool_create_info.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
   }
   base::Log::Info("renderer", "command pool", "queue family index set to",
