@@ -39,6 +39,7 @@ public:
   const VkSwapchainKHR &Get() const;
   const VkExtent2D& GetExtent() const;
   const VkSurfaceFormatKHR& GetSurfaceFormat() const;
+  const std::vector<ImageView>& GetImageViews() const;
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const DeviceQueue::FamilyIndices &qf_indices,

@@ -70,6 +70,10 @@ const VkSurfaceFormatKHR &Swapchain::GetSurfaceFormat() const {
   return surface_format_;
 }
 
+const std::vector<ImageView>& Swapchain::GetImageViews() const {
+    return image_views_;
+}
+
 VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
                                  const DeviceQueue::FamilyIndices &qf_indices,
                                  const VkSurfaceCapabilitiesKHR &caps) {
