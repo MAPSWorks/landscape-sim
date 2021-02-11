@@ -6,13 +6,26 @@
 #define LSIM_RENDERER_VLK_FRAMEBUFFER_H_
 #include <vulkan/vulkan.h>
 
-
-
 namespace lsim::renderer::vlk {
 class Framebuffer {
 public:
-private:
+  Framebuffer(const VkDevice &device, const VkRenderPass &render_pass,
+              const VkImageView &swapchain_image_view,
+              const VkExtent2D &swapchain_extent,
+              const VkImageView &depth_image_view);
+  ~Framebuffer();
+  Framebuffer(Framebuffer const &) = delete;
+  Framebuffer operator=(Framebuffer const &) = delete;
+  const VkFramebuffer &Get() const;
 
-  };
-}
-  #endif
+private:
+  VkFramebuffer Create(const VkRenderPass &render_pass,
+                       const VkImageView &swapchain_image_view,
+                       const VkExtent2D &swapchain_extent,
+                       const VkImageView &depth_image_view) const;
+  // Reference to resource this object is created with
+  const VkDevice &device_;
+  const VkFramebuffer framebuffer_ = VK_NULL_HANDLE;
+};
+} // namespace lsim::renderer::vlk
+#endif
