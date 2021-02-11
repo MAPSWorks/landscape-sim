@@ -176,8 +176,12 @@ void Test::InitPipeline() {
 }
 
 void Test::CreateFramebuffers() {
+  const auto& image_views = renderer_.GetSwapchinObject().GetImageViews();
 
-
+  for (const auto& view : image_views) {
+    framebuffers_.emplace_back(renderer_.GetDeviceObject().Get(), render_pass_->Get(),
+      view.Get(), renderer_.GetSwapchinObject().GetExtent(), nullptr);
+  }
 }
 
 } // namespace apps::test
