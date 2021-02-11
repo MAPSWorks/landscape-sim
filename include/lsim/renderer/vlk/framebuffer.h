@@ -1,7 +1,7 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Abstraction of a Vulkan framebuffer layout object.
+// Abstraction of a Vulkan framebuffer object.
 #ifndef LSIM_RENDERER_VLK_FRAMEBUFFER_H_
 #define LSIM_RENDERER_VLK_FRAMEBUFFER_H_
 #include <vulkan/vulkan.h>
