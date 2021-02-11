@@ -5,11 +5,14 @@
 #ifndef LSIM_APPS_TEST_H_
 #define LSIM_APPS_TEST_H_
 #include <memory>
+#include <vector>
 
 #include <lsim/platform/i_application.h>
 #include <lsim/renderer/vlk/pipeline_graphics.h>
 #include <lsim/renderer/vlk/pipeline_layout.h>
 #include <lsim/renderer/vlk/render_pass.h>
+#include <lsim/renderer/vlk/framebuffer.h>
+
 
 namespace apps::test {
 class Test : public lsim::platform::IApplication {
@@ -18,9 +21,13 @@ public:
 
 private:
   void InitPipeline();
+  void CreateFramebuffers();
   std::unique_ptr<lsim::renderer::vlk::PipelineLayout> layout_;
   std::unique_ptr<lsim::renderer::vlk::RenderPass> render_pass_;
   std::unique_ptr<lsim::renderer::vlk::PipelineGraphics> pipeline_;
+  // List of framebuffer for each image in swapchain
+  std::vector<lsim::renderer::vlk::Framebuffer> framebuffers_;
+
 };
 } // namespace apps::test
 

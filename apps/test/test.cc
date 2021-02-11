@@ -18,6 +18,7 @@ lsim::platform::Settings user_settings{"Alpha app", 1,
 Test::Test(int argc, char *argv[])
     : lsim::platform::IApplication(argc, argv, user_settings) {
   InitPipeline();
+  CreateFramebuffers();
   lsim::base::Log::Info("test application", "initialized");
 }
 
@@ -172,6 +173,11 @@ void Test::InitPipeline() {
   pipeline_info.subpass = 0;
   pipeline_ = std::make_unique<lsim::renderer::vlk::PipelineGraphics>(
       renderer_.GetDeviceObject().Get(), pipeline_info);
+}
+
+void Test::CreateFramebuffers() {
+
+
 }
 
 } // namespace apps::test
