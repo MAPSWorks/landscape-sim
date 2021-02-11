@@ -175,12 +175,14 @@ void Test::InitPipeline() {
       renderer_.GetDeviceObject().Get(), pipeline_info);
 }
 
+// Create frame buffers for all image views in swapchain
 void Test::CreateFramebuffers() {
-  const auto& image_views = renderer_.GetSwapchinObject().GetImageViews();
+  const auto &image_views = renderer_.GetSwapchinObject().GetImageViews();
 
-  for (const auto& view : image_views) {
-    framebuffers_.emplace_back(renderer_.GetDeviceObject().Get(), render_pass_->Get(),
-      view.Get(), renderer_.GetSwapchinObject().GetExtent(), nullptr);
+  for (const auto &view : image_views) {
+    framebuffers_.emplace_back(
+        renderer_.GetDeviceObject().Get(), render_pass_->Get(), view.Get(),
+        renderer_.GetSwapchinObject().GetExtent(), nullptr);
   }
 }
 
