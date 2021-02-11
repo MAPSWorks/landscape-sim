@@ -12,6 +12,7 @@
 #include <lsim/renderer/vlk/pipeline_layout.h>
 #include <lsim/renderer/vlk/render_pass.h>
 #include <lsim/renderer/vlk/framebuffer.h>
+#include <lsim/renderer/vlk/command_pool.h>
 
 
 namespace apps::test {
@@ -27,7 +28,7 @@ private:
   std::unique_ptr<lsim::renderer::vlk::PipelineGraphics> pipeline_;
   // List of framebuffer for each image in swapchain
   std::vector<lsim::renderer::vlk::Framebuffer> framebuffers_;
-
+  std::unique_ptr<lsim::renderer::vlk::CommandPool> command_pool_;
 };
 } // namespace apps::test
 

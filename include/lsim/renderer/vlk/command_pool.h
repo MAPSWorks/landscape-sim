@@ -18,7 +18,7 @@ public:
 
   // is_transient - true for short-lived buffers for optimization
   CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
-              Flags flags);
+              Flags flags = Flags::kNone);
   ~CommandPool();
   CommandPool(CommandPool const &) = delete;
   CommandPool operator=(CommandPool const &) = delete;
@@ -33,12 +33,14 @@ private:
 };
 
 // Comparison operators for flag
-CommandPool::Flags operator|(CommandPool::Flags lhs, CommandPool::Flags rhs) {
+inline CommandPool::Flags operator|(CommandPool::Flags lhs,
+                                    CommandPool::Flags rhs) {
   return static_cast<CommandPool::Flags>(
       static_cast<std::underlying_type<CommandPool::Flags>::type>(lhs) |
       static_cast<std::underlying_type<CommandPool::Flags>::type>(rhs));
 }
-CommandPool::Flags operator&(CommandPool::Flags lhs, CommandPool::Flags rhs) {
+inline CommandPool::Flags operator&(CommandPool::Flags lhs,
+                                    CommandPool::Flags rhs) {
   return static_cast<CommandPool::Flags>(
       static_cast<std::underlying_type<CommandPool::Flags>::type>(lhs) &
       static_cast<std::underlying_type<CommandPool::Flags>::type>(rhs));

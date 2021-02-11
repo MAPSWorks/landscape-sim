@@ -10,8 +10,7 @@
 namespace lsim::renderer::vlk {
 CommandPool::CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
                          Flags flags)
-    : device_(device),
-      command_pool_(Create(family_index, flags)) {
+    : device_(device), command_pool_(Create(family_index, flags)) {
   base::Log::Info("renderer", "command pool", "created");
 }
 

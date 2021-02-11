@@ -2,6 +2,7 @@
 // Created by Ivars Rusbergs in 2021
 //
 #include "test.h"
+#include "lsim/renderer/vlk/command_pool.h"
 
 #include <vulkan/vulkan.h>
 
@@ -19,6 +20,10 @@ Test::Test(int argc, char *argv[])
     : lsim::platform::IApplication(argc, argv, user_settings) {
   InitPipeline();
   CreateFramebuffers();
+
+  command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
+      renderer_.GetDeviceObject().Get(), 0 );
+
   lsim::base::Log::Info("test application", "initialized");
 }
 
@@ -178,7 +183,6 @@ void Test::InitPipeline() {
 // Create frame buffers for all image views in swapchain
 void Test::CreateFramebuffers() {
   const auto &image_views = renderer_.GetSwapchinObject().GetImageViews();
-
   for (const auto &view : image_views) {
     framebuffers_.emplace_back(
         renderer_.GetDeviceObject().Get(), render_pass_->Get(), view.Get(),
