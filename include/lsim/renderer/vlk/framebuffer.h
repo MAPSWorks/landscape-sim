@@ -14,18 +14,23 @@ public:
               const VkExtent2D &swapchain_extent,
               const VkImageView &depth_image_view);
   ~Framebuffer();
-  Framebuffer(Framebuffer const &) = delete;
-  Framebuffer operator=(Framebuffer const &) = delete;
+  //Framebuffer(Framebuffer const &) = delete;
+  //Framebuffer operator=(Framebuffer const &) = delete;
+  // Move constructor
+  Framebuffer(Framebuffer &&other) noexcept;
+  // Move asignment
+  Framebuffer &operator=(Framebuffer &&other) noexcept;
   const VkFramebuffer &Get() const;
 
 private:
+  void Destroy();
   VkFramebuffer Create(const VkRenderPass &render_pass,
                        const VkImageView &swapchain_image_view,
                        const VkExtent2D &swapchain_extent,
                        const VkImageView &depth_image_view) const;
   // Reference to resource this object is created with
   const VkDevice &device_;
-  const VkFramebuffer framebuffer_ = VK_NULL_HANDLE;
+  VkFramebuffer framebuffer_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 #endif

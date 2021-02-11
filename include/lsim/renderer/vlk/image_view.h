@@ -13,8 +13,8 @@ public:
   ImageView(const VkDevice &device, const VkImage &image, VkFormat format,
             VkImageAspectFlags aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT);
   ~ImageView();
-  ImageView(ImageView const &) = delete;
-  ImageView operator=(ImageView const &) = delete;
+  //ImageView(ImageView const &) = delete;
+  //ImageView operator=(ImageView const &) = delete;
   // Move constructor
   ImageView(ImageView &&other) noexcept;
   // Move asignment

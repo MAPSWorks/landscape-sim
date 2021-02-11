@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 #include "lsim/base/log.h"
 #include "vulkan_shared.h"
@@ -22,9 +23,24 @@ Framebuffer::Framebuffer(const VkDevice &device,
   base::Log::Info("renderer", "framebuffer", "created");
 }
 
-Framebuffer::~Framebuffer() {
-  base::Log::Info("renderer", "framebuffer", "destroying..");
-  vkDestroyFramebuffer(device_, framebuffer_, nullptr);
+Framebuffer::~Framebuffer() { Destroy(); }
+
+Framebuffer::Framebuffer(Framebuffer &&other) noexcept
+    : device_(other.device_) {
+  // Call move-asignment operator
+  *this = std::move(other);
+  //base::Log::Info("renderer", "framebuffer", "move cnstructed");
+}
+
+Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
+  if (this != &other) {
+    // Destroy current resource if there is anything to destroy
+    Destroy();
+    this->framebuffer_ = other.framebuffer_;
+    other.framebuffer_ = VK_NULL_HANDLE;
+    //base::Log::Info("renderer", "framebuffer", "move assigned");
+  }
+  return *this;
 }
 
 const VkFramebuffer &Framebuffer::Get() const { return framebuffer_; }
@@ -50,5 +66,12 @@ VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
   ErrorCheck(vkCreateFramebuffer(device_, &framebuffer_create_info, nullptr,
                                  &framebuffer));
   return framebuffer;
+}
+
+void Framebuffer::Destroy() {
+  if (framebuffer_ != VK_NULL_HANDLE) {
+    base::Log::Info("renderer", "framebuffer", "destroying..");
+    vkDestroyFramebuffer(device_, framebuffer_, nullptr);
+  }
 }
 } // namespace lsim::renderer::vlk

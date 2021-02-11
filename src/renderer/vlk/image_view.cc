@@ -18,7 +18,7 @@ ImageView::ImageView(const VkDevice &device, const VkImage &image,
 ImageView::~ImageView() { Destroy(); }
 
 ImageView::ImageView(ImageView &&other) noexcept
-    : device_(other.device_), image_view_(VK_NULL_HANDLE) {
+    : device_(other.device_) {
   // Call move-asignment operator
   *this = std::move(other);
 }
