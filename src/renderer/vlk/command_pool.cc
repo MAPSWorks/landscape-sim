@@ -3,6 +3,8 @@
 //
 #include "lsim/renderer/vlk/command_pool.h"
 
+#include <vulkan/vulkan.h>
+
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/device_queue.h"
 #include "vulkan_shared.h"
