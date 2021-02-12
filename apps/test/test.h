@@ -23,6 +23,7 @@ public:
 private:
   void InitPipeline();
   void CreateFramebuffers();
+  void CreateCommandBuffers();
   std::unique_ptr<lsim::renderer::vlk::PipelineLayout> layout_;
   std::unique_ptr<lsim::renderer::vlk::RenderPass> render_pass_;
   std::unique_ptr<lsim::renderer::vlk::PipelineGraphics> pipeline_;

@@ -20,11 +20,7 @@ Test::Test(int argc, char *argv[])
     : lsim::platform::IApplication(argc, argv, user_settings) {
   InitPipeline();
   CreateFramebuffers();
-
-  command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
-      renderer_.Device().Handle(),
-      renderer_.Device().Queue().Families().graphics.value());
-
+  CreateCommandBuffers();
   lsim::base::Log::Info("test application", "initialized");
 }
 
@@ -190,5 +186,14 @@ void Test::CreateFramebuffers() {
         renderer_.Swapchin().Extent(), nullptr);
   }
 }
+
+// Command buffers are destroyed together with the pool
+void Test::CreateCommandBuffers() {
+  command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
+      renderer_.Device().Handle(),
+      renderer_.Device().Queue().Families().graphics.value());
+
+}
+
 
 } // namespace apps::test

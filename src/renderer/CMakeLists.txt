@@ -16,7 +16,8 @@ set(SOURCES vlk/instance.cc
             vlk/pipeline_layout.cc  
             vlk/render_pass.cc    
             vlk/framebuffer.cc    
-            vlk/command_pool.cc  
+            vlk/command_pool.cc 
+            vlk/command_buffer.cc 
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})
