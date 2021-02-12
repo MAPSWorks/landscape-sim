@@ -27,6 +27,11 @@ Test::Test(int argc, char *argv[])
   lsim::base::Log::Info("test application", "initialized");
 }
 
+void Test::RenderFrame() const {
+  
+}
+
+
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(renderer_.Device().Handle(),

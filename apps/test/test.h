@@ -21,6 +21,7 @@ public:
   Test(int argc, char *argv[]);
 
 private:
+  virtual void RenderFrame() const override;
   void InitPipeline();
   void CreateFramebuffers();
   void CreateCommandBuffers();

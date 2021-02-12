@@ -38,14 +38,13 @@ void IApplication::Run() {
         break;
 
       default:
-        // Do nothing.
         break;
       }
     }
-
-    // ... render
-    running = false;
-    SDL_Delay(10);
+      
+    RenderFrame(); 
+    //running = false;
+    //SDL_Delay(10);
   }
   base::Log::Info("platform", "main loop", "exiting..");
 }

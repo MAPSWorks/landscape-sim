@@ -31,6 +31,7 @@ protected:
   renderer::Renderer renderer_;
 
 private:
+  virtual void RenderFrame() const = 0;
 };
 } // namespace lsim::platform
 
