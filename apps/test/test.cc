@@ -5,11 +5,12 @@
 
 #include <vulkan/vulkan.h>
 
-#include "lsim/renderer/vlk/command_buffer.h"
-#include "lsim/renderer/vlk/command_pool.h"
 #include <lsim/base/log.h>
 #include <lsim/platform/i_application.h>
 #include <lsim/platform/types.h>
+#include <lsim/renderer/vlk/command_buffer.h>
+#include <lsim/renderer/vlk/command_pool.h>
+#include <lsim/renderer/vlk/semaphore.h>
 #include <lsim/renderer/vlk/shader_module.h>
 
 namespace apps::test {
@@ -22,13 +23,11 @@ Test::Test(int argc, char *argv[])
   InitPipeline();
   CreateFramebuffers();
   CreateCommandBuffers();
+  CreateSemaphores();
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::RenderFrame() const {
-  
-}
-
+void Test::RenderFrame() const {}
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
@@ -204,6 +203,13 @@ void Test::CreateCommandBuffers() {
   for (size_t i = 0; i < framebuffers_.size(); ++i) {
     command_buffers_.emplace_back(*command_pool_);
   }
+}
+
+void Test::CreateSemaphores() {
+  image_available_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
+      renderer_.Device().Handle());
+  render_finished_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
+      renderer_.Device().Handle());
 }
 
 } // namespace apps::test
