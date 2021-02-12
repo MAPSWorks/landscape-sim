@@ -4,7 +4,6 @@
 #include "lsim/renderer/vlk/command_pool.h"
 
 #include <vulkan/vulkan.h>
-#include <vulkan/vulkan_core.h>
 
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/device_queue.h"
@@ -32,15 +31,18 @@ VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
   command_buffer_allocinfo.sType =
       VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
   command_buffer_allocinfo.commandPool = command_pool_;
-  if (level == BufferLevel::kPrimary) {
-    command_buffer_allocinfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  } else if (level == BufferLevel::kSecondary) {
-    command_buffer_allocinfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-  }
+  command_buffer_allocinfo.level = static_cast<VkCommandBufferLevel>(level);
   command_buffer_allocinfo.commandBufferCount = 1;
   VkCommandBuffer command_buffer;
   ErrorCheck(vkAllocateCommandBuffers(device_, &command_buffer_allocinfo,
                                       &command_buffer));
+  if (level == BufferLevel::kPrimary) {
+    base::Log::Info("renderer", "command pool",
+                    "primary command buffer allocated");
+  } else if (level == BufferLevel::kSecondary) {
+    base::Log::Info("renderer", "command pool",
+                    "secondary command buffer allocated");
+  }
   return command_buffer;
 }
 

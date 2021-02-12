@@ -15,7 +15,10 @@ class CommandPool {
 public:
   // Flags of a command buffer
   enum class Flags { kNone = 0, kResetable = 1 << 0, kTransient = 1 << 1 };
-  enum class BufferLevel {kPrimary, kSecondary}; 
+  enum class BufferLevel {
+    kPrimary = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+    kSecondary = VK_COMMAND_BUFFER_LEVEL_SECONDARY
+  };
   // is_transient - true for short-lived buffers for optimization
   CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
               Flags flags = Flags::kNone);
@@ -25,7 +28,8 @@ public:
   // Returns Vulkan object handle
   const VkCommandPool &Handle() const;
   // Allocate and return command buffer of a given level
-  VkCommandBuffer AllocateCommandBuffer(BufferLevel level = BufferLevel::kPrimary) const;
+  VkCommandBuffer
+  AllocateCommandBuffer(BufferLevel level = BufferLevel::kPrimary) const;
 
 private:
   VkCommandPool Create(QueueFamilyIndex family_index, Flags flags) const;
