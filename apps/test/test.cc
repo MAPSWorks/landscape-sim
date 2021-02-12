@@ -3,8 +3,6 @@
 //
 #include "test.h"
 
-#include <vector>
-
 #include <vulkan/vulkan.h>
 
 #include "lsim/renderer/vlk/command_buffer.h"
@@ -203,7 +201,6 @@ void Test::CreateCommandBuffers() {
   // Command buffer for each framebuffer.
   // Bcause one of the drawing commands involves binding the right VkFramebuffer
   // () could later be redone for each frame-in-flight
-  std::vector<lsim::renderer::vlk::CommandBuffer> command_buffers_;
   for (size_t i = 0; i < framebuffers_.size(); ++i) {
     command_buffers_.emplace_back(*command_pool_);
   }

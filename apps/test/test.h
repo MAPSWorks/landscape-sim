@@ -13,7 +13,7 @@
 #include <lsim/renderer/vlk/render_pass.h>
 #include <lsim/renderer/vlk/framebuffer.h>
 #include <lsim/renderer/vlk/command_pool.h>
-
+#include <lsim/renderer/vlk/command_buffer.h>
 
 namespace apps::test {
 class Test : public lsim::platform::IApplication {
@@ -31,6 +31,8 @@ private:
   // List of framebuffer for each image in swapchain
   std::vector<lsim::renderer::vlk::Framebuffer> framebuffers_;
   std::unique_ptr<lsim::renderer::vlk::CommandPool> command_pool_;
+
+  std::vector<lsim::renderer::vlk::CommandBuffer> command_buffers_;
 };
 } // namespace apps::test
 
