@@ -2,10 +2,13 @@
 // Created by Ivars Rusbergs in 2021
 //
 #include "test.h"
-#include "lsim/renderer/vlk/command_pool.h"
+
+#include <vector>
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/renderer/vlk/command_buffer.h"
+#include "lsim/renderer/vlk/command_pool.h"
 #include <lsim/base/log.h>
 #include <lsim/platform/i_application.h>
 #include <lsim/platform/types.h>
@@ -26,10 +29,10 @@ Test::Test(int argc, char *argv[])
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
-  lsim::renderer::vlk::ShaderModule vertex_shader(
-      renderer_.Device().Handle(), "shaders/test.vert.spv");
-  lsim::renderer::vlk::ShaderModule fragment_shader(
-      renderer_.Device().Handle(), "shaders/test.frag.spv");
+  lsim::renderer::vlk::ShaderModule vertex_shader(renderer_.Device().Handle(),
+                                                  "shaders/test.vert.spv");
+  lsim::renderer::vlk::ShaderModule fragment_shader(renderer_.Device().Handle(),
+                                                    "shaders/test.frag.spv");
   // Graphics pipeline
   // Shader stage
   VkPipelineShaderStageCreateInfo vert_stage_create_info{};
@@ -72,10 +75,8 @@ void Test::InitPipeline() {
   viewport.y = 0.0f;
 
   // should be swapchain extent
-  viewport.width =
-      static_cast<float>(renderer_.Swapchin().Extent().width);
-  viewport.height =
-      static_cast<float>(renderer_.Swapchin().Extent().height);
+  viewport.width = static_cast<float>(renderer_.Swapchin().Extent().width);
+  viewport.height = static_cast<float>(renderer_.Swapchin().Extent().height);
   viewport.minDepth = 0.0f;
   viewport.maxDepth = 1.0f;
   VkRect2D scissor{};
@@ -154,8 +155,8 @@ void Test::InitPipeline() {
       renderer_.Device().Handle(), layout_create_info);
   // Render pass
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
-      renderer_.Device().Handle(),
-      renderer_.Swapchin().SurfaceFormat().format, VkFormat{});
+      renderer_.Device().Handle(), renderer_.Swapchin().SurfaceFormat().format,
+      VkFormat{});
 
   // Define pipeline itself
   VkGraphicsPipelineCreateInfo pipeline_info{};
@@ -181,19 +182,26 @@ void Test::InitPipeline() {
 void Test::CreateFramebuffers() {
   const auto &image_views = renderer_.Swapchin().ImageViews();
   for (const auto &view : image_views) {
-    framebuffers_.emplace_back(
-        renderer_.Device().Handle(), render_pass_->Handle(), view.Handle(),
-        renderer_.Swapchin().Extent(), nullptr);
+    framebuffers_.emplace_back(renderer_.Device().Handle(),
+                               render_pass_->Handle(), view.Handle(),
+                               renderer_.Swapchin().Extent(), nullptr);
   }
 }
 
 // Command buffers are destroyed together with the pool
 void Test::CreateCommandBuffers() {
+  // Pool for command buffers to allocate from
   command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
       renderer_.Device().Handle(),
       renderer_.Device().Queue().Families().graphics.value());
 
+  // Command buffer for each framebuffer.
+  // Bcause one of the drawing commands involves binding the right VkFramebuffer
+  // () could later be redone for each frame-in-flight
+  std::vector<lsim::renderer::vlk::CommandBuffer> command_buffers_;
+  for (size_t i = 0; i < framebuffers_.size(); ++i) {
+    command_buffers_.emplace_back(*command_pool_);
+  }
 }
-
 
 } // namespace apps::test

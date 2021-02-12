@@ -4,6 +4,7 @@
 #include "lsim/renderer/vlk/command_pool.h"
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/device_queue.h"
@@ -25,21 +26,23 @@ CommandPool::~CommandPool() {
 
 const VkCommandPool &CommandPool::Handle() const { return command_pool_; }
 
-/*
 // Command buffer alloceted will be destroyed implicitly with pool destruction
-VkCommandBuffer CommandPool::AllocateCommandPrimaryBuffer() const {
+VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
   VkCommandBufferAllocateInfo command_buffer_allocinfo{};
   command_buffer_allocinfo.sType =
       VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
   command_buffer_allocinfo.commandPool = command_pool_;
-  command_buffer_allocinfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  if (level == BufferLevel::kPrimary) {
+    command_buffer_allocinfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  } else if (level == BufferLevel::kSecondary) {
+    command_buffer_allocinfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+  }
   command_buffer_allocinfo.commandBufferCount = 1;
   VkCommandBuffer command_buffer;
   ErrorCheck(vkAllocateCommandBuffers(device_, &command_buffer_allocinfo,
                                       &command_buffer));
   return command_buffer;
 }
-*/
 
 VkCommandPool CommandPool::Create(QueueFamilyIndex family_index,
                                   Flags flags) const {
