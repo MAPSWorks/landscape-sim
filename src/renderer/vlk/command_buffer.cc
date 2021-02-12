@@ -63,4 +63,14 @@ void CommandBuffer::EndRenderPass() const {
   vkCmdEndRenderPass(command_buffer_);
 }
 
+void CommandBuffer::BindGraphicsPipeline(const VkPipeline &pipeline) const {
+  vkCmdBindPipeline(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+}
+
+void CommandBuffer::Draw(uint32_t vertex_count, uint32_t instance_count,
+                         uint32_t first_vertex, uint32_t first_instance) const {
+  vkCmdDraw(command_buffer_, vertex_count, instance_count, first_vertex,
+            first_instance);
+}
+
 } // namespace lsim::renderer::vlk
