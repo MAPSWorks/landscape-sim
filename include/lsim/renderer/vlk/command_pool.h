@@ -16,7 +16,9 @@ public:
   // Flags of a command buffer
   enum class Flags { kNone = 0, kResetable = 1 << 0, kTransient = 1 << 1 };
   enum class BufferLevel {
+    // Can be submitted to a queue for execution, but cannot be called from other command buffers.
     kPrimary = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+    // Cannot be submitted directly, but can be called from primary command buffers.
     kSecondary = VK_COMMAND_BUFFER_LEVEL_SECONDARY
   };
   // is_transient - true for short-lived buffers for optimization
