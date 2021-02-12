@@ -19,7 +19,8 @@ public:
   ImageView(ImageView &&other) noexcept;
   // Move asignment
   ImageView &operator=(ImageView &&other) noexcept;
-  const VkImageView &Get() const;
+  // Returns Vulkan object handle
+  const VkImageView &Handle() const;
 
 private:
   VkImageView Create(const VkImage &image, VkFormat format,

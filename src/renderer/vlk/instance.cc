@@ -36,7 +36,7 @@ Instance::~Instance() {
   vkDestroyInstance(instance_, nullptr);
 }
 
-const VkInstance &Instance::Get() const { return instance_; }
+const VkInstance &Instance::Handle() const { return instance_; }
 
 VkInstance Instance::Create(std::string name, uint32_t version) const {
   VkApplicationInfo app_info{};
@@ -56,8 +56,8 @@ VkInstance Instance::Create(std::string name, uint32_t version) const {
   create_info.ppEnabledExtensionNames = extensions_.data();
   // Validation layers
   create_info.enabledLayerCount =
-      static_cast<uint32_t>(validation_.GetLayers().size());
-  create_info.ppEnabledLayerNames = validation_.GetLayers().data();
+      static_cast<uint32_t>(validation_.Layers().size());
+  create_info.ppEnabledLayerNames = validation_.Layers().data();
 
   base::Log::Info("renderer", "app name:", app_info.pApplicationName,
                   " app version:", app_info.applicationVersion,

@@ -22,7 +22,8 @@ public:
   ~CommandPool();
   CommandPool(CommandPool const &) = delete;
   CommandPool operator=(CommandPool const &) = delete;
-  const VkCommandPool &Get() const;
+  // Returns Vulkan object handle
+  const VkCommandPool &Handle() const;
   // VkCommandBuffer AllocateCommandPrimaryBuffer() const;
 
 private:

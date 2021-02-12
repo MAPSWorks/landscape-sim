@@ -16,7 +16,8 @@ public:
   ~Window();
   Window(Window const &) = delete;
   Window operator=(Window const &) = delete;
-  SDL_Window *Get() const;
+  // Get window handle
+  SDL_Window *Handle() const;
 
 private:
   SDL_Window *CreatWindow(const Settings &settings) const;

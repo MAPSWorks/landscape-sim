@@ -20,7 +20,7 @@ DebugMessenger::DebugMessenger(const Instance &instance)
 DebugMessenger::~DebugMessenger() {
   if (instance_.ValidationEnabled()) {
     base::Log::Info("renderer", "debug messenger", "destroying..");
-    DestroyDebugUtilsMessengerEXT(instance_.Get(), debug_messanger_, nullptr);
+    DestroyDebugUtilsMessengerEXT(instance_.Handle(), debug_messanger_, nullptr);
   }
 }
 
@@ -39,7 +39,7 @@ VkDebugUtilsMessengerEXT DebugMessenger::Create() const {
     create_info.pUserData =
         nullptr; // Optional (goes to user_data in debug callback)
     VkDebugUtilsMessengerEXT debug_messenger;
-    ErrorCheck(CreateDebugUtilsMessengerEXT(instance_.Get(), &create_info,
+    ErrorCheck(CreateDebugUtilsMessengerEXT(instance_.Handle(), &create_info,
                                             nullptr, &debug_messenger));
     return debug_messenger;
   } else {

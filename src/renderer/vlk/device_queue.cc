@@ -14,11 +14,11 @@ namespace lsim::renderer::vlk {
 
 DeviceQueue::DeviceQueue(const VkPhysicalDevice &gpu,
                          const VkSurfaceKHR &surface)
-    : family_indices_(SelectFamilies(gpu, surface)) {
+    : families_(SelectFamilies(gpu, surface)) {
 
   base::Log::Info("renderer", "device queue family indices picked.",
-                  "Graphics -", family_indices_.graphics.value(), " present - ",
-                  family_indices_.present.value());
+                  "Graphics -", families_.graphics.value(), " present - ",
+                  families_.present.value());
 }
 
 // static
@@ -54,11 +54,11 @@ DeviceQueue::SelectFamilies(const VkPhysicalDevice &gpu,
   return indices;
 }
 
-std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos() const {
+std::vector<VkDeviceQueueCreateInfo> DeviceQueue::CreateInfos() const {
   // We dont know in advance whether queue family capabilities belong to one
   // family or multiple
   const std::set<QueueFamilyIndex> unique_queue_families = {
-      family_indices_.graphics.value(), family_indices_.present.value()};
+      families_.graphics.value(), families_.present.value()};
   // Create multiple queues if necessery
   std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
   uint32_t number_of_queues = 1;
@@ -74,12 +74,12 @@ std::vector<VkDeviceQueueCreateInfo> DeviceQueue::GetCreateInfos() const {
   return queue_create_infos;
 }
 
-const DeviceQueue::FamilyIndices &DeviceQueue::GetFamilyIndices() const {
-  return family_indices_;
+const DeviceQueue::FamilyIndices &DeviceQueue::Families() const {
+  return families_;
 }
 
 void DeviceQueue::SetGraphics(VkQueue queue) { graphics_queue_ = queue; }
 void DeviceQueue::SetPresent(VkQueue queue) { present_queue_ = queue; }
-const VkQueue &DeviceQueue::GetGraphics() const { return graphics_queue_; }
-const VkQueue &DeviceQueue::GetPresent() const { return present_queue_; }
+const VkQueue &DeviceQueue::Graphics() const { return graphics_queue_; }
+const VkQueue &DeviceQueue::Present() const { return present_queue_; }
 } // namespace lsim::renderer::vlk

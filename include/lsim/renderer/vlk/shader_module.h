@@ -21,7 +21,8 @@ public:
   ~ShaderModule();
   ShaderModule(ShaderModule const &) = delete;
   ShaderModule operator=(ShaderModule const &) = delete;
-  const VkShaderModule &Get() const;
+  // Returns Vulkan object handle
+  const VkShaderModule &Handle() const;
 
 private:
   VkShaderModule Create(const std::string &file_name) const;

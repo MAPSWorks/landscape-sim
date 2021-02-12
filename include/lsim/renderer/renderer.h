@@ -19,9 +19,9 @@ class Renderer {
 public:
   Renderer(SDL_Window *window, const platform::Settings &settings);
   // Get vulkan device abstraction object
-  const vlk::Device& GetDeviceObject() const;
+  const vlk::Device& Device() const;
   // Get vulkan swapchain abstraction object
-  const vlk::Swapchain& GetSwapchinObject() const;
+  const vlk::Swapchain& Swapchin() const;
 private:
   const vlk::Instance instance_;
   // Responsible for validation info feedback output.

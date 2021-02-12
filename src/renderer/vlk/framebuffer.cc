@@ -43,7 +43,7 @@ Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
   return *this;
 }
 
-const VkFramebuffer &Framebuffer::Get() const { return framebuffer_; }
+const VkFramebuffer &Framebuffer::Handle() const { return framebuffer_; }
 
 VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
                                   const VkImageView &swapchain_image_view,

@@ -36,7 +36,7 @@ void Validation::AppendExtentions(std::vector<const char *> &extensions) const {
 
 bool Validation::Enabled() const { return enabled_; }
 
-const std::vector<const char *> &Validation::GetLayers() const {
+const std::vector<const char *> &Validation::Layers() const {
   return layers_;
 }
 

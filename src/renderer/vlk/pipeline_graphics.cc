@@ -20,7 +20,7 @@ PipelineGraphics::~PipelineGraphics() {
   vkDestroyPipeline(device_, pipeline_, nullptr);
 }
 
-const VkPipeline &PipelineGraphics::Get() const { return pipeline_; }
+const VkPipeline &PipelineGraphics::Handle() const { return pipeline_; }
 
 VkPipeline PipelineGraphics::Create(
     const VkGraphicsPipelineCreateInfo &create_info) const {

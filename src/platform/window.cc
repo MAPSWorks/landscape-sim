@@ -23,7 +23,7 @@ Window::~Window() {
   SDL_Quit();
 }
 
-SDL_Window *Window::Get() const { return window_; }
+SDL_Window *Window::Handle() const { return window_; }
 
 SDL_Window *Window::CreatWindow(const Settings &settings) const {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {

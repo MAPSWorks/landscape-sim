@@ -24,11 +24,11 @@ public:
   Device(Device const &) = delete;
   Device operator=(Device const &) = delete;
   // Returns reference to Vulkan physical device object
-  const VkPhysicalDevice &GetGPU() const;
+  const VkPhysicalDevice &GPU() const;
   // Returns reference to Vulkan logical device object
-  const VkDevice &Get() const;
-  // Get queue abstraction instead of vulkan queue object
-  const DeviceQueue &GetQueue() const;
+  const VkDevice &Handle() const;
+  // Returns queue abstraction
+  const DeviceQueue &Queue() const;
 
 private:
   VkPhysicalDevice AcquireGPU(const VkInstance &instance,

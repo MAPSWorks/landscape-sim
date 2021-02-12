@@ -62,15 +62,15 @@ Swapchain::~Swapchain() {
   vkDestroySwapchainKHR(device_, swapchain_, nullptr);
 }
 
-const VkSwapchainKHR &Swapchain::Get() const { return swapchain_; }
+const VkSwapchainKHR &Swapchain::Handle() const { return swapchain_; }
 
-const VkExtent2D &Swapchain::GetExtent() const { return extent_; }
+const VkExtent2D &Swapchain::Extent() const { return extent_; }
 
-const VkSurfaceFormatKHR &Swapchain::GetSurfaceFormat() const {
+const VkSurfaceFormatKHR &Swapchain::SurfaceFormat() const {
   return surface_format_;
 }
 
-const std::vector<ImageView>& Swapchain::GetImageViews() const {
+const std::vector<ImageView>& Swapchain::ImageViews() const {
     return image_views_;
 }
 

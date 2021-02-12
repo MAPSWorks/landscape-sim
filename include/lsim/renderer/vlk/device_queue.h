@@ -36,17 +36,18 @@ public:
   static FamilyIndices SelectFamilies(const VkPhysicalDevice &gpu,
                                       const VkSurfaceKHR &surface);
   DeviceQueue(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
-  const FamilyIndices &GetFamilyIndices() const;
-  // Gets structure necessery for logical device creation
-  std::vector<VkDeviceQueueCreateInfo> GetCreateInfos() const;
+  const FamilyIndices &Families() const;
+  // Returns structure necessery for logical device creation
+  std::vector<VkDeviceQueueCreateInfo> CreateInfos() const;
   void SetGraphics(VkQueue queue);
   void SetPresent(VkQueue queue);
-  const VkQueue &GetGraphics() const;
-  const VkQueue &GetPresent() const;
+  // Returns queue Vulkan object handle
+  const VkQueue &Graphics() const;
+  const VkQueue &Present() const;
 
 private:
   // Selected queue family indices
-  const FamilyIndices family_indices_;
+  const FamilyIndices families_;
   // Queues are created together with logial device
   // Queues are cleaned up when the logical device is destroyed
   VkQueue graphics_queue_ = VK_NULL_HANDLE;

@@ -18,7 +18,8 @@ public:
   ~RenderPass();
   RenderPass(RenderPass const &) = delete;
   RenderPass operator=(RenderPass const &) = delete;
-  const VkRenderPass &Get() const;
+  // Returns Vulkan object handle
+  const VkRenderPass &Handle() const;
 
 private:
   VkRenderPass Create(const VkFormat &swapchain_format,

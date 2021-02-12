@@ -23,7 +23,8 @@ public:
   ~Instance();
   Instance(Instance const &) = delete;
   Instance operator=(Instance const &) = delete;
-  const VkInstance &Get() const;
+  // Returns Vulkan object handle
+  const VkInstance &Handle() const;
   // Returns if validation layers are enabled.
   // To not expose the whole validation object.
   bool ValidationEnabled() const;

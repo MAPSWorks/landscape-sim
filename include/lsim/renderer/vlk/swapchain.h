@@ -36,10 +36,11 @@ public:
   ~Swapchain();
   Swapchain(Swapchain const &) = delete;
   Swapchain operator=(Swapchain const &) = delete;
-  const VkSwapchainKHR &Get() const;
-  const VkExtent2D& GetExtent() const;
-  const VkSurfaceFormatKHR& GetSurfaceFormat() const;
-  const std::vector<ImageView>& GetImageViews() const;
+  // Returns Vulkan object handle
+  const VkSwapchainKHR &Handle() const;
+  const VkExtent2D& Extent() const;
+  const VkSurfaceFormatKHR& SurfaceFormat() const;
+  const std::vector<ImageView>& ImageViews() const;
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const DeviceQueue::FamilyIndices &qf_indices,

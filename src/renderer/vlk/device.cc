@@ -30,11 +30,11 @@ Device::~Device() {
   vkDestroyDevice(device_, nullptr);
 }
 
-const VkPhysicalDevice &Device::GetGPU() const { return gpu_; }
+const VkPhysicalDevice &Device::GPU() const { return gpu_; }
 
-const VkDevice &Device::Get() const { return device_; }
+const VkDevice &Device::Handle() const { return device_; }
 
-const DeviceQueue &Device::GetQueue() const { return queue_; }
+const DeviceQueue &Device::Queue() const { return queue_; }
 
 // Physical device is not created but acquired and need not be deleted
 VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
@@ -86,7 +86,7 @@ void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
 }
 
 VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
-  const auto queue_create_infos = queue_.GetCreateInfos();
+  const auto queue_create_infos = queue_.CreateInfos();
   // Device features to enable
   VkPhysicalDeviceFeatures device_features{};
   device_features.fillModeNonSolid = VK_TRUE;
@@ -110,14 +110,14 @@ VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
 
 VkQueue Device::GetGraphicsQueue() const {
   VkQueue queue;
-  vkGetDeviceQueue(device_, queue_.GetFamilyIndices().graphics.value(), 0,
+  vkGetDeviceQueue(device_, queue_.Families().graphics.value(), 0,
                    &queue);
   return queue;
 }
 
 VkQueue Device::GetPresentQueue() const {
   VkQueue queue;
-  vkGetDeviceQueue(device_, queue_.GetFamilyIndices().present.value(), 0,
+  vkGetDeviceQueue(device_, queue_.Families().present.value(), 0,
                    &queue);
   return queue;
 }

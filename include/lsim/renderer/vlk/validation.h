@@ -17,7 +17,7 @@ public:
   // Add required extentions for our validation layers to the given extentions
   // vector
   void AppendExtentions(std::vector<const char *> &extensions) const;
-  const std::vector<const char *> &GetLayers() const;
+  const std::vector<const char *> &Layers() const;
 
 private:
   // Check if required layers are available

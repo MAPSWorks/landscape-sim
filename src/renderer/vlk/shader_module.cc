@@ -25,7 +25,7 @@ ShaderModule::~ShaderModule() {
   vkDestroyShaderModule(device_, shader_module_, nullptr);
 }
 
-const VkShaderModule &ShaderModule::Get() const { return shader_module_; }
+const VkShaderModule &ShaderModule::Handle() const { return shader_module_; }
 
 VkShaderModule ShaderModule::Create(const std::string &file_name) const {
   // It is ok that this buffer is destroyed on exiting function

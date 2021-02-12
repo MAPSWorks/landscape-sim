@@ -20,7 +20,7 @@ PipelineLayout::~PipelineLayout() {
   vkDestroyPipelineLayout(device_, pipeline_layout_, nullptr);
 }
 
-const VkPipelineLayout &PipelineLayout::Get() const { return pipeline_layout_; }
+const VkPipelineLayout &PipelineLayout::Handle() const { return pipeline_layout_; }
 
 VkPipelineLayout
 PipelineLayout::Create(const VkPipelineLayoutCreateInfo &create_info) const {

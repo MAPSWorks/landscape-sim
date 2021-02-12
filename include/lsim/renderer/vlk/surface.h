@@ -16,7 +16,8 @@ public:
   ~Surface();
   Surface(Surface const &) = delete;
   Surface operator=(Surface const &) = delete;
-  const VkSurfaceKHR &Get() const;
+  // Returns Vulkan object handle
+  const VkSurfaceKHR &Handle() const;
 
 private:
   VkSurfaceKHR Create(SDL_Window *window) const;

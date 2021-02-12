@@ -22,7 +22,8 @@ Test::Test(int argc, char *argv[])
   CreateFramebuffers();
 
   command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
-      renderer_.GetDeviceObject().Get(), 0 );
+      renderer_.Device().Handle(),
+      renderer_.Device().Queue().Families().graphics.value());
 
   lsim::base::Log::Info("test application", "initialized");
 }
@@ -30,23 +31,23 @@ Test::Test(int argc, char *argv[])
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(
-      renderer_.GetDeviceObject().Get(), "shaders/test.vert.spv");
+      renderer_.Device().Handle(), "shaders/test.vert.spv");
   lsim::renderer::vlk::ShaderModule fragment_shader(
-      renderer_.GetDeviceObject().Get(), "shaders/test.frag.spv");
+      renderer_.Device().Handle(), "shaders/test.frag.spv");
   // Graphics pipeline
   // Shader stage
   VkPipelineShaderStageCreateInfo vert_stage_create_info{};
   vert_stage_create_info.sType =
       VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   vert_stage_create_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
-  vert_stage_create_info.module = vertex_shader.Get();
+  vert_stage_create_info.module = vertex_shader.Handle();
   vert_stage_create_info.pName = "main";
   // vert_stage_create_info.pSpecializationInfo  - can adjust shader behaviour
   VkPipelineShaderStageCreateInfo frag_stage_create_info{};
   frag_stage_create_info.sType =
       VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   frag_stage_create_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-  frag_stage_create_info.module = fragment_shader.Get();
+  frag_stage_create_info.module = fragment_shader.Handle();
   frag_stage_create_info.pName = "main";
 
   VkPipelineShaderStageCreateInfo shader_stages[] = {vert_stage_create_info,
@@ -76,16 +77,16 @@ void Test::InitPipeline() {
 
   // should be swapchain extent
   viewport.width =
-      static_cast<float>(renderer_.GetSwapchinObject().GetExtent().width);
+      static_cast<float>(renderer_.Swapchin().Extent().width);
   viewport.height =
-      static_cast<float>(renderer_.GetSwapchinObject().GetExtent().height);
+      static_cast<float>(renderer_.Swapchin().Extent().height);
   viewport.minDepth = 0.0f;
   viewport.maxDepth = 1.0f;
   VkRect2D scissor{};
 
   // swapchain extent
   scissor.offset = {0, 0};
-  scissor.extent = renderer_.GetSwapchinObject().GetExtent();
+  scissor.extent = renderer_.Swapchin().Extent();
   VkPipelineViewportStateCreateInfo viewport_states_info{};
   viewport_states_info.sType =
       VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -154,11 +155,11 @@ void Test::InitPipeline() {
   layout_create_info.pushConstantRangeCount = 0;    // Optional
   layout_create_info.pPushConstantRanges = nullptr; // Optional
   layout_ = std::make_unique<lsim::renderer::vlk::PipelineLayout>(
-      renderer_.GetDeviceObject().Get(), layout_create_info);
+      renderer_.Device().Handle(), layout_create_info);
   // Render pass
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
-      renderer_.GetDeviceObject().Get(),
-      renderer_.GetSwapchinObject().GetSurfaceFormat().format, VkFormat{});
+      renderer_.Device().Handle(),
+      renderer_.Swapchin().SurfaceFormat().format, VkFormat{});
 
   // Define pipeline itself
   VkGraphicsPipelineCreateInfo pipeline_info{};
@@ -173,20 +174,20 @@ void Test::InitPipeline() {
   pipeline_info.pDepthStencilState = nullptr; // Optional
   pipeline_info.pColorBlendState = &color_blend_info;
   pipeline_info.pDynamicState = nullptr; // Optional
-  pipeline_info.layout = layout_->Get();
-  pipeline_info.renderPass = render_pass_->Get();
+  pipeline_info.layout = layout_->Handle();
+  pipeline_info.renderPass = render_pass_->Handle();
   pipeline_info.subpass = 0;
   pipeline_ = std::make_unique<lsim::renderer::vlk::PipelineGraphics>(
-      renderer_.GetDeviceObject().Get(), pipeline_info);
+      renderer_.Device().Handle(), pipeline_info);
 }
 
 // Create frame buffers for all image views in swapchain
 void Test::CreateFramebuffers() {
-  const auto &image_views = renderer_.GetSwapchinObject().GetImageViews();
+  const auto &image_views = renderer_.Swapchin().ImageViews();
   for (const auto &view : image_views) {
     framebuffers_.emplace_back(
-        renderer_.GetDeviceObject().Get(), render_pass_->Get(), view.Get(),
-        renderer_.GetSwapchinObject().GetExtent(), nullptr);
+        renderer_.Device().Handle(), render_pass_->Handle(), view.Handle(),
+        renderer_.Swapchin().Extent(), nullptr);
   }
 }
 
