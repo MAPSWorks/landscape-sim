@@ -30,6 +30,10 @@ public:
   void Begin(Usage usage) const;
   // End recording to the command buffer
   void End() const;
+  // Begin iven render pass using given framebuffer as an attachment
+      void BeginRenderPass(const VkRenderPass& render_pass, const VkFramebuffer& frame_buffer,
+        const VkExtent2D& render_area) const;
+    void EndRenderPass() const;
 
 private:
   // Reference to resource this object is created with
