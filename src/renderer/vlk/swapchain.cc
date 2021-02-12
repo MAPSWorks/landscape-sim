@@ -70,8 +70,20 @@ const VkSurfaceFormatKHR &Swapchain::SurfaceFormat() const {
   return surface_format_;
 }
 
-const std::vector<ImageView>& Swapchain::ImageViews() const {
-    return image_views_;
+const std::vector<ImageView> &Swapchain::ImageViews() const {
+  return image_views_;
+}
+
+// image_available_semaphore - a semaphore that will become signaled when the presentation
+// engine has released ownership of the image
+uint32_t
+Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
+  uint32_t image_index;
+  constexpr auto unlimited_timeout = std::numeric_limits<uint64_t>::max();
+  ErrorCheck(vkAcquireNextImageKHR(device_, swapchain_, unlimited_timeout,
+                                   image_available_sem, VK_NULL_HANDLE,
+                                   &image_index));
+  return image_index;
 }
 
 VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,

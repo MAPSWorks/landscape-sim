@@ -5,6 +5,7 @@
 // images with the refresh rate of the screen.
 #ifndef LSIM_RENDERER_VLK_SWAPCHAIN_H_
 #define LSIM_RENDERER_VLK_SWAPCHAIN_H_
+#include <bits/stdint-uintn.h>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -38,9 +39,12 @@ public:
   Swapchain operator=(Swapchain const &) = delete;
   // Returns Vulkan object handle
   const VkSwapchainKHR &Handle() const;
-  const VkExtent2D& Extent() const;
-  const VkSurfaceFormatKHR& SurfaceFormat() const;
-  const std::vector<ImageView>& ImageViews() const;
+  const VkExtent2D &Extent() const;
+  const VkSurfaceFormatKHR &SurfaceFormat() const;
+  const std::vector<ImageView> &ImageViews() const;
+  // Return next available image index from the swapchain
+  uint32_t AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
+
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const DeviceQueue::FamilyIndices &qf_indices,
