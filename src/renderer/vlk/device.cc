@@ -3,21 +3,21 @@
 //
 #include "lsim/renderer/vlk/device.h"
 
-#include <stdexcept>
-#include <vector>
+//#include <stdexcept>
+//#include <vector>
 
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/device_queue.h"
-#include "lsim/renderer/vlk/swapchain.h"
+//#include "lsim/renderer/vlk/swapchain.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
 Device::Device(const VkInstance &instance, const VkSurfaceKHR &surface)
     : required_extentions_({VK_KHR_SWAPCHAIN_EXTENSION_NAME}),
-      gpu_(AcquireGPU(instance, surface)), queue_(gpu_, surface),
-      device_(CreateDevice(gpu_)) {
+      gpu_(instance, surface), queue_(gpu_.Handle(), surface),
+      device_(CreateDevice(gpu_.Handle())) {
   // Retrieve queues from device and set their handles for DeviceQueue class
   queue_.SetGraphics(GetGraphicsQueue());
   queue_.SetPresent(GetPresentQueue());
@@ -30,13 +30,14 @@ Device::~Device() {
   vkDestroyDevice(device_, nullptr);
 }
 
-const VkPhysicalDevice &Device::GPU() const { return gpu_; }
+const PhysicalDevice &Device::GPU() const { return gpu_; }
 
 const VkDevice &Device::Handle() const { return device_; }
 
 const DeviceQueue &Device::Queue() const { return queue_; }
 
 // Physical device is not created but acquired and need not be deleted
+/*
 VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
                                     const VkSurfaceKHR &surface) const {
   // List of all physical devices available
@@ -65,15 +66,16 @@ VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
 
   PrintGPUProperties(physical_device);
   return physical_device;
-}
-
+}*/
+/*
 bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu,
                            const VkSurfaceKHR &surface) const {
   const auto queue_family = DeviceQueue::SelectFamilies(gpu, surface);
   const auto swapchain_support = Swapchain::QuerySupport(gpu, surface);
   return queue_family.IsComplete() && swapchain_support.IsCapable();
 }
-
+*/
+/*
 void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
   // Log some properties
   VkPhysicalDeviceProperties p_device_properties;
@@ -84,7 +86,7 @@ void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
                   VK_VERSION_MINOR(p_device_properties.apiVersion), ".",
                   VK_VERSION_PATCH(p_device_properties.apiVersion));
 }
-
+*/
 VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
   const auto queue_create_infos = queue_.CreateInfos();
   // Device features to enable

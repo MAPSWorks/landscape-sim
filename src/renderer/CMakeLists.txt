@@ -19,6 +19,8 @@ set(SOURCES vlk/instance.cc
             vlk/command_pool.cc 
             vlk/command_buffer.cc 
             vlk/semaphore.cc 
+            vlk/queue_families.cc 
+            vlk/physical_device.cc 
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})

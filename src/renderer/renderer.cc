@@ -16,7 +16,7 @@ Renderer::Renderer(SDL_Window *window, const platform::Settings &settings)
     : instance_(window, settings), debug_messenger_(instance_),
       surface_(instance_.Handle(), window),
       device_(instance_.Handle(), surface_.Handle()),
-      swapchain_(device_.Handle(), device_.GPU(), surface_.Handle(),
+      swapchain_(device_.Handle(), device_.GPU().Handle(), surface_.Handle(),
                  device_.Queue().Families(), window) {
   base::Log::Info("renderer", "initialized");
 }

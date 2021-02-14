@@ -10,6 +10,7 @@
 #include <vulkan/vulkan.h>
 
 #include "device_queue.h"
+#include "physical_device.h"
 
 namespace lsim::renderer::vlk {
 // Contains both logical and physical device handles.
@@ -23,20 +24,21 @@ public:
   ~Device();
   Device(Device const &) = delete;
   Device operator=(Device const &) = delete;
-  // Returns reference to Vulkan physical device object
-  const VkPhysicalDevice &GPU() const;
+  // Returns reference to Vulkan physical device abstraction
+  const PhysicalDevice &GPU() const;
   // Returns reference to Vulkan logical device object
   const VkDevice &Handle() const;
   // Returns queue abstraction
   const DeviceQueue &Queue() const;
 
 private:
-  VkPhysicalDevice AcquireGPU(const VkInstance &instance,
-                              const VkSurfaceKHR &surface) const;
-  void PrintGPUProperties(const VkPhysicalDevice &gpu) const;
+
+  //VkPhysicalDevice AcquireGPU(const VkInstance &instance,
+  //                            const VkSurfaceKHR &surface) const;
+  //void PrintGPUProperties(const VkPhysicalDevice &gpu) const;
   // Checks if gicen GPU is suitable for this engine
-  bool IsSuitableGPU(const VkPhysicalDevice &gpu,
-                     const VkSurfaceKHR &surface) const;
+  //bool IsSuitableGPU(const VkPhysicalDevice &gpu,
+  //                   const VkSurfaceKHR &surface) const;
   // Creates and return handle to logical device from the given gpu
   VkDevice CreateDevice(const VkPhysicalDevice &gpu) const;
   // Retrieve queue handle from logical device
@@ -45,8 +47,10 @@ private:
   // VkQueue GetPresentQueue() const;
   // Device extentions that the logical device has to support
   const std::vector<const char *> required_extentions_;
+  //GPU gpu_;
   // The selected device Vulkan is going to use, aka physical device
-  const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
+ //const VkPhysicalDevice gpu_ = VK_NULL_HANDLE;
+  const PhysicalDevice gpu_;
   // Device queue handles and selection.
   // Since queues are logically tied to device, they belong here.
   DeviceQueue queue_;
