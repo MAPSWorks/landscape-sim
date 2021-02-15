@@ -13,16 +13,31 @@
 #include "lsim/renderer/vlk/swapchain.h"
 
 namespace lsim::renderer::vlk {
-PhysicalDevice::PhysicalDevice(const VkInstance &instance, const VkSurfaceKHR &surface)
-    : physical_device_(Acquire(instance, surface)) {
-  PrintProperties(physical_device_);
+// Internal linkage
+namespace {
+// Checks if gicen GPU satisfies requirements for this engine
+bool DeviceSuitable(const VkPhysicalDevice &physical_device,
+                    const VkSurfaceKHR &surface) {
+  const QueueFamilies queue_families(physical_device, surface);
+  const auto swapchain_support =
+      Swapchain::QuerySupport(physical_device, surface);
+  return queue_families.Complete() && swapchain_support.IsCapable();
 }
 
-const VkPhysicalDevice &PhysicalDevice::Handle() const { return physical_device_; }
+void PrintDeviceProperties(const VkPhysicalDevice &physical_device) {
+  // Log some properties
+  VkPhysicalDeviceProperties gpu_properties;
+  vkGetPhysicalDeviceProperties(physical_device, &gpu_properties);
+  base::Log::Info("renderer", "GPU picked -", gpu_properties.deviceName,
+                  ", Vulkan v. -", VK_VERSION_MAJOR(gpu_properties.apiVersion),
+                  ".", VK_VERSION_MINOR(gpu_properties.apiVersion), ".",
+                  VK_VERSION_PATCH(gpu_properties.apiVersion));
+}
 
+// Select physical device the engine is going to se
 // Physical device is not created but acquired and need not be deleted
-VkPhysicalDevice PhysicalDevice::Acquire(const VkInstance &instance,
-                              const VkSurfaceKHR &surface) const {
+VkPhysicalDevice AcquireDevice(const VkInstance &instance,
+                               const VkSurfaceKHR &surface) {
   // List of all physical devices available
   uint32_t device_count = 0;
   vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -35,7 +50,7 @@ VkPhysicalDevice PhysicalDevice::Acquire(const VkInstance &instance,
   // Choose device that satisfies engine requirements
   VkPhysicalDevice physical_device = VK_NULL_HANDLE;
   for (auto device : physical_devices) {
-    if (Suitable(device, surface)) {
+    if (DeviceSuitable(device, surface)) {
       physical_device = device;
       break;
     }
@@ -47,22 +62,15 @@ VkPhysicalDevice PhysicalDevice::Acquire(const VkInstance &instance,
 
   return physical_device;
 }
+} // namespace
 
-// static
-bool PhysicalDevice::Suitable(const VkPhysicalDevice &physical_device, const VkSurfaceKHR &surface) {
-  const QueueFamilies queue_families(physical_device, surface);
-  const auto swapchain_support = Swapchain::QuerySupport(physical_device, surface);
-  return queue_families.Complete() && swapchain_support.IsCapable();
+PhysicalDevice::PhysicalDevice(const VkInstance &instance,
+                               const VkSurfaceKHR &surface)
+    : physical_device_(AcquireDevice(instance, surface)) {
+  PrintDeviceProperties(physical_device_);
 }
 
-// static
-void PhysicalDevice::PrintProperties(const VkPhysicalDevice &physical_device) {
-  // Log some properties
-  VkPhysicalDeviceProperties gpu_properties;
-  vkGetPhysicalDeviceProperties(physical_device, &gpu_properties);
-  base::Log::Info("renderer", "GPU picked -", gpu_properties.deviceName,
-                  ", Vulkan v. -", VK_VERSION_MAJOR(gpu_properties.apiVersion),
-                  ".", VK_VERSION_MINOR(gpu_properties.apiVersion), ".",
-                  VK_VERSION_PATCH(gpu_properties.apiVersion));
+const VkPhysicalDevice &PhysicalDevice::Handle() const {
+  return physical_device_;
 }
 } // namespace lsim::renderer::vlk
