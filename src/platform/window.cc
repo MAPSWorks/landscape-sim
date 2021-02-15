@@ -11,21 +11,9 @@
 #include "lsim/platform/types.h"
 
 namespace lsim::platform {
-Window::Window(const Settings &settings) : window_(CreatWindow(settings)) {
-  base::Log::Info("platform", "window", "initialized",
-                  "size:", settings.initial_size.width,
-                  settings.initial_size.height);
-}
-
-Window::~Window() {
-  base::Log::Info("platform", "window", "destroying..");
-  SDL_DestroyWindow(window_);
-  SDL_Quit();
-}
-
-SDL_Window *Window::Handle() const { return window_; }
-
-SDL_Window *Window::CreatWindow(const Settings &settings) const {
+// Internal lnkage
+namespace {
+SDL_Window *CreatWindow(const Settings &settings) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     base::Log::Error("platform", "window", SDL_GetError());
     throw std::runtime_error("platform: could not initialize SDL.");
@@ -41,4 +29,19 @@ SDL_Window *Window::CreatWindow(const Settings &settings) const {
 
   return window;
 }
+} // namespace
+
+Window::Window(const Settings &settings) : window_(CreatWindow(settings)) {
+  base::Log::Info("platform", "window", "initialized",
+                  "size:", settings.initial_size.width,
+                  settings.initial_size.height);
+}
+
+Window::~Window() {
+  base::Log::Info("platform", "window", "destroying..");
+  SDL_DestroyWindow(window_);
+  SDL_Quit();
+}
+
+SDL_Window *Window::Handle() const { return window_; }
 } // namespace lsim::platform

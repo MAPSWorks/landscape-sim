@@ -20,7 +20,6 @@ public:
   SDL_Window *Handle() const;
 
 private:
-  SDL_Window *CreatWindow(const Settings &settings) const;
   // OS window handle, used to retreive data like size etc
   SDL_Window *window_;
 };
