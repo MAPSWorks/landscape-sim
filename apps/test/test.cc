@@ -216,6 +216,19 @@ void Test::CreateCommandBuffers() {
   for (size_t i = 0; i < framebuffers_.size(); ++i) {
     command_buffers_.emplace_back(*command_pool_);
   }
+
+  // Record command buffers
+  size_t i = 0;
+  for (const auto &cmd_buffer : command_buffers_) {
+    cmd_buffer.Begin(lsim::renderer::vlk::CommandBuffer::Usage::kOneTimeSubmit);
+    cmd_buffer.BeginRenderPass(render_pass_->Handle(),
+                               framebuffers_.at(i).Handle(),
+                               renderer_.Swapchin().Extent());
+    cmd_buffer.BindGraphicsPipeline(pipeline_->Handle());
+    cmd_buffer.Draw(3, 1, 0, 0);
+
+    i++;
+  }
 }
 
 void Test::CreateSemaphores() {
