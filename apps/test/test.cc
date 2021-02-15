@@ -225,7 +225,7 @@ void Test::CreateCommandBuffers() {
   // Record command buffers
   size_t i = 0;
   for (const auto &cmd_buffer : command_buffers_) {
-    cmd_buffer.Begin(lsim::renderer::vlk::CommandBuffer::Usage::kOneTimeSubmit);
+    cmd_buffer.Begin(lsim::renderer::vlk::CommandBuffer::Usage::kSimultaniousUse);
     cmd_buffer.BeginRenderPass(render_pass_->Handle(),
                                framebuffers_.at(i).Handle(),
                                renderer_.Swapchin().Extent());
