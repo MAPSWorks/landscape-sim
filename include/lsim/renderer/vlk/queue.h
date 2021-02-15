@@ -12,11 +12,10 @@ namespace lsim::renderer::vlk {
 // This class is only a storage of handle and associated functions.
 class Queue {
 public:
-  Queue(const VkDevice& device, uint32_t family_index);
-  const VkQueue& Handle() const;
+  Queue(const VkDevice &device, uint32_t family_index);
+  const VkQueue &Handle() const;
+
 private:
-  // Retrieve queue from the given device 
-  VkQueue GetFromDevice(const VkDevice& device, uint32_t family_index) const; 
   const VkQueue queue_ = VK_NULL_HANDLE;
 };
 
