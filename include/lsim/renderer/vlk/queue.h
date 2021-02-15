@@ -21,6 +21,11 @@ public:
               const std::vector<VkPipelineStageFlags> &wait_stages,
               const std::vector<VkSemaphore> &signal_semaphores,
               const VkFence &fence) const;
+  // Present image to swapchain
+  // Calling queue have to be with pesentation capabilities
+  // wait_semaphore is semaphore to wait on before presenting
+  VkResult Present(const VkSwapchainKHR &swapchain, uint32_t image_index,
+                   const VkSemaphore &wait_semaphore) const;
 
 private:
   const VkQueue queue_ = VK_NULL_HANDLE;
