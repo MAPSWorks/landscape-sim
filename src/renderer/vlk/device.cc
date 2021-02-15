@@ -3,24 +3,23 @@
 //
 #include "lsim/renderer/vlk/device.h"
 
-//#include <stdexcept>
-//#include <vector>
+#include <set>
+#include <vector>
 
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
-#include "lsim/renderer/vlk/device_queue.h"
-//#include "lsim/renderer/vlk/swapchain.h"
+#include "lsim/renderer/vlk/queue.h"
+#include "lsim/renderer/vlk/queue_families.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
 Device::Device(const VkInstance &instance, const VkSurfaceKHR &surface)
     : required_extentions_({VK_KHR_SWAPCHAIN_EXTENSION_NAME}),
-      gpu_(instance, surface), queue_(gpu_.Handle(), surface),
-      device_(CreateDevice(gpu_.Handle())) {
-  // Retrieve queues from device and set their handles for DeviceQueue class
-  queue_.SetGraphics(GetGraphicsQueue());
-  queue_.SetPresent(GetPresentQueue());
+      gpu_(instance, surface), queue_families_(gpu_.Handle(), surface),
+      device_(Create(gpu_.Handle(), queue_families_)),
+      queues_{Queue(device_, queue_families_.Graphics()),
+              Queue(device_, queue_families_.Present())} {
   base::Log::Info("renderer", "device", "created");
 }
 
@@ -34,61 +33,32 @@ const PhysicalDevice &Device::GPU() const { return gpu_; }
 
 const VkDevice &Device::Handle() const { return device_; }
 
-const DeviceQueue &Device::Queue() const { return queue_; }
+const struct Device::Queues &Device::Queues() const { return queues_; }
 
-// Physical device is not created but acquired and need not be deleted
-/*
-VkPhysicalDevice Device::AcquireGPU(const VkInstance &instance,
-                                    const VkSurfaceKHR &surface) const {
-  // List of all physical devices available
-  uint32_t device_count = 0;
-  vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
-  if (!device_count) {
-    throw std::runtime_error(
-        "renderer: failed to find GPU with Vulkan support");
-  }
-  // List of the GPU's available
-  std::vector<VkPhysicalDevice> physical_devices(device_count);
-  vkEnumeratePhysicalDevices(instance, &device_count, physical_devices.data());
-
-  // Choose device that satisfies engine requirements
-  VkPhysicalDevice physical_device = VK_NULL_HANDLE;
-  for (auto device : physical_devices) {
-    if (IsSuitableGPU(device, surface)) {
-      physical_device = device;
-      break;
-    }
-  }
-  if (physical_device == VK_NULL_HANDLE) {
-    throw std::runtime_error(
-        "renderer: failed to find rdevice with required features");
-  }
-
-  PrintGPUProperties(physical_device);
-  return physical_device;
-}*/
-/*
-bool Device::IsSuitableGPU(const VkPhysicalDevice &gpu,
-                           const VkSurfaceKHR &surface) const {
-  const auto queue_family = DeviceQueue::SelectFamilies(gpu, surface);
-  const auto swapchain_support = Swapchain::QuerySupport(gpu, surface);
-  return queue_family.IsComplete() && swapchain_support.IsCapable();
+const class QueueFamilies &Device::QueueFamilies() const {
+  return queue_families_;
 }
-*/
-/*
-void Device::PrintGPUProperties(const VkPhysicalDevice &gpu) const {
-  // Log some properties
-  VkPhysicalDeviceProperties p_device_properties;
-  vkGetPhysicalDeviceProperties(gpu, &p_device_properties);
-  base::Log::Info("renderer", "GPU picked -", p_device_properties.deviceName,
-                  ", Vulkan v. -",
-                  VK_VERSION_MAJOR(p_device_properties.apiVersion), ".",
-                  VK_VERSION_MINOR(p_device_properties.apiVersion), ".",
-                  VK_VERSION_PATCH(p_device_properties.apiVersion));
-}
-*/
-VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
-  const auto queue_create_infos = queue_.CreateInfos();
+
+VkDevice Device::Create(const VkPhysicalDevice &gpu,
+                        const class QueueFamilies &queue_families) const {
+  // Notify what kind of queues and how many device should create
+  // We dont know in advance whether queue family capabilities belong to one
+  // family or multiple
+  const std::set<QueueFamilies::Index> unique_queue_families = {
+      queue_families.Graphics(), queue_families.Present()};
+  // Create multiple queues if necessery
+  std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
+  uint32_t number_of_queues = 1;
+  float queue_priority = 1.0f;
+  for (auto queue_family : unique_queue_families) {
+    VkDeviceQueueCreateInfo queue_create_info{};
+    queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queue_create_info.queueFamilyIndex = queue_family;
+    queue_create_info.queueCount = number_of_queues;
+    queue_create_info.pQueuePriorities = &queue_priority;
+    queue_create_infos.push_back(queue_create_info);
+  }
+
   // Device features to enable
   VkPhysicalDeviceFeatures device_features{};
   device_features.fillModeNonSolid = VK_TRUE;
@@ -109,19 +79,4 @@ VkDevice Device::CreateDevice(const VkPhysicalDevice &gpu) const {
   ErrorCheck(vkCreateDevice(gpu, &device_create_info, nullptr, &device));
   return device;
 }
-
-VkQueue Device::GetGraphicsQueue() const {
-  VkQueue queue;
-  vkGetDeviceQueue(device_, queue_.Families().graphics.value(), 0,
-                   &queue);
-  return queue;
-}
-
-VkQueue Device::GetPresentQueue() const {
-  VkQueue queue;
-  vkGetDeviceQueue(device_, queue_.Families().present.value(), 0,
-                   &queue);
-  return queue;
-}
-
 } // namespace lsim::renderer::vlk

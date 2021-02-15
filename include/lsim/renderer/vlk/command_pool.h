@@ -8,7 +8,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include "device_queue.h"
+#include "queue_families.h"
 
 namespace lsim::renderer::vlk {
 class CommandPool {
@@ -22,7 +22,7 @@ public:
     kSecondary = VK_COMMAND_BUFFER_LEVEL_SECONDARY
   };
   // is_transient - true for short-lived buffers for optimization
-  CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
+  CommandPool(const VkDevice &device, QueueFamilies::Index family_index,
               Flags flags = Flags::kNone);
   ~CommandPool();
   CommandPool(CommandPool const &) = delete;
@@ -34,7 +34,7 @@ public:
   AllocateCommandBuffer(BufferLevel level = BufferLevel::kPrimary) const;
 
 private:
-  VkCommandPool Create(QueueFamilyIndex family_index, Flags flags) const;
+  VkCommandPool Create(QueueFamilies::Index family_index, Flags flags) const;
   // Reference to resource this object is created with
   const VkDevice &device_;
   const VkCommandPool command_pool_ = VK_NULL_HANDLE;

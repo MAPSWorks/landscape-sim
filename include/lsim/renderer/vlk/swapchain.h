@@ -5,13 +5,12 @@
 // images with the refresh rate of the screen.
 #ifndef LSIM_RENDERER_VLK_SWAPCHAIN_H_
 #define LSIM_RENDERER_VLK_SWAPCHAIN_H_
-#include <bits/stdint-uintn.h>
 #include <vector>
 
 #include <SDL2/SDL.h>
 #include <vulkan/vulkan.h>
 
-#include "device_queue.h"
+#include "queue_families.h"
 #include "image_view.h"
 
 namespace lsim::renderer::vlk {
@@ -33,7 +32,7 @@ public:
                                      const VkSurfaceKHR &surface);
   Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
             const VkSurfaceKHR &surface,
-            const DeviceQueue::FamilyIndices &qf_indices, SDL_Window *window);
+            const QueueFamilies &qf_indices, SDL_Window *window);
   ~Swapchain();
   Swapchain(Swapchain const &) = delete;
   Swapchain operator=(Swapchain const &) = delete;
@@ -47,7 +46,7 @@ public:
 
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
-                        const DeviceQueue::FamilyIndices &qf_indices,
+                        const QueueFamilies &qf_indices,
                         const VkSurfaceCapabilitiesKHR &caps);
   VkSurfaceFormatKHR
   SelectSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats) const;

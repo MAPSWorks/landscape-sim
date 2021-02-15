@@ -5,9 +5,15 @@
 
 #include <vulkan/vulkan.h>
 
+#include "lsim/base/log.h"
+
 namespace lsim::renderer::vlk {
 Queue::Queue(const VkDevice &device, uint32_t family_index)
-    : queue_(GetFromDevice(device, family_index)) {}
+    : queue_(GetFromDevice(device, family_index)) {
+
+  base::Log::Info("renderer", "queue", "retrieved", "with family index",
+                  family_index);
+}
 
 const VkQueue &Queue::Handle() const { return queue_; }
 

@@ -11,7 +11,7 @@
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
-#include "lsim/renderer/vlk/device_queue.h"
+#include "lsim/renderer/vlk/queue_families.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -45,7 +45,7 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
 
 Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
                      const VkSurfaceKHR &surface,
-                     const DeviceQueue::FamilyIndices &qf_indices,
+                     const QueueFamilies &qf_indices,
                      SDL_Window *window)
     : device_(device), support_details_(QuerySupport(gpu, surface)),
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
@@ -87,7 +87,7 @@ Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
 }
 
 VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
-                                 const DeviceQueue::FamilyIndices &qf_indices,
+                                 const QueueFamilies &qf_indices,
                                  const VkSurfaceCapabilitiesKHR &caps) {
   const auto min_image_count = SelectImageCount(caps);
   VkSwapchainCreateInfoKHR create_info{};
@@ -102,13 +102,13 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
   // are not guaranteed
   create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
   // Handle swapchain iamges in case graphics and presentation queues differ
-  if (!qf_indices.IsGraphicsPresentMatch()) {
+  if (!qf_indices.GraphicsPresentMatch()) {
     // Used by multiple queues that is why need to specify which
     create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
     create_info.queueFamilyIndexCount = 2;
     create_info.pQueueFamilyIndices =
         std::vector<uint32_t>(
-            {qf_indices.graphics.value(), qf_indices.present.value()})
+            {qf_indices.Graphics(), qf_indices.Present()})
             .data();
   } else {
     // Image is owned by only one queue at a time

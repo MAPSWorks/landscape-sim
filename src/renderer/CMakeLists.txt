@@ -7,7 +7,9 @@ set(SOURCES vlk/instance.cc
             vlk/validation.cc
             vlk/debug_messenger.cc
             vlk/device.cc
-            vlk/device_queue.cc
+            vlk/queue_families.cc 
+            vlk/physical_device.cc 
+            vlk/queue.cc 
             vlk/surface.cc
             vlk/swapchain.cc
             vlk/image_view.cc
@@ -19,9 +21,7 @@ set(SOURCES vlk/instance.cc
             vlk/command_pool.cc 
             vlk/command_buffer.cc 
             vlk/semaphore.cc 
-            vlk/queue_families.cc 
-            vlk/physical_device.cc 
-            vlk/queue.cc 
+
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})

@@ -6,11 +6,11 @@
 #include <vulkan/vulkan.h>
 
 #include "lsim/base/log.h"
-#include "lsim/renderer/vlk/device_queue.h"
+#include "lsim/renderer/vlk/queue_families.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-CommandPool::CommandPool(const VkDevice &device, QueueFamilyIndex family_index,
+CommandPool::CommandPool(const VkDevice &device, QueueFamilies::Index family_index,
                          Flags flags)
     : device_(device), command_pool_(Create(family_index, flags)) {
   base::Log::Info("renderer", "command pool", "created");
@@ -46,7 +46,7 @@ VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
   return command_buffer;
 }
 
-VkCommandPool CommandPool::Create(QueueFamilyIndex family_index,
+VkCommandPool CommandPool::Create(QueueFamilies::Index family_index,
                                   Flags flags) const {
   VkCommandPoolCreateInfo pool_create_info{};
   pool_create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;

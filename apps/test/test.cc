@@ -195,7 +195,7 @@ void Test::CreateCommandBuffers() {
   // Pool for command buffers to allocate from
   command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
       renderer_.Device().Handle(),
-      renderer_.Device().Queue().Families().graphics.value());
+      renderer_.Device().QueueFamilies().Graphics());
 
   // Command buffer for each framebuffer.
   // Bcause one of the drawing commands involves binding the right VkFramebuffer
