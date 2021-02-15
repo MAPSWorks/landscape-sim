@@ -6,7 +6,6 @@
 #ifndef LSIM_RENDERER_VLK_SHADER_NODULE_H_
 #define LSIM_RENDERER_VLK_SHADER_NODULE_H_
 #include <string>
-#include <vector>
 
 #include <vulkan/vulkan.h>
 
@@ -32,9 +31,6 @@ private:
   const std::string file_path_;
   const VkShaderModule shader_module_ = VK_NULL_HANDLE;
 };
-// Free-standing functions
-// Loads and returns binary data from given file
-std::vector<char> ReadBinaryFile(const std::string &file_path);
 } // namespace lsim::renderer::vlk
 
 #endif
