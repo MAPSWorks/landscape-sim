@@ -11,6 +11,55 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
+// Internal linkage
+namespace {
+// Attachment is Vulkan’s name for what you might otherwise know as a render
+// target - an Image to be used as output from rendering.You don’t point to
+// specific Images here – you just describe their formats. (Understanding
+// Vulkan objects) Actual images to render to are defined in framebuffers to
+// which this renderpass is compatable Single color buffer attachmnt
+std::vector<VkAttachmentDescription>
+DescribeAttachments(const VkFormat &swapchain_format,
+                    const VkFormat &depth_format) {
+
+  VkAttachmentDescription color_attachment{};
+  // The format of the color attachment should match the format of the swap
+  // chain images because we are rendering to it
+  color_attachment.format = swapchain_format;
+  // No multisampling
+  color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+  // What to do with data in attachment before rendering (color and depth data)
+  color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+  // After rendering
+  color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+  // Stencil data
+  color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+  color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+  color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+  // Images to be presented in the swap chain
+  color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+  // Depth attachment
+  VkAttachmentDescription depth_attachment{};
+  depth_attachment.format = depth_format;
+  depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+  depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+  depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+  depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+  depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+  depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+  depth_attachment.finalLayout =
+      VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+  (void)depth_attachment;
+  // The index of the attachment in this array is directly referenced from the
+  // fragment shader with the layout(location = 0) out vec4 outColor directive!
+  // TODO: attachments should be added somehow dynamically to control their
+  // index in array
+  std::vector<VkAttachmentDescription> attachments = {color_attachment /*,
+                                                      depth_attachment*/};
+  return attachments;
+}
+} // namespace
+
 RenderPass::RenderPass(const VkDevice &device, const VkFormat &swapchain_format,
                        const VkFormat &depth_format)
     : device_(device), render_pass_(Create(swapchain_format, depth_format)) {
@@ -79,52 +128,6 @@ VkRenderPass RenderPass::Create(const VkFormat &swapchain_format,
   ErrorCheck(vkCreateRenderPass(device_, &render_pass_create_info, nullptr,
                                 &render_pass));
   return render_pass;
-}
-
-// Attachment is Vulkan’s name for what you might otherwise know as a render
-// target - an Image to be used as output from rendering.You don’t point to
-// specific Images here – you just describe their formats. (Understanding
-// Vulkan objects) Actual images to render to are defined in framebuffers to
-// which this renderpass is compatable Single color buffer attachmnt
-std::vector<VkAttachmentDescription>
-RenderPass::DescribeAttachments(const VkFormat &swapchain_format,
-                                const VkFormat &depth_format) const {
-
-  VkAttachmentDescription color_attachment{};
-  // The format of the color attachment should match the format of the swap
-  // chain images because we are rendering to it
-  color_attachment.format = swapchain_format;
-  // No multisampling
-  color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
-  // What to do with data in attachment before rendering (color and depth data)
-  color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-  // After rendering
-  color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-  // Stencil data
-  color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-  color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  // Images to be presented in the swap chain
-  color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-  // Depth attachment
-  VkAttachmentDescription depth_attachment{};
-  depth_attachment.format = depth_format;
-  depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
-  depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-  depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-  depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  depth_attachment.finalLayout =
-      VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-  (void)depth_attachment;
-  // The index of the attachment in this array is directly referenced from the
-  // fragment shader with the layout(location = 0) out vec4 outColor directive!
-  // TODO: attachments should be added somehow dynamically to control their
-  // index in array
-  std::vector<VkAttachmentDescription> attachments = {color_attachment /*,
-                                                      depth_attachment*/};
-  return attachments;
 }
 
 } // namespace lsim::renderer::vlk
