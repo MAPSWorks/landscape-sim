@@ -36,6 +36,10 @@ void Test::RenderFrame() const {
       {image_available_sem_->Handle()},
       {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
       {render_finished_sem_->Handle()}, VK_NULL_HANDLE);
+
+  renderer_.Device().Queues().present.Present(renderer_.Swapchin().Handle(),
+                                              image_index,
+                                              render_finished_sem_->Handle());
 }
 
 void Test::InitPipeline() {
