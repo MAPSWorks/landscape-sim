@@ -32,6 +32,7 @@ protected:
 
 private:
   virtual void RenderFrame() const = 0;
+  virtual void OnExit() const =0;
 };
 } // namespace lsim::platform
 

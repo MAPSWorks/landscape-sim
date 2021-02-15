@@ -23,6 +23,7 @@ public:
 
 private:
   virtual void RenderFrame() const override;
+  virtual void OnExit() const override;
   void InitPipeline();
   void CreateFramebuffers();
   void CreateCommandBuffers();

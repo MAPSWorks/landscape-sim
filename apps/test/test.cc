@@ -42,6 +42,11 @@ void Test::RenderFrame() const {
                                               render_finished_sem_->Handle());
 }
 
+void Test::OnExit() const {
+  vkDeviceWaitIdle(renderer_.Device().Handle());
+}
+
+
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(renderer_.Device().Handle(),

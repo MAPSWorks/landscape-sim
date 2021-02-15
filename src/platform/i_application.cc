@@ -47,6 +47,7 @@ void IApplication::Run() {
     //SDL_Delay(10);
   }
   base::Log::Info("platform", "main loop", "exiting..");
+  OnExit();
 }
 
 } // namespace lsim::platform
