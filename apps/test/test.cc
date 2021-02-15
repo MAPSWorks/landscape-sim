@@ -27,7 +27,16 @@ Test::Test(int argc, char *argv[])
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::RenderFrame() const {}
+void Test::RenderFrame() const {
+  const auto image_index = renderer_.Swapchin().AcquireNextImageIndex(
+      image_available_sem_->Handle());
+
+  renderer_.Device().Queues().graphics.Submit(
+      {command_buffers_.at(image_index).Handle()},
+      {image_available_sem_->Handle()},
+      {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+      {render_finished_sem_->Handle()}, VK_NULL_HANDLE);
+}
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
