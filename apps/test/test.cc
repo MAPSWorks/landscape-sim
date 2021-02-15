@@ -226,6 +226,8 @@ void Test::CreateCommandBuffers() {
                                renderer_.Swapchin().Extent());
     cmd_buffer.BindGraphicsPipeline(pipeline_->Handle());
     cmd_buffer.Draw(3, 1, 0, 0);
+    cmd_buffer.EndRenderPass();
+    cmd_buffer.End();
 
     i++;
   }
