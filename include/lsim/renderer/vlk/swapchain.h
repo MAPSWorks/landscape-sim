@@ -10,8 +10,8 @@
 #include <SDL2/SDL.h>
 #include <vulkan/vulkan.h>
 
-#include "queue_families.h"
 #include "image_view.h"
+#include "queue_families.h"
 
 namespace lsim::renderer::vlk {
 class Swapchain {
@@ -31,8 +31,8 @@ public:
   static SupportDetails QuerySupport(const VkPhysicalDevice &gpu,
                                      const VkSurfaceKHR &surface);
   Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
-            const VkSurfaceKHR &surface,
-            const QueueFamilies &qf_indices, SDL_Window *window);
+            const VkSurfaceKHR &surface, const QueueFamilies &qf_indices,
+            SDL_Window *window);
   ~Swapchain();
   Swapchain(Swapchain const &) = delete;
   Swapchain operator=(Swapchain const &) = delete;
@@ -48,14 +48,6 @@ private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const QueueFamilies &qf_indices,
                         const VkSurfaceCapabilitiesKHR &caps);
-  VkSurfaceFormatKHR
-  SelectSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats) const;
-  VkPresentModeKHR
-  SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) const;
-  VkExtent2D RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
-                            SDL_Window *window) const;
-  // Select number of images in the swapchain
-  uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) const;
   // Retrieve list of images from swapchain
   std::vector<VkImage> RetrieveImages() const;
   // Create image views for given images

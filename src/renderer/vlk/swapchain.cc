@@ -15,6 +15,88 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
+// Internal linkage
+namespace {
+VkSurfaceFormatKHR
+SelectSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats) {
+  // Preferred formats that we look for
+  const auto preferred_color_format = VK_FORMAT_B8G8R8A8_UNORM;
+  const auto preferred_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+  // If surface has no preferred format we return our desired format (best case
+  // scenario)
+  if (formats.size() == 1 && formats.at(0).format == VK_FORMAT_UNDEFINED) {
+    return {preferred_color_format, preferred_color_space};
+  }
+  // If we are not free to choose any format, see if our desired format is
+  // available
+  for (const auto &format : formats) {
+    if (format.format == preferred_color_format &&
+        format.colorSpace == preferred_color_space) {
+      return format;
+    }
+  }
+  // If everything failed return first available format
+  return formats.at(0);
+}
+
+VkPresentModeKHR SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) {
+  // Fifo is guaranteed to be present, but some drivers dont properly support it
+  // so we choose between mailbox (tripple buffering) and imidiate
+  auto preferred_mode = VK_PRESENT_MODE_FIFO_KHR;
+  for (const auto &present_mode : modes) {
+    // This is the best case so we return imidiatly if encountered
+    if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+      return present_mode;
+    } else if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+      preferred_mode = present_mode;
+    }
+  }
+  return preferred_mode;
+}
+
+VkExtent2D RetrieveWindowExtent(const VkSurfaceCapabilitiesKHR &caps,
+                                SDL_Window *window) {
+  VkExtent2D extent;
+  // Most of the time extent matches surface resolution
+  if (caps.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+    extent = caps.currentExtent;
+  }
+  // But in some OS winows size is determined by extent so we need to set it
+  // between min and max.
+  else {
+    // Instead of passing dimensions we retrieve these values from framebuffer
+    // Could also retrieve from window but not safe because window dimensions
+    // and framebuffer may not match.
+    int width, height;
+    SDL_Vulkan_GetDrawableSize(window, &width, &height);
+    VkExtent2D actual_extent = {static_cast<uint32_t>(width),
+                                static_cast<uint32_t>(height)};
+    actual_extent.width =
+        std::clamp(actual_extent.width, caps.minImageExtent.width,
+                   caps.maxImageExtent.width);
+    actual_extent.height =
+        std::clamp(actual_extent.height, caps.minImageExtent.height,
+                   caps.maxImageExtent.height);
+    extent = actual_extent;
+  }
+  return extent;
+}
+
+// Select number of images in the swapchain
+// Swapchain is allowed to create more images than we specify
+uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) {
+  // It is recomended to request one image than the minimum for driver to work
+  // more optimal
+  uint32_t image_count = caps.minImageCount + 1;
+  // Make sure not to exceed maximum allowed image count (0 means no maximum)
+  if (caps.maxImageCount > 0 && image_count > caps.maxImageCount) {
+    image_count = caps.maxImageCount;
+  }
+  return image_count;
+}
+
+} // namespace
+
 // static
 Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
                                                   const VkSurfaceKHR &surface) {
@@ -45,12 +127,11 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
 
 Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
                      const VkSurfaceKHR &surface,
-                     const QueueFamilies &qf_indices,
-                     SDL_Window *window)
+                     const QueueFamilies &qf_indices, SDL_Window *window)
     : device_(device), support_details_(QuerySupport(gpu, surface)),
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
-      extent_(RetrieveExtent(support_details_.capabilities, window)),
+      extent_(RetrieveWindowExtent(support_details_.capabilities, window)),
       swapchain_(Create(surface, qf_indices, support_details_.capabilities)),
       images_(RetrieveImages()), image_views_(CreateImageViews(images_)) {
 
@@ -74,8 +155,8 @@ const std::vector<ImageView> &Swapchain::ImageViews() const {
   return image_views_;
 }
 
-// image_available_semaphore - a semaphore that will become signaled when the presentation
-// engine has released ownership of the image
+// image_available_semaphore - a semaphore that will become signaled when the
+// presentation engine has released ownership of the image
 uint32_t
 Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
   uint32_t image_index;
@@ -107,8 +188,7 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
     create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
     create_info.queueFamilyIndexCount = 2;
     create_info.pQueueFamilyIndices =
-        std::vector<uint32_t>(
-            {qf_indices.Graphics(), qf_indices.Present()})
+        std::vector<uint32_t>({qf_indices.Graphics(), qf_indices.Present()})
             .data();
   } else {
     // Image is owned by only one queue at a time
@@ -130,85 +210,6 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
   VkSwapchainKHR swapchain;
   ErrorCheck(vkCreateSwapchainKHR(device_, &create_info, nullptr, &swapchain));
   return swapchain;
-}
-
-VkSurfaceFormatKHR Swapchain::SelectSurfaceFormat(
-    const std::vector<VkSurfaceFormatKHR> &formats) const {
-  // Preferred formats that we look for
-  const auto preferred_color_format = VK_FORMAT_B8G8R8A8_UNORM;
-  const auto preferred_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-  // If surface has no preferred format we return our desired format (best case
-  // scenario)
-  if (formats.size() == 1 && formats.at(0).format == VK_FORMAT_UNDEFINED) {
-    return {preferred_color_format, preferred_color_space};
-  }
-  // If we are not free to choose any format, see if our desired format is
-  // available
-  for (const auto &format : formats) {
-    if (format.format == preferred_color_format &&
-        format.colorSpace == preferred_color_space) {
-      return format;
-    }
-  }
-  // If everything failed return first available format
-  return formats.at(0);
-}
-
-VkPresentModeKHR
-Swapchain::SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) const {
-  // Fifo is guaranteed to be present, but some drivers dont properly support it
-  // so we choose between mailbox (tripple buffering) and imidiate
-  auto preferred_mode = VK_PRESENT_MODE_FIFO_KHR;
-  for (const auto &present_mode : modes) {
-    // This is the best case so we return imidiatly if encountered
-    if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-      return present_mode;
-    } else if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
-      preferred_mode = present_mode;
-    }
-  }
-  return preferred_mode;
-}
-
-VkExtent2D Swapchain::RetrieveExtent(const VkSurfaceCapabilitiesKHR &caps,
-                                     SDL_Window *window) const {
-  VkExtent2D extent;
-  // Most of the time extent matches surface resolution
-  if (caps.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-    extent = caps.currentExtent;
-  }
-  // But in some OS winows size is determined by extent so we need to set it
-  // between min and max.
-  else {
-    // Instead of passing dimensions we retrieve these values from framebuffer
-    // Could also retrieve from window but not safe because window dimensions
-    // and framebuffer may not match.
-    int width, height;
-    SDL_Vulkan_GetDrawableSize(window, &width, &height);
-    VkExtent2D actual_extent = {static_cast<uint32_t>(width),
-                                static_cast<uint32_t>(height)};
-    actual_extent.width =
-        std::clamp(actual_extent.width, caps.minImageExtent.width,
-                   caps.maxImageExtent.width);
-    actual_extent.height =
-        std::clamp(actual_extent.height, caps.minImageExtent.height,
-                   caps.maxImageExtent.height);
-    extent = actual_extent;
-  }
-  return extent;
-}
-
-// Swapchain is allowed to create more images than we specify
-uint32_t
-Swapchain::SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) const {
-  // It is recomended to request one image than the minimum for driver to work
-  // more optimal
-  uint32_t image_count = caps.minImageCount + 1;
-  // Make sure not to exceed maximum allowed image count (0 means no maximum)
-  if (caps.maxImageCount > 0 && image_count > caps.maxImageCount) {
-    image_count = caps.maxImageCount;
-  }
-  return image_count;
 }
 
 // Images are created together with swapchain so we only retrieve them
