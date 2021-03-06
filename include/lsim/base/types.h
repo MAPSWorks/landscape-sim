@@ -12,11 +12,10 @@ namespace lsim {
 using F32 = float;
 using F64 = double;
 using UC = unsigned char;
-using US = unsigned short;
 // Store data that require width and height
 template<typename T>
 struct Size {
-    Size(T w = 0, T h = 0) : width(w), height(h) {};
+    explicit Size(T w = 0, T h = 0) : width(w), height(h) {};
     T width;
     T height;
 };
@@ -37,7 +36,6 @@ using Mat4 = glm::tmat4x4<F32>;
 static_assert(sizeof(F32) == 4);
 static_assert(sizeof(F64) == 8);
 static_assert(sizeof(UC) == 1);
-static_assert(sizeof(US) == 2);
 } // namespace lsim
 
 #endif
