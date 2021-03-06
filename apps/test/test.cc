@@ -3,6 +3,8 @@
 //
 #include "test.h"
 
+#include <array>
+
 #include <vulkan/vulkan.h>
 
 #include <lsim/base/log.h>
@@ -66,8 +68,7 @@ void Test::InitPipeline() {
   frag_stage_create_info.module = fragment_shader.Handle();
   frag_stage_create_info.pName = "main";
 
-  VkPipelineShaderStageCreateInfo shader_stages[] = {vert_stage_create_info, //NOLINT
-                                                     frag_stage_create_info};
+  std::array shader_stages{vert_stage_create_info, frag_stage_create_info};
 
   // vertex input
   VkPipelineVertexInputStateCreateInfo vertex_input_info{};
@@ -179,7 +180,7 @@ void Test::InitPipeline() {
   VkGraphicsPipelineCreateInfo pipeline_info{};
   pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
   pipeline_info.stageCount = 2;
-  pipeline_info.pStages = shader_stages;
+  pipeline_info.pStages = shader_stages.data();
   pipeline_info.pVertexInputState = &vertex_input_info;
   pipeline_info.pInputAssemblyState = &input_assembly_info;
   pipeline_info.pViewportState = &viewport_states_info;
