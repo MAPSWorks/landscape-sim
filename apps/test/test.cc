@@ -14,12 +14,12 @@
 #include <lsim/renderer/vlk/shader_module.h>
 
 namespace apps::test {
-// TODO: should come from elsewhere
-lsim::platform::Settings user_settings{"Alpha app", 1,
-                                       lsim::Size<uint32_t>(1280, 720)};
+// TODO(ivars): should come from elsewhere
+const lsim::platform::Settings kUserSettings{"Alpha app", 1,
+                                             lsim::Size<uint32_t>(1280, 720)};
 
-Test::Test(int argc, char *argv[])
-    : lsim::platform::IApplication(argc, argv, user_settings) {
+Test::Test(int argc, char **argv)
+    : lsim::platform::IApplication(argc, argv, kUserSettings) {
   InitPipeline();
   CreateFramebuffers();
   CreateCommandBuffers();
@@ -42,10 +42,7 @@ void Test::RenderFrame() const {
                                               render_finished_sem_->Handle());
 }
 
-void Test::OnExit() const {
-  vkDeviceWaitIdle(renderer_.Device().Handle());
-}
-
+void Test::OnExit() const { vkDeviceWaitIdle(renderer_.Device().Handle()); }
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
@@ -69,7 +66,7 @@ void Test::InitPipeline() {
   frag_stage_create_info.module = fragment_shader.Handle();
   frag_stage_create_info.pName = "main";
 
-  VkPipelineShaderStageCreateInfo shader_stages[] = {vert_stage_create_info,
+  VkPipelineShaderStageCreateInfo shader_stages[] = {vert_stage_create_info, //NOLINT
                                                      frag_stage_create_info};
 
   // vertex input
@@ -225,7 +222,8 @@ void Test::CreateCommandBuffers() {
   // Record command buffers
   size_t i = 0;
   for (const auto &cmd_buffer : command_buffers_) {
-    cmd_buffer.Begin(lsim::renderer::vlk::CommandBuffer::Usage::kSimultaniousUse);
+    cmd_buffer.Begin(
+        lsim::renderer::vlk::CommandBuffer::Usage::kSimultaniousUse);
     cmd_buffer.BeginRenderPass(render_pass_->Handle(),
                                framebuffers_.at(i).Handle(),
                                renderer_.Swapchin().Extent());

@@ -19,11 +19,11 @@
 namespace apps::test {
 class Test : public lsim::platform::IApplication {
 public:
-  Test(int argc, char *argv[]);
+  Test(int argc, char **argv);
 
 private:
-  virtual void RenderFrame() const override;
-  virtual void OnExit() const override;
+  void RenderFrame() const override;
+  void OnExit() const override;
   void InitPipeline();
   void CreateFramebuffers();
   void CreateCommandBuffers();
