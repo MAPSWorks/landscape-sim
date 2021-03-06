@@ -48,7 +48,6 @@ cmake-build-*/
 # clangd
 .clangd/
 .cache/
-.clang-tidy
 
 # Workspace files (are user-specific)
 ## Sublime
