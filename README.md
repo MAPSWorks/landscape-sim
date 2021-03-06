@@ -45,5 +45,9 @@ The lsim engine consists of multiple sublibriraries.
 - include - exported header files. To be used in applications or other libraries.
 - extern - external modules 
 
+## Coding convention
+The project uses Google style guide and C++ Core Guidelines as a coding reference.  
+In case Clangd language server is used, *.clang-tidy* file describes the style the code is checked against.  
+
 ## Author
 Designed and developed by [Ivars Rusbergs.](https://github.com/ivarsrb)
