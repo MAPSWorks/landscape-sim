@@ -15,7 +15,7 @@ public:
   // Stream where the log is written
   enum class Type {
     kClog,
-    kFile // TODO: not implemented
+    kFile // TODO(ivars): not implemented
   };
   // Severity of logged information
   enum class Severity {
@@ -26,7 +26,7 @@ public:
 
   // Logging
   template <typename... Args> inline static void Info(Args &&... args) {
-    if constexpr (enabled && output == Type::kClog && detail == Severity::kInfo) {
+    if constexpr (kEnabled && kOutput == Type::kClog && kDetail == Severity::kInfo) {
       // Linux terminal coloring
 #if defined(__linux__)
       std::clog << "\033[33mINFO: \033[0m";
@@ -38,7 +38,7 @@ public:
     }
   }
   template <typename... Args> inline static void Error(Args &&... args) {
-    if constexpr (enabled && output == Type::kClog && detail <= Severity::kError) {
+    if constexpr (kEnabled && kOutput == Type::kClog && kDetail <= Severity::kError) {
       // Linux terminal coloring
 #if defined(__linux__)
       std::clog << "\033[31mERROR: \033[0m";
@@ -53,15 +53,15 @@ public:
 
   // When disabled nothing is written to log
 #ifdef _DEBUG
-  static constexpr bool enabled = true;
+  static constexpr bool kEnabled = true;
 #else
-  static constexpr bool enabled = false;
+  static constexpr bool kEnabled = false;
 #endif
   // Setting below matter only when logging is enabled
   // Where to write log
-  static constexpr Type output = Type::kClog;
+  static constexpr Type kOutput = Type::kClog;
   // Show logs by severity
-  static constexpr Severity detail = Severity::kInfo;
+  static constexpr Severity kDetail = Severity::kInfo;
 };
 } // namespace lsim::base
 
