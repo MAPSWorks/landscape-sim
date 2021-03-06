@@ -88,14 +88,14 @@ void Test::InitPipeline() {
 
   // viewport and scissors
   VkViewport viewport{};
-  viewport.x = 0.0f;
-  viewport.y = 0.0f;
+  viewport.x = 0.0F;
+  viewport.y = 0.0F;
 
   // should be swapchain extent
   viewport.width = static_cast<float>(renderer_.Swapchin().Extent().width);
   viewport.height = static_cast<float>(renderer_.Swapchin().Extent().height);
-  viewport.minDepth = 0.0f;
-  viewport.maxDepth = 1.0f;
+  viewport.minDepth = 0.0F;
+  viewport.maxDepth = 1.0F;
   VkRect2D scissor{};
 
   // swapchain extent
@@ -116,13 +116,13 @@ void Test::InitPipeline() {
   raster_state_info.depthClampEnable = VK_FALSE;
   raster_state_info.rasterizerDiscardEnable = VK_FALSE;
   raster_state_info.polygonMode = VK_POLYGON_MODE_FILL;
-  raster_state_info.lineWidth = 1.0f;
+  raster_state_info.lineWidth = 1.0F;
   raster_state_info.cullMode = VK_CULL_MODE_BACK_BIT;
   raster_state_info.frontFace = VK_FRONT_FACE_CLOCKWISE;
   raster_state_info.depthBiasEnable = VK_FALSE;
-  raster_state_info.depthBiasConstantFactor = 0.0f; // Optional
-  raster_state_info.depthBiasClamp = 0.0f;          // Optional
-  raster_state_info.depthBiasSlopeFactor = 0.0f;    // Optional
+  raster_state_info.depthBiasConstantFactor = 0.0F; // Optional
+  raster_state_info.depthBiasClamp = 0.0F;          // Optional
+  raster_state_info.depthBiasSlopeFactor = 0.0F;    // Optional
 
   // Multisample
   VkPipelineMultisampleStateCreateInfo multisample_info{};
@@ -130,7 +130,7 @@ void Test::InitPipeline() {
       VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
   multisample_info.sampleShadingEnable = VK_FALSE;
   multisample_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-  multisample_info.minSampleShading = 1.0f;          // Optional
+  multisample_info.minSampleShading = 1.0F;          // Optional
   multisample_info.pSampleMask = nullptr;            // Optional
   multisample_info.alphaToCoverageEnable = VK_FALSE; // Optional
   multisample_info.alphaToOneEnable = VK_FALSE;      // Optional
@@ -157,10 +157,10 @@ void Test::InitPipeline() {
   color_blend_info.logicOp = VK_LOGIC_OP_COPY; // Optional
   color_blend_info.attachmentCount = 1;
   color_blend_info.pAttachments = &color_blend_attachment;
-  color_blend_info.blendConstants[0] = 0.0f; // Optional
-  color_blend_info.blendConstants[1] = 0.0f; // Optional
-  color_blend_info.blendConstants[2] = 0.0f; // Optional
-  color_blend_info.blendConstants[3] = 0.0f; // Optional
+  color_blend_info.blendConstants[0] = 0.0F; // Optional
+  color_blend_info.blendConstants[1] = 0.0F; // Optional
+  color_blend_info.blendConstants[2] = 0.0F; // Optional
+  color_blend_info.blendConstants[3] = 0.0F; // Optional
   // Pipeline layout
   VkPipelineLayoutCreateInfo layout_create_info{};
   layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
