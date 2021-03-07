@@ -12,12 +12,14 @@
 namespace lsim::platform {
 class Window {
 public:
-  Window(const Settings &settings);
+  explicit Window(const Settings &settings);
   ~Window();
-  Window(Window const &) = delete;
-  Window operator=(Window const &) = delete;
+  Window(const Window &) = delete;
+  Window &operator=(const Window &) = delete;
+  Window(Window &&) = delete;
+  Window &operator=(Window &&) = delete;
   // Get window handle
-  SDL_Window *Handle() const;
+  [[nodiscard]] SDL_Window *Handle() const;
 
 private:
   // OS window handle, used to retreive data like size etc
