@@ -17,8 +17,8 @@ class IApplication {
 public:
   IApplication(int argc, char **argv, const Settings &settings);
   virtual ~IApplication();
-  IApplication(IApplication const &) = delete;
-  IApplication &operator=(IApplication const &) = delete;
+  IApplication(const IApplication &) = delete;
+  IApplication &operator=(const IApplication &) = delete;
   IApplication(IApplication &&) = delete;
   IApplication &operator=(IApplication &&) = delete;
   // Main loop of an Application
