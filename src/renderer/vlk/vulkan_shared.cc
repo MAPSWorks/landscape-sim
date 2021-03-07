@@ -133,25 +133,24 @@ void ErrorCheck(VkResult result) {
 }
 
 VkResult CreateDebugUtilsMessengerEXT(
-    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
-    const VkAllocationCallbacks *pAllocator,
-    VkDebugUtilsMessengerEXT *pDebugMessenger) {
-  auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      instance, "vkCreateDebugUtilsMessengerEXT");
-  if (func != nullptr) {
-    return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
-  } else {
-    return VK_ERROR_EXTENSION_NOT_PRESENT;
+    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *create_info,
+    const VkAllocationCallbacks *allocator,
+    VkDebugUtilsMessengerEXT *debug_messenger) {
+  auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
+      instance, "vkCreateDebugUtilsMessengerEXT"));
+  if (func == nullptr) {
+    return VK_ERROR_EXTENSION_NOT_PRESENT; 
   }
+  return func(instance, create_info, allocator, debug_messenger);
 }
 
 void DestroyDebugUtilsMessengerEXT(VkInstance instance,
-                                   VkDebugUtilsMessengerEXT debugMessenger,
-                                   const VkAllocationCallbacks *pAllocator) {
-  auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      instance, "vkDestroyDebugUtilsMessengerEXT");
+                                   VkDebugUtilsMessengerEXT debug_messenger,
+                                   const VkAllocationCallbacks *allocator) {
+  auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
+      instance, "vkDestroyDebugUtilsMessengerEXT"));
   if (func != nullptr) {
-    func(instance, debugMessenger, pAllocator);
+    func(instance, debug_messenger, allocator);
   }
 }
 } // namespace lsim::renderer::vlk

@@ -12,12 +12,12 @@ namespace lsim::renderer::vlk {
 void ErrorCheck(VkResult result);
 // Load vulkan extention functions
 VkResult CreateDebugUtilsMessengerEXT(
-    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo,
-    const VkAllocationCallbacks *pAllocator,
-    VkDebugUtilsMessengerEXT *pDebugMessenger);
+    VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *create_info,
+    const VkAllocationCallbacks *allocator,
+    VkDebugUtilsMessengerEXT *debug_messenger);
 void DestroyDebugUtilsMessengerEXT(VkInstance instance,
-                                   VkDebugUtilsMessengerEXT debugMessenger,
-                                   const VkAllocationCallbacks *pAllocator);
+                                   VkDebugUtilsMessengerEXT debug_messenger,
+                                   const VkAllocationCallbacks *allocator);
 
 } // namespace lsim::renderer::vlk
 
