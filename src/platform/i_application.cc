@@ -9,7 +9,7 @@
 #include "lsim/platform/types.h"
 
 namespace lsim::platform {
-IApplication::IApplication(int argc, char **argv, const Settings &settings)
+IApplication::IApplication(int argc, char **argv, const struct Settings &settings)
     : settings_(settings), window_(settings),
       renderer_(window_.Handle(), settings) {
   (void)argc;
@@ -41,13 +41,17 @@ void IApplication::Run() {
         break;
       }
     }
-      
-    RenderFrame(); 
-    //running = false;
-    //SDL_Delay(10);
+
+    RenderFrame();
+    // running = false;
+    // SDL_Delay(10);
   }
   base::Log::Info("platform", "main loop", "exiting..");
   OnExit();
 }
+
+const Settings &IApplication::Settings() const { return settings_; }
+const Window &IApplication::Window() const { return window_; }
+const renderer::Renderer &IApplication::Renderer() const { return renderer_; }
 
 } // namespace lsim::platform

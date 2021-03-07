@@ -30,27 +30,27 @@ Test::Test(int argc, char **argv)
 }
 
 void Test::RenderFrame() const {
-  const auto image_index = renderer_.Swapchin().AcquireNextImageIndex(
+  const auto image_index = Renderer().Swapchin().AcquireNextImageIndex(
       image_available_sem_->Handle());
 
-  renderer_.Device().Queues().graphics.Submit(
+  Renderer().Device().Queues().graphics.Submit(
       {command_buffers_.at(image_index).Handle()},
       {image_available_sem_->Handle()},
       {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
       {render_finished_sem_->Handle()}, VK_NULL_HANDLE);
 
-  renderer_.Device().Queues().present.Present(renderer_.Swapchin().Handle(),
+  Renderer().Device().Queues().present.Present(Renderer().Swapchin().Handle(),
                                               image_index,
                                               render_finished_sem_->Handle());
 }
 
-void Test::OnExit() const { vkDeviceWaitIdle(renderer_.Device().Handle()); }
+void Test::OnExit() const { vkDeviceWaitIdle(Renderer().Device().Handle()); }
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
-  lsim::renderer::vlk::ShaderModule vertex_shader(renderer_.Device().Handle(),
+  lsim::renderer::vlk::ShaderModule vertex_shader(Renderer().Device().Handle(),
                                                   "shaders/test.vert.spv");
-  lsim::renderer::vlk::ShaderModule fragment_shader(renderer_.Device().Handle(),
+  lsim::renderer::vlk::ShaderModule fragment_shader(Renderer().Device().Handle(),
                                                     "shaders/test.frag.spv");
   // Graphics pipeline
   // Shader stage
@@ -93,15 +93,15 @@ void Test::InitPipeline() {
   viewport.y = 0.0F;
 
   // should be swapchain extent
-  viewport.width = static_cast<float>(renderer_.Swapchin().Extent().width);
-  viewport.height = static_cast<float>(renderer_.Swapchin().Extent().height);
+  viewport.width = static_cast<float>(Renderer().Swapchin().Extent().width);
+  viewport.height = static_cast<float>(Renderer().Swapchin().Extent().height);
   viewport.minDepth = 0.0F;
   viewport.maxDepth = 1.0F;
   VkRect2D scissor{};
 
   // swapchain extent
   scissor.offset = {0, 0};
-  scissor.extent = renderer_.Swapchin().Extent();
+  scissor.extent = Renderer().Swapchin().Extent();
   VkPipelineViewportStateCreateInfo viewport_states_info{};
   viewport_states_info.sType =
       VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -170,10 +170,10 @@ void Test::InitPipeline() {
   layout_create_info.pushConstantRangeCount = 0;    // Optional
   layout_create_info.pPushConstantRanges = nullptr; // Optional
   layout_ = std::make_unique<lsim::renderer::vlk::PipelineLayout>(
-      renderer_.Device().Handle(), layout_create_info);
+      Renderer().Device().Handle(), layout_create_info);
   // Render pass
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
-      renderer_.Device().Handle(), renderer_.Swapchin().SurfaceFormat().format,
+      Renderer().Device().Handle(), Renderer().Swapchin().SurfaceFormat().format,
       VkFormat{});
 
   // Define pipeline itself
@@ -193,16 +193,16 @@ void Test::InitPipeline() {
   pipeline_info.renderPass = render_pass_->Handle();
   pipeline_info.subpass = 0;
   pipeline_ = std::make_unique<lsim::renderer::vlk::PipelineGraphics>(
-      renderer_.Device().Handle(), pipeline_info);
+      Renderer().Device().Handle(), pipeline_info);
 }
 
 // Create frame buffers for all image views in swapchain
 void Test::CreateFramebuffers() {
-  const auto &image_views = renderer_.Swapchin().ImageViews();
+  const auto &image_views = Renderer().Swapchin().ImageViews();
   for (const auto &view : image_views) {
-    framebuffers_.emplace_back(renderer_.Device().Handle(),
+    framebuffers_.emplace_back(Renderer().Device().Handle(),
                                render_pass_->Handle(), view.Handle(),
-                               renderer_.Swapchin().Extent(), nullptr);
+                               Renderer().Swapchin().Extent(), nullptr);
   }
 }
 
@@ -210,8 +210,8 @@ void Test::CreateFramebuffers() {
 void Test::CreateCommandBuffers() {
   // Pool for command buffers to allocate from
   command_pool_ = std::make_unique<lsim::renderer::vlk::CommandPool>(
-      renderer_.Device().Handle(),
-      renderer_.Device().QueueFamilies().Graphics());
+      Renderer().Device().Handle(),
+      Renderer().Device().QueueFamilies().Graphics());
 
   // Command buffer for each framebuffer.
   // Bcause one of the drawing commands involves binding the right VkFramebuffer
@@ -227,7 +227,7 @@ void Test::CreateCommandBuffers() {
         lsim::renderer::vlk::CommandBuffer::Usage::kSimultaniousUse);
     cmd_buffer.BeginRenderPass(render_pass_->Handle(),
                                framebuffers_.at(i).Handle(),
-                               renderer_.Swapchin().Extent());
+                               Renderer().Swapchin().Extent());
     cmd_buffer.BindGraphicsPipeline(pipeline_->Handle());
     cmd_buffer.Draw(3, 1, 0, 0);
     cmd_buffer.EndRenderPass();
@@ -239,9 +239,9 @@ void Test::CreateCommandBuffers() {
 
 void Test::CreateSemaphores() {
   image_available_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
-      renderer_.Device().Handle());
+      Renderer().Device().Handle());
   render_finished_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
-      renderer_.Device().Handle());
+      Renderer().Device().Handle());
 }
 
 } // namespace apps::test
