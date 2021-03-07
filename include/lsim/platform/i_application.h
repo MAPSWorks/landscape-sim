@@ -15,9 +15,10 @@ namespace lsim::platform {
 // Handles application specific tasks and stores it's state.
 class IApplication {
 public:
-  IApplication(int argc, char *argv[], const Settings &settings);
+  IApplication(int argc, char **argv, const Settings &settings);
   virtual ~IApplication();
   IApplication(IApplication const &) = delete;
+  IApplication& operator=(IApplication const &) = delete;
   // Copy-assignment is not allowed doe to pure virtual functions
   // Main loop of an Application
   void Run();

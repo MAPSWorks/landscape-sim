@@ -9,7 +9,7 @@
 #include "lsim/platform/types.h"
 
 namespace lsim::platform {
-IApplication::IApplication(int argc, char *argv[], const Settings &settings)
+IApplication::IApplication(int argc, char **argv, const Settings &settings)
     : settings_(settings), window_(settings),
       renderer_(window_.Handle(), settings) {
   (void)argc;
