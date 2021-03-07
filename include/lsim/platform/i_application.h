@@ -19,7 +19,8 @@ public:
   virtual ~IApplication();
   IApplication(IApplication const &) = delete;
   IApplication &operator=(IApplication const &) = delete;
-  // Copy-assignment is not allowed doe to pure virtual functions
+  IApplication(IApplication &&) = delete;
+  IApplication &operator=(IApplication &&) = delete;
   // Main loop of an Application
   void Run();
 
