@@ -22,7 +22,9 @@ public:
   Instance(SDL_Window *window, const platform::Settings &settings);
   ~Instance();
   Instance(Instance const &) = delete;
-  Instance operator=(Instance const &) = delete;
+  Instance &operator=(Instance const &) = delete;
+  Instance(Instance &&) = delete;
+  Instance &operator=(Instance &&) = delete;
   // Returns Vulkan object handle
   const VkInstance &Handle() const;
   // Returns if validation layers are enabled.
