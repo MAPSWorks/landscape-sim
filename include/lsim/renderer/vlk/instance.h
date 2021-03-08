@@ -26,16 +26,17 @@ public:
   Instance(Instance &&) = delete;
   Instance &operator=(Instance &&) = delete;
   // Returns Vulkan object handle
-  const VkInstance &Handle() const;
+  [[nodiscard]] const VkInstance &Handle() const;
   // Returns if validation layers are enabled.
   // To not expose the whole validation object.
-  bool ValidationEnabled() const;
+  [[nodiscard]] bool ValidationEnabled() const;
 
 private:
   // Gets array of required extensions and appends other.
   // Returns updated extension vector.
   ExtVector GetExtensions(SDL_Window *window) const;
-  VkInstance Create(std::string name, uint32_t version) const;
+  [[nodiscard]] VkInstance Create(const std::string &name,
+                                  uint32_t version) const;
   // Validation layers and debug callbacks
   Validation validation_;
   ExtVector extensions_;

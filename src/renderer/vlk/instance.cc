@@ -38,7 +38,7 @@ Instance::~Instance() {
 
 const VkInstance &Instance::Handle() const { return instance_; }
 
-VkInstance Instance::Create(std::string name, uint32_t version) const {
+VkInstance Instance::Create(const std::string& name, uint32_t version) const {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   // TODO
@@ -69,7 +69,7 @@ VkInstance Instance::Create(std::string name, uint32_t version) const {
 }
 
 // This function is platform dependant
-Instance::ExtVector Instance::GetExtensions(SDL_Window *window) const {
+Instance::ExtVector Instance::GetExtensions(SDL_Window* window) const {
   // Get WSI extensions from SDL
   unsigned extension_count;
   if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count, NULL)) {
