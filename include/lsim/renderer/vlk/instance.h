@@ -18,7 +18,7 @@ namespace lsim::renderer::vlk {
 class Instance {
 public:
   // Alias for extension vector data ttype
-  using ExtVector = std::vector<const char *>;
+  using CharVector = std::vector<const char *>;
   Instance(SDL_Window *window, const platform::Settings &settings);
   ~Instance();
   Instance(Instance const &) = delete;
@@ -34,13 +34,13 @@ public:
 private:
   // Gets array of required extensions and appends other.
   // Returns updated extension vector.
-  ExtVector GetExtensions(SDL_Window *window) const;
+  CharVector GetExtensions(SDL_Window *window) const;
   [[nodiscard]] VkInstance Create(const std::string &name,
                                   uint32_t version) const;
   // Validation layers and debug callbacks
   Validation validation_;
-  ExtVector extensions_;
-  const VkInstance instance_ = VK_NULL_HANDLE;
+  CharVector extensions_;
+  const VkInstance instance_ = VK_NULL_HANDLE; // NOLINT
 };
 } // namespace lsim::renderer::vlk
 

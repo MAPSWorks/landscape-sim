@@ -2,6 +2,7 @@
 // Created by Ivars Rusbergs in 2021
 //
 #include "lsim/renderer/vlk/instance.h"
+#include "SDL_stdinc.h"
 
 #include <stdexcept>
 #include <string>
@@ -38,10 +39,9 @@ Instance::~Instance() {
 
 const VkInstance &Instance::Handle() const { return instance_; }
 
-VkInstance Instance::Create(const std::string& name, uint32_t version) const {
+VkInstance Instance::Create(const std::string &name, uint32_t version) const {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-  // TODO
   app_info.pApplicationName = name.c_str();
   app_info.applicationVersion = version;
   app_info.pEngineName = "LSIM";
@@ -63,22 +63,23 @@ VkInstance Instance::Create(const std::string& name, uint32_t version) const {
                   " app version:", app_info.applicationVersion,
                   " engine name:", app_info.pEngineName,
                   " engine version:", app_info.engineVersion);
-  VkInstance instance;
+  VkInstance instance = VK_NULL_HANDLE;
   ErrorCheck(vkCreateInstance(&create_info, nullptr, &instance));
   return instance;
 }
 
 // This function is platform dependant
-Instance::ExtVector Instance::GetExtensions(SDL_Window* window) const {
+auto Instance::GetExtensions(SDL_Window *window) const -> CharVector {
   // Get WSI extensions from SDL
-  unsigned extension_count;
-  if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count, NULL)) {
+  unsigned extension_count = 0;
+  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count, nullptr) ==
+      SDL_FALSE) {
     throw std::runtime_error("renderer: could not get the number of required "
                              "instance extensions from SDL.");
   }
-  std::vector<const char *> extensions(extension_count);
-  if (!SDL_Vulkan_GetInstanceExtensions(window, &extension_count,
-                                        extensions.data())) {
+  CharVector extensions(extension_count);
+  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count,
+                                       extensions.data()) == SDL_FALSE) {
     throw std::runtime_error("renderer: could not get the names of required "
                              "instance extensions from SDL.");
   }
