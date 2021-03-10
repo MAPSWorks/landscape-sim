@@ -37,7 +37,7 @@ Instance::~Instance() {
   vkDestroyInstance(instance_, nullptr);
 }
 
-const VkInstance &Instance::Handle() const { return instance_; }
+VkInstance Instance::Handle() const { return instance_; }
 
 VkInstance Instance::Create(const std::string &name, uint32_t version) const {
   VkApplicationInfo app_info{};

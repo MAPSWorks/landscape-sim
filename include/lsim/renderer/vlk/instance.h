@@ -26,7 +26,7 @@ public:
   Instance(Instance &&) = delete;
   Instance &operator=(Instance &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] const VkInstance &Handle() const;
+  [[nodiscard]] VkInstance Handle() const;
   // Returns if validation layers are enabled.
   // To not expose the whole validation object.
   [[nodiscard]] bool ValidationEnabled() const;
