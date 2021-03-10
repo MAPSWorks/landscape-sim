@@ -12,7 +12,7 @@ namespace lsim::renderer::vlk {
 class Surface {
 public:
   // Surface depends on OS specific window
-  Surface(const VkInstance &instance, SDL_Window *window);
+  Surface(VkInstance instance, SDL_Window *window);
   ~Surface();
   Surface(Surface const &) = delete;
   Surface operator=(Surface const &) = delete;
@@ -23,7 +23,7 @@ private:
   VkSurfaceKHR Create(SDL_Window *window) const;
   // Reference to resource this renderable was created with.
   // It is used also for destruction of the surface.
-  const VkInstance &instance_;
+  VkInstance const instance_;
   // Images are presented to the surface
   const VkSurfaceKHR surface_ = VK_NULL_HANDLE;
 };

@@ -12,7 +12,7 @@
 #include "lsim/base/log.h"
 
 namespace lsim::renderer::vlk {
-Surface::Surface(const VkInstance &instance, SDL_Window *window)
+Surface::Surface(VkInstance instance, SDL_Window *window)
     : instance_(instance), surface_(Create(window)) {
   base::Log::Info("renderer", "surface", "created");
 }
