@@ -40,7 +40,8 @@ private:
   // Validation layers and debug callbacks
   Validation validation_;
   CharVector extensions_;
-  const VkInstance instance_ = VK_NULL_HANDLE; // NOLINT
+   // NOLINTNEXTLINE - const pointer, not const pointee
+  VkInstance const instance_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 
