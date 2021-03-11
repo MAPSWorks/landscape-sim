@@ -41,7 +41,7 @@ VkPhysicalDevice AcquireDevice(const VkInstance &instance,
   // List of all physical devices available
   uint32_t device_count = 0;
   vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
-  if (!device_count) {
+  if (device_count == 0) {
     throw std::runtime_error(
         "renderer: failed to find GPU with Vulkan support");
   }
@@ -49,7 +49,7 @@ VkPhysicalDevice AcquireDevice(const VkInstance &instance,
   vkEnumeratePhysicalDevices(instance, &device_count, physical_devices.data());
   // Choose device that satisfies engine requirements
   VkPhysicalDevice physical_device = VK_NULL_HANDLE;
-  for (auto device : physical_devices) {
+  for (auto *device : physical_devices) {
     if (DeviceSuitable(device, surface)) {
       physical_device = device;
       break;
@@ -70,7 +70,7 @@ PhysicalDevice::PhysicalDevice(const VkInstance &instance,
   PrintDeviceProperties(physical_device_);
 }
 
-const VkPhysicalDevice &PhysicalDevice::Handle() const {
+VkPhysicalDevice PhysicalDevice::Handle() const {
   return physical_device_;
 }
 } // namespace lsim::renderer::vlk
