@@ -12,11 +12,12 @@
 namespace lsim::renderer::vlk {
 class DebugMessenger {
 public:
-  DebugMessenger(const Instance &instance);
+  explicit DebugMessenger(const Instance &instance);
   ~DebugMessenger();
   DebugMessenger(DebugMessenger const &) = delete;
   DebugMessenger operator=(DebugMessenger const &) = delete;
-
+  DebugMessenger(DebugMessenger &&) = delete;
+  DebugMessenger &operator=(DebugMessenger &&) = delete;
 private:
   // Reports back from validation layers
   static VKAPI_ATTR VkBool32 VKAPI_CALL
@@ -24,10 +25,10 @@ private:
                 VkDebugUtilsMessageTypeFlagsEXT message_type,
                 const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
                 void *user_data);
-  VkDebugUtilsMessengerEXT Create() const;
+  [[nodiscard]] VkDebugUtilsMessengerEXT Create() const;
   // Reference to application instance this messenger is used with
   const Instance &instance_;
-  const VkDebugUtilsMessengerEXT debug_messanger_ = VK_NULL_HANDLE;
+  VkDebugUtilsMessengerEXT const debug_messanger_ = VK_NULL_HANDLE;
 };
 
 } // namespace lsim::renderer::vlk

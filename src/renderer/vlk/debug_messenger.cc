@@ -38,13 +38,12 @@ VkDebugUtilsMessengerEXT DebugMessenger::Create() const {
     create_info.pfnUserCallback = DebugCallback;
     create_info.pUserData =
         nullptr; // Optional (goes to user_data in debug callback)
-    VkDebugUtilsMessengerEXT debug_messenger;
+    VkDebugUtilsMessengerEXT debug_messenger = VK_NULL_HANDLE;
     ErrorCheck(CreateDebugUtilsMessengerEXT(instance_.Handle(), &create_info,
                                             nullptr, &debug_messenger));
     return debug_messenger;
-  } else {
-    return VK_NULL_HANDLE;
-  }
+  } 
+  return VK_NULL_HANDLE;
 }
 
 VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessenger::DebugCallback(
