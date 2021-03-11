@@ -15,7 +15,7 @@
 namespace lsim::renderer::vlk {
 // Internal linkage
 namespace {
-// Checks if gicen GPU satisfies requirements for this engine
+// Checks if given GPU satisfies requirements for this engine
 bool DeviceSuitable(const VkPhysicalDevice &physical_device,
                     const VkSurfaceKHR &surface) {
   const QueueFamilies queue_families(physical_device, surface);
