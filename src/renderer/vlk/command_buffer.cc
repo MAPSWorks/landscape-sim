@@ -10,8 +10,8 @@
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/command_pool.h"
 #include "vulkan_shared.h"
-namespace lsim::renderer::vlk {
 
+namespace lsim::renderer::vlk {
 CommandBuffer::CommandBuffer(const CommandPool &command_pool)
     : command_pool_(command_pool),
       command_buffer_(command_pool_.AllocateCommandBuffer(
@@ -20,7 +20,7 @@ CommandBuffer::CommandBuffer(const CommandPool &command_pool)
   base::Log::Info("renderer", "command buffer", "initialized");
 }
 
-const VkCommandBuffer &CommandBuffer::Handle() const { return command_buffer_; }
+VkCommandBuffer CommandBuffer::Handle() const { return command_buffer_; }
 
 void CommandBuffer::Begin(CommandBuffer::Usage usage) const {
   VkCommandBufferBeginInfo begin_info = {};
@@ -37,25 +37,25 @@ void CommandBuffer::End() const {
 void CommandBuffer::BeginRenderPass(const VkRenderPass &render_pass,
                                     const VkFramebuffer &frame_buffer,
                                     const VkExtent2D &render_area) const {
-  VkRenderPassBeginInfo render_pass_Info{};
-  render_pass_Info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-  render_pass_Info.renderPass = render_pass;
-  render_pass_Info.framebuffer = frame_buffer;
-  render_pass_Info.renderArea.offset = {0, 0};
+  VkRenderPassBeginInfo render_pass_info{};
+  render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+  render_pass_info.renderPass = render_pass;
+  render_pass_info.framebuffer = frame_buffer;
+  render_pass_info.renderArea.offset = {0, 0};
   // Usually swapchain extent
-  render_pass_Info.renderArea.extent = render_area;
+  render_pass_info.renderArea.extent = render_area;
   // Clear values to use for VK_ATTACHMENT_LOAD_OP_CLEAR, which used as load
   // operation for color attachment and depth
   std::vector<VkClearValue> clear_values(2);
   // NOTE: this order should match attachment order !
-  clear_values[0].color = {{0.39f, 0.58f, 0.92f, 1.0f}};
+  clear_values[0].color = {{0.39F, 0.58F, 0.92F, 1.0F}};
   // The range of depths in the depth buffer is 0.0 to 1.0, by default should be
   // furthest.
   // clear_values[1].depthStencil = { 1.0f, 0 };
-  render_pass_Info.clearValueCount = static_cast<uint32_t>(clear_values.size());
-  render_pass_Info.pClearValues = clear_values.data();
+  render_pass_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
+  render_pass_info.pClearValues = clear_values.data();
   // VK_SUBPASS_CONTENTS_INLINE is used for primary command buffers
-  vkCmdBeginRenderPass(command_buffer_, &render_pass_Info,
+  vkCmdBeginRenderPass(command_buffer_, &render_pass_info,
                        VK_SUBPASS_CONTENTS_INLINE);
 }
 

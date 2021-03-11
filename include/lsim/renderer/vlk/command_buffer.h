@@ -24,8 +24,8 @@ public:
     // in the pending state.
     kSimultaniousUse = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
   };
-  CommandBuffer(const CommandPool &command_pool);
-  const VkCommandBuffer &Handle() const;
+  explicit CommandBuffer(const CommandPool &command_pool);
+  [[nodiscard]] VkCommandBuffer Handle() const;
   // Start recording to the command buffer
   void Begin(Usage usage) const;
   // End recording to the command buffer
