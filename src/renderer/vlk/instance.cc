@@ -26,9 +26,29 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
+namespace {
+// Retrieves and return a vector of required instance extensions
+// This function is platform dependant
+std::vector<const char *> GetExtensions(SDL_Window *window) {
+  // Get WSI extensions from SDL
+  unsigned extension_count = 0;
+  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count, nullptr) ==
+      SDL_FALSE) {
+    throw std::runtime_error("renderer: could not get the number of required "
+                             "instance extensions from SDL.");
+  }
+  std::vector<const char *> extensions(extension_count);
+  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count,
+                                       extensions.data()) == SDL_FALSE) {
+    throw std::runtime_error("renderer: could not get the names of required "
+                             "instance extensions from SDL.");
+  }
+  return extensions;
+}
+} // namespace
+
 Instance::Instance(SDL_Window *window, const platform::Settings &settings)
-    : extensions_(GetExtensions(window)),
-      instance_(Create(settings.name, settings.version)) {
+    : instance_(Create(settings.name, settings.version, window)) {
   base::Log::Info("renderer", "instance", "created");
 }
 
@@ -39,7 +59,8 @@ Instance::~Instance() {
 
 VkInstance Instance::Handle() const { return instance_; }
 
-VkInstance Instance::Create(const std::string &name, uint32_t version) const {
+VkInstance Instance::Create(const std::string &name, uint32_t version,
+                            SDL_Window *window) const {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   app_info.pApplicationName = name.c_str();
@@ -52,8 +73,11 @@ VkInstance Instance::Create(const std::string &name, uint32_t version) const {
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
   // Extensions
-  create_info.enabledExtensionCount = static_cast<uint32_t>(extensions_.size());
-  create_info.ppEnabledExtensionNames = extensions_.data();
+  auto extensions = GetExtensions(window);
+  // Add extentions from validation
+  validation_.AppendExtentions(extensions);
+  create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+  create_info.ppEnabledExtensionNames = extensions.data();
   // Validation layers
   create_info.enabledLayerCount =
       static_cast<uint32_t>(validation_.Layers().size());
@@ -66,26 +90,6 @@ VkInstance Instance::Create(const std::string &name, uint32_t version) const {
   VkInstance instance = VK_NULL_HANDLE;
   ErrorCheck(vkCreateInstance(&create_info, nullptr, &instance));
   return instance;
-}
-
-// This function is platform dependant
-auto Instance::GetExtensions(SDL_Window *window) const -> CharVector {
-  // Get WSI extensions from SDL
-  unsigned extension_count = 0;
-  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count, nullptr) ==
-      SDL_FALSE) {
-    throw std::runtime_error("renderer: could not get the number of required "
-                             "instance extensions from SDL.");
-  }
-  CharVector extensions(extension_count);
-  if (SDL_Vulkan_GetInstanceExtensions(window, &extension_count,
-                                       extensions.data()) == SDL_FALSE) {
-    throw std::runtime_error("renderer: could not get the names of required "
-                             "instance extensions from SDL.");
-  }
-  // Add extentions from validation
-  validation_.AppendExtentions(extensions);
-  return extensions;
 }
 
 bool Instance::ValidationEnabled() const { return validation_.Enabled(); }
