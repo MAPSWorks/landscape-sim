@@ -14,7 +14,7 @@
 #include "queue_families.h"
 
 namespace lsim::renderer::vlk {
-// TODO: having to add struct and class in front of variables to not mix with
+// TODO(ivars): having to add struct and class in front of variables to not mix with
 // getters is probably a problem of the class not having a single responsibility.
 class Device {
 public:
@@ -28,7 +28,9 @@ public:
   Device(const VkInstance &instance, const VkSurfaceKHR &surface);
   ~Device();
   Device(Device const &) = delete;
-  Device operator=(Device const &) = delete;
+  Device &operator=(Device const &) = delete;
+  Device(Device &&) = delete;
+  Device &operator=(Device &&) = delete;
   // Returns reference to Vulkan physical device abstraction
   const PhysicalDevice &GPU() const;
   // Returns reference to Vulkan logical device object
