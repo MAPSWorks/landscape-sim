@@ -23,7 +23,7 @@ CommandPool::~CommandPool() {
   vkDestroyCommandPool(context_device_, command_pool_, nullptr);
 }
 
-const VkCommandPool &CommandPool::Handle() const { return command_pool_; }
+VkCommandPool CommandPool::Handle() const { return command_pool_; }
 
 // Command buffer alloceted will be destroyed implicitly with pool destruction
 VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
@@ -33,7 +33,7 @@ VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
   command_buffer_allocinfo.commandPool = command_pool_;
   command_buffer_allocinfo.level = static_cast<VkCommandBufferLevel>(level);
   command_buffer_allocinfo.commandBufferCount = 1;
-  VkCommandBuffer command_buffer;
+  VkCommandBuffer command_buffer = VK_NULL_HANDLE;
   ErrorCheck(vkAllocateCommandBuffers(context_device_, &command_buffer_allocinfo,
                                       &command_buffer));
   if (level == BufferLevel::kPrimary) {
@@ -62,7 +62,7 @@ VkCommandPool CommandPool::Create(QueueFamilies::Index family_index,
   }
   base::Log::Info("renderer", "command pool", "queue family index set to",
                   family_index);
-  VkCommandPool command_pool;
+  VkCommandPool command_pool = VK_NULL_HANDLE;
   ErrorCheck(
       vkCreateCommandPool(context_device_, &pool_create_info, nullptr, &command_pool));
   return command_pool;
