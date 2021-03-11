@@ -49,7 +49,7 @@ VkDevice Device::Create(const VkPhysicalDevice &gpu,
   // Create multiple queues if necessery
   std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
   uint32_t number_of_queues = 1;
-  float queue_priority = 1.0f;
+  float queue_priority = 1.0F;
   for (auto queue_family : unique_queue_families) {
     VkDeviceQueueCreateInfo queue_create_info{};
     queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -75,7 +75,7 @@ VkDevice Device::Create(const VkPhysicalDevice &gpu,
       static_cast<uint32_t>(required_extentions_.size());
   device_create_info.ppEnabledExtensionNames = required_extentions_.data();
 
-  VkDevice device;
+  VkDevice device = VK_NULL_HANDLE;
   ErrorCheck(vkCreateDevice(gpu, &device_create_info, nullptr, &device));
   return device;
 }
