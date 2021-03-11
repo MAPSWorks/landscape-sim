@@ -21,9 +21,8 @@ public:
 
 private:
   VkSurfaceKHR Create(SDL_Window *window) const;
-  // Reference to resource this renderable was created with.
-  // It is used also for destruction of the surface.
-  VkInstance const instance_;
+  // Pointer to resource this renderable was created with.
+  VkInstance const context_instance_;
   // Images are presented to the surface
   const VkSurfaceKHR surface_ = VK_NULL_HANDLE;
 };

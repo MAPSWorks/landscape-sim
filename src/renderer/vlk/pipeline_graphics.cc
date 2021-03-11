@@ -10,14 +10,14 @@
 
 namespace lsim::renderer::vlk {
 PipelineGraphics::PipelineGraphics(
-    const VkDevice &device, const VkGraphicsPipelineCreateInfo &create_info)
-    : device_(device), pipeline_(Create(create_info)) {
+    VkDevice device, const VkGraphicsPipelineCreateInfo &create_info)
+    : context_device_(device), pipeline_(Create(create_info)) {
   base::Log::Info("renderer", "pipeline", "created");
 }
 
 PipelineGraphics::~PipelineGraphics() {
   base::Log::Info("renderer", "pipeline", "destroying..");
-  vkDestroyPipeline(device_, pipeline_, nullptr);
+  vkDestroyPipeline(context_device_, pipeline_, nullptr);
 }
 
 const VkPipeline &PipelineGraphics::Handle() const { return pipeline_; }
@@ -26,7 +26,7 @@ VkPipeline PipelineGraphics::Create(
     const VkGraphicsPipelineCreateInfo &create_info) const {
 
   VkPipeline pipeline;
-  ErrorCheck(vkCreateGraphicsPipelines(device_, VK_NULL_HANDLE, 1, &create_info,
+  ErrorCheck(vkCreateGraphicsPipelines(context_device_, VK_NULL_HANDLE, 1, &create_info,
                                        nullptr, &pipeline));
   return pipeline;
 }

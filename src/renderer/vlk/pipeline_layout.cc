@@ -9,15 +9,15 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-PipelineLayout::PipelineLayout(const VkDevice &device,
+PipelineLayout::PipelineLayout(VkDevice device,
                                const VkPipelineLayoutCreateInfo &create_info)
-    : device_(device), pipeline_layout_(Create(create_info)) {
+    : context_device_(device), pipeline_layout_(Create(create_info)) {
   base::Log::Info("renderer", "pipeline layout", "created");
 }
 
 PipelineLayout::~PipelineLayout() {
   base::Log::Info("renderer", "pipeline layout", "destroying..");
-  vkDestroyPipelineLayout(device_, pipeline_layout_, nullptr);
+  vkDestroyPipelineLayout(context_device_, pipeline_layout_, nullptr);
 }
 
 const VkPipelineLayout &PipelineLayout::Handle() const { return pipeline_layout_; }
@@ -26,7 +26,7 @@ VkPipelineLayout
 PipelineLayout::Create(const VkPipelineLayoutCreateInfo &create_info) const {
   VkPipelineLayout pipeline_layout;
   ErrorCheck(
-      vkCreatePipelineLayout(device_, &create_info, nullptr, &pipeline_layout));
+      vkCreatePipelineLayout(context_device_, &create_info, nullptr, &pipeline_layout));
   return pipeline_layout;
 }
 

@@ -16,7 +16,7 @@ namespace lsim::renderer::vlk {
 // entry point.
 class ShaderModule {
 public:
-  ShaderModule(const VkDevice &device, const std::string &file_path);
+  ShaderModule(VkDevice device, const std::string &file_path);
   ~ShaderModule();
   ShaderModule(ShaderModule const &) = delete;
   ShaderModule operator=(ShaderModule const &) = delete;
@@ -25,8 +25,8 @@ public:
 
 private:
   VkShaderModule Create(const std::string &file_name) const;
-  // Reference to resource this object is created with
-  const VkDevice &device_;
+  // Pointer to resource this object is created with
+  VkDevice const context_device_;
   // To store path to file this module was created from
   const std::string file_path_;
   const VkShaderModule shader_module_ = VK_NULL_HANDLE;

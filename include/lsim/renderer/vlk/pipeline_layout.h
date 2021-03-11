@@ -12,7 +12,7 @@ namespace lsim::renderer::vlk {
 // to command buffer (to establish compatability).
 class PipelineLayout {
 public:
-  PipelineLayout(const VkDevice &device,
+  PipelineLayout(VkDevice device,
                  const VkPipelineLayoutCreateInfo &create_info);
   ~PipelineLayout();
   PipelineLayout(PipelineLayout const &) = delete;
@@ -22,8 +22,8 @@ public:
 
 private:
   VkPipelineLayout Create(const VkPipelineLayoutCreateInfo &create_info) const;
-  // Reference to object this resource was created with
-  const VkDevice &device_;
+  // Pointer to object this resource was created with
+  VkDevice const context_device_;
   const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;
 };
 

@@ -11,7 +11,7 @@
 namespace lsim::renderer::vlk {
 class Semaphore {
 public:
-  Semaphore(const VkDevice &device);
+  Semaphore(VkDevice device);
   ~Semaphore();
   Semaphore(Semaphore const &) = delete;
   Semaphore operator=(Semaphore const &) = delete;
@@ -20,8 +20,8 @@ public:
 
 private:
   VkSemaphore Create() const;
-  // Reference to resource this object is created with
-  const VkDevice &device_;
+  // Pointer to resource this object is created with
+  VkDevice const context_device_;
   const VkSemaphore semaphore_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk

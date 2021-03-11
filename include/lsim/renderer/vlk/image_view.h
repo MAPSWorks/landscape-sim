@@ -10,7 +10,7 @@ class ImageView {
 public:
   // Create image view for given image with given format
   // Specify also aspect flag (color (default), depth ...)
-  ImageView(const VkDevice &device, const VkImage &image, VkFormat format,
+  ImageView(VkDevice device, const VkImage &image, VkFormat format,
             VkImageAspectFlags aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT);
   ~ImageView();
   //ImageView(ImageView const &) = delete;
@@ -26,8 +26,8 @@ private:
   VkImageView Create(const VkImage &image, VkFormat format,
                      VkImageAspectFlags aspect_flags) const;
   void Destroy();
-  // Reference to object this resource was created with
-  const VkDevice &device_;
+  // Pointer to object this resource was created with
+  VkDevice const context_device_;
   VkImageView image_view_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk

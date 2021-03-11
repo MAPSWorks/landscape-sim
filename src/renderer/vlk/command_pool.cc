@@ -10,9 +10,9 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-CommandPool::CommandPool(const VkDevice &device, QueueFamilies::Index family_index,
+CommandPool::CommandPool(VkDevice device, QueueFamilies::Index family_index,
                          Flags flags)
-    : device_(device), command_pool_(Create(family_index, flags)) {
+    : context_device_(device), command_pool_(Create(family_index, flags)) {
   base::Log::Info("renderer", "command pool", "created");
 }
 
@@ -20,7 +20,7 @@ CommandPool::CommandPool(const VkDevice &device, QueueFamilies::Index family_ind
 CommandPool::~CommandPool() {
   base::Log::Info("renderer", "command pool (and implicitly command buffers)",
                   "destroying..");
-  vkDestroyCommandPool(device_, command_pool_, nullptr);
+  vkDestroyCommandPool(context_device_, command_pool_, nullptr);
 }
 
 const VkCommandPool &CommandPool::Handle() const { return command_pool_; }
@@ -34,7 +34,7 @@ VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
   command_buffer_allocinfo.level = static_cast<VkCommandBufferLevel>(level);
   command_buffer_allocinfo.commandBufferCount = 1;
   VkCommandBuffer command_buffer;
-  ErrorCheck(vkAllocateCommandBuffers(device_, &command_buffer_allocinfo,
+  ErrorCheck(vkAllocateCommandBuffers(context_device_, &command_buffer_allocinfo,
                                       &command_buffer));
   if (level == BufferLevel::kPrimary) {
     base::Log::Info("renderer", "command pool",
@@ -64,7 +64,7 @@ VkCommandPool CommandPool::Create(QueueFamilies::Index family_index,
                   family_index);
   VkCommandPool command_pool;
   ErrorCheck(
-      vkCreateCommandPool(device_, &pool_create_info, nullptr, &command_pool));
+      vkCreateCommandPool(context_device_, &pool_create_info, nullptr, &command_pool));
   return command_pool;
 }
 } // namespace lsim::renderer::vlk

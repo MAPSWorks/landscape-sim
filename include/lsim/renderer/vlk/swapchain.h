@@ -30,7 +30,7 @@ public:
   // surface
   static SupportDetails QuerySupport(const VkPhysicalDevice &gpu,
                                      const VkSurfaceKHR &surface);
-  Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
+  Swapchain(VkDevice device, const VkPhysicalDevice &gpu,
             const VkSurfaceKHR &surface, const QueueFamilies &qf_indices,
             SDL_Window *window);
   ~Swapchain();
@@ -53,8 +53,8 @@ private:
   // Create image views for given images
   std::vector<ImageView>
   CreateImageViews(const std::vector<VkImage> &images) const;
-  // Reference to object this resource was created with
-  const VkDevice &device_;
+  // Pointer to object this resource was created with
+  VkDevice const context_device_;
   // NOTE: should be initialized before vulkan swapchain object
   // Selected format of swapchain images
   const SupportDetails support_details_;

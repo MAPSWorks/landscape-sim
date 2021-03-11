@@ -125,10 +125,10 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
   return details;
 }
 
-Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
+Swapchain::Swapchain(VkDevice device, const VkPhysicalDevice &gpu,
                      const VkSurfaceKHR &surface,
                      const QueueFamilies &qf_indices, SDL_Window *window)
-    : device_(device), support_details_(QuerySupport(gpu, surface)),
+    : context_device_(device), support_details_(QuerySupport(gpu, surface)),
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
       extent_(RetrieveWindowExtent(support_details_.capabilities, window)),
@@ -140,7 +140,7 @@ Swapchain::Swapchain(const VkDevice &device, const VkPhysicalDevice &gpu,
 
 Swapchain::~Swapchain() {
   base::Log::Info("renderer", "swapchain", "destroying..");
-  vkDestroySwapchainKHR(device_, swapchain_, nullptr);
+  vkDestroySwapchainKHR(context_device_, swapchain_, nullptr);
 }
 
 const VkSwapchainKHR &Swapchain::Handle() const { return swapchain_; }
@@ -161,7 +161,7 @@ uint32_t
 Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
   uint32_t image_index;
   constexpr auto unlimited_timeout = std::numeric_limits<uint64_t>::max();
-  ErrorCheck(vkAcquireNextImageKHR(device_, swapchain_, unlimited_timeout,
+  ErrorCheck(vkAcquireNextImageKHR(context_device_, swapchain_, unlimited_timeout,
                                    image_available_sem, VK_NULL_HANDLE,
                                    &image_index));
   return image_index;
@@ -208,7 +208,7 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
   // set to old swachain
   create_info.oldSwapchain = VK_NULL_HANDLE;
   VkSwapchainKHR swapchain;
-  ErrorCheck(vkCreateSwapchainKHR(device_, &create_info, nullptr, &swapchain));
+  ErrorCheck(vkCreateSwapchainKHR(context_device_, &create_info, nullptr, &swapchain));
   return swapchain;
 }
 
@@ -217,9 +217,9 @@ std::vector<VkImage> Swapchain::RetrieveImages() const {
   // Get handles to swapchain images
   // NOTE: swapchain is allowed to create more images than we specify
   uint32_t image_count;
-  vkGetSwapchainImagesKHR(device_, swapchain_, &image_count, nullptr);
+  vkGetSwapchainImagesKHR(context_device_, swapchain_, &image_count, nullptr);
   std::vector<VkImage> swapchain_images(image_count);
-  ErrorCheck(vkGetSwapchainImagesKHR(device_, swapchain_, &image_count,
+  ErrorCheck(vkGetSwapchainImagesKHR(context_device_, swapchain_, &image_count,
                                      swapchain_images.data()));
   return swapchain_images;
 }
@@ -229,7 +229,7 @@ Swapchain::CreateImageViews(const std::vector<VkImage> &images) const {
   std::vector<ImageView> image_views;
   // Number of image views and images should mach (also their order)!
   for (const auto &image : images) {
-    image_views.emplace_back(device_, image, surface_format_.format);
+    image_views.emplace_back(context_device_, image, surface_format_.format);
   }
   return image_views;
 }

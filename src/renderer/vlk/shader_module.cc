@@ -34,15 +34,15 @@ std::vector<char> ReadBinaryFile(const std::string &file_path) {
 }
 } // namespace
 
-ShaderModule::ShaderModule(const VkDevice &device, const std::string &file_path)
-    : device_(device), file_path_(file_path),
+ShaderModule::ShaderModule(VkDevice device, const std::string &file_path)
+    : context_device_(device), file_path_(file_path),
       shader_module_(Create(file_path)) {
   base::Log::Info("renderer", "shader module", "created", file_path_);
 }
 
 ShaderModule::~ShaderModule() {
   base::Log::Info("renderer", "shader module", "destroying..", file_path_);
-  vkDestroyShaderModule(device_, shader_module_, nullptr);
+  vkDestroyShaderModule(context_device_, shader_module_, nullptr);
 }
 
 const VkShaderModule &ShaderModule::Handle() const { return shader_module_; }
@@ -56,7 +56,7 @@ VkShaderModule ShaderModule::Create(const std::string &file_name) const {
   create_info.pCode = reinterpret_cast<const uint32_t *>(spirv_data.data());
   VkShaderModule shader_module;
   ErrorCheck(
-      vkCreateShaderModule(device_, &create_info, nullptr, &shader_module));
+      vkCreateShaderModule(context_device_, &create_info, nullptr, &shader_module));
   return shader_module;
 }
 } // namespace lsim::renderer::vlk

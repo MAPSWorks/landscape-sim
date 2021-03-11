@@ -22,7 +22,7 @@ public:
     kSecondary = VK_COMMAND_BUFFER_LEVEL_SECONDARY
   };
   // is_transient - true for short-lived buffers for optimization
-  CommandPool(const VkDevice &device, QueueFamilies::Index family_index,
+  CommandPool(VkDevice device, QueueFamilies::Index family_index,
               Flags flags = Flags::kNone);
   ~CommandPool();
   CommandPool(CommandPool const &) = delete;
@@ -35,8 +35,8 @@ public:
 
 private:
   VkCommandPool Create(QueueFamilies::Index family_index, Flags flags) const;
-  // Reference to resource this object is created with
-  const VkDevice &device_;
+  // Pointer to resource this object is created with
+  VkDevice const context_device_;
   const VkCommandPool command_pool_ = VK_NULL_HANDLE;
 };
 

@@ -11,7 +11,7 @@ namespace lsim::renderer::vlk {
 // and subpasses
 class RenderPass {
 public:
-  RenderPass(const VkDevice &device, const VkFormat &swapchain_format,
+  RenderPass(VkDevice device, const VkFormat &swapchain_format,
              const VkFormat &depth_format);
   ~RenderPass();
   RenderPass(RenderPass const &) = delete;
@@ -22,8 +22,8 @@ public:
 private:
   VkRenderPass Create(const VkFormat &swapchain_format,
                       const VkFormat &depth_format) const;
-  // Reference to object this resource was created with
-  const VkDevice &device_;
+  // Pointer to object this resource was created with
+  VkDevice const context_device_;
   const VkRenderPass render_pass_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk

@@ -9,7 +9,7 @@
 namespace lsim::renderer::vlk {
 class Framebuffer {
 public:
-  Framebuffer(const VkDevice &device, const VkRenderPass &render_pass,
+  Framebuffer(VkDevice device, const VkRenderPass &render_pass,
               const VkImageView &swapchain_image_view,
               const VkExtent2D &swapchain_extent,
               const VkImageView &depth_image_view);
@@ -29,8 +29,8 @@ private:
                        const VkImageView &swapchain_image_view,
                        const VkExtent2D &swapchain_extent,
                        const VkImageView &depth_image_view) const;
-  // Reference to resource this object is created with
-  const VkDevice &device_;
+  // Pointer to resource this object is created with
+  VkDevice const context_device_;
   VkFramebuffer framebuffer_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk

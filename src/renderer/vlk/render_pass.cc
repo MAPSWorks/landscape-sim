@@ -60,15 +60,15 @@ DescribeAttachments(const VkFormat &swapchain_format,
 }
 } // namespace
 
-RenderPass::RenderPass(const VkDevice &device, const VkFormat &swapchain_format,
+RenderPass::RenderPass(VkDevice device, const VkFormat &swapchain_format,
                        const VkFormat &depth_format)
-    : device_(device), render_pass_(Create(swapchain_format, depth_format)) {
+    : context_device_(device), render_pass_(Create(swapchain_format, depth_format)) {
   base::Log::Info("renderer", "render pass", "created");
 }
 
 RenderPass::~RenderPass() {
   base::Log::Info("renderer", "render pass", "destroying..");
-  vkDestroyRenderPass(device_, render_pass_, nullptr);
+  vkDestroyRenderPass(context_device_, render_pass_, nullptr);
 }
 
 const VkRenderPass &RenderPass::Handle() const { return render_pass_; }
@@ -125,7 +125,7 @@ VkRenderPass RenderPass::Create(const VkFormat &swapchain_format,
   render_pass_create_info.dependencyCount = 1;
   render_pass_create_info.pDependencies = &dependency;
   VkRenderPass render_pass;
-  ErrorCheck(vkCreateRenderPass(device_, &render_pass_create_info, nullptr,
+  ErrorCheck(vkCreateRenderPass(context_device_, &render_pass_create_info, nullptr,
                                 &render_pass));
   return render_pass;
 }

@@ -9,16 +9,16 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-ImageView::ImageView(const VkDevice &device, const VkImage &image,
+ImageView::ImageView(VkDevice device, const VkImage &image,
                      VkFormat format, VkImageAspectFlags aspect_flags)
-    : device_(device), image_view_(Create(image, format, aspect_flags)) {
+    : context_device_(device), image_view_(Create(image, format, aspect_flags)) {
   base::Log::Info("renderer", "image view", "created");
 }
 
 ImageView::~ImageView() { Destroy(); }
 
 ImageView::ImageView(ImageView &&other) noexcept
-    : device_(other.device_) {
+    : context_device_(other.context_device_) {
   // Call move-asignment operator
   *this = std::move(other);
 }
@@ -56,7 +56,7 @@ VkImageView ImageView::Create(const VkImage &image, VkFormat format,
   create_info.subresourceRange.baseArrayLayer = 0;
   create_info.subresourceRange.layerCount = 1;
   VkImageView image_view;
-  ErrorCheck(vkCreateImageView(device_, &create_info, nullptr, &image_view));
+  ErrorCheck(vkCreateImageView(context_device_, &create_info, nullptr, &image_view));
   return image_view;
 }
 
@@ -65,7 +65,7 @@ void ImageView::Destroy() {
   // Handle must be in valid state
   if (image_view_ != VK_NULL_HANDLE) {
     base::Log::Info("renderer", "image view", "destroying...");
-    vkDestroyImageView(device_, image_view_, nullptr);
+    vkDestroyImageView(context_device_, image_view_, nullptr);
     // Make sure handle is not valid anymore
     image_view_ = VK_NULL_HANDLE;
   }

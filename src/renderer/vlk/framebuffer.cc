@@ -11,12 +11,12 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Framebuffer::Framebuffer(const VkDevice &device,
+Framebuffer::Framebuffer(VkDevice device,
                          const VkRenderPass &render_pass,
                          const VkImageView &swapchain_image_view,
                          const VkExtent2D &swapchain_extent,
                          const VkImageView &depth_image_view)
-    : device_(device),
+    : context_device_(device),
       framebuffer_(Create(render_pass, swapchain_image_view, swapchain_extent,
                           depth_image_view)) {
   base::Log::Info("renderer", "framebuffer", "created");
@@ -25,7 +25,7 @@ Framebuffer::Framebuffer(const VkDevice &device,
 Framebuffer::~Framebuffer() { Destroy(); }
 
 Framebuffer::Framebuffer(Framebuffer &&other) noexcept
-    : device_(other.device_) {
+    : context_device_(other.context_device_) {
   // Call move-asignment operator
   *this = std::move(other);
   //base::Log::Info("renderer", "framebuffer", "move cnstructed");
@@ -62,7 +62,7 @@ VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
   framebuffer_create_info.height = swapchain_extent.height;
   framebuffer_create_info.layers = 1;
   VkFramebuffer framebuffer;
-  ErrorCheck(vkCreateFramebuffer(device_, &framebuffer_create_info, nullptr,
+  ErrorCheck(vkCreateFramebuffer(context_device_, &framebuffer_create_info, nullptr,
                                  &framebuffer));
   return framebuffer;
 }
@@ -70,7 +70,7 @@ VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
 void Framebuffer::Destroy() {
   if (framebuffer_ != VK_NULL_HANDLE) {
     base::Log::Info("renderer", "framebuffer", "destroying..");
-    vkDestroyFramebuffer(device_, framebuffer_, nullptr);
+    vkDestroyFramebuffer(context_device_, framebuffer_, nullptr);
   }
 }
 } // namespace lsim::renderer::vlk

@@ -31,7 +31,7 @@ Device::~Device() {
 
 const PhysicalDevice &Device::GPU() const { return gpu_; }
 
-const VkDevice &Device::Handle() const { return device_; }
+VkDevice Device::Handle() const { return device_; }
 
 const struct Device::Queues &Device::Queues() const { return queues_; }
 
