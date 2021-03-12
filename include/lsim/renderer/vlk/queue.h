@@ -15,7 +15,7 @@ namespace lsim::renderer::vlk {
 class Queue {
 public:
   Queue(const VkDevice &device, uint32_t family_index);
-  const VkQueue &Handle() const;
+  [[nodiscard]] VkQueue Handle() const;
   void Submit(const std::vector<VkCommandBuffer> &command_buffers,
               const std::vector<VkSemaphore> &wait_semaphores,
               const std::vector<VkPipelineStageFlags> &wait_stages,
@@ -24,11 +24,12 @@ public:
   // Present image to swapchain
   // Calling queue have to be with pesentation capabilities
   // wait_semaphore is semaphore to wait on before presenting
-  VkResult Present(const VkSwapchainKHR &swapchain, uint32_t image_index,
-                   const VkSemaphore &wait_semaphore) const;
+  [[nodiscard]] VkResult Present(const VkSwapchainKHR &swapchain,
+                                 uint32_t image_index,
+                                 const VkSemaphore &wait_semaphore) const;
 
 private:
-  const VkQueue queue_ = VK_NULL_HANDLE;
+  VkQueue const queue_ = VK_NULL_HANDLE;
 };
 
 } // namespace lsim::renderer::vlk

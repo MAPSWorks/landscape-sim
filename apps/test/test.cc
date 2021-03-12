@@ -14,6 +14,7 @@
 #include <lsim/renderer/vlk/command_pool.h>
 #include <lsim/renderer/vlk/semaphore.h>
 #include <lsim/renderer/vlk/shader_module.h>
+#include <vulkan/vulkan_core.h>
 
 namespace apps::test {
 // TODO(ivars): should come from elsewhere
@@ -39,9 +40,11 @@ void Test::RenderFrame() const {
       {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
       {render_finished_sem_->Handle()}, VK_NULL_HANDLE);
 
-  Renderer().Device().Queues().present.Present(Renderer().Swapchin().Handle(),
-                                              image_index,
-                                              render_finished_sem_->Handle());
+  if (Renderer().Device().Queues().present.Present(
+          Renderer().Swapchin().Handle(), image_index,
+          render_finished_sem_->Handle()) != VK_SUCCESS) {
+     lsim::base::Log::Error("test application", "unable to present queue");         
+  }
 }
 
 void Test::OnExit() const { vkDeviceWaitIdle(Renderer().Device().Handle()); }
@@ -50,8 +53,8 @@ void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation
   lsim::renderer::vlk::ShaderModule vertex_shader(Renderer().Device().Handle(),
                                                   "shaders/test.vert.spv");
-  lsim::renderer::vlk::ShaderModule fragment_shader(Renderer().Device().Handle(),
-                                                    "shaders/test.frag.spv");
+  lsim::renderer::vlk::ShaderModule fragment_shader(
+      Renderer().Device().Handle(), "shaders/test.frag.spv");
   // Graphics pipeline
   // Shader stage
   VkPipelineShaderStageCreateInfo vert_stage_create_info{};
@@ -173,8 +176,8 @@ void Test::InitPipeline() {
       Renderer().Device().Handle(), layout_create_info);
   // Render pass
   render_pass_ = std::make_unique<lsim::renderer::vlk::RenderPass>(
-      Renderer().Device().Handle(), Renderer().Swapchin().SurfaceFormat().format,
-      VkFormat{});
+      Renderer().Device().Handle(),
+      Renderer().Swapchin().SurfaceFormat().format, VkFormat{});
 
   // Define pipeline itself
   VkGraphicsPipelineCreateInfo pipeline_info{};

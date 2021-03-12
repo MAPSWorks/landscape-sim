@@ -16,8 +16,8 @@ public:
   ~Framebuffer();
   Framebuffer(Framebuffer const &) = delete;
   Framebuffer &operator=(Framebuffer const &) = delete;
-  //Framebuffer(Framebuffer const &) = delete;
-  //Framebuffer operator=(Framebuffer const &) = delete;
+  // Framebuffer(Framebuffer const &) = delete;
+  // Framebuffer operator=(Framebuffer const &) = delete;
   // Move constructor
   Framebuffer(Framebuffer &&other) noexcept;
   // Move asignment
@@ -28,9 +28,9 @@ public:
 private:
   void Destroy();
   [[nodiscard]] VkFramebuffer Create(const VkRenderPass &render_pass,
-                       const VkImageView &swapchain_image_view,
-                       const VkExtent2D &swapchain_extent,
-                       const VkImageView &depth_image_view) const;
+                                     const VkImageView &swapchain_image_view,
+                                     const VkExtent2D &swapchain_extent,
+                                     const VkImageView &depth_image_view) const;
   // Pointer to resource this object is created with
   VkDevice const context_device_;
   VkFramebuffer framebuffer_ = VK_NULL_HANDLE;

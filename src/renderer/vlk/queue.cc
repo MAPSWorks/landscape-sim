@@ -4,6 +4,7 @@
 #include "lsim/renderer/vlk/queue.h"
 
 #include <vector>
+#include <array>
 
 #include <vulkan/vulkan.h>
 
@@ -15,7 +16,7 @@ namespace lsim::renderer::vlk {
 namespace {
 // Retrieve queue from the given device
 VkQueue GetDeviceQueue(const VkDevice &device, uint32_t family_index) {
-  VkQueue queue;
+  VkQueue queue = VK_NULL_HANDLE;
   vkGetDeviceQueue(device, family_index, 0, &queue);
   return queue;
 }
@@ -29,7 +30,7 @@ Queue::Queue(const VkDevice &device, uint32_t family_index)
                   family_index);
 }
 
-const VkQueue &Queue::Handle() const { return queue_; }
+VkQueue Queue::Handle() const { return queue_; }
 
 void Queue::Submit(const std::vector<VkCommandBuffer> &command_buffers,
                    const std::vector<VkSemaphore> &wait_semaphores,
@@ -55,12 +56,13 @@ VkResult Queue::Present(const VkSwapchainKHR &swapchain, uint32_t image_index,
                         const VkSemaphore &wait_semaphore) const {
   VkPresentInfoKHR present_info{};
   present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-  const VkSemaphore wait_semaphores[] = {wait_semaphore};
+  //const VkSemaphore wait_semaphores[] = {wait_semaphore};
+  const std::array wait_semaphores{wait_semaphore};
   present_info.waitSemaphoreCount = 1;
-  present_info.pWaitSemaphores = wait_semaphores;
-  VkSwapchainKHR swap_chains[] = {swapchain};
+  present_info.pWaitSemaphores = wait_semaphores.data();
+  const std::array swap_chains{swapchain};
   present_info.swapchainCount = 1;
-  present_info.pSwapchains = swap_chains;
+  present_info.pSwapchains = swap_chains.data();
   present_info.pImageIndices = &image_index;
   // Error in this doesnt necessarily means that we need to throw exception
   return vkQueuePresentKHR(queue_, &present_info);
