@@ -9,6 +9,7 @@
 
 #include "lsim/base/log.h"
 #include "lsim/renderer/vlk/instance.h"
+#include "lsim/renderer/vlk/validation.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
@@ -18,14 +19,14 @@ DebugMessenger::DebugMessenger(const Instance &instance)
 }
 
 DebugMessenger::~DebugMessenger() {
-  if (instance_.ValidationEnabled()) {
+  if (Validation::kEnabled) {
     base::Log::Info("renderer", "debug messenger", "destroying..");
     DestroyDebugUtilsMessengerEXT(instance_.Handle(), debug_messanger_, nullptr);
   }
 }
 
 VkDebugUtilsMessengerEXT DebugMessenger::Create() const {
-  if (instance_.ValidationEnabled()) {
+  if (Validation::kEnabled) {
     VkDebugUtilsMessengerCreateInfoEXT create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     create_info.messageSeverity =

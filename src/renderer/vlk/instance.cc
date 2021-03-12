@@ -92,6 +92,4 @@ VkInstance Instance::Create(const std::string &name, uint32_t version,
   return instance;
 }
 
-bool Instance::ValidationEnabled() const { return Validation::kEnabled; }
-
 } // namespace lsim::renderer::vlk
