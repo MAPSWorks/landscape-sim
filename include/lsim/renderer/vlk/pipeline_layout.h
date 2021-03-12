@@ -16,7 +16,7 @@ public:
                  const VkPipelineLayoutCreateInfo &create_info);
   ~PipelineLayout();
   PipelineLayout(PipelineLayout const &) = delete;
-  PipelineLayout operator=(PipelineLayout const &) = delete;
+  PipelineLayout &operator=(PipelineLayout const &) = delete;
   PipelineLayout(PipelineLayout &&) = delete;
   PipelineLayout &operator=(PipelineLayout &&) = delete;
   // Returns Vulkan object handle
