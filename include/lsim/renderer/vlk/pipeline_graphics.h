@@ -13,15 +13,17 @@ public:
                    const VkGraphicsPipelineCreateInfo &create_info);
   ~PipelineGraphics();
   PipelineGraphics(PipelineGraphics const &) = delete;
-  PipelineGraphics operator=(PipelineGraphics const &) = delete;
+  PipelineGraphics &operator=(PipelineGraphics const &) = delete;
+  PipelineGraphics(PipelineGraphics &&) = delete;
+  PipelineGraphics &operator=(PipelineGraphics &&) = delete;
   // Returns Vulkan object handle
-  const VkPipeline &Handle() const;
+  [[nodiscard]] VkPipeline Handle() const;
 
 private:
-  VkPipeline Create(const VkGraphicsPipelineCreateInfo &create_info) const;
+  [[nodiscard]] VkPipeline Create(const VkGraphicsPipelineCreateInfo &create_info) const;
   // Reference to resource this object is created with
   VkDevice const context_device_;
-  const VkPipeline pipeline_ = VK_NULL_HANDLE;
+  VkPipeline const pipeline_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 

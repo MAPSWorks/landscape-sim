@@ -20,12 +20,12 @@ PipelineGraphics::~PipelineGraphics() {
   vkDestroyPipeline(context_device_, pipeline_, nullptr);
 }
 
-const VkPipeline &PipelineGraphics::Handle() const { return pipeline_; }
+VkPipeline PipelineGraphics::Handle() const { return pipeline_; }
 
 VkPipeline PipelineGraphics::Create(
     const VkGraphicsPipelineCreateInfo &create_info) const {
 
-  VkPipeline pipeline;
+  VkPipeline pipeline  = VK_NULL_HANDLE;
   ErrorCheck(vkCreateGraphicsPipelines(context_device_, VK_NULL_HANDLE, 1, &create_info,
                                        nullptr, &pipeline));
   return pipeline;
