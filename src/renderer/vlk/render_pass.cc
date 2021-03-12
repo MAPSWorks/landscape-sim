@@ -52,7 +52,7 @@ DescribeAttachments(const VkFormat &swapchain_format,
   (void)depth_attachment;
   // The index of the attachment in this array is directly referenced from the
   // fragment shader with the layout(location = 0) out vec4 outColor directive!
-  // TODO: attachments should be added somehow dynamically to control their
+  // TODO(ivars): attachments should be added somehow dynamically to control their
   // index in array
   std::vector<VkAttachmentDescription> attachments = {color_attachment /*,
                                                       depth_attachment*/};
@@ -71,7 +71,7 @@ RenderPass::~RenderPass() {
   vkDestroyRenderPass(context_device_, render_pass_, nullptr);
 }
 
-const VkRenderPass &RenderPass::Handle() const { return render_pass_; }
+VkRenderPass RenderPass::Handle() const { return render_pass_; }
 
 // Defines how many color and depth buffers there will be, how many samples to
 // use for each of them and how their contents should be handled throughout the
@@ -124,7 +124,7 @@ VkRenderPass RenderPass::Create(const VkFormat &swapchain_format,
   render_pass_create_info.pSubpasses = &subpass;
   render_pass_create_info.dependencyCount = 1;
   render_pass_create_info.pDependencies = &dependency;
-  VkRenderPass render_pass;
+  VkRenderPass render_pass = VK_NULL_HANDLE;
   ErrorCheck(vkCreateRenderPass(context_device_, &render_pass_create_info, nullptr,
                                 &render_pass));
   return render_pass;

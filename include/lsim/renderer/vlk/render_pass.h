@@ -15,16 +15,18 @@ public:
              const VkFormat &depth_format);
   ~RenderPass();
   RenderPass(RenderPass const &) = delete;
-  RenderPass operator=(RenderPass const &) = delete;
+  RenderPass &operator=(RenderPass const &) = delete;
+  RenderPass(RenderPass &&) = delete;
+  RenderPass &operator=(RenderPass &&) = delete;
   // Returns Vulkan object handle
-  const VkRenderPass &Handle() const;
+  [[nodiscard]] VkRenderPass Handle() const;
 
 private:
-  VkRenderPass Create(const VkFormat &swapchain_format,
-                      const VkFormat &depth_format) const;
+  [[nodiscard]] VkRenderPass Create(const VkFormat &swapchain_format,
+                                    const VkFormat &depth_format) const;
   // Pointer to object this resource was created with
   VkDevice const context_device_;
-  const VkRenderPass render_pass_ = VK_NULL_HANDLE;
+  VkRenderPass const render_pass_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 #endif
