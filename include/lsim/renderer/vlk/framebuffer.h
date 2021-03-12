@@ -14,6 +14,8 @@ public:
               const VkExtent2D &swapchain_extent,
               const VkImageView &depth_image_view);
   ~Framebuffer();
+  Framebuffer(Framebuffer const &) = delete;
+  Framebuffer &operator=(Framebuffer const &) = delete;
   //Framebuffer(Framebuffer const &) = delete;
   //Framebuffer operator=(Framebuffer const &) = delete;
   // Move constructor
@@ -21,11 +23,11 @@ public:
   // Move asignment
   Framebuffer &operator=(Framebuffer &&other) noexcept;
   // Returns Vulkan object handle
-  const VkFramebuffer &Handle() const;
+  [[nodiscard]] VkFramebuffer Handle() const;
 
 private:
   void Destroy();
-  VkFramebuffer Create(const VkRenderPass &render_pass,
+  [[nodiscard]] VkFramebuffer Create(const VkRenderPass &render_pass,
                        const VkImageView &swapchain_image_view,
                        const VkExtent2D &swapchain_extent,
                        const VkImageView &depth_image_view) const;

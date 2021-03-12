@@ -42,7 +42,7 @@ Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
   return *this;
 }
 
-const VkFramebuffer &Framebuffer::Handle() const { return framebuffer_; }
+VkFramebuffer Framebuffer::Handle() const { return framebuffer_; }
 
 VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
                                   const VkImageView &swapchain_image_view,
@@ -61,7 +61,7 @@ VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
   framebuffer_create_info.width = swapchain_extent.width;
   framebuffer_create_info.height = swapchain_extent.height;
   framebuffer_create_info.layers = 1;
-  VkFramebuffer framebuffer;
+  VkFramebuffer framebuffer = VK_NULL_HANDLE;
   ErrorCheck(vkCreateFramebuffer(context_device_, &framebuffer_create_info, nullptr,
                                  &framebuffer));
   return framebuffer;
