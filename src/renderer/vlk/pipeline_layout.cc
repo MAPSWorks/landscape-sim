@@ -20,13 +20,13 @@ PipelineLayout::~PipelineLayout() {
   vkDestroyPipelineLayout(context_device_, pipeline_layout_, nullptr);
 }
 
-const VkPipelineLayout &PipelineLayout::Handle() const { return pipeline_layout_; }
+VkPipelineLayout PipelineLayout::Handle() const { return pipeline_layout_; }
 
 VkPipelineLayout
 PipelineLayout::Create(const VkPipelineLayoutCreateInfo &create_info) const {
-  VkPipelineLayout pipeline_layout;
-  ErrorCheck(
-      vkCreatePipelineLayout(context_device_, &create_info, nullptr, &pipeline_layout));
+  VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+  ErrorCheck(vkCreatePipelineLayout(context_device_, &create_info, nullptr,
+                                    &pipeline_layout));
   return pipeline_layout;
 }
 

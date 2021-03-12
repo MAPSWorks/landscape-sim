@@ -17,14 +17,16 @@ public:
   ~PipelineLayout();
   PipelineLayout(PipelineLayout const &) = delete;
   PipelineLayout operator=(PipelineLayout const &) = delete;
+  PipelineLayout(PipelineLayout &&) = delete;
+  PipelineLayout &operator=(PipelineLayout &&) = delete;
   // Returns Vulkan object handle
-  const VkPipelineLayout &Handle() const;
+  [[nodiscard]] VkPipelineLayout Handle() const;
 
 private:
-  VkPipelineLayout Create(const VkPipelineLayoutCreateInfo &create_info) const;
+  [[nodiscard]] VkPipelineLayout Create(const VkPipelineLayoutCreateInfo &create_info) const;
   // Pointer to object this resource was created with
   VkDevice const context_device_;
-  const VkPipelineLayout pipeline_layout_ = VK_NULL_HANDLE;
+  VkPipelineLayout const pipeline_layout_ = VK_NULL_HANDLE;
 };
 
 } // namespace lsim::renderer::vlk
