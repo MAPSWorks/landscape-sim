@@ -75,7 +75,7 @@ VkInstance Instance::Create(const std::string &name, uint32_t version,
   // Extensions
   auto extensions = GetExtensions(window);
   // Add extentions from validation
-  validation_.AppendExtentions(extensions);
+  Validation::AppendExtentions(extensions);
   create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
   create_info.ppEnabledExtensionNames = extensions.data();
   // Validation layers
@@ -92,6 +92,6 @@ VkInstance Instance::Create(const std::string &name, uint32_t version,
   return instance;
 }
 
-bool Instance::ValidationEnabled() const { return validation_.Enabled(); }
+bool Instance::ValidationEnabled() const { return Validation::kEnabled; }
 
 } // namespace lsim::renderer::vlk

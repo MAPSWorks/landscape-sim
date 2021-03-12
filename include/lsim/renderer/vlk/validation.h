@@ -12,22 +12,21 @@ namespace lsim::renderer::vlk {
 // Layer validation should be called before instance creation.
 class Validation {
 public:
-  Validation();
-  bool Enabled() const;
   // Add required extentions for our validation layers to the given extentions
   // vector
-  void AppendExtentions(std::vector<const char *> &extensions) const;
-  const std::vector<const char *> &Layers() const;
+  static void AppendExtentions(std::vector<const char *> &extensions);
+  // Enable validation layers depending on if this is a debug build
+#ifdef _DEBUG
+  static constexpr bool kEnabled = true;
+#else
+  static constexpr bool kEnabled = false;
+#endif
+  Validation();
+  [[nodiscard]] const std::vector<const char *> &Layers() const;
 
 private:
   // Check if required layers are available
-  bool IsLayersSupported() const;
-  // Enable validation layers depending on if this is a debug build
-#ifdef _DEBUG
-  static constexpr bool enabled_ = true;
-#else
-  static constexpr bool enabled_ = false;
-#endif
+  [[nodiscard]] bool IsLayersSupported() const;
   // Validation layers
   std::vector<const char *> layers_;
 };
