@@ -19,12 +19,12 @@ Semaphore::~Semaphore() {
   vkDestroySemaphore(context_device_, semaphore_, nullptr);
 }
 
-const VkSemaphore &Semaphore::Handle() const { return semaphore_; }
+VkSemaphore Semaphore::Handle() const { return semaphore_; }
 
 VkSemaphore Semaphore::Create() const {
   VkSemaphoreCreateInfo create_info = {};
   create_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-  VkSemaphore semaphore;
+  VkSemaphore semaphore = VK_NULL_HANDLE;
   ErrorCheck(vkCreateSemaphore(context_device_, &create_info, nullptr, &semaphore));
   return semaphore;
 }
