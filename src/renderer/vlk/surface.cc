@@ -9,6 +9,7 @@
 #include <SDL2/SDL_vulkan.h>
 #include <vulkan/vulkan.h>
 
+#include "SDL_stdinc.h"
 #include "lsim/base/log.h"
 
 namespace lsim::renderer::vlk {
@@ -22,12 +23,12 @@ Surface::~Surface() {
   vkDestroySurfaceKHR(context_instance_, surface_, nullptr);
 }
 
-const VkSurfaceKHR &Surface::Handle() const { return surface_; }
+VkSurfaceKHR Surface::Handle() const { return surface_; }
 
 VkSurfaceKHR Surface::Create(SDL_Window *window) const {
-  VkSurfaceKHR surface;
+  VkSurfaceKHR surface = VK_NULL_HANDLE;
   // No typical error check here because this is SDL function
-  if (!SDL_Vulkan_CreateSurface(window, context_instance_, &surface)) {
+  if (SDL_Vulkan_CreateSurface(window, context_instance_, &surface) == SDL_FALSE) {
     throw std::runtime_error("renderer: failed to create window surface");
   }
   return surface;
