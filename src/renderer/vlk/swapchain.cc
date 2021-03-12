@@ -46,8 +46,10 @@ VkPresentModeKHR SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) {
   for (const auto &present_mode : modes) {
     // This is the best case so we return imidiatly if encountered
     if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-      return present_mode;
-    } else if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+      preferred_mode =  present_mode;
+      break;
+    }
+    if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
       preferred_mode = present_mode;
     }
   }
@@ -67,7 +69,8 @@ VkExtent2D RetrieveWindowExtent(const VkSurfaceCapabilitiesKHR &caps,
     // Instead of passing dimensions we retrieve these values from framebuffer
     // Could also retrieve from window but not safe because window dimensions
     // and framebuffer may not match.
-    int width, height;
+    int width = 0;
+    int height = 0;
     SDL_Vulkan_GetDrawableSize(window, &width, &height);
     VkExtent2D actual_extent = {static_cast<uint32_t>(width),
                                 static_cast<uint32_t>(height)};
@@ -105,7 +108,7 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
   vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface,
                                             &details.capabilities);
   // Formats
-  uint32_t format_count;
+  uint32_t format_count = 0;
   vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &format_count, nullptr);
   if (format_count != 0) {
     details.formats.resize(format_count);
@@ -113,7 +116,7 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
                                          details.formats.data());
   }
   // Present modes
-  uint32_t present_mode_count;
+  uint32_t present_mode_count = 0;
   vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &present_mode_count,
                                             nullptr);
   if (present_mode_count != 0) {
@@ -143,7 +146,7 @@ Swapchain::~Swapchain() {
   vkDestroySwapchainKHR(context_device_, swapchain_, nullptr);
 }
 
-const VkSwapchainKHR &Swapchain::Handle() const { return swapchain_; }
+VkSwapchainKHR Swapchain::Handle() const { return swapchain_; }
 
 const VkExtent2D &Swapchain::Extent() const { return extent_; }
 
@@ -159,7 +162,7 @@ const std::vector<ImageView> &Swapchain::ImageViews() const {
 // presentation engine has released ownership of the image
 uint32_t
 Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
-  uint32_t image_index;
+  uint32_t image_index = 0;
   constexpr auto unlimited_timeout = std::numeric_limits<uint64_t>::max();
   ErrorCheck(vkAcquireNextImageKHR(context_device_, swapchain_, unlimited_timeout,
                                    image_available_sem, VK_NULL_HANDLE,
@@ -207,7 +210,7 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
   // When swapchain needs to be recreated (resizig window) this field should be
   // set to old swachain
   create_info.oldSwapchain = VK_NULL_HANDLE;
-  VkSwapchainKHR swapchain;
+  VkSwapchainKHR swapchain = VK_NULL_HANDLE;
   ErrorCheck(vkCreateSwapchainKHR(context_device_, &create_info, nullptr, &swapchain));
   return swapchain;
 }
@@ -216,7 +219,7 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
 std::vector<VkImage> Swapchain::RetrieveImages() const {
   // Get handles to swapchain images
   // NOTE: swapchain is allowed to create more images than we specify
-  uint32_t image_count;
+  uint32_t image_count = 0;
   vkGetSwapchainImagesKHR(context_device_, swapchain_, &image_count, nullptr);
   std::vector<VkImage> swapchain_images(image_count);
   ErrorCheck(vkGetSwapchainImagesKHR(context_device_, swapchain_, &image_count,
@@ -227,7 +230,7 @@ std::vector<VkImage> Swapchain::RetrieveImages() const {
 std::vector<ImageView>
 Swapchain::CreateImageViews(const std::vector<VkImage> &images) const {
   std::vector<ImageView> image_views;
-  // Number of image views and images should mach (also their order)!
+  // Number of image views and images should match (also their order)!
   for (const auto &image : images) {
     image_views.emplace_back(context_device_, image, surface_format_.format);
   }

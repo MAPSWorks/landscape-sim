@@ -22,7 +22,7 @@ public:
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> present_modes;
     // If swapchain support is enaugh for the engine
-    bool IsCapable() const {
+    [[nodiscard]] bool IsCapable() const {
       return !formats.empty() && !present_modes.empty();
     }
   };
@@ -35,23 +35,26 @@ public:
             SDL_Window *window);
   ~Swapchain();
   Swapchain(Swapchain const &) = delete;
-  Swapchain operator=(Swapchain const &) = delete;
+  Swapchain &operator=(Swapchain const &) = delete;
+  Swapchain(Swapchain &&) = delete;
+  Swapchain &operator=(Swapchain &&) = delete;
   // Returns Vulkan object handle
-  const VkSwapchainKHR &Handle() const;
-  const VkExtent2D &Extent() const;
-  const VkSurfaceFormatKHR &SurfaceFormat() const;
-  const std::vector<ImageView> &ImageViews() const;
+  [[nodiscard]] VkSwapchainKHR Handle() const;
+  [[nodiscard]] const VkExtent2D &Extent() const;
+  [[nodiscard]] const VkSurfaceFormatKHR &SurfaceFormat() const;
+  [[nodiscard]] const std::vector<ImageView> &ImageViews() const;
   // Return next available image index from the swapchain
-  uint32_t AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
+  [[nodiscard]] uint32_t
+  AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
 
 private:
   VkSwapchainKHR Create(const VkSurfaceKHR &surface,
                         const QueueFamilies &qf_indices,
                         const VkSurfaceCapabilitiesKHR &caps);
   // Retrieve list of images from swapchain
-  std::vector<VkImage> RetrieveImages() const;
+  [[nodiscard]] std::vector<VkImage> RetrieveImages() const;
   // Create image views for given images
-  std::vector<ImageView>
+  [[nodiscard]] std::vector<ImageView>
   CreateImageViews(const std::vector<VkImage> &images) const;
   // Pointer to object this resource was created with
   VkDevice const context_device_;
@@ -63,7 +66,7 @@ private:
   // It ususlly is the same size as surface, but now always, see
   // RetrieveExtent()
   const VkExtent2D extent_;
-  const VkSwapchainKHR swapchain_ = VK_NULL_HANDLE;
+  VkSwapchainKHR const swapchain_ = VK_NULL_HANDLE;
   // List of image handles acquired from swapchain
   // Number of images should be rrtrieved from this array if needed
   const std::vector<VkImage> images_;
