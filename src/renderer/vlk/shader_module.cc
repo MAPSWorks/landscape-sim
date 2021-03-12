@@ -45,7 +45,7 @@ ShaderModule::~ShaderModule() {
   vkDestroyShaderModule(context_device_, shader_module_, nullptr);
 }
 
-const VkShaderModule &ShaderModule::Handle() const { return shader_module_; }
+VkShaderModule ShaderModule::Handle() const { return shader_module_; }
 
 VkShaderModule ShaderModule::Create(const std::string &file_name) const {
   // It is ok that this buffer is destroyed on exiting function
@@ -54,9 +54,9 @@ VkShaderModule ShaderModule::Create(const std::string &file_name) const {
   create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
   create_info.codeSize = spirv_data.size();
   create_info.pCode = reinterpret_cast<const uint32_t *>(spirv_data.data());
-  VkShaderModule shader_module;
-  ErrorCheck(
-      vkCreateShaderModule(context_device_, &create_info, nullptr, &shader_module));
+  VkShaderModule shader_module = VK_NULL_HANDLE;
+  ErrorCheck(vkCreateShaderModule(context_device_, &create_info, nullptr,
+                                  &shader_module));
   return shader_module;
 }
 } // namespace lsim::renderer::vlk

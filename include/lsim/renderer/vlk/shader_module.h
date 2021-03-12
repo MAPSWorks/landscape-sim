@@ -19,17 +19,19 @@ public:
   ShaderModule(VkDevice device, const std::string &file_path);
   ~ShaderModule();
   ShaderModule(ShaderModule const &) = delete;
-  ShaderModule operator=(ShaderModule const &) = delete;
+  ShaderModule &operator=(ShaderModule const &) = delete;
+  ShaderModule(ShaderModule &&) = delete;
+  ShaderModule &operator=(ShaderModule &&) = delete;
   // Returns Vulkan object handle
-  const VkShaderModule &Handle() const;
+  [[nodiscard]] VkShaderModule Handle() const;
 
 private:
-  VkShaderModule Create(const std::string &file_name) const;
+  [[nodiscard]] VkShaderModule Create(const std::string &file_name) const;
   // Pointer to resource this object is created with
   VkDevice const context_device_;
   // To store path to file this module was created from
   const std::string file_path_;
-  const VkShaderModule shader_module_ = VK_NULL_HANDLE;
+  VkShaderModule const shader_module_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 
