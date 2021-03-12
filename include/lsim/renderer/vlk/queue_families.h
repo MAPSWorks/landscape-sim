@@ -17,13 +17,13 @@ public:
   using Index = uint32_t;
   QueueFamilies(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
   // Checks if all required queue families are available
-  bool Complete() const;
+  [[nodiscard]] bool Complete() const;
   // Checks if graphics and presentation queues families are the same
-  bool GraphicsPresentMatch() const;
+  [[nodiscard]] bool GraphicsPresentMatch() const;
   // Accessor
-  Index Graphics() const;
+  [[nodiscard]] Index Graphics() const;
   // Accessor
-  Index Present() const;
+  [[nodiscard]] Index Present() const;
 
 private:
   // Selects queue family indices from the given gpu and surface.

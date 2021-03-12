@@ -44,9 +44,9 @@ void QueueFamilies::Select(const VkPhysicalDevice &gpu,
       graphics_ = i;
     }
 
-    VkBool32 present_support = false;
+    VkBool32 present_support = VK_FALSE;
     vkGetPhysicalDeviceSurfaceSupportKHR(gpu, i, surface, &present_support);
-    if (family.queueCount > 0 && present_support) {
+    if (family.queueCount > 0 && present_support == VK_TRUE) {
       present_ = i;
     }
     if (Complete()) {
