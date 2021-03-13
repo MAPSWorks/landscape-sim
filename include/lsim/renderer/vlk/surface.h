@@ -19,7 +19,7 @@ public:
   Surface(Surface &&) = delete;
   Surface &operator=(Surface &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkSurfaceKHR Handle() const;
+  [[nodiscard]] VkSurfaceKHR Handle();
 
 private:
   VkSurfaceKHR Create(SDL_Window *window) const;

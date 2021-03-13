@@ -23,7 +23,7 @@ Surface::~Surface() {
   vkDestroySurfaceKHR(context_instance_, surface_, nullptr);
 }
 
-VkSurfaceKHR Surface::Handle() const { return surface_; }
+VkSurfaceKHR Surface::Handle() { return surface_; }
 
 VkSurfaceKHR Surface::Create(SDL_Window *window) const {
   VkSurfaceKHR surface = VK_NULL_HANDLE;

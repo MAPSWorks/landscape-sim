@@ -27,7 +27,7 @@ private:
   // Responsible for validation info feedback output.
   // Dependent on Instance being already initialized.
   const vlk::DebugMessenger debug_messenger_;
-  const vlk::Surface surface_;
+  vlk::Surface surface_;
   vlk::Device device_;
   vlk::Swapchain swapchain_;
 };
