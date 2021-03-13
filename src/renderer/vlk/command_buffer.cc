@@ -20,7 +20,7 @@ CommandBuffer::CommandBuffer(const CommandPool &command_pool)
   base::Log::Info("renderer", "command buffer", "initialized");
 }
 
-VkCommandBuffer CommandBuffer::Handle() const { return command_buffer_; }
+VkCommandBuffer CommandBuffer::Handle() { return command_buffer_; }
 
 void CommandBuffer::Begin(CommandBuffer::Usage usage) const {
   VkCommandBufferBeginInfo begin_info = {};
