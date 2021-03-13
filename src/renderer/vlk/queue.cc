@@ -3,8 +3,8 @@
 //
 #include "lsim/renderer/vlk/queue.h"
 
-#include <vector>
 #include <array>
+#include <vector>
 
 #include <vulkan/vulkan.h>
 
@@ -15,7 +15,7 @@ namespace lsim::renderer::vlk {
 // Internal linkage
 namespace {
 // Retrieve queue from the given device
-VkQueue GetDeviceQueue(const VkDevice &device, uint32_t family_index) {
+VkQueue GetDeviceQueue(VkDevice device, uint32_t family_index) {
   VkQueue queue = VK_NULL_HANDLE;
   vkGetDeviceQueue(device, family_index, 0, &queue);
   return queue;
@@ -23,7 +23,7 @@ VkQueue GetDeviceQueue(const VkDevice &device, uint32_t family_index) {
 
 } // namespace
 
-Queue::Queue(const VkDevice &device, uint32_t family_index)
+Queue::Queue(VkDevice device, uint32_t family_index)
     : queue_(GetDeviceQueue(device, family_index)) {
 
   base::Log::Info("renderer", "queue", "retrieved", "with family index",
@@ -36,7 +36,7 @@ void Queue::Submit(const std::vector<VkCommandBuffer> &command_buffers,
                    const std::vector<VkSemaphore> &wait_semaphores,
                    const std::vector<VkPipelineStageFlags> &wait_stages,
                    const std::vector<VkSemaphore> &signal_semaphores,
-                   const VkFence &fence) const {
+                   VkFence fence) const {
   VkSubmitInfo submit_info{};
   submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
   submit_info.commandBufferCount =
@@ -52,11 +52,11 @@ void Queue::Submit(const std::vector<VkCommandBuffer> &command_buffers,
   ErrorCheck(vkQueueSubmit(queue_, 1, &submit_info, fence));
 }
 
-VkResult Queue::Present(const VkSwapchainKHR &swapchain, uint32_t image_index,
-                        const VkSemaphore &wait_semaphore) const {
+VkResult Queue::Present(VkSwapchainKHR swapchain, uint32_t image_index,
+                        VkSemaphore wait_semaphore) const {
   VkPresentInfoKHR present_info{};
   present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-  //const VkSemaphore wait_semaphores[] = {wait_semaphore};
+  // const VkSemaphore wait_semaphores[] = {wait_semaphore};
   const std::array wait_semaphores{wait_semaphore};
   present_info.waitSemaphoreCount = 1;
   present_info.pWaitSemaphores = wait_semaphores.data();
