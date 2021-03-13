@@ -10,7 +10,7 @@ class ImageView {
 public:
   // Create image view for given image with given format
   // Specify also aspect flag (color (default), depth ...)
-  ImageView(VkDevice device, const VkImage &image, VkFormat format,
+  ImageView(VkDevice device, VkImage image, VkFormat format,
             VkImageAspectFlags aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT);
   ~ImageView();
   ImageView(ImageView const &) = delete;
@@ -23,7 +23,7 @@ public:
   [[nodiscard]] VkImageView Handle();
 
 private:
-  [[nodiscard]] VkImageView Create(const VkImage &image, VkFormat format,
+  [[nodiscard]] VkImageView Create(VkImage image, VkFormat format,
                                    VkImageAspectFlags aspect_flags) const;
   void Destroy();
   // Pointer to object this resource was created with

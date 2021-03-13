@@ -10,9 +10,10 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-ImageView::ImageView(VkDevice device, const VkImage &image,
-                     VkFormat format, VkImageAspectFlags aspect_flags)
-    : context_device_(device), image_view_(Create(image, format, aspect_flags)) {
+ImageView::ImageView(VkDevice device, VkImage image, VkFormat format,
+                     VkImageAspectFlags aspect_flags)
+    : context_device_(device),
+      image_view_(Create(image, format, aspect_flags)) {
   base::Log::Info("renderer", "image view", "created");
 }
 
@@ -39,7 +40,7 @@ ImageView &ImageView::operator=(ImageView &&other) noexcept {
 
 VkImageView ImageView::Handle() { return image_view_; }
 
-VkImageView ImageView::Create(const VkImage &image, VkFormat format,
+VkImageView ImageView::Create(VkImage image, VkFormat format,
                               VkImageAspectFlags aspect_flags) const {
   VkImageViewCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -57,7 +58,8 @@ VkImageView ImageView::Create(const VkImage &image, VkFormat format,
   create_info.subresourceRange.baseArrayLayer = 0;
   create_info.subresourceRange.layerCount = 1;
   VkImageView image_view = VK_NULL_HANDLE;
-  ErrorCheck(vkCreateImageView(context_device_, &create_info, nullptr, &image_view));
+  ErrorCheck(
+      vkCreateImageView(context_device_, &create_info, nullptr, &image_view));
   return image_view;
 }
 
