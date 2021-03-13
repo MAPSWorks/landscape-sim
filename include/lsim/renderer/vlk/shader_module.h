@@ -23,7 +23,7 @@ public:
   ShaderModule(ShaderModule &&) = delete;
   ShaderModule &operator=(ShaderModule &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkShaderModule Handle() const;
+  [[nodiscard]] VkShaderModule Handle();
 
 private:
   [[nodiscard]] VkShaderModule Create(const std::string &file_name) const;
