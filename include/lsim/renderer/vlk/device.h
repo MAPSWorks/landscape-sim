@@ -33,7 +33,7 @@ public:
   Device(Device &&) = delete;
   Device &operator=(Device &&) = delete;
   // Returns reference to Vulkan physical device abstraction
-  [[nodiscard]] const PhysicalDevice &GPU() const;
+  [[nodiscard]] PhysicalDevice &GPU();
   // Returns reference to Vulkan logical device object
   [[nodiscard]] VkDevice Handle();
   // Returns containing abstractions
@@ -48,7 +48,7 @@ private:
   // Device extentions that the logical device has to support
   const std::vector<const char *> required_extentions_;
   // The selected device Vulkan is going to use, aka physical device
-  const PhysicalDevice gpu_;
+  PhysicalDevice gpu_;
   const class QueueFamilies queue_families_;
   VkDevice const device_ = VK_NULL_HANDLE;
   const struct Queues queues_;

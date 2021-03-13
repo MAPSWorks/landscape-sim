@@ -29,9 +29,9 @@ public:
   };
   // Gets and returns swapchain support details from given physical device and
   // surface
-  static SupportDetails QuerySupport(const VkPhysicalDevice &gpu,
+  static SupportDetails QuerySupport(VkPhysicalDevice gpu,
                                      const VkSurfaceKHR &surface);
-  Swapchain(VkDevice device, const VkPhysicalDevice &gpu,
+  Swapchain(VkDevice device, VkPhysicalDevice gpu,
             const VkSurfaceKHR &surface, const QueueFamilies &qf_indices,
             SDL_Window *window);
   ~Swapchain();

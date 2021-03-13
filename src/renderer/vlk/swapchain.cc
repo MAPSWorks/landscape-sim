@@ -102,7 +102,7 @@ uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) {
 } // namespace
 
 // static
-Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
+Swapchain::SupportDetails Swapchain::QuerySupport(VkPhysicalDevice gpu,
                                                   const VkSurfaceKHR &surface) {
   SupportDetails details;
   // Capabilities
@@ -129,7 +129,7 @@ Swapchain::SupportDetails Swapchain::QuerySupport(const VkPhysicalDevice &gpu,
   return details;
 }
 
-Swapchain::Swapchain(VkDevice device, const VkPhysicalDevice &gpu,
+Swapchain::Swapchain(VkDevice device, VkPhysicalDevice gpu,
                      const VkSurfaceKHR &surface,
                      const QueueFamilies &qf_indices, SDL_Window *window)
     : context_device_(device), support_details_(QuerySupport(gpu, surface)),

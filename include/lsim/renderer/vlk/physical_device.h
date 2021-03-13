@@ -10,7 +10,7 @@ namespace lsim::renderer::vlk {
 class PhysicalDevice {
 public:
   PhysicalDevice(const VkInstance &instance, const VkSurfaceKHR &surface);
-  [[nodiscard]] VkPhysicalDevice Handle() const;
+  [[nodiscard]] VkPhysicalDevice Handle();
 
 private:
   // The selected device the engine is going to use, aka physical device

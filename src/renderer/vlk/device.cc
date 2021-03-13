@@ -29,7 +29,7 @@ Device::~Device() {
   vkDestroyDevice(device_, nullptr);
 }
 
-const PhysicalDevice &Device::GPU() const { return gpu_; }
+PhysicalDevice &Device::GPU() { return gpu_; }
 
 VkDevice Device::Handle() { return device_; }
 

@@ -70,7 +70,7 @@ PhysicalDevice::PhysicalDevice(const VkInstance &instance,
   PrintDeviceProperties(physical_device_);
 }
 
-VkPhysicalDevice PhysicalDevice::Handle() const {
+VkPhysicalDevice PhysicalDevice::Handle() {
   return physical_device_;
 }
 } // namespace lsim::renderer::vlk
