@@ -20,7 +20,7 @@ public:
   PipelineLayout(PipelineLayout &&) = delete;
   PipelineLayout &operator=(PipelineLayout &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkPipelineLayout Handle() const;
+  [[nodiscard]] VkPipelineLayout Handle();
 
 private:
   [[nodiscard]] VkPipelineLayout Create(const VkPipelineLayoutCreateInfo &create_info) const;
