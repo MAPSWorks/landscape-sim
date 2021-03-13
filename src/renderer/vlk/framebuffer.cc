@@ -12,10 +12,10 @@
 
 namespace lsim::renderer::vlk {
 Framebuffer::Framebuffer(VkDevice device,
-                         const VkRenderPass &render_pass,
-                         const VkImageView &swapchain_image_view,
+                         VkRenderPass render_pass,
+                         VkImageView swapchain_image_view,
                          const VkExtent2D &swapchain_extent,
-                         const VkImageView &depth_image_view)
+                         VkImageView depth_image_view)
     : context_device_(device),
       framebuffer_(Create(render_pass, swapchain_image_view, swapchain_extent,
                           depth_image_view)) {
@@ -44,10 +44,10 @@ Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
 
 VkFramebuffer Framebuffer::Handle() { return framebuffer_; }
 
-VkFramebuffer Framebuffer::Create(const VkRenderPass &render_pass,
-                                  const VkImageView &swapchain_image_view,
+VkFramebuffer Framebuffer::Create(VkRenderPass render_pass,
+                                  VkImageView swapchain_image_view,
                                   const VkExtent2D &swapchain_extent,
-                                  const VkImageView &depth_image_view) const {
+                                  VkImageView depth_image_view) const {
   (void)depth_image_view;
   const std::vector<VkImageView> attachments = {swapchain_image_view/*,
                                                 depth_image_view*/};
