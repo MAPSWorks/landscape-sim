@@ -15,7 +15,7 @@ namespace lsim::renderer::vlk {
 class Queue {
 public:
   Queue(const VkDevice &device, uint32_t family_index);
-  [[nodiscard]] VkQueue Handle() const;
+  [[nodiscard]] VkQueue Handle();
   void Submit(const std::vector<VkCommandBuffer> &command_buffers,
               const std::vector<VkSemaphore> &wait_semaphores,
               const std::vector<VkPipelineStageFlags> &wait_stages,

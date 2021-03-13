@@ -30,7 +30,7 @@ Queue::Queue(const VkDevice &device, uint32_t family_index)
                   family_index);
 }
 
-VkQueue Queue::Handle() const { return queue_; }
+VkQueue Queue::Handle() { return queue_; }
 
 void Queue::Submit(const std::vector<VkCommandBuffer> &command_buffers,
                    const std::vector<VkSemaphore> &wait_semaphores,
