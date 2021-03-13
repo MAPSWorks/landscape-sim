@@ -32,7 +32,7 @@ public:
   CommandPool(CommandPool &&) = delete;
   CommandPool &operator=(CommandPool &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkCommandPool Handle() const;
+  [[nodiscard]] VkCommandPool Handle();
   // Allocate and return command buffer of a given level
   [[nodiscard]] VkCommandBuffer
   AllocateCommandBuffer(BufferLevel level = BufferLevel::kPrimary) const;

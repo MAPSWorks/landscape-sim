@@ -23,7 +23,7 @@ CommandPool::~CommandPool() {
   vkDestroyCommandPool(context_device_, command_pool_, nullptr);
 }
 
-VkCommandPool CommandPool::Handle() const { return command_pool_; }
+VkCommandPool CommandPool::Handle() { return command_pool_; }
 
 // Command buffer alloceted will be destroyed implicitly with pool destruction
 VkCommandBuffer CommandPool::AllocateCommandBuffer(BufferLevel level) const {
