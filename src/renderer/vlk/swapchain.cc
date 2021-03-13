@@ -147,7 +147,7 @@ Swapchain::~Swapchain() {
   vkDestroySwapchainKHR(context_device_, swapchain_, nullptr);
 }
 
-VkSwapchainKHR Swapchain::Handle() const { return swapchain_; }
+VkSwapchainKHR Swapchain::Handle() { return swapchain_; }
 
 const VkExtent2D &Swapchain::Extent() const { return extent_; }
 

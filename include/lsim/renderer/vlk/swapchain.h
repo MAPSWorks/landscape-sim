@@ -40,7 +40,7 @@ public:
   Swapchain(Swapchain &&) = delete;
   Swapchain &operator=(Swapchain &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkSwapchainKHR Handle() const;
+  [[nodiscard]] VkSwapchainKHR Handle();
   [[nodiscard]] const VkExtent2D &Extent() const;
   [[nodiscard]] const VkSurfaceFormatKHR &SurfaceFormat() const;
   [[nodiscard]] const std::vector<std::unique_ptr<ImageView>> &ImageViews();
