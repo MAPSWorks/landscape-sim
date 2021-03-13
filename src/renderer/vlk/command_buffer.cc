@@ -34,8 +34,8 @@ void CommandBuffer::End() const {
   ErrorCheck(vkEndCommandBuffer(command_buffer_));
 }
 
-void CommandBuffer::BeginRenderPass(const VkRenderPass &render_pass,
-                                    const VkFramebuffer &frame_buffer,
+void CommandBuffer::BeginRenderPass(VkRenderPass render_pass,
+                                    VkFramebuffer frame_buffer,
                                     const VkExtent2D &render_area) const {
   VkRenderPassBeginInfo render_pass_info{};
   render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -63,7 +63,7 @@ void CommandBuffer::EndRenderPass() const {
   vkCmdEndRenderPass(command_buffer_);
 }
 
-void CommandBuffer::BindGraphicsPipeline(const VkPipeline &pipeline) const {
+void CommandBuffer::BindGraphicsPipeline(VkPipeline pipeline) const {
   vkCmdBindPipeline(command_buffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 

@@ -31,11 +31,11 @@ public:
   // End recording to the command buffer
   void End() const;
   // Begin iven render pass using given framebuffer as an attachment
-  void BeginRenderPass(const VkRenderPass &render_pass,
-                       const VkFramebuffer &frame_buffer,
+  void BeginRenderPass(VkRenderPass render_pass,
+                       VkFramebuffer frame_buffer,
                        const VkExtent2D &render_area) const;
   void EndRenderPass() const;
-  void BindGraphicsPipeline(const VkPipeline &pipeline) const;
+  void BindGraphicsPipeline(VkPipeline pipeline) const;
   // Draw command
   void Draw(uint32_t vertex_count, uint32_t instance_count = 1,
             uint32_t first_vertex = 0, uint32_t first_instance = 0) const;
