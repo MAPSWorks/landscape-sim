@@ -23,7 +23,7 @@ public:
   // Move asignment
   Framebuffer &operator=(Framebuffer &&other) noexcept;
   // Returns Vulkan object handle
-  [[nodiscard]] VkFramebuffer Handle() const;
+  [[nodiscard]] VkFramebuffer Handle();
 
 private:
   void Destroy();
