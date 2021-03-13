@@ -103,7 +103,7 @@ uint32_t SelectImageCount(const VkSurfaceCapabilitiesKHR &caps) {
 
 // static
 Swapchain::SupportDetails Swapchain::QuerySupport(VkPhysicalDevice gpu,
-                                                  const VkSurfaceKHR &surface) {
+                                                  VkSurfaceKHR surface) {
   SupportDetails details;
   // Capabilities
   vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface,
@@ -130,8 +130,8 @@ Swapchain::SupportDetails Swapchain::QuerySupport(VkPhysicalDevice gpu,
 }
 
 Swapchain::Swapchain(VkDevice device, VkPhysicalDevice gpu,
-                     const VkSurfaceKHR &surface,
-                     const QueueFamilies &qf_indices, SDL_Window *window)
+                     VkSurfaceKHR surface, const QueueFamilies &qf_indices,
+                     SDL_Window *window)
     : context_device_(device), support_details_(QuerySupport(gpu, surface)),
       surface_format_(SelectSurfaceFormat(support_details_.formats)),
       present_mode_(SelectPresentMode(support_details_.present_modes)),
@@ -162,7 +162,7 @@ const std::vector<std::unique_ptr<ImageView>> &Swapchain::ImageViews() {
 // image_available_semaphore - a semaphore that will become signaled when the
 // presentation engine has released ownership of the image
 uint32_t
-Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
+Swapchain::AcquireNextImageIndex(VkSemaphore image_available_sem) const {
   uint32_t image_index = 0;
   constexpr auto unlimited_timeout = std::numeric_limits<uint64_t>::max();
   ErrorCheck(vkAcquireNextImageKHR(context_device_, swapchain_,
@@ -171,7 +171,7 @@ Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
   return image_index;
 }
 
-VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
+VkSwapchainKHR Swapchain::Create(VkSurfaceKHR surface,
                                  const QueueFamilies &qf_indices,
                                  const VkSurfaceCapabilitiesKHR &caps) {
   const auto min_image_count = SelectImageCount(caps);

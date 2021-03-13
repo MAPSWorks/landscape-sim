@@ -30,9 +30,9 @@ public:
   // Gets and returns swapchain support details from given physical device and
   // surface
   static SupportDetails QuerySupport(VkPhysicalDevice gpu,
-                                     const VkSurfaceKHR &surface);
+                                     VkSurfaceKHR surface);
   Swapchain(VkDevice device, VkPhysicalDevice gpu,
-            const VkSurfaceKHR &surface, const QueueFamilies &qf_indices,
+            VkSurfaceKHR surface, const QueueFamilies &qf_indices,
             SDL_Window *window);
   ~Swapchain();
   Swapchain(Swapchain const &) = delete;
@@ -46,10 +46,10 @@ public:
   [[nodiscard]] const std::vector<std::unique_ptr<ImageView>> &ImageViews();
   // Return next available image index from the swapchain
   [[nodiscard]] uint32_t
-  AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
+  AcquireNextImageIndex(VkSemaphore image_available_sem) const;
 
 private:
-  VkSwapchainKHR Create(const VkSurfaceKHR &surface,
+  VkSwapchainKHR Create(VkSurfaceKHR surface,
                         const QueueFamilies &qf_indices,
                         const VkSurfaceCapabilitiesKHR &caps);
   // Retrieve list of images from swapchain
