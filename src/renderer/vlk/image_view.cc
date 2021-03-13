@@ -4,6 +4,7 @@
 #include "lsim/renderer/vlk/image_view.h"
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 #include "lsim/base/log.h"
 #include "vulkan_shared.h"
@@ -36,7 +37,7 @@ ImageView &ImageView::operator=(ImageView &&other) noexcept {
   return *this;
 }
 
-const VkImageView &ImageView::Handle() const { return image_view_; }
+VkImageView ImageView::Handle() const { return image_view_; }
 
 VkImageView ImageView::Create(const VkImage &image, VkFormat format,
                               VkImageAspectFlags aspect_flags) const {
@@ -55,7 +56,7 @@ VkImageView ImageView::Create(const VkImage &image, VkFormat format,
   create_info.subresourceRange.levelCount = 1;
   create_info.subresourceRange.baseArrayLayer = 0;
   create_info.subresourceRange.layerCount = 1;
-  VkImageView image_view;
+  VkImageView image_view = VK_NULL_HANDLE;
   ErrorCheck(vkCreateImageView(context_device_, &create_info, nullptr, &image_view));
   return image_view;
 }

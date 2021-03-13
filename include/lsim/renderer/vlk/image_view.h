@@ -13,18 +13,18 @@ public:
   ImageView(VkDevice device, const VkImage &image, VkFormat format,
             VkImageAspectFlags aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT);
   ~ImageView();
-  //ImageView(ImageView const &) = delete;
-  //ImageView operator=(ImageView const &) = delete;
+  ImageView(ImageView const &) = delete;
+  ImageView &operator=(ImageView const &) = delete;
   // Move constructor
   ImageView(ImageView &&other) noexcept;
   // Move asignment
   ImageView &operator=(ImageView &&other) noexcept;
   // Returns Vulkan object handle
-  const VkImageView &Handle() const;
+  [[nodiscard]] VkImageView Handle() const;
 
 private:
-  VkImageView Create(const VkImage &image, VkFormat format,
-                     VkImageAspectFlags aspect_flags) const;
+  [[nodiscard]] VkImageView Create(const VkImage &image, VkFormat format,
+                                   VkImageAspectFlags aspect_flags) const;
   void Destroy();
   // Pointer to object this resource was created with
   VkDevice const context_device_;
