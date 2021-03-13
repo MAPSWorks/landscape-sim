@@ -9,7 +9,7 @@
 namespace lsim::renderer::vlk {
 class PhysicalDevice {
 public:
-  PhysicalDevice(const VkInstance &instance, const VkSurfaceKHR &surface);
+  PhysicalDevice(VkInstance instance, VkSurfaceKHR surface);
   [[nodiscard]] VkPhysicalDevice Handle();
 
 private:

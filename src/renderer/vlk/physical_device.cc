@@ -16,15 +16,14 @@ namespace lsim::renderer::vlk {
 // Internal linkage
 namespace {
 // Checks if given GPU satisfies requirements for this engine
-bool DeviceSuitable(const VkPhysicalDevice &physical_device,
-                    const VkSurfaceKHR &surface) {
+bool DeviceSuitable(VkPhysicalDevice physical_device, VkSurfaceKHR surface) {
   const QueueFamilies queue_families(physical_device, surface);
   const auto swapchain_support =
       Swapchain::QuerySupport(physical_device, surface);
   return queue_families.Complete() && swapchain_support.IsCapable();
 }
 
-void PrintDeviceProperties(const VkPhysicalDevice &physical_device) {
+void PrintDeviceProperties(VkPhysicalDevice physical_device) {
   // Log some properties
   VkPhysicalDeviceProperties gpu_properties;
   vkGetPhysicalDeviceProperties(physical_device, &gpu_properties);
@@ -36,8 +35,7 @@ void PrintDeviceProperties(const VkPhysicalDevice &physical_device) {
 
 // Select physical device the engine is going to se
 // Physical device is not created but acquired and need not be deleted
-VkPhysicalDevice AcquireDevice(const VkInstance &instance,
-                               const VkSurfaceKHR &surface) {
+VkPhysicalDevice AcquireDevice(VkInstance instance, VkSurfaceKHR surface) {
   // List of all physical devices available
   uint32_t device_count = 0;
   vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -64,13 +62,10 @@ VkPhysicalDevice AcquireDevice(const VkInstance &instance,
 }
 } // namespace
 
-PhysicalDevice::PhysicalDevice(const VkInstance &instance,
-                               const VkSurfaceKHR &surface)
+PhysicalDevice::PhysicalDevice(VkInstance instance, VkSurfaceKHR surface)
     : physical_device_(AcquireDevice(instance, surface)) {
   PrintDeviceProperties(physical_device_);
 }
 
-VkPhysicalDevice PhysicalDevice::Handle() {
-  return physical_device_;
-}
+VkPhysicalDevice PhysicalDevice::Handle() { return physical_device_; }
 } // namespace lsim::renderer::vlk
