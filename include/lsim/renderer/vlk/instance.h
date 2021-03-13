@@ -31,7 +31,6 @@ private:
                                   SDL_Window *window) const;
   // Validation layers and debug callbacks
   Validation validation_;
-  // NOLINTNEXTLINE - const pointer, not const pointee
   VkInstance const instance_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk

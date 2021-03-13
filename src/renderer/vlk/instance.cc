@@ -48,7 +48,8 @@ std::vector<const char *> GetExtensions(SDL_Window *window) {
 } // namespace
 
 Instance::Instance(SDL_Window *window, const platform::Settings &settings)
-    : instance_(Create(settings.name, settings.version, window)) {
+    : validation_(),
+      instance_(Create(settings.name, settings.version, window)) {
   base::Log::Info("renderer", "instance", "created");
 }
 
