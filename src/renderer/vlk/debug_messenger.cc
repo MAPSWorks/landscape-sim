@@ -13,7 +13,7 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-DebugMessenger::DebugMessenger(const Instance &instance)
+DebugMessenger::DebugMessenger(Instance &instance)
     : instance_(instance), debug_messanger_(Create()) {
   base::Log::Info("renderer", "debug messenger", "created");
 }

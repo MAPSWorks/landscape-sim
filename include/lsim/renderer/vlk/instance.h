@@ -24,7 +24,7 @@ public:
   Instance(Instance &&) = delete;
   Instance &operator=(Instance &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkInstance Handle() const;
+  [[nodiscard]] VkInstance Handle();
 
 private:
   [[nodiscard]] VkInstance Create(const std::string &name, uint32_t version,

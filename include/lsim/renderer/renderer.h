@@ -23,7 +23,7 @@ public:
   // Get vulkan swapchain abstraction object
   [[nodiscard]] const vlk::Swapchain& Swapchin() const;
 private:
-  const vlk::Instance instance_;
+  vlk::Instance instance_;
   // Responsible for validation info feedback output.
   // Dependent on Instance being already initialized.
   const vlk::DebugMessenger debug_messenger_;

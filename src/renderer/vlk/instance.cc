@@ -57,7 +57,7 @@ Instance::~Instance() {
   vkDestroyInstance(instance_, nullptr);
 }
 
-VkInstance Instance::Handle() const { return instance_; }
+VkInstance Instance::Handle() { return instance_; }
 
 VkInstance Instance::Create(const std::string &name, uint32_t version,
                             SDL_Window *window) const {

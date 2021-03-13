@@ -12,7 +12,7 @@
 namespace lsim::renderer::vlk {
 class DebugMessenger {
 public:
-  explicit DebugMessenger(const Instance &instance);
+  explicit DebugMessenger(Instance &instance);
   ~DebugMessenger();
   DebugMessenger(DebugMessenger const &) = delete;
   DebugMessenger operator=(DebugMessenger const &) = delete;
@@ -27,7 +27,7 @@ private:
                 void *user_data);
   [[nodiscard]] VkDebugUtilsMessengerEXT Create() const;
   // Reference to application instance this messenger is used with
-  const Instance &instance_;
+  Instance &instance_;
   VkDebugUtilsMessengerEXT const debug_messanger_ = VK_NULL_HANDLE;
 };
 
