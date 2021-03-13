@@ -19,7 +19,7 @@ public:
   Window(Window &&) = delete;
   Window &operator=(Window &&) = delete;
   // Get window handle
-  [[nodiscard]] SDL_Window *Handle() const;
+  [[nodiscard]] SDL_Window *Handle();
 
 private:
   // OS window handle, used to retreive data like size etc

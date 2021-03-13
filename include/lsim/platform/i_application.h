@@ -26,7 +26,7 @@ public:
 
 protected:
   [[nodiscard]] const struct Settings &Settings() const;
-  [[nodiscard]] const class Window &Window() const;
+  [[nodiscard]] class Window &Window();
   [[nodiscard]] const renderer::Renderer &Renderer() const;
 
 private:
@@ -35,7 +35,7 @@ private:
   // Applications and subsystem settings
   const struct Settings settings_;
   // Platform specific window
-  const class Window window_;
+  class Window window_;
   // Framework with which rendering is performed
   const renderer::Renderer renderer_;
 };

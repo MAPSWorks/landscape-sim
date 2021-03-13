@@ -43,5 +43,5 @@ Window::~Window() {
   SDL_Quit();
 }
 
-SDL_Window *Window::Handle() const { return window_; }
+SDL_Window *Window::Handle() { return window_; }
 } // namespace lsim::platform

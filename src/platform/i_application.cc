@@ -51,7 +51,7 @@ void IApplication::Run() {
 }
 
 const Settings &IApplication::Settings() const { return settings_; }
-const Window &IApplication::Window() const { return window_; }
+Window &IApplication::Window() { return window_; }
 const renderer::Renderer &IApplication::Renderer() const { return renderer_; }
 
 } // namespace lsim::platform
