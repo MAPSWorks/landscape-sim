@@ -20,7 +20,7 @@ public:
   // Move asignment
   ImageView &operator=(ImageView &&other) noexcept;
   // Returns Vulkan object handle
-  [[nodiscard]] VkImageView Handle() const;
+  [[nodiscard]] VkImageView Handle();
 
 private:
   [[nodiscard]] VkImageView Create(const VkImage &image, VkFormat format,

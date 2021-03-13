@@ -21,7 +21,7 @@ public:
   // Get vulkan device abstraction object
   [[nodiscard]] vlk::Device& Device();
   // Get vulkan swapchain abstraction object
-  [[nodiscard]] const vlk::Swapchain& Swapchin() const;
+  [[nodiscard]] vlk::Swapchain& Swapchin();
 private:
   vlk::Instance instance_;
   // Responsible for validation info feedback output.
@@ -29,7 +29,7 @@ private:
   const vlk::DebugMessenger debug_messenger_;
   const vlk::Surface surface_;
   vlk::Device device_;
-  const vlk::Swapchain swapchain_;
+  vlk::Swapchain swapchain_;
 };
 
 } // namespace lsim::renderer

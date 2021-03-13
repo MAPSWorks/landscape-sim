@@ -23,5 +23,5 @@ Renderer::Renderer(SDL_Window *window, const platform::Settings &settings)
 
 vlk::Device &Renderer::Device() { return device_; }
 
-const vlk::Swapchain &Renderer::Swapchin() const { return swapchain_; }
+vlk::Swapchain &Renderer::Swapchin() { return swapchain_; }
 } // namespace lsim::renderer

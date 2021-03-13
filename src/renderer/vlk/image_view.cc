@@ -37,7 +37,7 @@ ImageView &ImageView::operator=(ImageView &&other) noexcept {
   return *this;
 }
 
-VkImageView ImageView::Handle() const { return image_view_; }
+VkImageView ImageView::Handle() { return image_view_; }
 
 VkImageView ImageView::Create(const VkImage &image, VkFormat format,
                               VkImageAspectFlags aspect_flags) const {

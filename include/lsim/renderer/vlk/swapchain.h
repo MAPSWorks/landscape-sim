@@ -42,7 +42,7 @@ public:
   [[nodiscard]] VkSwapchainKHR Handle() const;
   [[nodiscard]] const VkExtent2D &Extent() const;
   [[nodiscard]] const VkSurfaceFormatKHR &SurfaceFormat() const;
-  [[nodiscard]] const std::vector<ImageView> &ImageViews() const;
+  [[nodiscard]] std::vector<ImageView> &ImageViews();
   // Return next available image index from the swapchain
   [[nodiscard]] uint32_t
   AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
@@ -71,7 +71,7 @@ private:
   // Number of images should be rrtrieved from this array if needed
   const std::vector<VkImage> images_;
   // Image views for swapchain images
-  const std::vector<ImageView> image_views_;
+  std::vector<ImageView> image_views_;
 };
 } // namespace lsim::renderer::vlk
 #endif

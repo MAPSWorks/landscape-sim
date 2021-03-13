@@ -154,7 +154,7 @@ const VkSurfaceFormatKHR &Swapchain::SurfaceFormat() const {
   return surface_format_;
 }
 
-const std::vector<ImageView> &Swapchain::ImageViews() const {
+std::vector<ImageView> &Swapchain::ImageViews() {
   return image_views_;
 }
 
