@@ -21,7 +21,7 @@ Renderer::Renderer(SDL_Window *window, const platform::Settings &settings)
   base::Log::Info("renderer", "initialized");
 }
 
-const vlk::Device &Renderer::Device() const { return device_; }
+vlk::Device &Renderer::Device() { return device_; }
 
 const vlk::Swapchain &Renderer::Swapchin() const { return swapchain_; }
 } // namespace lsim::renderer

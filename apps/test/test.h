@@ -22,8 +22,8 @@ public:
   Test(int argc, char **argv);
 
 private:
-  void RenderFrame() const override;
-  void OnExit() const override;
+  void RenderFrame() override;
+  void OnExit() override;
   void InitPipeline();
   void CreateFramebuffers();
   void CreateCommandBuffers();

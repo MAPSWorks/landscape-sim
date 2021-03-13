@@ -27,17 +27,17 @@ public:
 protected:
   [[nodiscard]] const struct Settings &Settings() const;
   [[nodiscard]] class Window &Window();
-  [[nodiscard]] const renderer::Renderer &Renderer() const;
+  [[nodiscard]] renderer::Renderer &Renderer();
 
 private:
-  virtual void RenderFrame() const = 0;
-  virtual void OnExit() const = 0;
+  virtual void RenderFrame() = 0;
+  virtual void OnExit() = 0;
   // Applications and subsystem settings
   const struct Settings settings_;
   // Platform specific window
   class Window window_;
   // Framework with which rendering is performed
-  const renderer::Renderer renderer_;
+  renderer::Renderer renderer_;
 };
 } // namespace lsim::platform
 

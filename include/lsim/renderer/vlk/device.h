@@ -35,7 +35,7 @@ public:
   // Returns reference to Vulkan physical device abstraction
   [[nodiscard]] const PhysicalDevice &GPU() const;
   // Returns reference to Vulkan logical device object
-  [[nodiscard]] VkDevice Handle() const;
+  [[nodiscard]] VkDevice Handle();
   // Returns containing abstractions
   [[nodiscard]] const struct Queues &Queues() const;
   [[nodiscard]] const class QueueFamilies &QueueFamilies() const;

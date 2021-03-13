@@ -9,7 +9,8 @@
 #include "lsim/platform/types.h"
 
 namespace lsim::platform {
-IApplication::IApplication(int argc, char **argv, const struct Settings &settings)
+IApplication::IApplication(int argc, char **argv,
+                           const struct Settings &settings)
     : settings_(settings), window_(settings),
       renderer_(window_.Handle(), settings) {
   (void)argc;
@@ -52,6 +53,6 @@ void IApplication::Run() {
 
 const Settings &IApplication::Settings() const { return settings_; }
 Window &IApplication::Window() { return window_; }
-const renderer::Renderer &IApplication::Renderer() const { return renderer_; }
+renderer::Renderer &IApplication::Renderer() { return renderer_; }
 
 } // namespace lsim::platform

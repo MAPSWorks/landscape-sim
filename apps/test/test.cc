@@ -30,7 +30,7 @@ Test::Test(int argc, char **argv)
   lsim::base::Log::Info("test application", "initialized");
 }
 
-void Test::RenderFrame() const {
+void Test::RenderFrame() {
   const auto image_index = Renderer().Swapchin().AcquireNextImageIndex(
       image_available_sem_->Handle());
 
@@ -47,7 +47,7 @@ void Test::RenderFrame() const {
   }
 }
 
-void Test::OnExit() const { vkDeviceWaitIdle(Renderer().Device().Handle()); }
+void Test::OnExit() { vkDeviceWaitIdle(Renderer().Device().Handle()); }
 
 void Test::InitPipeline() {
   // Note: shader modules can be destroyed after pipeline creation

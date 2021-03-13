@@ -19,7 +19,7 @@ class Renderer {
 public:
   Renderer(SDL_Window *window, const platform::Settings &settings);
   // Get vulkan device abstraction object
-  [[nodiscard]] const vlk::Device& Device() const;
+  [[nodiscard]] vlk::Device& Device();
   // Get vulkan swapchain abstraction object
   [[nodiscard]] const vlk::Swapchain& Swapchin() const;
 private:
@@ -28,7 +28,7 @@ private:
   // Dependent on Instance being already initialized.
   const vlk::DebugMessenger debug_messenger_;
   const vlk::Surface surface_;
-  const vlk::Device device_;
+  vlk::Device device_;
   const vlk::Swapchain swapchain_;
 };
 
