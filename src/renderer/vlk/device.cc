@@ -14,7 +14,7 @@
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Device::Device(const VkInstance &instance, const VkSurfaceKHR &surface)
+Device::Device(VkInstance instance, VkSurfaceKHR surface)
     : required_extentions_({VK_KHR_SWAPCHAIN_EXTENSION_NAME}),
       gpu_(instance, surface), queue_families_(gpu_.Handle(), surface),
       device_(Create(gpu_.Handle(), queue_families_)),
@@ -39,7 +39,7 @@ const class QueueFamilies &Device::QueueFamilies() const {
   return queue_families_;
 }
 
-VkDevice Device::Create(const VkPhysicalDevice &gpu,
+VkDevice Device::Create(VkPhysicalDevice gpu,
                         const class QueueFamilies &queue_families) const {
   // Notify what kind of queues and how many device should create
   // We dont know in advance whether queue family capabilities belong to one

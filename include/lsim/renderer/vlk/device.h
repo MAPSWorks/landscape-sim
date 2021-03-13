@@ -26,7 +26,7 @@ public:
     const Queue present;
   };
 
-  Device(const VkInstance &instance, const VkSurfaceKHR &surface);
+  Device(VkInstance instance, VkSurfaceKHR surface);
   ~Device();
   Device(Device const &) = delete;
   Device &operator=(Device const &) = delete;
@@ -43,7 +43,7 @@ public:
 private:
   // Creates and return handle to logical device from the given gpu
   [[nodiscard]] VkDevice
-  Create(const VkPhysicalDevice &gpu,
+  Create(VkPhysicalDevice gpu,
          const class QueueFamilies &queue_families) const;
   // Device extentions that the logical device has to support
   const std::vector<const char *> required_extentions_;
