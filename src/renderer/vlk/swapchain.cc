@@ -4,6 +4,7 @@
 #include "lsim/renderer/vlk/swapchain.h"
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -46,7 +47,7 @@ VkPresentModeKHR SelectPresentMode(const std::vector<VkPresentModeKHR> &modes) {
   for (const auto &present_mode : modes) {
     // This is the best case so we return imidiatly if encountered
     if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-      preferred_mode =  present_mode;
+      preferred_mode = present_mode;
       break;
     }
     if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
@@ -154,7 +155,7 @@ const VkSurfaceFormatKHR &Swapchain::SurfaceFormat() const {
   return surface_format_;
 }
 
-std::vector<ImageView> &Swapchain::ImageViews() {
+const std::vector<std::unique_ptr<ImageView>> &Swapchain::ImageViews() {
   return image_views_;
 }
 
@@ -164,9 +165,9 @@ uint32_t
 Swapchain::AcquireNextImageIndex(const VkSemaphore &image_available_sem) const {
   uint32_t image_index = 0;
   constexpr auto unlimited_timeout = std::numeric_limits<uint64_t>::max();
-  ErrorCheck(vkAcquireNextImageKHR(context_device_, swapchain_, unlimited_timeout,
-                                   image_available_sem, VK_NULL_HANDLE,
-                                   &image_index));
+  ErrorCheck(vkAcquireNextImageKHR(context_device_, swapchain_,
+                                   unlimited_timeout, image_available_sem,
+                                   VK_NULL_HANDLE, &image_index));
   return image_index;
 }
 
@@ -211,7 +212,8 @@ VkSwapchainKHR Swapchain::Create(const VkSurfaceKHR &surface,
   // set to old swachain
   create_info.oldSwapchain = VK_NULL_HANDLE;
   VkSwapchainKHR swapchain = VK_NULL_HANDLE;
-  ErrorCheck(vkCreateSwapchainKHR(context_device_, &create_info, nullptr, &swapchain));
+  ErrorCheck(
+      vkCreateSwapchainKHR(context_device_, &create_info, nullptr, &swapchain));
   return swapchain;
 }
 
@@ -227,12 +229,15 @@ std::vector<VkImage> Swapchain::RetrieveImages() const {
   return swapchain_images;
 }
 
-std::vector<ImageView>
+// Store ImageView objects into pointers because const vector objects
+// should be later modifieable through this pointer.
+std::vector<std::unique_ptr<ImageView>>
 Swapchain::CreateImageViews(const std::vector<VkImage> &images) const {
-  std::vector<ImageView> image_views;
+  std::vector<std::unique_ptr<ImageView>> image_views;
   // Number of image views and images should match (also their order)!
   for (const auto &image : images) {
-    image_views.emplace_back(context_device_, image, surface_format_.format);
+    image_views.emplace_back(std::make_unique<ImageView>(
+        context_device_, image, surface_format_.format));
   }
   return image_views;
 }

@@ -5,6 +5,7 @@
 // images with the refresh rate of the screen.
 #ifndef LSIM_RENDERER_VLK_SWAPCHAIN_H_
 #define LSIM_RENDERER_VLK_SWAPCHAIN_H_
+#include <memory>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -42,7 +43,7 @@ public:
   [[nodiscard]] VkSwapchainKHR Handle() const;
   [[nodiscard]] const VkExtent2D &Extent() const;
   [[nodiscard]] const VkSurfaceFormatKHR &SurfaceFormat() const;
-  [[nodiscard]] std::vector<ImageView> &ImageViews();
+  [[nodiscard]] const std::vector<std::unique_ptr<ImageView>> &ImageViews();
   // Return next available image index from the swapchain
   [[nodiscard]] uint32_t
   AcquireNextImageIndex(const VkSemaphore &image_available_sem) const;
@@ -54,7 +55,7 @@ private:
   // Retrieve list of images from swapchain
   [[nodiscard]] std::vector<VkImage> RetrieveImages() const;
   // Create image views for given images
-  [[nodiscard]] std::vector<ImageView>
+  [[nodiscard]] std::vector<std::unique_ptr<ImageView>>
   CreateImageViews(const std::vector<VkImage> &images) const;
   // Pointer to object this resource was created with
   VkDevice const context_device_;
@@ -71,7 +72,7 @@ private:
   // Number of images should be rrtrieved from this array if needed
   const std::vector<VkImage> images_;
   // Image views for swapchain images
-  std::vector<ImageView> image_views_;
+  const std::vector<std::unique_ptr<ImageView>> image_views_;
 };
 } // namespace lsim::renderer::vlk
 #endif

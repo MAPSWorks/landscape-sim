@@ -14,6 +14,7 @@
 #include <lsim/renderer/vlk/command_pool.h>
 #include <lsim/renderer/vlk/semaphore.h>
 #include <lsim/renderer/vlk/shader_module.h>
+#include <lsim/renderer/vlk/image_view.h>
 #include <vulkan/vulkan_core.h>
 
 namespace apps::test {
@@ -201,10 +202,10 @@ void Test::InitPipeline() {
 
 // Create frame buffers for all image views in swapchain
 void Test::CreateFramebuffers() {
-  auto &image_views = Renderer().Swapchin().ImageViews();
-  for (auto &view : image_views) {
+  const auto &image_views = Renderer().Swapchin().ImageViews();
+  for (const auto &view : image_views) {
     framebuffers_.emplace_back(Renderer().Device().Handle(),
-                               render_pass_->Handle(), view.Handle(),
+                               render_pass_->Handle(), view->Handle(),
                                Renderer().Swapchin().Extent(), nullptr);
   }
 }
