@@ -19,7 +19,7 @@ public:
   RenderPass(RenderPass &&) = delete;
   RenderPass &operator=(RenderPass &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkRenderPass Handle() const;
+  [[nodiscard]] VkRenderPass Handle();
 
 private:
   [[nodiscard]] VkRenderPass Create(const VkFormat &swapchain_format,

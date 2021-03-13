@@ -71,7 +71,7 @@ RenderPass::~RenderPass() {
   vkDestroyRenderPass(context_device_, render_pass_, nullptr);
 }
 
-VkRenderPass RenderPass::Handle() const { return render_pass_; }
+VkRenderPass RenderPass::Handle() { return render_pass_; }
 
 // Defines how many color and depth buffers there will be, how many samples to
 // use for each of them and how their contents should be handled throughout the
