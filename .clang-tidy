@@ -9,6 +9,7 @@ Checks: >
   performance-*,
   bugprone-*,
   misc-*,
+  -misc-misplaced-const,
   readability-*
 
 CheckOptions:
