@@ -18,7 +18,7 @@ public:
   Semaphore(Semaphore &&) = delete;
   Semaphore &operator=(Semaphore &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkSemaphore Handle() const;
+  [[nodiscard]] VkSemaphore Handle();
 
 private:
   [[nodiscard]] VkSemaphore Create() const;

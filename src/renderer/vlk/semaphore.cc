@@ -19,7 +19,7 @@ Semaphore::~Semaphore() {
   vkDestroySemaphore(context_device_, semaphore_, nullptr);
 }
 
-VkSemaphore Semaphore::Handle() const { return semaphore_; }
+VkSemaphore Semaphore::Handle() { return semaphore_; }
 
 VkSemaphore Semaphore::Create() const {
   VkSemaphoreCreateInfo create_info = {};
