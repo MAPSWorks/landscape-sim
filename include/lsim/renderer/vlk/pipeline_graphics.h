@@ -17,7 +17,7 @@ public:
   PipelineGraphics(PipelineGraphics &&) = delete;
   PipelineGraphics &operator=(PipelineGraphics &&) = delete;
   // Returns Vulkan object handle
-  [[nodiscard]] VkPipeline Handle() const;
+  [[nodiscard]] VkPipeline Handle();
 
 private:
   [[nodiscard]] VkPipeline Create(const VkGraphicsPipelineCreateInfo &create_info) const;
