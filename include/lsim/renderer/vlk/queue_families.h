@@ -15,7 +15,7 @@ class QueueFamilies {
 public:
   // Queue family index
   using Index = uint32_t;
-  QueueFamilies(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
+  QueueFamilies(VkPhysicalDevice gpu, VkSurfaceKHR surface);
   // Checks if all required queue families are available
   [[nodiscard]] bool Complete() const;
   // Checks if graphics and presentation queues families are the same
@@ -28,7 +28,7 @@ public:
 private:
   // Selects queue family indices from the given gpu and surface.
   // Initializes graphhics and present families if found.
-  void Select(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surface);
+  void Select(VkPhysicalDevice gpu, VkSurfaceKHR surface);
   // Index of a graphics queue family
   // It is possible that it is not present.
   std::optional<Index> graphics_;

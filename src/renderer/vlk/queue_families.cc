@@ -9,8 +9,8 @@
 #include <vulkan/vulkan.h>
 
 namespace lsim::renderer::vlk {
-QueueFamilies::QueueFamilies(const VkPhysicalDevice &gpu,
-                             const VkSurfaceKHR &surface) {
+QueueFamilies::QueueFamilies(VkPhysicalDevice gpu,
+                             VkSurfaceKHR surface) {
   Select(gpu, surface);
 }
 
@@ -28,8 +28,8 @@ QueueFamilies::Index QueueFamilies::Graphics() const {
 
 QueueFamilies::Index QueueFamilies::Present() const { return present_.value(); }
 
-void QueueFamilies::Select(const VkPhysicalDevice &gpu,
-                           const VkSurfaceKHR &surface) {
+void QueueFamilies::Select(VkPhysicalDevice gpu,
+                           VkSurfaceKHR surface) {
   // Get all available queue families from given physical device
   uint32_t queue_family_count = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, nullptr);
