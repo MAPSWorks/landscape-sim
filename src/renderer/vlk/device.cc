@@ -33,7 +33,7 @@ PhysicalDevice &Device::GPU() { return gpu_; }
 
 VkDevice Device::Handle() { return device_; }
 
-const struct Device::Queues &Device::Queues() const { return queues_; }
+struct Device::Queues &Device::Queues() { return queues_; }
 
 const class QueueFamilies &Device::QueueFamilies() const {
   return queue_families_;

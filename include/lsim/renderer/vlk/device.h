@@ -22,8 +22,8 @@ public:
   // Device queue handles that are retrieved from this device
   // Note that queue handles can match.
   struct Queues {
-    const Queue graphics;
-    const Queue present;
+    Queue graphics;
+    Queue present;
   };
 
   Device(VkInstance instance, VkSurfaceKHR surface);
@@ -37,7 +37,7 @@ public:
   // Returns reference to Vulkan logical device object
   [[nodiscard]] VkDevice Handle();
   // Returns containing abstractions
-  [[nodiscard]] const struct Queues &Queues() const;
+  [[nodiscard]] struct Queues &Queues();
   [[nodiscard]] const class QueueFamilies &QueueFamilies() const;
 
 private:
@@ -51,7 +51,7 @@ private:
   PhysicalDevice gpu_;
   const class QueueFamilies queue_families_;
   VkDevice const device_ = VK_NULL_HANDLE;
-  const struct Queues queues_;
+  struct Queues queues_;
 };
 } // namespace lsim::renderer::vlk
 
