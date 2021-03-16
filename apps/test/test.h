@@ -15,6 +15,7 @@
 #include <lsim/renderer/vlk/pipeline_layout.h>
 #include <lsim/renderer/vlk/render_pass.h>
 #include <lsim/renderer/vlk/semaphore.h>
+#include <lsim/renderer/vlk/fence.h>
 
 namespace apps::test {
 
@@ -25,6 +26,7 @@ struct FrameResource {
 
   lsim::renderer::vlk::Semaphore sem_image_available;
   lsim::renderer::vlk::Semaphore sem_render_finished;
+  lsim::renderer::vlk::Fence fence_drawing_fisnihsed;
 };
 
 
