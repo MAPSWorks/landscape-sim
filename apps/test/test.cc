@@ -12,9 +12,9 @@
 #include <lsim/platform/types.h>
 #include <lsim/renderer/vlk/command_buffer.h>
 #include <lsim/renderer/vlk/command_pool.h>
+#include <lsim/renderer/vlk/image_view.h>
 #include <lsim/renderer/vlk/semaphore.h>
 #include <lsim/renderer/vlk/shader_module.h>
-#include <lsim/renderer/vlk/image_view.h>
 #include <vulkan/vulkan_core.h>
 
 namespace apps::test {
@@ -22,12 +22,16 @@ namespace apps::test {
 const lsim::platform::Settings kUserSettings{"Alpha app", 1,
                                              lsim::Size<uint32_t>(1280, 720)};
 
+FrameResource::FrameResource(VkDevice device)
+    : sem_image_available(device), sem_render_finished(device) {}
+
 Test::Test(int argc, char **argv)
     : lsim::platform::IApplication(argc, argv, kUserSettings) {
   InitPipeline();
   CreateFramebuffers();
   CreateCommandBuffers();
   CreateSemaphores();
+  CreateFrameResources();
   lsim::base::Log::Info("test application", "initialized");
 }
 
@@ -44,7 +48,7 @@ void Test::RenderFrame() {
   if (Renderer().Device().Queues().present.Present(
           Renderer().Swapchin().Handle(), image_index,
           render_finished_sem_->Handle()) != VK_SUCCESS) {
-     lsim::base::Log::Error("test application", "unable to present queue");         
+    lsim::base::Log::Error("test application", "unable to present queue");
   }
 }
 
@@ -246,6 +250,12 @@ void Test::CreateSemaphores() {
       Renderer().Device().Handle());
   render_finished_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
       Renderer().Device().Handle());
+}
+
+void Test::CreateFrameResources() {
+  for (size_t i = 0; i < kFramesInFlight; ++i) {
+    frame_resources_.emplace_back(Renderer().Device().Handle());
+  }
 }
 
 } // namespace apps::test

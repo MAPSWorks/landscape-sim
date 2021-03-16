@@ -15,16 +15,17 @@ public:
   ~Semaphore();
   Semaphore(Semaphore const &) = delete;
   Semaphore& operator=(Semaphore const &) = delete;
-  Semaphore(Semaphore &&) = delete;
-  Semaphore &operator=(Semaphore &&) = delete;
+  Semaphore(Semaphore &&other) noexcept;
+  Semaphore &operator=(Semaphore &&other) noexcept;
   // Returns Vulkan object handle
   [[nodiscard]] VkSemaphore Handle();
 
 private:
   [[nodiscard]] VkSemaphore Create() const;
+  void Destroy();
   // Pointer to resource this object is created with
   VkDevice const context_device_;
-  VkSemaphore const semaphore_ = VK_NULL_HANDLE;
+  VkSemaphore semaphore_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 

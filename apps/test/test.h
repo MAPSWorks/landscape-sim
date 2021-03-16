@@ -17,6 +17,18 @@
 #include <lsim/renderer/vlk/semaphore.h>
 
 namespace apps::test {
+
+const int kFramesInFlight = 2;
+
+struct FrameResource {
+  FrameResource(VkDevice device);
+
+  lsim::renderer::vlk::Semaphore sem_image_available;
+  lsim::renderer::vlk::Semaphore sem_render_finished;
+};
+
+
+
 class Test : public lsim::platform::IApplication {
 public:
   Test(int argc, char **argv);
@@ -28,6 +40,7 @@ private:
   void CreateFramebuffers();
   void CreateCommandBuffers();
   void CreateSemaphores();
+  void CreateFrameResources();
   std::unique_ptr<lsim::renderer::vlk::PipelineLayout> layout_;
   std::unique_ptr<lsim::renderer::vlk::RenderPass> render_pass_;
   std::unique_ptr<lsim::renderer::vlk::PipelineGraphics> pipeline_;
@@ -39,6 +52,8 @@ private:
   std::unique_ptr<lsim::renderer::vlk::Semaphore> image_available_sem_;
   // Ready for presentation
   std::unique_ptr<lsim::renderer::vlk::Semaphore> render_finished_sem_;
+
+  std::vector<FrameResource> frame_resources_;
 };
 } // namespace apps::test
 
