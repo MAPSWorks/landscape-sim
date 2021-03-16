@@ -14,9 +14,24 @@ Fence::Fence(VkDevice device, bool signaled)
   base::Log::Info("renderer", "fence", "created");
 }
 
-Fence::~Fence() {
-  base::Log::Info("renderer", "fence", "destroying..");
-  vkDestroyFence(context_device_, fence_, nullptr);
+Fence::~Fence() { Destroy(); }
+
+Fence::Fence(Fence &&other) noexcept : context_device_(other.context_device_) {
+  // Call move-asignment operator
+  *this = std::move(other);
+}
+
+Fence &Fence::operator=(Fence &&other) noexcept {
+  // Check self-move
+  if (this != &other) {
+    // Free this resource if initialized
+    Destroy();
+    // Change handle ownership
+    this->fence_ = other.fence_;
+    // Remove handle from about-to-deleted object so it doesnt destroy resource
+    other.fence_ = VK_NULL_HANDLE;
+  }
+  return *this;
 }
 
 VkFence Fence::Handle() { return fence_; }
@@ -38,5 +53,15 @@ VkFence Fence::Create(bool signaled) const {
   VkFence fence = VK_NULL_HANDLE;
   ErrorCheck(vkCreateFence(context_device_, &create_info, nullptr, &fence));
   return fence;
+}
+
+void Fence::Destroy() {
+  // Handle must be in valid state
+  if (fence_ != VK_NULL_HANDLE) {
+    base::Log::Info("renderer", "fence", "destroying..");
+    vkDestroyFence(context_device_, fence_, nullptr);
+    // Make sure handle is not valid anymore
+    fence_ = VK_NULL_HANDLE;
+  }
 }
 } // namespace lsim::renderer::vlk

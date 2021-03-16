@@ -39,7 +39,6 @@ private:
   void InitPipeline();
   void CreateFramebuffers();
   void CreateCommandBuffers();
-  void CreateSemaphores();
   void CreateFrameResources();
   std::unique_ptr<lsim::renderer::vlk::PipelineLayout> layout_;
   std::unique_ptr<lsim::renderer::vlk::RenderPass> render_pass_;
@@ -48,11 +47,9 @@ private:
   std::vector<lsim::renderer::vlk::Framebuffer> framebuffers_;
   std::unique_ptr<lsim::renderer::vlk::CommandPool> command_pool_;
   std::vector<lsim::renderer::vlk::CommandBuffer> command_buffers_;
-  // Ready for rendering
-  std::unique_ptr<lsim::renderer::vlk::Semaphore> image_available_sem_;
-  // Ready for presentation
-  std::unique_ptr<lsim::renderer::vlk::Semaphore> render_finished_sem_;
 
+  // Frames in flight
+  uint16_t current_frame_ = 0;
   std::vector<FrameResource> frame_resources_;
 };
 } // namespace apps::test

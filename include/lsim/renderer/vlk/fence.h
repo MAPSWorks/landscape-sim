@@ -15,8 +15,8 @@ public:
   ~Fence();
   Fence(Fence const &) = delete;
   Fence &operator=(Fence const &) = delete;
-  Fence(Fence &&) = delete;
-  Fence &operator=(Fence &&) = delete;
+  Fence(Fence &&other) noexcept;
+  Fence &operator=(Fence &&other) noexcept;
   // Returns Vulkan object handle
   [[nodiscard]] VkFence Handle();
   // Waits for the fence to enter signaled state
@@ -26,9 +26,10 @@ public:
 
 private:
   [[nodiscard]] VkFence Create(bool signaled) const;
+  void Destroy();
   // Pointer to resource this object is created with
   VkDevice const context_device_;
-  VkFence const fence_ = VK_NULL_HANDLE;
+  VkFence fence_ = VK_NULL_HANDLE;
 };
 } // namespace lsim::renderer::vlk
 

@@ -24,32 +24,38 @@ const lsim::platform::Settings kUserSettings{"Alpha app", 1,
 
 FrameResource::FrameResource(VkDevice device)
     : sem_image_available(device), sem_render_finished(device) {}
-
+///////////////////////////////////////////////////////////////////////////
 Test::Test(int argc, char **argv)
     : lsim::platform::IApplication(argc, argv, kUserSettings) {
   InitPipeline();
   CreateFramebuffers();
   CreateCommandBuffers();
-  CreateSemaphores();
   CreateFrameResources();
   lsim::base::Log::Info("test application", "initialized");
 }
 
 void Test::RenderFrame() {
-  const auto image_index = Renderer().Swapchin().AcquireNextImageIndex(
-      image_available_sem_->Handle());
+
+  VkSemaphore sem_image_awailable =
+      frame_resources_.at(current_frame_).sem_image_available.Handle();
+  VkSemaphore sem_render_finished =
+      frame_resources_.at(current_frame_).sem_render_finished.Handle();
+
+  const auto image_index =
+      Renderer().Swapchin().AcquireNextImageIndex(sem_image_awailable);
 
   Renderer().Device().Queues().graphics.Submit(
-      {command_buffers_.at(image_index).Handle()},
-      {image_available_sem_->Handle()},
-      {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
-      {render_finished_sem_->Handle()}, VK_NULL_HANDLE);
+      {command_buffers_.at(image_index).Handle()}, {sem_image_awailable},
+      {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT}, {sem_render_finished},
+      VK_NULL_HANDLE);
 
   if (Renderer().Device().Queues().present.Present(
-          Renderer().Swapchin().Handle(), image_index,
-          render_finished_sem_->Handle()) != VK_SUCCESS) {
+          Renderer().Swapchin().Handle(), image_index, sem_render_finished) !=
+      VK_SUCCESS) {
     lsim::base::Log::Error("test application", "unable to present queue");
   }
+
+  current_frame_ = (current_frame_ + 1) % kFramesInFlight;
 }
 
 void Test::OnExit() { vkDeviceWaitIdle(Renderer().Device().Handle()); }
@@ -243,13 +249,6 @@ void Test::CreateCommandBuffers() {
 
     i++;
   }
-}
-
-void Test::CreateSemaphores() {
-  image_available_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
-      Renderer().Device().Handle());
-  render_finished_sem_ = std::make_unique<lsim::renderer::vlk::Semaphore>(
-      Renderer().Device().Handle());
 }
 
 void Test::CreateFrameResources() {
