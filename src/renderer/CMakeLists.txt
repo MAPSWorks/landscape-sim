@@ -21,7 +21,7 @@ set(SOURCES vlk/instance.cc
             vlk/command_pool.cc 
             vlk/command_buffer.cc 
             vlk/semaphore.cc 
-
+            vlk/fence.cc
             renderer.cc)
 
 add_library(${LIB_NAME} ${SOURCES})
