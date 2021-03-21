@@ -6,13 +6,13 @@
 #include <vector>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 #include "lsim/base/log.h"
 #include "vulkan_shared.h"
 
 namespace lsim::renderer::vlk {
-Framebuffer::Framebuffer(VkDevice device,
-                         VkRenderPass render_pass,
+Framebuffer::Framebuffer(VkDevice device, VkRenderPass render_pass,
                          VkImageView swapchain_image_view,
                          const VkExtent2D &swapchain_extent,
                          VkImageView depth_image_view)
@@ -25,10 +25,9 @@ Framebuffer::Framebuffer(VkDevice device,
 Framebuffer::~Framebuffer() { Destroy(); }
 
 Framebuffer::Framebuffer(Framebuffer &&other) noexcept
-    : context_device_(other.context_device_) {
+    : context_device_(other.context_device_), framebuffer_(VK_NULL_HANDLE) {
   // Call move-asignment operator
   *this = std::move(other);
-  //base::Log::Info("renderer", "framebuffer", "move cnstructed");
 }
 
 Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
@@ -37,7 +36,6 @@ Framebuffer &Framebuffer::operator=(Framebuffer &&other) noexcept {
     Destroy();
     this->framebuffer_ = other.framebuffer_;
     other.framebuffer_ = VK_NULL_HANDLE;
-    //base::Log::Info("renderer", "framebuffer", "move assigned");
   }
   return *this;
 }
@@ -62,8 +60,8 @@ VkFramebuffer Framebuffer::Create(VkRenderPass render_pass,
   framebuffer_create_info.height = swapchain_extent.height;
   framebuffer_create_info.layers = 1;
   VkFramebuffer framebuffer = VK_NULL_HANDLE;
-  ErrorCheck(vkCreateFramebuffer(context_device_, &framebuffer_create_info, nullptr,
-                                 &framebuffer));
+  ErrorCheck(vkCreateFramebuffer(context_device_, &framebuffer_create_info,
+                                 nullptr, &framebuffer));
   return framebuffer;
 }
 
@@ -71,6 +69,7 @@ void Framebuffer::Destroy() {
   if (framebuffer_ != VK_NULL_HANDLE) {
     base::Log::Info("renderer", "framebuffer", "destroying..");
     vkDestroyFramebuffer(context_device_, framebuffer_, nullptr);
+    framebuffer_ = VK_NULL_HANDLE;
   }
 }
 } // namespace lsim::renderer::vlk

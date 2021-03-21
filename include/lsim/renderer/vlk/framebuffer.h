@@ -32,7 +32,7 @@ private:
                                      VkImageView depth_image_view) const;
   // Pointer to resource this object is created with
   VkDevice const context_device_;
-  VkFramebuffer framebuffer_ = VK_NULL_HANDLE;
+  VkFramebuffer framebuffer_;
 };
 } // namespace lsim::renderer::vlk
 #endif
