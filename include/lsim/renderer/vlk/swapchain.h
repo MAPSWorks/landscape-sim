@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <vulkan/vulkan.h>
 
 #include "image_view.h"

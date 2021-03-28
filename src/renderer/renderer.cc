@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "lsim/base/log.h"
 #include "lsim/platform/types.h"

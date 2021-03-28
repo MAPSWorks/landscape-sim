@@ -5,7 +5,7 @@
 // Stores renderer state and functions.
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "lsim/platform/types.h"
 #include "vlk/debug_messenger.h"

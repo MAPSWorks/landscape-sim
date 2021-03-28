@@ -5,7 +5,7 @@
 #ifndef LSIM_PLATFORM_WINDOW_H_
 #define LSIM_PLATFORM_WINDOW_H_
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "types.h"
 
