@@ -1,9 +1,11 @@
 set(TARGET_NAME test-app)
-
+# Headers are used in certain IDE's
+set(HEADERS test.h
+            )
 set(SOURCES main.cc
             test.cc)
 
-add_executable(${TARGET_NAME} ${SOURCES})
+add_executable(${TARGET_NAME} ${SOURCES} ${HEADERS})
 
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_17)
 if (MSVC)
