@@ -25,15 +25,16 @@ public:
   void Run();
 
 protected:
-  [[nodiscard]] const struct Settings &Settings() const;
   [[nodiscard]] class Window &Window();
   [[nodiscard]] renderer::Renderer &Renderer();
+  // Applications and subsystem settings
+  // Member variable is const and seen as const global in
+  // subclasses (NOLINTNEXTLINE)
+  const Settings settings;
 
 private:
   virtual void RenderFrame() = 0;
   virtual void OnExit() = 0;
-  // Applications and subsystem settings
-  const struct Settings settings_;
   // Platform specific window
   class Window window_;
   // Framework with which rendering is performed

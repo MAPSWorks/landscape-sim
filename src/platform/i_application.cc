@@ -11,7 +11,7 @@
 namespace lsim::platform {
 IApplication::IApplication(int argc, char **argv,
                            const struct Settings &settings)
-    : settings_(settings), window_(settings),
+    : settings(settings), window_(settings),
       renderer_(window_.Handle(), settings) {
   (void)argc;
   (void)argv;
@@ -51,7 +51,6 @@ void IApplication::Run() {
   OnExit();
 }
 
-const Settings &IApplication::Settings() const { return settings_; }
 Window &IApplication::Window() { return window_; }
 renderer::Renderer &IApplication::Renderer() { return renderer_; }
 
