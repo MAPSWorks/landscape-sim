@@ -33,12 +33,19 @@ void IApplication::Run() {
     while (SDL_PollEvent(&event) != 0) {
 
       switch (event.type) {
-
       case SDL_QUIT:
         running = false;
         break;
-
-      default:
+      case SDL_WINDOWEVENT:
+        if (event.window.event == SDL_WINDOWEVENT_CLOSE &&
+            event.window.windowID == SDL_GetWindowID(window_.Handle())) {
+          running = false;
+        }
+        break;
+      case SDL_KEYUP:
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+          running = false;
+        }
         break;
       }
     }
