@@ -41,9 +41,9 @@ public:
     if constexpr (kEnabled && kOutput == Type::kClog && kDetail <= Severity::kError) {
       // Linux terminal coloring
 #if defined(__linux__)
-      std::clog << "\033[31mERROR: \033[0m";
+      std::cerr << "\033[31mERROR: \033[0m";
 #else
-      std::clog << "ERROR: ";
+      std::cerr << "ERROR: ";
 #endif
 
       // A trailing space is added between each pair of arguments
