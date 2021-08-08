@@ -71,4 +71,4 @@ GitHub.sublime-settings
 ## Notepad++ backups #
 *.bak
 # Makefile
-Makefile
+# Makefile
