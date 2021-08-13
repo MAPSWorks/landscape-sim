@@ -1,7 +1,7 @@
 //
 // Created by Ivars Rusbergs in 2021
 //
-// Application used as an experimental app for engine testing
+// Application used as an experimental app
 #ifndef LSIM_APPS_TEST_H_
 #define LSIM_APPS_TEST_H_
 #include <memory>
@@ -22,11 +22,11 @@ namespace apps::test {
 const int kFramesInFlight = 2;
 
 struct FrameResource {
-  FrameResource(VkDevice device);
+  explicit FrameResource(VkDevice device);
 
   lsim::renderer::vlk::Semaphore sem_image_available;
   lsim::renderer::vlk::Semaphore sem_render_finished;
-  lsim::renderer::vlk::Fence fence_drawing_fisnihsed;
+  lsim::renderer::vlk::Fence fence_drawing_finished;
 };
 
 

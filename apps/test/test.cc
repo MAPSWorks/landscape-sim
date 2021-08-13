@@ -25,8 +25,8 @@ const lsim::platform::Settings kUserSettings{"Alpha app", 1,
 
 FrameResource::FrameResource(VkDevice device)
     : sem_image_available(device), sem_render_finished(device),
-      fence_drawing_fisnihsed(device) {}
-///////////////////////////////////////////////////////////////////////////
+      fence_drawing_finished(device) {}
+
 Test::Test(int argc, char **argv)
     : lsim::platform::IApplication(argc, argv, kUserSettings) {
   InitPipeline();
@@ -37,15 +37,15 @@ Test::Test(int argc, char **argv)
 }
 
 void Test::RenderFrame() {
-  frame_resources_.at(current_frame_).fence_drawing_fisnihsed.WaitFor();
-  frame_resources_.at(current_frame_).fence_drawing_fisnihsed.Reset();
+  frame_resources_.at(current_frame_).fence_drawing_finished.WaitFor();
+  frame_resources_.at(current_frame_).fence_drawing_finished.Reset();
 
   VkSemaphore sem_image_awailable =
       frame_resources_.at(current_frame_).sem_image_available.Handle();
   VkSemaphore sem_render_finished =
       frame_resources_.at(current_frame_).sem_render_finished.Handle();
   VkFence fence_drawing_fisnihsed =
-      frame_resources_.at(current_frame_).fence_drawing_fisnihsed.Handle();
+      frame_resources_.at(current_frame_).fence_drawing_finished.Handle();
 
   const auto image_index =
       Renderer().Swapchin().AcquireNextImageIndex(sem_image_awailable);
