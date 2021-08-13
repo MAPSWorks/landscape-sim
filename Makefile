@@ -4,7 +4,7 @@ TARGET_NAME = test-app
 
 
 all: build run
-full: clean generate build run
+full: clean generate build shaders
 generate:
 	# -DBUILD_SHARED_LIBS=YES
 	cmake -G "Unix Makefiles" -S . -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=1
